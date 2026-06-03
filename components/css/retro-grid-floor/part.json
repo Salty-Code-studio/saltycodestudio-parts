@@ -1,0 +1,13 @@
+{
+  "name": "Retro Synthwave Grid Floor",
+  "slug": "retro-grid-floor",
+  "category": "css",
+  "tier": "showcase",
+  "tags": ["background", "retro", "synthwave", "3d", "perspective", "animated", "no-js"],
+  "description": "An infinitely scrolling Tron/vaporwave floor grid that recedes to a glowing horizon, built entirely from layered gradients and a single 3D transform with no canvas or JavaScript.",
+  "deps": [],
+  "files": ["styles.css", "index.html"],
+  "usage": "Drop the .rgf markup (sky, sun, plane, grid) into a sized container and include styles.css; the grid fills its parent and scrolls forever. Override the --rgf-* custom properties to retune line color, glow, cell size, speed, tilt, and perspective.",
+  "source": "https://freefrontend.com/code/pure-css-synthwave-80s-animation-2026-01-20/",
+  "license": "MIT — reimplemented from scratch; technique (perspective grid via repeating gradients) is an unencumbered public-domain CSS idiom"
+}

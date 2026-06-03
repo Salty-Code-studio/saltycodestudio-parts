@@ -1,0 +1,14 @@
+<!-- Heart Like Burst — markup snippet.
+     Pair this with styles.css. Each like button is a .hlb wrapper holding a
+     checkbox, the .hlb__heart effect layer (the two pseudo-elements live
+     here), and the .hlb__glyph that paints the ♥.
+     Give every checkbox a unique id and wrap with an aria-label so screen
+     readers announce the action. -->
+<span class="hlb">
+  <input class="hlb__input" type="checkbox" id="like-1" aria-label="Like this post" />
+  <span class="hlb__heart" aria-hidden="true"></span>
+  <span class="hlb__glyph" aria-hidden="true"></span>
+</span>
+
+<!-- Scale a single instance by overriding --hlb-size on the wrapper: -->
+<!-- <span class="hlb" style="--hlb-size: 96px"> ... </span> -->

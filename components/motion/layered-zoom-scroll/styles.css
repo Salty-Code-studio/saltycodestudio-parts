@@ -1,0 +1,206 @@
+/* ===================================================================
+   Layered Zoom Scroll — styles
+   Sand & Surf palette. Pair with animation.js.
+   The JS drives a per-section CSS var --progress (0..1) used here for
+   a vignette / overlay sweep so the effect reads even before JS settles.
+=================================================================== */
+
+:root {
+  --lzs-sand: #fbf7f0;
+  --lzs-sand-2: #f4ece0;
+  --lzs-sand-3: #ece0cd;
+  --lzs-ink: #1c2b33;
+  --lzs-ink-soft: #4a5d66;
+  --lzs-teal: #1f8a8a;
+  --lzs-deep: #0f5c5c;
+  --lzs-surf: #2ec3c3;
+}
+
+/* ScrollSmoother scaffold. position:fixed wrapper is required by the plugin. */
+#smooth-wrapper {
+  overflow: hidden;
+}
+
+.lzs {
+  --progress: 0;
+  position: relative;
+  background: var(--lzs-sand);
+  color: var(--lzs-ink);
+}
+
+/* The pinned stage. Everything is centered and absolutely stacked. */
+.lzs__stage {
+  position: relative;
+  width: 100%;
+  height: 100svh;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(
+      120% 90% at 50% 30%,
+      var(--lzs-sand) 0%,
+      var(--lzs-sand-2) 55%,
+      var(--lzs-sand-3) 100%
+    );
+}
+
+/* Faint grain/vignette that intensifies as the scene resolves. */
+.lzs__stage::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  pointer-events: none;
+  background: radial-gradient(
+    140% 120% at 50% 50%,
+    transparent 40%,
+    rgba(15, 92, 92, calc(0.10 + var(--progress) * 0.12)) 100%
+  );
+  mix-blend-mode: multiply;
+}
+
+/* ---- Stacked zoom layers ---- */
+.lzs__layers {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: grid;
+  place-items: center;
+}
+
+.lzs__layer {
+  position: absolute;
+  width: min(82vw, 1100px);
+  aspect-ratio: 16 / 10;
+  border-radius: 22px;
+  background-image: var(--img);
+  background-size: cover;
+  background-position: center;
+  box-shadow:
+    0 30px 80px -30px rgba(15, 92, 92, 0.45),
+    0 2px 0 rgba(255, 255, 255, 0.35) inset;
+  will-change: transform, filter, opacity;
+  backface-visibility: hidden;
+}
+
+/* Teal duotone wash on the layers to keep them on-brand. */
+.lzs__layer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    155deg,
+    rgba(46, 195, 195, 0.18),
+    rgba(15, 92, 92, 0.32)
+  );
+  mix-blend-mode: multiply;
+}
+
+/* ---- Central masked subject (text-clipped image) ---- */
+.lzs__subject {
+  position: relative;
+  z-index: 20;
+  margin: 0;
+  width: min(72vw, 880px);
+  aspect-ratio: 16 / 9;
+  background-image: var(--img);
+  background-size: cover;
+  background-position: center 40%;
+  /* Masked into a strong word so the image reveals through type. */
+  -webkit-mask: var(--mask, none) center / contain no-repeat;
+  mask: var(--mask, none) center / contain no-repeat;
+  will-change: transform;
+  filter: saturate(1.05) contrast(1.04);
+}
+
+/* When no SVG mask is supplied, the subject stays a soft framed card. */
+.lzs__subject--card {
+  border-radius: 18px;
+  -webkit-mask: none;
+  mask: none;
+  box-shadow: 0 40px 90px -40px rgba(15, 92, 92, 0.55);
+  outline: 6px solid rgba(251, 247, 240, 0.9);
+  outline-offset: -6px;
+}
+
+/* ---- Split headline ---- */
+.lzs__title {
+  position: absolute;
+  z-index: 25;
+  inset: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.4rem, 4vw, 3rem);
+  pointer-events: none;
+  font-family: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 0.9;
+  font-size: clamp(2.6rem, 12vw, 9.5rem);
+  text-transform: uppercase;
+}
+
+.lzs__word {
+  display: inline-block;
+  will-change: transform;
+  color: var(--lzs-ink);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.lzs__word--b {
+  color: var(--lzs-deep);
+}
+
+/* Scroll hint */
+.lzs__hint {
+  position: absolute;
+  z-index: 26;
+  bottom: clamp(1rem, 4vh, 2.5rem);
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font: 600 0.72rem/1 "Archivo", system-ui, sans-serif;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--lzs-ink-soft);
+  opacity: calc(1 - var(--progress) * 1.4);
+}
+
+.lzs__hint span {
+  width: 1.4rem;
+  height: 1.4rem;
+  border: 1.5px solid currentColor;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+}
+
+.lzs__hint span::after {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: translateY(-1px) rotate(45deg);
+  animation: lzs-bob 1.5s ease-in-out infinite;
+}
+
+@keyframes lzs-bob {
+  0%, 100% { transform: translateY(-2px) rotate(45deg); }
+  50% { transform: translateY(1px) rotate(45deg); }
+}
+
+.lzs__spacer {
+  height: 80vh; /* gives the pinned scrub room to run */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lzs__hint span::after { animation: none; }
+}

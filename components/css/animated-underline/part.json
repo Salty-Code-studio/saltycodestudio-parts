@@ -1,0 +1,13 @@
+{
+  "name": "Sliding Underline Link",
+  "slug": "animated-underline",
+  "category": "css",
+  "tier": "practical",
+  "tags": ["underline", "hover", "link", "background-size", "micro-interaction", "multiline"],
+  "description": "A link underline that wipes in on hover and correctly wraps across multiple lines, using an animated background-size instead of a transform.",
+  "deps": [],
+  "files": ["styles.css", "index.html"],
+  "usage": "Add the styles.css to your stylesheet and apply the .su-link class to any anchor; tune color and thickness per instance with the --su-color and --su-thickness custom properties, or use the --reverse, --bold, and --retract modifiers.",
+  "source": "https://css-irl.info/animating-underlines/",
+  "license": "CSS { In Real Life } blog (Michelle Barker) — educational snippet, reimplemented cleanly"
+}

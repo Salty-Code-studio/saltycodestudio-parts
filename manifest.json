@@ -1,5 +1,30 @@
 [
   {
+    "name": ":has() Sibling Dim Spotlight",
+    "slug": "has-sibling-spotlight",
+    "category": "css",
+    "tier": "showcase",
+    "tags": [
+      ":has()",
+      "parent-selector",
+      "hover",
+      "interactive",
+      "list",
+      "no-js"
+    ],
+    "description": "Hovering any item in a grid dims every sibling and lifts the focused one, a focus-spotlight interaction built with pure CSS and no JavaScript.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "index.html"
+    ],
+    "usage": "Drop styles.css into your stylesheet and wrap focusable cards in a .spotlight-grid using the markup from index.html. Hover or keyboard-focus any .spotlight-card and its siblings dim while it lifts — no script required.",
+    "source": "https://blog.logrocket.com/blog/different-ways-to-use-css-has/",
+    "license": "LogRocket Blog article — code snippets free to reuse; reimplemented cleanly. :has() is native Baseline CSS.",
+    "path": "components/css/has-sibling-spotlight",
+    "preview": "components/css/has-sibling-spotlight/preview.html"
+  },
+  {
     "name": "3D Tilt Card",
     "slug": "tilt-card-3d",
     "category": "css",
@@ -20,6 +45,31 @@
     "usage": "Wrap the card in .scs-tilt (sets perspective). Inner content gets .scs-tilt__layer plus a depth class; tune the rotateX/rotateY and translateZ values to taste.",
     "path": "components/css/tilt-card-3d",
     "preview": "components/css/tilt-card-3d/preview.html"
+  },
+  {
+    "name": "Animated Details Accordion",
+    "slug": "details-accordion",
+    "category": "css",
+    "tier": "practical",
+    "tags": [
+      "accordion",
+      "details",
+      "summary",
+      "grid-template-rows",
+      "no-js",
+      "accessible"
+    ],
+    "description": "A native, accessible accordion that smoothly animates open and closed from height 0 to auto using the details element with zero JavaScript.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "index.html"
+    ],
+    "usage": "Copy styles.css and the markup from index.html, then give every <details> in a group the same name attribute for exclusive (one-open-at-a-time) behaviour. Add the open attribute to whichever panel should start expanded.",
+    "source": "https://www.builder.io/blog/animated-css-accordions",
+    "license": "Builder.io blog article — code shared for reuse; details/::details-content are native HTML/CSS. Reimplemented cleanly.",
+    "path": "components/css/details-accordion",
+    "preview": "components/css/details-accordion/preview.html"
   },
   {
     "name": "Animated Gradient Mesh",
@@ -44,6 +94,30 @@
     "preview": "components/css/animated-gradient-mesh/preview.html"
   },
   {
+    "name": "Animated Text Gradient",
+    "slug": "animated-text-gradient",
+    "category": "css",
+    "tier": "practical",
+    "tags": [
+      "text",
+      "gradient",
+      "background-clip",
+      "animation",
+      "headline",
+      "no-js"
+    ],
+    "description": "A headline filled with a slowly drifting multi-stop gradient for a premium, living-color title with no JS.",
+    "deps": [],
+    "files": [
+      "styles.css"
+    ],
+    "usage": "Copy styles.css into your stylesheet and add the .animated-gradient-text class to any heading. Tune angle, size, speed, and color stops via the --atg-* custom properties (inline or in CSS).",
+    "source": "https://web.dev/articles/speedy-css-tip-animated-gradient-text",
+    "license": "web.dev article (Adam Argyle), content under CC-BY 4.0; technique is native CSS — reimplemented",
+    "path": "components/css/animated-text-gradient",
+    "preview": "components/css/animated-text-gradient/preview.html"
+  },
+  {
     "name": "Aurora Background",
     "slug": "aurora-background",
     "category": "css",
@@ -64,6 +138,106 @@
     "usage": "Wrap content in .scs-aurora and include the .scs-aurora__lights layer with its four spans. Give the wrapper a height; content sits above the aurora automatically.",
     "path": "components/css/aurora-background",
     "preview": "components/css/aurora-background/preview.html"
+  },
+  {
+    "name": "Auto-Invert Difference Cursor",
+    "slug": "difference-blend-cursor",
+    "category": "css",
+    "tier": "showcase",
+    "tags": [
+      "cursor",
+      "mix-blend-mode",
+      "difference",
+      "invert",
+      "interactive",
+      "monochrome"
+    ],
+    "description": "A custom circular cursor that auto-inverts whatever it passes over using mix-blend-mode: difference, so it stays legible on any background.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "index.html"
+    ],
+    "usage": "Link styles.css, drop the single .scs-difference-cursor element on the page, then paste the script that feeds --x/--y position and toggles state classes; add .scs-cursor-target to any element you want the cursor to grow over (native links/buttons are auto-detected).",
+    "source": "https://css-tricks.com/taming-blend-modes-difference-and-exclusion/",
+    "license": "Public-domain CSS idiom — mix-blend-mode is native CSS; reimplemented cleanly from the CSS-Tricks concept.",
+    "path": "components/css/difference-blend-cursor",
+    "preview": "components/css/difference-blend-cursor/preview.html"
+  },
+  {
+    "name": "Container-Query Adaptive Card",
+    "slug": "container-query-card",
+    "category": "css",
+    "tier": "practical",
+    "tags": [
+      "container-queries",
+      "@container",
+      "responsive",
+      "component",
+      "layout",
+      "no-js"
+    ],
+    "description": "A self-contained card that reflows from stacked to side-by-side based on the width of its parent slot, not the viewport.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "index.html"
+    ],
+    "usage": "Wrap the card in a .cq-slot element (which gets container-type: inline-size) and drop it into any sidebar, modal, or hero — the @container queries in styles.css swap the grid template and type scale based on the slot's width, with no media queries or JavaScript. Put the brand tokens (the .cq-scope block, or your own :root vars) on any ancestor so the colors resolve.",
+    "source": "https://web.dev/blog/cq-stable",
+    "license": "web.dev / content under CC-BY 4.0 — reimplemented; container queries are native Baseline CSS",
+    "path": "components/css/container-query-card",
+    "preview": "components/css/container-query-card/preview.html"
+  },
+  {
+    "name": "CSS Scroll Reveal Timeline",
+    "slug": "css-scroll-reveal-timeline",
+    "category": "css",
+    "tier": "showcase",
+    "tags": [
+      "scroll-driven",
+      "animation-timeline",
+      "view",
+      "clip-path",
+      "no-js",
+      "progressive-enhancement"
+    ],
+    "description": "Zero-JavaScript clip-path and fade reveals plus a top scroll-progress bar driven entirely by the native CSS animation-timeline view() and scroll() functions.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "index.html"
+    ],
+    "usage": "Include styles.css, drop a single <div class=\"srt-progress\"> near the top of <body> for the scroll bar, then add .srt-reveal plus a variant (.srt-fade-up, .srt-clip, .srt-clip--up, or .srt-zoom) to any element you want revealed. Stagger siblings by setting an inline --srt-delay between 0 and 1.",
+    "source": "https://tympanus.net/codrops/2024/01/17/a-practical-introduction-to-scroll-driven-animations-with-css-scroll-and-view/",
+    "license": "Public-domain CSS idiom — reimplemented; technique is a native CSS feature (no library).",
+    "path": "components/css/css-scroll-reveal-timeline",
+    "preview": "components/css/css-scroll-reveal-timeline/preview.html"
+  },
+  {
+    "name": "CSS-Only Snap Carousel",
+    "slug": "scroll-snap-carousel",
+    "category": "css",
+    "tier": "practical",
+    "tags": [
+      "carousel",
+      "scroll-snap",
+      "scroll-marker",
+      "scroll-button",
+      "no-js",
+      "accessible"
+    ],
+    "description": "A swipeable, paginated carousel with prev/next buttons and dot markers built with zero JavaScript via scroll-snap plus the new ::scroll-button and ::scroll-marker pseudo-elements.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "index.html"
+    ],
+    "usage": "Copy styles.css into your project and mark up a .snap-carousel wrapper containing a .snap-carousel__track list with one .snap-carousel__slide per item (see index.html). The browser generates the prev/next buttons and dot pagination automatically — no scripts, no extra markup.",
+    "source": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Overflow/Carousels",
+    "license": "Public-domain CSS idiom — reimplemented from MDN docs (CC-BY-SA 2.5); CSS Overflow L5 features are native and unencumbered",
+    "path": "components/css/scroll-snap-carousel",
+    "preview": "components/css/scroll-snap-carousel/preview.html"
   },
   {
     "name": "Glassmorphism Card",
@@ -154,6 +328,31 @@
     "preview": "components/css/grain-noise-overlay/preview.html"
   },
   {
+    "name": "Heart Like Burst",
+    "slug": "heart-like-burst",
+    "category": "css",
+    "tier": "showcase",
+    "tags": [
+      "like",
+      "heart",
+      "burst",
+      "particles",
+      "favorite",
+      "micro-interaction"
+    ],
+    "description": "A like button where the heart pops with an elastic bounce and a ring of colorful particles bursts outward, with no images or JavaScript.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "index.html"
+    ],
+    "usage": "Copy styles.css into your stylesheet and drop in the .hlb markup (a hidden checkbox plus .hlb__heart and .hlb__glyph spans) for each button. Tune per instance with the --hlb-size, --hlb-liked, --hlb-idle, and --hlb-ring custom properties on the wrapper.",
+    "source": "https://css-tricks.com/recreating-the-twitter-heart-animation/",
+    "license": "CSS-Tricks tutorial by Ana Tudor — technique reimplemented cleanly, shared for learning",
+    "path": "components/css/heart-like-burst",
+    "preview": "components/css/heart-like-burst/preview.html"
+  },
+  {
     "name": "Infinite Marquee",
     "slug": "marquee",
     "category": "css",
@@ -198,6 +397,32 @@
     "preview": "components/css/neon-glow-button/preview.html"
   },
   {
+    "name": "Retro Synthwave Grid Floor",
+    "slug": "retro-grid-floor",
+    "category": "css",
+    "tier": "showcase",
+    "tags": [
+      "background",
+      "retro",
+      "synthwave",
+      "3d",
+      "perspective",
+      "animated",
+      "no-js"
+    ],
+    "description": "An infinitely scrolling Tron/vaporwave floor grid that recedes to a glowing horizon, built entirely from layered gradients and a single 3D transform with no canvas or JavaScript.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "index.html"
+    ],
+    "usage": "Drop the .rgf markup (sky, sun, plane, grid) into a sized container and include styles.css; the grid fills its parent and scrolls forever. Override the --rgf-* custom properties to retune line color, glow, cell size, speed, tilt, and perspective.",
+    "source": "https://freefrontend.com/code/pure-css-synthwave-80s-animation-2026-01-20/",
+    "license": "MIT — reimplemented from scratch; technique (perspective grid via repeating gradients) is an unencumbered public-domain CSS idiom",
+    "path": "components/css/retro-grid-floor",
+    "preview": "components/css/retro-grid-floor/preview.html"
+  },
+  {
     "name": "Shimmer Skeleton",
     "slug": "shimmer-skeleton",
     "category": "css",
@@ -218,6 +443,89 @@
     "usage": "Use .scs-skeleton with a shape helper (--text, --title, --avatar, --thumb, --btn) and optional width helper (--w90/--w75/--w60/--w40). Compose blocks to mirror your real content, then swap in content when loaded.",
     "path": "components/css/shimmer-skeleton",
     "preview": "components/css/shimmer-skeleton/preview.html"
+  },
+  {
+    "name": "Sliding Underline Link",
+    "slug": "animated-underline",
+    "category": "css",
+    "tier": "practical",
+    "tags": [
+      "underline",
+      "hover",
+      "link",
+      "background-size",
+      "micro-interaction",
+      "multiline"
+    ],
+    "description": "A link underline that wipes in on hover and correctly wraps across multiple lines, using an animated background-size instead of a transform.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "index.html"
+    ],
+    "usage": "Add the styles.css to your stylesheet and apply the .su-link class to any anchor; tune color and thickness per instance with the --su-color and --su-thickness custom properties, or use the --reverse, --bold, and --retract modifiers.",
+    "source": "https://css-irl.info/animating-underlines/",
+    "license": "CSS { In Real Life } blog (Michelle Barker) — educational snippet, reimplemented cleanly",
+    "path": "components/css/animated-underline",
+    "preview": "components/css/animated-underline/preview.html"
+  },
+  {
+    "name": "3D Scroll Text Cylinder",
+    "slug": "scroll-text-cylinder",
+    "category": "motion",
+    "tier": "showcase",
+    "tags": [
+      "text",
+      "3d",
+      "scroll",
+      "perspective",
+      "cylinder",
+      "gsap",
+      "transform"
+    ],
+    "description": "Lines of text wrapped around an invisible 3D cylinder that rotates through depth as you scroll, with no WebGL required.",
+    "deps": [
+      "gsap",
+      "gsap/ScrollTrigger",
+      "gsap/ScrollSmoother"
+    ],
+    "files": [
+      "animation.js",
+      "styles.css"
+    ],
+    "usage": "Wrap .cyl-line spans in a [data-cylinder] element inside a .cyl-stage section, then call initScrollCylinder(); tune via data-radius, data-arc, data-spin and data-axis (\"x\" tube or \"y\" carousel). ScrollSmoother is optional and auto-detected for inertia.",
+    "source": "https://tympanus.net/codrops/2025/11/04/creating-3d-scroll-driven-text-animations-with-css-and-gsap/",
+    "license": "MIT — reimplemented from the Codrops/Tympanus tutorial technique (free for personal and commercial use; GSAP plugins are now free).",
+    "path": "components/motion/scroll-text-cylinder",
+    "preview": "components/motion/scroll-text-cylinder/preview.html"
+  },
+  {
+    "name": "Gravity Mouse Trail",
+    "slug": "gravity-mouse-trail",
+    "category": "motion",
+    "tier": "showcase",
+    "tags": [
+      "mouse",
+      "cursor",
+      "image-trail",
+      "gravity",
+      "physics",
+      "gsap",
+      "bounce"
+    ],
+    "description": "Images burst from the cursor as it moves, then fall under simulated gravity, bounce off the bottom of the viewport, and fade away.",
+    "deps": [
+      "gsap"
+    ],
+    "files": [
+      "animation.js",
+      "styles.css"
+    ],
+    "usage": "Drop in a positioned .gmt-stage element, then call initGravityMouseTrail(stageEl, { images: [...] }); pass an array of preloaded image URLs and the trail spawns from the cursor on mousemove.",
+    "source": "https://tympanus.net/codrops/2026/05/20/made-with-gsap-building-a-fun-gravity-based-mouse-trail/",
+    "license": "Codrops/Tympanus license — free for personal and commercial use, no redistribution as-is. Reimplemented cleanly for saltycodestudio; no physics engine.",
+    "path": "components/motion/gravity-mouse-trail",
+    "preview": "components/motion/gravity-mouse-trail/preview.html"
   },
   {
     "name": "Horizontal Scroll Gallery",
@@ -271,6 +579,67 @@
     "usage": "Provide a tall .scrub-section wrapping a pinned <canvas class=\"scrub-canvas\">, then call initScrubSequence().",
     "path": "components/motion/image-scrub-sequence",
     "preview": "components/motion/image-scrub-sequence/preview.html"
+  },
+  {
+    "name": "Infinite Parallax Scroll",
+    "slug": "infinite-parallax-scroll",
+    "category": "motion",
+    "tier": "showcase",
+    "tags": [
+      "scroll",
+      "infinite",
+      "parallax",
+      "depth",
+      "snap",
+      "gsap",
+      "lenis"
+    ],
+    "description": "Fullscreen sections that loop endlessly with eased snap, while their inner media drifts at a slower rate to create a seamless sense of depth.",
+    "deps": [
+      "gsap",
+      "gsap/ScrollTrigger",
+      "lenis",
+      "lenis/snap"
+    ],
+    "files": [
+      "animation.js",
+      "styles.css"
+    ],
+    "usage": "Duplicate your first .ips__section as the last child (tag it data-ips-clone) inside a [data-ips] container, then call initInfiniteParallaxScroll() after GSAP and Lenis load. Lenis infinite:true hides the loop seam, GSAP parallaxes each .ips__media, and Lenis Snap eases to whole-viewport stops.",
+    "source": "https://tympanus.net/codrops/2026/05/28/the-never-ending-story-building-a-seamless-infinite-scroll-experience-with-gsap-lenis/",
+    "license": "Codrops/Tympanus — reimplemented; demo code free for personal and commercial use, not redistributed as-is.",
+    "path": "components/motion/infinite-parallax-scroll",
+    "preview": "components/motion/infinite-parallax-scroll/preview.html"
+  },
+  {
+    "name": "Layered Zoom Scroll",
+    "slug": "layered-zoom-scroll",
+    "category": "motion",
+    "tier": "showcase",
+    "tags": [
+      "scroll",
+      "zoom",
+      "parallax",
+      "blur",
+      "split-text",
+      "gsap",
+      "scrollsmoother"
+    ],
+    "description": "A cinematic trailing-zoom hero where stacked image layers scale and de-blur into focus while split headline text parts to reveal a masked central subject on scroll.",
+    "deps": [
+      "gsap",
+      "gsap/ScrollTrigger",
+      "gsap/ScrollSmoother"
+    ],
+    "files": [
+      "animation.js",
+      "styles.css"
+    ],
+    "usage": "Drop the smooth-wrapper/smooth-content scaffold and .lzs hero markup into your page, then call initLayeredZoomScroll() after GSAP loads. Tune layer count, start scales, blur, and word travel via the options object.",
+    "source": "https://tympanus.net/codrops/2025/10/29/building-a-layered-zoom-scroll-effect-with-gsap-scrollsmoother-and-scrolltrigger/",
+    "license": "Codrops tutorial — clean reimplementation; credits original Telescope site authors; GSAP plugins (incl. ScrollSmoother) are now free for everyone.",
+    "path": "components/motion/layered-zoom-scroll",
+    "preview": "components/motion/layered-zoom-scroll/preview.html"
   },
   {
     "name": "Magnetic Button",
@@ -403,6 +772,34 @@
     "preview": "components/motion/scroll-text-reveal/preview.html"
   },
   {
+    "name": "Scroll Velocity Skew Marquee",
+    "slug": "scroll-velocity-skew-marquee",
+    "category": "motion",
+    "tier": "showcase",
+    "tags": [
+      "scroll",
+      "marquee",
+      "skew",
+      "gsap",
+      "velocity",
+      "infinite-loop"
+    ],
+    "description": "An infinite horizontal marquee that skews and stretches in proportion to scroll velocity, snapping back to rest when the scroll stops.",
+    "deps": [
+      "gsap",
+      "gsap/ScrollTrigger"
+    ],
+    "files": [
+      "animation.js",
+      "styles.css"
+    ],
+    "usage": "Import initScrollVelocitySkewMarquee, pass it a wrapper element containing a [data-svm-track] row with two identical sets of items, and the marquee loops infinitely while leaning into your scroll velocity. Include styles.css for layout and reduced-motion handling.",
+    "source": "https://codepen.io/GreenSock/pen/eYpGLYL",
+    "license": "Inspired by an official GreenSock CodePen; reimplemented cleanly. GSAP core is free under the standard GreenSock 'no charge' license.",
+    "path": "components/motion/scroll-velocity-skew-marquee",
+    "preview": "components/motion/scroll-velocity-skew-marquee/preview.html"
+  },
+  {
     "name": "Split Text Stagger",
     "slug": "split-text-stagger",
     "category": "motion",
@@ -430,6 +827,37 @@
     "preview": "components/motion/split-text-stagger/preview.html"
   },
   {
+    "name": "Sticky Grid Scroll",
+    "slug": "sticky-grid-scroll",
+    "category": "motion",
+    "tier": "showcase",
+    "tags": [
+      "scroll",
+      "pinned",
+      "grid",
+      "gallery",
+      "zoom",
+      "gsap",
+      "lenis",
+      "stagger"
+    ],
+    "description": "A pinned 3-column image grid that staggers in, scales and opens up, and reveals an overlaid title and CTA at precise scroll points before releasing.",
+    "deps": [
+      "gsap",
+      "gsap/ScrollTrigger",
+      "lenis"
+    ],
+    "files": [
+      "animation.js",
+      "styles.css"
+    ],
+    "usage": "Mark up .sgs > .sgs-stage > (.sgs-grid with three .sgs-col / .sgs-cell columns + a [data-sgs-content] overlay), include styles.css, then call initStickyGridScroll(). Lenis is auto-detected; pass { lenis: false } to opt out.",
+    "source": "https://tympanus.net/codrops/2026/03/02/sticky-grid-scroll-building-a-scroll-driven-animated-grid/",
+    "license": "Inspired by a Codrops/Tympanus tutorial (free for personal & commercial use) — reimplemented cleanly, no verbatim source.",
+    "path": "components/motion/sticky-grid-scroll",
+    "preview": "components/motion/sticky-grid-scroll/preview.html"
+  },
+  {
     "name": "Sticky Stacking Cards",
     "slug": "sticky-stacking-cards",
     "category": "motion",
@@ -454,6 +882,91 @@
     "usage": "Wrap .stack-card items in a .stack-cards container and call initStackingCards().",
     "path": "components/motion/sticky-stacking-cards",
     "preview": "components/motion/sticky-stacking-cards/preview.html"
+  },
+  {
+    "name": "SVG Line Draw on Scroll",
+    "slug": "svg-line-draw-on-scroll",
+    "category": "motion",
+    "tier": "practical",
+    "tags": [
+      "svg",
+      "stroke",
+      "draw",
+      "scroll",
+      "gsap",
+      "drawsvg",
+      "path"
+    ],
+    "description": "An SVG path that progressively draws itself in sync with scroll, ideal for connecting timeline sections or tracing illustrations.",
+    "deps": [
+      "gsap",
+      "gsap/ScrollTrigger"
+    ],
+    "files": [
+      "animation.js",
+      "styles.css"
+    ],
+    "usage": "Add an SVG with class draw-on-scroll containing stroked fill:none paths, include styles.css + GSAP/ScrollTrigger + animation.js, then call initSvgLineDraw() (optionally scoped with pathSelector/trigger/start/end).",
+    "source": "https://gsap.com/docs/v3/Plugins/DrawSVGPlugin/",
+    "license": "GSAP + DrawSVGPlugin are now free under the standard GSAP license; this is an original reimplementation using the stroke-dashoffset idiom on core GSAP. Pure-CSS scroll-timeline variant is an unrestricted public-domain idiom. MIT — reimplemented.",
+    "path": "components/motion/svg-line-draw-on-scroll",
+    "preview": "components/motion/svg-line-draw-on-scroll/preview.html"
+  },
+  {
+    "name": "SVG Text Clip Reveal",
+    "slug": "svg-text-clip-reveal",
+    "category": "motion",
+    "tier": "showcase",
+    "tags": [
+      "text",
+      "clip-path",
+      "svg",
+      "mask",
+      "scroll",
+      "gsap",
+      "wipe"
+    ],
+    "description": "Large display type used as an SVG clip-path that wipes open on scroll to reveal an image or pattern sliding behind the letters.",
+    "deps": [
+      "gsap",
+      "gsap/ScrollTrigger"
+    ],
+    "files": [
+      "animation.js",
+      "styles.css"
+    ],
+    "usage": "Include styles.css and animation.js, register GSAP + ScrollTrigger, and add a [data-stcr] section whose SVG has a <clipPath> wrapping the text and a media layer clipped to it. animation.js auto-inits on DOMContentLoaded; call initSvgTextClipReveal(opts) manually to tune drift/scrub.",
+    "source": "https://tympanus.net/codrops/2024/01/10/experimental-on-scroll-text-animations-with-svg-clip-path/",
+    "license": "Inspired by Codrops/Tympanus demo; reimplemented from scratch. Codrops license: free for personal and commercial use, no redistribution as-is.",
+    "path": "components/motion/svg-text-clip-reveal",
+    "preview": "components/motion/svg-text-clip-reveal/preview.html"
+  },
+  {
+    "name": "Animated Beam Connector",
+    "slug": "animated-beam-connector",
+    "category": "react",
+    "tier": "showcase",
+    "tags": [
+      "beam",
+      "connector",
+      "diagram",
+      "svg",
+      "integrations",
+      "flow"
+    ],
+    "description": "An animated gradient pulse that travels along a curved SVG path connecting two referenced DOM nodes, ideal for integration and architecture diagrams.",
+    "deps": [
+      "motion",
+      "tailwindcss"
+    ],
+    "files": [
+      "AnimatedBeam.tsx"
+    ],
+    "usage": "Give a relative container a ref, give each node you want to wire its own ref, then render one <AnimatedBeam containerRef fromRef toRef /> per connection; tune curvature, reverse, duration, delay and the gradient colours, and the path auto-recomputes on resize via a ResizeObserver.",
+    "source": "https://magicui.design/docs/components/animated-beam",
+    "license": "MIT (Magic UI, github.com/magicuidesign/magicui) — reimplemented cleanly with credit",
+    "path": "components/react/animated-beam-connector",
+    "preview": "components/react/animated-beam-connector/preview.html"
   },
   {
     "name": "Animated Counter",
@@ -504,6 +1017,57 @@
     "preview": "components/react/bento-grid/preview.html"
   },
   {
+    "name": "Border Beam",
+    "slug": "border-beam",
+    "category": "react",
+    "tier": "showcase",
+    "tags": [
+      "border",
+      "beam",
+      "glow",
+      "card",
+      "animated-border",
+      "tailwind"
+    ],
+    "description": "An animated beam of light that continuously travels around the border of any container, framing cards and pricing tiers with a premium glow.",
+    "deps": [
+      "motion",
+      "tailwindcss"
+    ],
+    "files": [
+      "BorderBeam.tsx"
+    ],
+    "usage": "Drop <BorderBeam /> inside any relative + overflow-hidden, rounded container to frame it with a travelling glow; tune colorFrom/colorTo, duration, delay, reverse and initialOffset, and stack two beams with offset delays for a chasing effect.",
+    "source": "https://magicui.design/docs/components/border-beam",
+    "license": "MIT (Magic UI, github.com/magicuidesign/magicui) — reimplemented cleanly with credit",
+    "path": "components/react/border-beam",
+    "preview": "components/react/border-beam/preview.html"
+  },
+  {
+    "name": "Canvas Particle Field",
+    "slug": "canvas-particle-field",
+    "category": "react",
+    "tier": "practical",
+    "tags": [
+      "particles",
+      "canvas",
+      "interactive",
+      "depth",
+      "mouse",
+      "background"
+    ],
+    "description": "Lightweight canvas particles that drift and gently react to the cursor, adding depth and motion behind hero content.",
+    "deps": [],
+    "files": [
+      "CanvasParticleField.tsx"
+    ],
+    "usage": "Render <CanvasParticleField /> as the first child of a position:relative hero section so it sits absolutely behind your content. Tune quantity, size, color, vx/vy drift, staticity, and ease to dial in the depth and mouse responsiveness.",
+    "source": "https://magicui.design/docs/components/particles",
+    "license": "MIT — reimplemented (inspired by Magic UI, magicuidesign/magicui)",
+    "path": "components/react/canvas-particle-field",
+    "preview": "components/react/canvas-particle-field/preview.html"
+  },
+  {
     "name": "Command Palette",
     "slug": "command-palette",
     "category": "react",
@@ -526,6 +1090,32 @@
     "usage": "Render <CommandPalette commands={...} /> anywhere; press ⌘K / Ctrl+K to open. Pass your own commands array.",
     "path": "components/react/command-palette",
     "preview": "components/react/command-palette/preview.html"
+  },
+  {
+    "name": "Confetti Button",
+    "slug": "confetti-button",
+    "category": "react",
+    "tier": "practical",
+    "tags": [
+      "confetti",
+      "button",
+      "celebration",
+      "feedback",
+      "canvas",
+      "delight"
+    ],
+    "description": "A button that bursts confetti from its own position on click to celebrate signups, purchases and other success moments.",
+    "deps": [
+      "canvas-confetti"
+    ],
+    "files": [
+      "ConfettiButton.tsx"
+    ],
+    "usage": "Render <ConfettiButton>Sign up</ConfettiButton> wherever you want a celebratory click; on press it reads its own bounding rect, normalises the centre to viewport-origin coordinates and fires canvas-confetti from that exact spot. Tune particleCount, spread, angle, startVelocity, gravity, scalar and colors, and use onConfetti for follow-up logic.",
+    "source": "https://magicui.design/docs/components/confetti",
+    "license": "MIT (Magic UI; wraps MIT canvas-confetti) — reimplemented cleanly with credit",
+    "path": "components/react/confetti-button",
+    "preview": "components/react/confetti-button/preview.html"
   },
   {
     "name": "Dark Mode Toggle",
@@ -602,6 +1192,60 @@
     "preview": "components/react/gradient-mesh-hero/preview.html"
   },
   {
+    "name": "Hover Glow Border",
+    "slug": "hover-glow-border",
+    "category": "react",
+    "tier": "showcase",
+    "tags": [
+      "glow",
+      "border",
+      "cursor",
+      "conic-gradient",
+      "card",
+      "cursor-style"
+    ],
+    "description": "A Cursor-style border glow that orbits any card and concentrates toward the mouse pointer, adapting to any container size.",
+    "deps": [
+      "motion",
+      "tailwindcss"
+    ],
+    "files": [
+      "HoverGlowBorder.tsx"
+    ],
+    "usage": "Wrap any card or panel in <HoverGlowBorder> and give the inner element a matching rounded background; tune spread, proximity, inactiveZone and movementDuration to shape how tightly the glow chases the cursor.",
+    "source": "https://ui.aceternity.com/components/glowing-effect",
+    "license": "MIT (Aceternity UI) — reimplemented cleanly with credit",
+    "path": "components/react/hover-glow-border",
+    "preview": "components/react/hover-glow-border/preview.html"
+  },
+  {
+    "name": "Lamp Effect",
+    "slug": "lamp-effect",
+    "category": "react",
+    "tier": "showcase",
+    "tags": [
+      "lamp",
+      "spotlight",
+      "section-header",
+      "conic-gradient",
+      "linear-style",
+      "hero"
+    ],
+    "description": "A Linear-inspired overhead lamp glow that fans light down onto a section header, with the headline rising into the beam on scroll.",
+    "deps": [
+      "motion",
+      "tailwindcss"
+    ],
+    "files": [
+      "LampEffect.tsx"
+    ],
+    "usage": "Render <LampEffect title=\"...\" subtitle=\"...\" /> as a section header; pass a `glow` color to retint the beam and optional children for CTAs.",
+    "source": "https://ui.aceternity.com/components/lamp-effect",
+    "license": "MIT (Aceternity UI) — reimplemented cleanly with credit",
+    "path": "components/react/lamp-effect",
+    "preview": "components/react/lamp-effect/preview.html"
+  },
+  {
     "name": "Logo Marquee",
     "slug": "logo-marquee",
     "category": "react",
@@ -624,6 +1268,33 @@
     "usage": "Render <LogoMarquee logos={[...]} /> with text or node logos; defaults to sample wordmarks.",
     "path": "components/react/logo-marquee",
     "preview": "components/react/logo-marquee/preview.html"
+  },
+  {
+    "name": "macOS Dock",
+    "slug": "macos-dock",
+    "category": "react",
+    "tier": "showcase",
+    "tags": [
+      "dock",
+      "navigation",
+      "magnify",
+      "macos",
+      "hover",
+      "toolbar"
+    ],
+    "description": "A macOS-style icon dock whose items magnify and lift as the cursor approaches, for portfolio nav bars and app launchers.",
+    "deps": [
+      "motion",
+      "tailwindcss"
+    ],
+    "files": [
+      "MacosDock.tsx"
+    ],
+    "usage": "Wrap a row of <DockItem label=\"...\"> icons in <MacosDock>; the dock tracks the cursor's X position and springs each icon's size so neighbours scale in a smooth bell curve around the hovered icon. Tune baseSize, maxSize, and distance props to taste.",
+    "source": "https://magicui.design/docs/components/dock",
+    "license": "MIT (Magic UI) — reimplemented cleanly with credit",
+    "path": "components/react/macos-dock",
+    "preview": "components/react/macos-dock/preview.html"
   },
   {
     "name": "Pricing Toggle",
@@ -674,6 +1345,33 @@
     "preview": "components/react/shrinking-sticky-navbar/preview.html"
   },
   {
+    "name": "Spotlight Card",
+    "slug": "spotlight-card",
+    "category": "react",
+    "tier": "practical",
+    "tags": [
+      "card",
+      "spotlight",
+      "hover",
+      "radial-gradient",
+      "pointer-tracking",
+      "feature"
+    ],
+    "description": "A card that reveals a soft radial spotlight following the cursor on hover, ideal for premium-but-safe feature and pricing grids.",
+    "deps": [
+      "motion",
+      "tailwindcss"
+    ],
+    "files": [
+      "SpotlightCard.tsx"
+    ],
+    "usage": "Import SpotlightCard and pass title/description/icon (or your own children); arrange several in a grid for feature or pricing layouts. Move the cursor over a card to reveal the spotlight.",
+    "source": "https://ui.aceternity.com/components/card-spotlight",
+    "license": "MIT (Aceternity UI) — reimplemented with credit",
+    "path": "components/react/spotlight-card",
+    "preview": "components/react/spotlight-card/preview.html"
+  },
+  {
     "name": "Testimonial Carousel",
     "slug": "testimonial-carousel",
     "category": "react",
@@ -696,6 +1394,58 @@
     "usage": "Render <TestimonialCarousel testimonials={...} /> or use the built-in sample quotes.",
     "path": "components/react/testimonial-carousel",
     "preview": "components/react/testimonial-carousel/preview.html"
+  },
+  {
+    "name": "Text Shimmer",
+    "slug": "text-shimmer",
+    "category": "react",
+    "tier": "practical",
+    "tags": [
+      "text",
+      "shimmer",
+      "shine",
+      "gradient",
+      "badge",
+      "loading"
+    ],
+    "description": "Text with a soft light sheen sweeping across it left to right, perfect for announcement pills, badges and subtle loading labels.",
+    "deps": [
+      "tailwindcss"
+    ],
+    "files": [
+      "TextShimmer.tsx"
+    ],
+    "usage": "Import TextShimmer and wrap any short string, e.g. <TextShimmer>Now in beta</TextShimmer> inside a pill, or set as=\"label\" with a longer duration for a subtle loading label. Tune duration, spread, baseColor and shineColor via props.",
+    "source": "https://magicui.design/docs/components/animated-shiny-text",
+    "license": "MIT (Magic UI) — reimplemented cleanly with credit",
+    "path": "components/react/text-shimmer",
+    "preview": "components/react/text-shimmer/preview.html"
+  },
+  {
+    "name": "WebGL Mesh Gradient Plasma",
+    "slug": "webgl-mesh-gradient-plasma",
+    "category": "react",
+    "tier": "showcase",
+    "tags": [
+      "mesh",
+      "gradient",
+      "plasma",
+      "webgl",
+      "shader",
+      "hero"
+    ],
+    "description": "A flowing WebGL mesh-gradient of color spots that swirl and distort like plasma, for a high-end animated hero canvas.",
+    "deps": [
+      "@paper-design/shaders-react"
+    ],
+    "files": [
+      "MeshGradientPlasma.tsx"
+    ],
+    "usage": "Wrap your hero content in <MeshGradientPlasma> to lay a live GLSL plasma canvas behind it; tune colors, speed, distortion, swirl, grainMixer and grainOverlay to taste. It freezes on a still frame automatically when prefers-reduced-motion is set.",
+    "source": "https://shaders.paper.design/mesh-gradient",
+    "license": "PolyForm Shield — free for commercial/non-commercial use unless it competes with Paper; wrapper code reimplemented cleanly with credit",
+    "path": "components/react/webgl-mesh-gradient-plasma",
+    "preview": "components/react/webgl-mesh-gradient-plasma/preview.html"
   },
   {
     "name": "Copy to Clipboard",

@@ -1,0 +1,13 @@
+{
+  "name": "Spotlight Card",
+  "slug": "spotlight-card",
+  "category": "react",
+  "tier": "practical",
+  "tags": ["card", "spotlight", "hover", "radial-gradient", "pointer-tracking", "feature"],
+  "description": "A card that reveals a soft radial spotlight following the cursor on hover, ideal for premium-but-safe feature and pricing grids.",
+  "deps": ["motion", "tailwindcss"],
+  "files": ["SpotlightCard.tsx"],
+  "usage": "Import SpotlightCard and pass title/description/icon (or your own children); arrange several in a grid for feature or pricing layouts. Move the cursor over a card to reveal the spotlight.",
+  "source": "https://ui.aceternity.com/components/card-spotlight",
+  "license": "MIT (Aceternity UI) — reimplemented with credit"
+}

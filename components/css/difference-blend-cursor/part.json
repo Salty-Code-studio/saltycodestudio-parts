@@ -1,0 +1,13 @@
+{
+  "name": "Auto-Invert Difference Cursor",
+  "slug": "difference-blend-cursor",
+  "category": "css",
+  "tier": "showcase",
+  "tags": ["cursor", "mix-blend-mode", "difference", "invert", "interactive", "monochrome"],
+  "description": "A custom circular cursor that auto-inverts whatever it passes over using mix-blend-mode: difference, so it stays legible on any background.",
+  "deps": [],
+  "files": ["styles.css", "index.html"],
+  "usage": "Link styles.css, drop the single .scs-difference-cursor element on the page, then paste the script that feeds --x/--y position and toggles state classes; add .scs-cursor-target to any element you want the cursor to grow over (native links/buttons are auto-detected).",
+  "source": "https://css-tricks.com/taming-blend-modes-difference-and-exclusion/",
+  "license": "Public-domain CSS idiom — mix-blend-mode is native CSS; reimplemented cleanly from the CSS-Tricks concept."
+}

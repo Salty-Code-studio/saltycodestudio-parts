@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Retro Synthwave Grid Floor — Sand &amp; Surf</title>
+<style>
+  /* ---------- Sand & Surf page chrome ---------- */
+  :root {
+    --sand-bg: #fbf7f0;
+    --sand-2: #f4ece0;
+    --sand-3: #ece0cd;
+    --ink: #1c2b33;
+    --ink-soft: #4a5d66;
+    --teal: #1f8a8a;
+    --deep: #0f5c5c;
+    --surf: #2ec3c3;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body { margin: 0; }
+
+  body {
+    font-family: "Albert Sans", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: var(--sand-bg);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 48px 24px 96px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--deep);
+    background: var(--sand-3);
+    padding: 7px 14px;
+    border-radius: 999px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--surf);
+    box-shadow: 0 0 0 4px rgba(46,195,195,0.25);
+  }
+
+  h1 {
+    font-size: clamp(34px, 6vw, 60px);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    margin: 18px 0 14px;
+    color: var(--ink);
+  }
+  h1 em {
+    font-style: normal;
+    color: var(--teal);
+  }
+
+  .lede {
+    max-width: 56ch;
+    font-size: clamp(16px, 2.1vw, 19px);
+    line-height: 1.6;
+    color: var(--ink-soft);
+    margin: 0 0 36px;
+  }
+
+  /* Stage card holding the effect */
+  .stage {
+    position: relative;
+    border-radius: 22px;
+    overflow: hidden;
+    box-shadow:
+      0 1px 0 rgba(28,43,51,0.04),
+      0 30px 60px -28px rgba(15,92,92,0.45);
+    border: 1px solid var(--sand-3);
+    height: clamp(380px, 56vh, 560px);
+  }
+
+  /* Foreground hero copy sitting on top of the floor */
+  .stage__copy {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: center;
+    padding: 48px 24px 0;
+    pointer-events: none;
+  }
+  .stage__kicker {
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    color: #ffe79a;
+    text-shadow: 0 0 14px rgba(255,95,174,0.6);
+    margin: 0 0 10px;
+  }
+  .stage__title {
+    margin: 0;
+    font-size: clamp(30px, 7vw, 64px);
+    line-height: 0.95;
+    letter-spacing: 0.01em;
+    font-weight: 800;
+    color: #fff;
+    text-shadow:
+      0 0 2px #fff,
+      0 0 18px var(--surf),
+      0 0 38px rgba(46,195,195,0.8),
+      0 0 70px rgba(255,95,174,0.5);
+  }
+  .stage__sub {
+    margin: 14px 0 0;
+    font-size: clamp(13px, 2vw, 16px);
+    letter-spacing: 0.06em;
+    color: rgba(255,255,255,0.86);
+    text-shadow: 0 1px 8px rgba(0,0,0,0.5);
+  }
+
+  /* Variant chips */
+  .variants {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-top: 28px;
+  }
+  .variant {
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--sand-3);
+    background: var(--sand-2);
+  }
+  .variant .rgf { height: 150px; }
+  .variant figcaption {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 11px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .variant figcaption code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 11px;
+    color: var(--deep);
+    background: var(--sand-bg);
+    border: 1px solid var(--sand-3);
+    padding: 2px 7px;
+    border-radius: 6px;
+  }
+  figure { margin: 0; }
+
+  .note {
+    margin-top: 40px;
+    padding: 16px 18px;
+    border-left: 3px solid var(--surf);
+    background: var(--sand-2);
+    border-radius: 0 12px 12px 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+  }
+  .note strong { color: var(--ink); }
+
+  /* ============================================================
+     PART CSS — Retro Synthwave Grid Floor (canonical copy in styles.css)
+     ============================================================ */
+  .rgf {
+    --rgf-line: #2ec3c3;
+    --rgf-glow: #1f8a8a;
+    --rgf-floor: rgba(15, 92, 92, 0.0);
+    --rgf-cell: 44px;
+    --rgf-speed: 1.6s;
+    --rgf-tilt: 58deg;
+    --rgf-perspective: 14em;
+
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 150px;
+    overflow: hidden;
+    background: #0b1f2a;
+    isolation: isolate;
+  }
+
+  .rgf__sky {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background:
+      linear-gradient(
+        to bottom,
+        #1b0b2e 0%,
+        #2a1145 26%,
+        #5a1a52 52%,
+        #0f3a4a 72%,
+        #0b1f2a 100%
+      );
+  }
+
+  .rgf__sun {
+    position: absolute;
+    left: 50%;
+    bottom: 50%;
+    z-index: 1;
+    width: 46%;
+    max-width: 360px;
+    aspect-ratio: 1;
+    transform: translate(-50%, 6%);
+    border-radius: 50%;
+    background:
+      linear-gradient(
+        to bottom,
+        #ffe79a 0%,
+        #ffb259 34%,
+        #ff5fae 70%,
+        #c2347f 100%
+      );
+    -webkit-mask-image:
+      linear-gradient(to bottom, #000 0 52%, transparent 52%),
+      repeating-linear-gradient(to bottom, #000 0 8px, transparent 8px 13px);
+    mask-image:
+      linear-gradient(to bottom, #000 0 52%, transparent 52%),
+      repeating-linear-gradient(to bottom, #000 0 8px, transparent 8px 13px);
+    -webkit-mask-composite: source-over;
+    mask-composite: add;
+    filter: drop-shadow(0 0 40px rgba(255, 95, 174, 0.55));
+  }
+
+  .rgf__plane {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    z-index: 2;
+    width: 280%;
+    height: 50%;
+    transform-origin: 50% 100%;
+    transform:
+      translateX(-50%)
+      perspective(var(--rgf-perspective))
+      rotateX(var(--rgf-tilt));
+    -webkit-mask-image: linear-gradient(to top, #000 38%, transparent 96%);
+    mask-image: linear-gradient(to top, #000 38%, transparent 96%);
+  }
+
+  .rgf__grid {
+    position: absolute;
+    inset: -100% 0 0 0;
+    background-color: var(--rgf-floor);
+    background-image:
+      repeating-linear-gradient(
+        to bottom,
+        var(--rgf-line) 0 2px,
+        transparent 2px var(--rgf-cell)
+      ),
+      repeating-linear-gradient(
+        to right,
+        var(--rgf-line) 0 2px,
+        transparent 2px var(--rgf-cell)
+      ),
+      radial-gradient(
+        120% 60% at 50% 100%,
+        color-mix(in srgb, var(--rgf-glow) 55%, transparent) 0%,
+        transparent 60%
+      );
+    background-size:
+      var(--rgf-cell) var(--rgf-cell),
+      var(--rgf-cell) var(--rgf-cell),
+      100% 100%;
+    background-position: 0 0, 0 0, center bottom;
+    animation: rgf-scroll var(--rgf-speed) linear infinite;
+    will-change: background-position;
+  }
+
+  @keyframes rgf-scroll {
+    to {
+      background-position: 0 var(--rgf-cell), 0 0, center bottom;
+    }
+  }
+
+  .rgf::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    z-index: 3;
+    height: 2px;
+    transform: translateY(-1px);
+    background: linear-gradient(
+      to right,
+      transparent,
+      color-mix(in srgb, var(--rgf-line) 90%, white) 50%,
+      transparent
+    );
+    box-shadow: 0 0 18px 2px var(--rgf-glow);
+    pointer-events: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rgf__grid { animation: none; }
+  }
+
+  /* ---- demo variant overrides (tunables only) ---- */
+  .v-surf   { --rgf-line: #2ec3c3; --rgf-glow: #1f8a8a; --rgf-speed: 1.4s; --rgf-cell: 36px; }
+  .v-deep   { --rgf-line: #0f5c5c; --rgf-glow: #2ec3c3; --rgf-speed: 2.2s; --rgf-cell: 52px; }
+  .v-amber  { --rgf-line: #ffb259; --rgf-glow: #ff5fae; --rgf-speed: 1.0s; --rgf-cell: 30px; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <span class="eyebrow">Sand &amp; Surf · CSS Showcase</span>
+    <h1>Retro <em>Synthwave</em> grid floor</h1>
+    <p class="lede">
+      An infinitely scrolling Tron / vaporwave floor that recedes to a glowing
+      horizon — drawn entirely from layered <code>repeating-linear-gradient</code>s
+      on a single <code>perspective() rotateX()</code> plane. No canvas, no JavaScript,
+      no images. Just CSS marching one grid cell per loop.
+    </p>
+
+    <div class="stage">
+      <div class="rgf v-surf">
+        <div class="rgf__sky"></div>
+        <div class="rgf__sun"></div>
+        <div class="rgf__plane">
+          <div class="rgf__grid"></div>
+        </div>
+        <div class="stage__copy">
+          <p class="stage__kicker">saltycodestudio presents</p>
+          <h2 class="stage__title">OUTRUN</h2>
+          <p class="stage__sub">drive into the gradient sunset · 1986 forever</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="variants">
+      <figure class="variant">
+        <div class="rgf v-surf">
+          <div class="rgf__sky"></div>
+          <div class="rgf__sun"></div>
+          <div class="rgf__plane"><div class="rgf__grid"></div></div>
+        </div>
+        <figcaption>Surf <code>--rgf-line: #2ec3c3</code></figcaption>
+      </figure>
+
+      <figure class="variant">
+        <div class="rgf v-deep">
+          <div class="rgf__sky"></div>
+          <div class="rgf__sun"></div>
+          <div class="rgf__plane"><div class="rgf__grid"></div></div>
+        </div>
+        <figcaption>Deep / slow <code>--rgf-speed: 2.2s</code></figcaption>
+      </figure>
+
+      <figure class="variant">
+        <div class="rgf v-amber">
+          <div class="rgf__sky"></div>
+          <div class="rgf__sun"></div>
+          <div class="rgf__plane"><div class="rgf__grid"></div></div>
+        </div>
+        <figcaption>Amber / fast <code>--rgf-cell: 30px</code></figcaption>
+      </figure>
+    </div>
+
+    <p class="note">
+      <strong>How it works:</strong> two <code>repeating-linear-gradient</code>s
+      paint the rows and columns; the row layer's <code>background-position-y</code>
+      animates by exactly one cell so the loop is seamless. The whole plane is tipped
+      with <code>perspective(14em) rotateX(58deg)</code>, and a
+      <code>mask-image</code> fade dissolves the far lines into the horizon.
+      Tune everything via CSS custom properties. Honors
+      <code>prefers-reduced-motion</code> by freezing the scroll.
+    </p>
+  </div>
+</body>
+</html>

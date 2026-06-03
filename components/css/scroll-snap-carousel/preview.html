@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CSS-Only Snap Carousel · Sand &amp; Surf</title>
+<style>
+  /* ---------- Sand & Surf palette + page chrome ---------- */
+  :root {
+    --sand: #fbf7f0;
+    --sand-2: #f4ece0;
+    --sand-3: #ece0cd;
+    --ink: #1c2b33;
+    --ink-soft: #4a5d66;
+    --teal: #1f8a8a;
+    --teal-deep: #0f5c5c;
+    --surf: #2ec3c3;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(120% 80% at 50% -10%, var(--sand) 0%, var(--sand-2) 55%, var(--sand-3) 100%);
+  }
+
+  .page {
+    max-width: 72rem;
+    margin-inline: auto;
+    padding: clamp(2rem, 5vw, 5rem) clamp(1rem, 4vw, 2.5rem) 6rem;
+  }
+
+  header.hero {
+    text-align: center;
+    margin-bottom: clamp(2.5rem, 6vw, 4rem);
+  }
+  .eyebrow {
+    display: inline-block;
+    font-size: 0.75rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--teal-deep);
+    background: var(--sand);
+    border: 1px solid var(--sand-3);
+    padding: 0.4rem 0.9rem;
+    border-radius: 999px;
+    margin-bottom: 1.25rem;
+  }
+  .hero h1 {
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    line-height: 1.04;
+    margin: 0 0 0.75rem;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+  .hero h1 .accent { color: var(--teal); }
+  .hero p {
+    max-width: 36rem;
+    margin: 0 auto;
+    color: var(--ink-soft);
+    font-size: 1.0625rem;
+    line-height: 1.6;
+  }
+
+  .section-label {
+    font-size: 0.8125rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    text-align: center;
+    margin-bottom: 1.25rem;
+  }
+
+  /* ===================================================================
+     THE PART — CSS-Only Snap Carousel (see styles.css for canonical copy)
+     =================================================================== */
+  .snap-carousel {
+    --slide-gap: 1.25rem;
+    --slide-radius: 1.25rem;
+    position: relative;
+    display: grid;
+    grid-template-rows: auto auto;
+    gap: 1rem;
+    max-width: 64rem;
+    margin-inline: auto;
+  }
+
+  .snap-carousel__track {
+    display: flex;
+    gap: var(--slide-gap);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    padding: 0.5rem;
+    margin: 0;
+    list-style: none;
+    border-radius: calc(var(--slide-radius) + 0.5rem);
+    scroll-marker-group: after;
+  }
+  .snap-carousel__track::-webkit-scrollbar { display: none; }
+
+  .snap-carousel__slide {
+    flex: 0 0 100%;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+    min-height: 20rem;
+    border-radius: var(--slide-radius);
+    display: grid;
+    place-content: center;
+    align-content: end;
+    text-align: left;
+    padding: 2.25rem;
+    color: var(--sand);
+    box-shadow: 0 18px 40px -24px rgba(15, 92, 92, 0.55);
+    position: relative;
+    overflow: hidden;
+  }
+  @media (min-width: 40rem) {
+    .snap-carousel__slide { flex-basis: clamp(20rem, 62%, 34rem); }
+  }
+
+  /* Decorative gradient artwork per slide (Sand & Surf tones). */
+  .snap-carousel__slide::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    opacity: 0.9;
+  }
+  .slide--1::before { background: linear-gradient(150deg, var(--surf), var(--teal-deep)); }
+  .slide--2::before { background: linear-gradient(150deg, var(--teal), #0a4747); }
+  .slide--3::before { background: linear-gradient(150deg, #36d3c4, var(--teal)); }
+  .slide--4::before { background: linear-gradient(150deg, var(--teal-deep), #062f2f); }
+  .slide--5::before { background: linear-gradient(150deg, #4fd6c9, var(--teal-deep)); }
+
+  /* subtle wave texture overlay */
+  .snap-carousel__slide::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background:
+      radial-gradient(60% 50% at 80% 10%, rgba(251, 247, 240, 0.28), transparent 60%),
+      radial-gradient(50% 40% at 10% 90%, rgba(251, 247, 240, 0.16), transparent 60%);
+    pointer-events: none;
+  }
+
+  .slide__body { position: relative; z-index: 1; }
+  .slide__kicker {
+    display: inline-block;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: rgba(251, 247, 240, 0.18);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(251, 247, 240, 0.3);
+    padding: 0.3rem 0.7rem;
+    border-radius: 999px;
+    margin-bottom: 0.9rem;
+  }
+  .snap-carousel__slide h3 {
+    font-size: clamp(1.6rem, 4vw, 2.25rem);
+    margin: 0 0 0.4rem;
+    letter-spacing: -0.01em;
+  }
+  .snap-carousel__slide p {
+    margin: 0;
+    max-width: 24rem;
+    line-height: 1.55;
+    color: rgba(251, 247, 240, 0.92);
+  }
+
+  .snap-carousel__slide:focus-visible {
+    outline: 3px solid var(--teal-deep);
+    outline-offset: 4px;
+  }
+
+  /* ---- ::scroll-button() native prev/next ---- */
+  .snap-carousel__track::scroll-button(*) {
+    position: absolute;
+    top: calc(50% - 1.5rem);
+    z-index: 3;
+    width: 3rem;
+    height: 3rem;
+    display: grid;
+    place-content: center;
+    font-size: 1.5rem;
+    line-height: 1;
+    color: var(--teal-deep);
+    background: var(--sand);
+    border: 1px solid var(--sand-3);
+    border-radius: 999px;
+    cursor: pointer;
+    box-shadow: 0 10px 24px -12px rgba(15, 92, 92, 0.5);
+    transition: transform 160ms ease, background 160ms ease, color 160ms ease, opacity 160ms ease;
+  }
+  .snap-carousel__track::scroll-button(*):hover {
+    background: var(--surf);
+    color: var(--sand);
+    transform: scale(1.06);
+  }
+  .snap-carousel__track::scroll-button(*):focus-visible {
+    outline: 3px solid var(--teal);
+    outline-offset: 3px;
+  }
+  .snap-carousel__track::scroll-button(*):active { transform: scale(0.96); }
+  .snap-carousel__track::scroll-button(*):disabled {
+    opacity: 0.35;
+    cursor: default;
+    box-shadow: none;
+  }
+  .snap-carousel__track::scroll-button(left) {
+    content: "\2039" / "Previous slide";
+    left: -0.5rem;
+  }
+  .snap-carousel__track::scroll-button(right) {
+    content: "\203A" / "Next slide";
+    right: -0.5rem;
+  }
+
+  /* ---- ::scroll-marker dot pagination ---- */
+  .snap-carousel__track::scroll-marker-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
+    padding-block: 0.25rem;
+  }
+  .snap-carousel__slide::scroll-marker {
+    content: "";
+    width: 0.7rem;
+    height: 0.7rem;
+    border-radius: 999px;
+    background: var(--sand-3);
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: background 180ms ease, transform 180ms ease, border-color 180ms ease;
+  }
+  .snap-carousel__slide::scroll-marker:hover {
+    background: var(--ink-soft);
+    transform: scale(1.15);
+  }
+  .snap-carousel__slide::scroll-marker:focus-visible {
+    outline: 3px solid var(--teal);
+    outline-offset: 2px;
+  }
+  .snap-carousel__slide::scroll-marker:target-current {
+    background: var(--teal-deep);
+    border-color: var(--surf);
+    transform: scale(1.3);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html, .snap-carousel__track { scroll-behavior: auto; }
+    .snap-carousel__track::scroll-button(*),
+    .snap-carousel__slide::scroll-marker { transition: none; }
+  }
+
+  /* ---------- support note + footer ---------- */
+  .note {
+    max-width: 44rem;
+    margin: 2.75rem auto 0;
+    background: var(--sand);
+    border: 1px solid var(--sand-3);
+    border-radius: 1rem;
+    padding: 1.25rem 1.4rem;
+    color: var(--ink-soft);
+    font-size: 0.9375rem;
+    line-height: 1.55;
+  }
+  .note strong { color: var(--ink); }
+  .note code {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    background: var(--sand-2);
+    border-radius: 0.35rem;
+    padding: 0.1rem 0.35rem;
+    font-size: 0.85em;
+    color: var(--teal-deep);
+  }
+
+  .spacer { height: 60vh; }
+  .scroll-cue {
+    text-align: center;
+    color: var(--ink-soft);
+    font-size: 0.875rem;
+    letter-spacing: 0.04em;
+    margin-top: 4rem;
+  }
+  footer {
+    text-align: center;
+    color: var(--ink-soft);
+    font-size: 0.8125rem;
+    padding-top: 3rem;
+  }
+  footer a { color: var(--teal-deep); }
+</style>
+</head>
+<body>
+  <main class="page">
+    <header class="hero">
+      <span class="eyebrow">saltycodestudio · CSS Overflow L5</span>
+      <h1>A carousel with <span class="accent">zero JavaScript</span></h1>
+      <p>
+        Prev/next buttons and dot pagination are generated entirely by the browser
+        from <code>::scroll-button()</code> and <code>::scroll-marker</code>.
+        Swipe, drag, click the arrows, tap a dot, or use the keyboard.
+      </p>
+    </header>
+
+    <p class="section-label">Featured destinations</p>
+
+    <!-- ===== THE PART ===== -->
+    <div class="snap-carousel" role="group" aria-roledescription="carousel" aria-label="Featured destinations">
+      <ul class="snap-carousel__track">
+        <li class="snap-carousel__slide slide--1" tabindex="0" aria-label="Slide 1 of 5: Bonaire">
+          <div class="slide__body">
+            <span class="slide__kicker">Dushi Caribbean</span>
+            <h3>Bonaire</h3>
+            <p>Turquoise shallows, salt flats blushing pink, and reef walls a fin-kick from shore.</p>
+          </div>
+        </li>
+        <li class="snap-carousel__slide slide--2" tabindex="0" aria-label="Slide 2 of 5: Curaçao">
+          <div class="slide__body">
+            <span class="slide__kicker">Pastel harbours</span>
+            <h3>Curaçao</h3>
+            <p>Candy-coloured façades along Handelskade and coral gardens just past the breakwater.</p>
+          </div>
+        </li>
+        <li class="snap-carousel__slide slide--3" tabindex="0" aria-label="Slide 3 of 5: Aruba">
+          <div class="slide__body">
+            <span class="slide__kicker">Trade-wind coast</span>
+            <h3>Aruba</h3>
+            <p>Wind-carved dunes, divi-divi trees bent due west, and a surf line that never sleeps.</p>
+          </div>
+        </li>
+        <li class="snap-carousel__slide slide--4" tabindex="0" aria-label="Slide 4 of 5: Klein Bonaire">
+          <div class="slide__body">
+            <span class="slide__kicker">Untouched</span>
+            <h3>Klein Bonaire</h3>
+            <p>An uninhabited ring of white sand and unbroken reef, reachable only by boat.</p>
+          </div>
+        </li>
+        <li class="snap-carousel__slide slide--5" tabindex="0" aria-label="Slide 5 of 5: Lac Bay">
+          <div class="slide__body">
+            <span class="slide__kicker">Flat-water flats</span>
+            <h3>Lac Bay</h3>
+            <p>A shallow, mangrove-fringed lagoon — the windsurf cradle of the southern Caribbean.</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <!-- ===== /THE PART ===== -->
+
+    <div class="note">
+      <strong>Heads up on support.</strong> The horizontal scroll-snap works in every
+      modern browser today. The generated arrow buttons and dot markers rely on
+      <code>::scroll-button()</code> and <code>::scroll-marker</code> (CSS Overflow Level 5).
+      Where those aren't supported yet, the carousel gracefully degrades to a clean
+      swipe / drag experience — nothing breaks, the extra controls simply don't render.
+      Try it in a recent Chromium build to see the buttons and dots.
+    </div>
+
+    <p class="scroll-cue">↓ keep scrolling — the page is tall so swipe vs. page-scroll stays distinct ↓</p>
+    <div class="spacer"></div>
+    <div class="spacer"></div>
+
+    <footer>
+      Source / inspiration:
+      <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Overflow/Carousels" target="_blank" rel="noopener">MDN — CSS Carousels</a>
+      · MDN docs CC-BY-SA 2.5 · native CSS features, reimplemented for saltycodestudio.
+    </footer>
+  </main>
+</body>
+</html>

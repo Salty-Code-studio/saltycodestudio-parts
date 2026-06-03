@@ -1,0 +1,190 @@
+/* ============================================================
+   Retro Synthwave Grid Floor
+   An infinitely scrolling perspective grid that recedes to a
+   horizon — built entirely from gradients + a 3D transform.
+   No canvas, no JS.
+
+   Markup:
+     <div class="rgf">
+       <div class="rgf__sky"></div>
+       <div class="rgf__sun"></div>
+       <div class="rgf__plane">
+         <div class="rgf__grid"></div>
+       </div>
+     </div>
+
+   Tunables (set on .rgf or any ancestor):
+     --rgf-line        grid line color
+     --rgf-glow        glow accent under the lines
+     --rgf-floor       base floor tint (transparent ok)
+     --rgf-cell        grid cell size in px
+     --rgf-speed       scroll duration (e.g. 1.6s)
+     --rgf-tilt        plane tilt angle (default 58deg)
+     --rgf-perspective perspective depth (default 14em)
+   ============================================================ */
+
+.rgf {
+  --rgf-line: #2ec3c3;
+  --rgf-glow: #1f8a8a;
+  --rgf-floor: rgba(15, 92, 92, 0.0);
+  --rgf-cell: 44px;
+  --rgf-speed: 1.6s;
+  --rgf-tilt: 58deg;
+  --rgf-perspective: 14em;
+
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 320px;
+  overflow: hidden;
+  background: #0b1f2a; /* deep night fallback */
+  isolation: isolate;
+}
+
+/* Vertical night-sky gradient behind everything */
+.rgf__sky {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    linear-gradient(
+      to bottom,
+      #1b0b2e 0%,
+      #2a1145 26%,
+      #5a1a52 52%,
+      #0f3a4a 72%,
+      #0b1f2a 100%
+    );
+}
+
+/* Setting sun glowing on the horizon */
+.rgf__sun {
+  position: absolute;
+  left: 50%;
+  bottom: 50%;
+  z-index: 1;
+  width: 46%;
+  max-width: 360px;
+  aspect-ratio: 1;
+  transform: translate(-50%, 6%);
+  border-radius: 50%;
+  background:
+    linear-gradient(
+      to bottom,
+      #ffe79a 0%,
+      #ffb259 34%,
+      #ff5fae 70%,
+      #c2347f 100%
+    );
+  /* Scanline bands eaten out of the lower half of the sun */
+  -webkit-mask-image:
+    linear-gradient(to bottom, #000 0 52%, transparent 52%),
+    repeating-linear-gradient(
+      to bottom,
+      #000 0 8px,
+      transparent 8px 13px
+    );
+  mask-image:
+    linear-gradient(to bottom, #000 0 52%, transparent 52%),
+    repeating-linear-gradient(
+      to bottom,
+      #000 0 8px,
+      transparent 8px 13px
+    );
+  -webkit-mask-composite: source-over;
+  mask-composite: add;
+  filter: drop-shadow(0 0 40px rgba(255, 95, 174, 0.55));
+}
+
+/* The receding ground plane — bottom half of the stage */
+.rgf__plane {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  z-index: 2;
+  width: 280%;
+  height: 50%;
+  transform-origin: 50% 100%;
+  transform:
+    translateX(-50%)
+    perspective(var(--rgf-perspective))
+    rotateX(var(--rgf-tilt));
+  /* Dissolve the lines into the horizon at the top */
+  -webkit-mask-image: linear-gradient(to top, #000 38%, transparent 96%);
+  mask-image: linear-gradient(to top, #000 38%, transparent 96%);
+}
+
+/* The actual grid — two repeating gradients (rows + columns)
+   layered over a soft glow wash. Animating background-position-y
+   marches the rows toward the viewer forever. */
+.rgf__grid {
+  position: absolute;
+  inset: -100% 0 0 0; /* extra headroom so scroll never reveals an edge */
+  background-color: var(--rgf-floor);
+  background-image:
+    /* horizontal lines (the rows that scroll) */
+    repeating-linear-gradient(
+      to bottom,
+      var(--rgf-line) 0 2px,
+      transparent 2px var(--rgf-cell)
+    ),
+    /* vertical lines (the columns, static) */
+    repeating-linear-gradient(
+      to right,
+      var(--rgf-line) 0 2px,
+      transparent 2px var(--rgf-cell)
+    ),
+    /* glow wash near the front edge */
+    radial-gradient(
+      120% 60% at 50% 100%,
+      color-mix(in srgb, var(--rgf-glow) 55%, transparent) 0%,
+      transparent 60%
+    );
+  background-size:
+    var(--rgf-cell) var(--rgf-cell),
+    var(--rgf-cell) var(--rgf-cell),
+    100% 100%;
+  background-position:
+    0 0,
+    0 0,
+    center bottom;
+  animation: rgf-scroll var(--rgf-speed) linear infinite;
+  will-change: background-position;
+}
+
+/* Move the rows down by exactly one cell, then loop seamlessly. */
+@keyframes rgf-scroll {
+  to {
+    background-position:
+      0 var(--rgf-cell),
+      0 0,
+      center bottom;
+  }
+}
+
+/* Optional subtle horizon glow line where plane meets sky */
+.rgf::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  z-index: 3;
+  height: 2px;
+  transform: translateY(-1px);
+  background: linear-gradient(
+    to right,
+    transparent,
+    color-mix(in srgb, var(--rgf-line) 90%, white) 50%,
+    transparent
+  );
+  box-shadow: 0 0 18px 2px var(--rgf-glow);
+  pointer-events: none;
+}
+
+/* Accessibility: hold the grid still for users who ask for less motion */
+@media (prefers-reduced-motion: reduce) {
+  .rgf__grid {
+    animation: none;
+  }
+}

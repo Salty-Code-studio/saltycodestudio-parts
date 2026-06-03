@@ -1,0 +1,13 @@
+{
+  "name": "Sticky Grid Scroll",
+  "slug": "sticky-grid-scroll",
+  "category": "motion",
+  "tier": "showcase",
+  "tags": ["scroll", "pinned", "grid", "gallery", "zoom", "gsap", "lenis", "stagger"],
+  "description": "A pinned 3-column image grid that staggers in, scales and opens up, and reveals an overlaid title and CTA at precise scroll points before releasing.",
+  "deps": ["gsap", "gsap/ScrollTrigger", "lenis"],
+  "files": ["animation.js", "styles.css"],
+  "usage": "Mark up .sgs > .sgs-stage > (.sgs-grid with three .sgs-col / .sgs-cell columns + a [data-sgs-content] overlay), include styles.css, then call initStickyGridScroll(). Lenis is auto-detected; pass { lenis: false } to opt out.",
+  "source": "https://tympanus.net/codrops/2026/03/02/sticky-grid-scroll-building-a-scroll-driven-animated-grid/",
+  "license": "Inspired by a Codrops/Tympanus tutorial (free for personal & commercial use) — reimplemented cleanly, no verbatim source."
+}

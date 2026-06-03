@@ -1,0 +1,13 @@
+{
+  "name": "SVG Line Draw on Scroll",
+  "slug": "svg-line-draw-on-scroll",
+  "category": "motion",
+  "tier": "practical",
+  "tags": ["svg", "stroke", "draw", "scroll", "gsap", "drawsvg", "path"],
+  "description": "An SVG path that progressively draws itself in sync with scroll, ideal for connecting timeline sections or tracing illustrations.",
+  "deps": ["gsap", "gsap/ScrollTrigger"],
+  "files": ["animation.js", "styles.css"],
+  "usage": "Add an SVG with class draw-on-scroll containing stroked fill:none paths, include styles.css + GSAP/ScrollTrigger + animation.js, then call initSvgLineDraw() (optionally scoped with pathSelector/trigger/start/end).",
+  "source": "https://gsap.com/docs/v3/Plugins/DrawSVGPlugin/",
+  "license": "GSAP + DrawSVGPlugin are now free under the standard GSAP license; this is an original reimplementation using the stroke-dashoffset idiom on core GSAP. Pure-CSS scroll-timeline variant is an unrestricted public-domain idiom. MIT — reimplemented."
+}

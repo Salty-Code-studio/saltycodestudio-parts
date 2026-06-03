@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Text Shimmer — Sand &amp; Surf</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+  html, body { margin: 0; }
+  body {
+    background:
+      radial-gradient(1200px 600px at 80% -10%, #f4ece0 0%, transparent 60%),
+      radial-gradient(1000px 500px at -10% 110%, #ece0cd 0%, transparent 55%),
+      #fbf7f0;
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #1c2b33;
+  }
+
+  /* ---- Text Shimmer (canonical CSS, mirrors TextShimmer.tsx) ---- */
+  @keyframes scs-text-shimmer {
+    0%   { background-position: var(--scs-shimmer-from); }
+    100% { background-position: var(--scs-shimmer-to); }
+  }
+  .scs-text-shimmer {
+    --scs-shimmer-spread: 2;
+    --scs-shimmer-base: #4a5d66;
+    --scs-shimmer-shine: #ffffff;
+    --scs-shimmer-from: calc(0% - var(--scs-shimmer-spread) * 1em);
+    --scs-shimmer-to: calc(100% + var(--scs-shimmer-spread) * 1em);
+    color: var(--scs-shimmer-base);
+    background-image: linear-gradient(
+      90deg,
+      transparent calc(50% - var(--scs-shimmer-spread) * 0.5em),
+      var(--scs-shimmer-shine) 50%,
+      transparent calc(50% + var(--scs-shimmer-spread) * 0.5em)
+    );
+    background-repeat: no-repeat;
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: scs-text-shimmer var(--scs-shimmer-duration, 3s) linear infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .scs-text-shimmer {
+      animation: none;
+      background-position: 50% 0;
+    }
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState } = React;
+
+/* TextShimmer — same component as TextShimmer.tsx (JS for the in-browser preview). */
+function TextShimmer({
+  children,
+  as: Tag = "span",
+  duration = 3,
+  spread = 2,
+  baseColor = "#4a5d66",
+  shineColor = "#ffffff",
+  className = "",
+}) {
+  const style = {
+    "--scs-shimmer-duration": duration + "s",
+    "--scs-shimmer-spread": String(spread),
+    "--scs-shimmer-base": baseColor,
+    "--scs-shimmer-shine": shineColor,
+  };
+  return (
+    <Tag className={"scs-text-shimmer " + className} style={style}>
+      {children}
+    </Tag>
+  );
+}
+
+function Pill({ children, dotted = false }) {
+  return (
+    <span className="inline-flex items-center gap-2 rounded-full border border-[#ece0cd] bg-[#fbf7f0]/70 px-4 py-1.5 text-sm font-medium shadow-sm backdrop-blur">
+      {dotted && (
+        <span className="relative flex h-2 w-2">
+          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#2ec3c3] opacity-60"></span>
+          <span className="relative inline-flex h-2 w-2 rounded-full bg-[#1f8a8a]"></span>
+        </span>
+      )}
+      {children}
+    </span>
+  );
+}
+
+function App() {
+  const [reduced, setReduced] = useState(false);
+
+  return (
+    <div className="min-h-screen w-full px-6 py-16 sm:py-24">
+      <div className="mx-auto flex max-w-3xl flex-col gap-14">
+
+        <header className="flex flex-col gap-4">
+          <Pill dotted>
+            <TextShimmer baseColor="#0f5c5c" shineColor="#2ec3c3" duration={2.6}>
+              Now shipping v1.0
+            </TextShimmer>
+          </Pill>
+          <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
+            Text Shimmer
+          </h1>
+          <p className="max-w-xl text-lg leading-relaxed text-[#4a5d66]">
+            A soft light sheen sweeps across the text left to right — built from a
+            clipped gradient highlight masked to the glyphs. Subtle enough for
+            badges, loud enough to draw the eye.
+          </p>
+        </header>
+
+        {/* Announcement pills */}
+        <section className="flex flex-col gap-4">
+          <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-[#1f8a8a]">
+            Announcement pills
+          </h2>
+          <div className="flex flex-wrap items-center gap-3">
+            <Pill>
+              <TextShimmer baseColor="#4a5d66" duration={3}>✨ Introducing Sand &amp; Surf</TextShimmer>
+            </Pill>
+            <Pill dotted>
+              <TextShimmer baseColor="#0f5c5c" shineColor="#2ec3c3" duration={2.2}>
+                Live on the beach
+              </TextShimmer>
+            </Pill>
+            <Pill>
+              <TextShimmer baseColor="#1c2b33" shineColor="#f4ece0" duration={4}>
+                Limited drop
+              </TextShimmer>
+            </Pill>
+          </div>
+        </section>
+
+        {/* Headline shimmer */}
+        <section className="flex flex-col gap-4 rounded-3xl border border-[#ece0cd] bg-gradient-to-br from-[#0f5c5c] to-[#1f8a8a] p-10 shadow-lg">
+          <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-[#2ec3c3]">
+            On a dark ocean panel
+          </h2>
+          <TextShimmer
+            as="h3"
+            baseColor="#a7d8d8"
+            shineColor="#ffffff"
+            duration={3.4}
+            className="text-3xl font-semibold tracking-tight sm:text-4xl"
+          >
+            Surf the wave of subtle motion.
+          </TextShimmer>
+          <p className="max-w-md text-sm leading-relaxed text-[#cfeaea]">
+            On deep teal the highlight reads almost like glass catching the sun.
+          </p>
+        </section>
+
+        {/* Loading labels */}
+        <section className="flex flex-col gap-4">
+          <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-[#1f8a8a]">
+            Loading labels
+          </h2>
+          <div className="flex flex-col gap-3 rounded-2xl border border-[#ece0cd] bg-[#f4ece0]/60 p-6">
+            <TextShimmer as="p" duration={1.6} baseColor="#7d8c93" className="text-base font-medium">
+              Charting the tide…
+            </TextShimmer>
+            <TextShimmer as="p" duration={1.9} baseColor="#7d8c93" className="text-base font-medium">
+              Gathering shells…
+            </TextShimmer>
+            <TextShimmer as="p" duration={2.2} baseColor="#7d8c93" className="text-base font-medium">
+              Almost ashore…
+            </TextShimmer>
+          </div>
+        </section>
+
+        {/* Reduced-motion note */}
+        <footer className="rounded-2xl border border-[#ece0cd] bg-[#fbf7f0]/70 p-5 text-sm text-[#4a5d66]">
+          <p>
+            <span className="font-semibold text-[#0f5c5c]">Accessible:</span> when the
+            OS requests reduced motion, the sweep holds still on a centered highlight
+            instead of animating. Toggle “Reduce motion” in your system settings to
+            see it freeze.
+          </p>
+        </footer>
+
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>

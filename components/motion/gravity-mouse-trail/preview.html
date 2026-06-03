@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Gravity Mouse Trail — saltycodestudio</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<style>
+  :root {
+    --sand: #fbf7f0;
+    --sand-2: #f4ece0;
+    --sand-3: #ece0cd;
+    --ink: #1c2b33;
+    --ink-soft: #4a5d66;
+    --teal: #1f8a8a;
+    --deep: #0f5c5c;
+    --surf: #2ec3c3;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body { height: 100%; margin: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(900px 600px at 80% -10%, rgba(46, 195, 195, 0.16), transparent 60%),
+      radial-gradient(700px 500px at -5% 110%, rgba(31, 138, 138, 0.14), transparent 55%),
+      linear-gradient(160deg, var(--sand) 0%, var(--sand-2) 55%, var(--sand-3) 100%);
+    cursor: crosshair;
+  }
+
+  /* The stage fills the viewport; images live and fall inside it. */
+  .gmt-stage {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    z-index: 0;
+  }
+
+  .gmt-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 14px;
+    object-fit: cover;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-drag: none;
+    will-change: transform, opacity;
+    box-shadow: 0 18px 40px -18px rgba(15, 92, 92, 0.55);
+    visibility: hidden;
+  }
+
+  /* ---- Demo content (sits above the trail, ignores pointer) ---- */
+  .wrap {
+    position: relative;
+    z-index: 1;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 48px 24px;
+    pointer-events: none;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 15px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(15, 92, 92, 0.18);
+    color: var(--deep);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    backdrop-filter: blur(6px);
+  }
+
+  .badge .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--surf);
+    box-shadow: 0 0 0 4px rgba(46, 195, 195, 0.25);
+  }
+
+  h1 {
+    margin: 22px 0 0;
+    font-size: clamp(2.6rem, 8vw, 5.5rem);
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+    font-weight: 800;
+    color: var(--ink);
+  }
+
+  h1 .accent {
+    background: linear-gradient(120deg, var(--teal), var(--surf));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  p.lead {
+    margin: 18px auto 0;
+    max-width: 540px;
+    font-size: clamp(1rem, 2.4vw, 1.18rem);
+    line-height: 1.55;
+    color: var(--ink-soft);
+  }
+
+  .hint {
+    margin-top: 30px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--deep);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.55);
+    border: 1px solid rgba(15, 92, 92, 0.14);
+  }
+
+  .hint svg { display: block; }
+
+  .credit {
+    position: fixed;
+    left: 0; right: 0; bottom: 16px;
+    text-align: center;
+    z-index: 1;
+    font-size: 12px;
+    color: var(--ink-soft);
+    pointer-events: none;
+  }
+  .credit a { color: var(--deep); pointer-events: auto; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hint .arrow { animation: none; }
+  }
+  .hint .arrow { animation: nudge 1.4s ease-in-out infinite; }
+  @keyframes nudge {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(5px); }
+  }
+</style>
+</head>
+<body>
+  <!-- Trail stage -->
+  <div class="gmt-stage" id="trail" aria-hidden="true"></div>
+
+  <!-- Demo content -->
+  <main class="wrap">
+    <span class="badge"><span class="dot"></span> Sand &amp; Surf · Motion</span>
+    <h1>Gravity<br /><span class="accent">Mouse Trail</span></h1>
+    <p class="lead">
+      Move your cursor across the canvas. Images burst out, drift on your
+      momentum, then fall and bounce off the floor — pure GSAP eases, no physics engine.
+    </p>
+    <span class="hint">
+      <svg class="arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h14M13 6l6 6-6 6"/></svg>
+      Swish your mouse around
+    </span>
+  </main>
+
+  <div class="credit">
+    Inspired by Codrops · “A Fun Gravity-Based Mouse Trail” — reimplemented for saltycodestudio
+  </div>
+
+<script>
+/* ---- Generate self-contained tile artwork (Sand & Surf palette) ---- */
+function tile(bg, fg, kind) {
+  let art = '';
+  if (kind === 'wave') {
+    art = `<path d="M0 78 C 30 58, 60 98, 90 78 S 150 58, 160 78 V160 H0 Z" fill="${fg}" opacity="0.92"/>
+           <path d="M0 96 C 32 78, 58 116, 92 96 S 150 78, 160 96 V160 H0 Z" fill="${fg}" opacity="0.55"/>`;
+  } else if (kind === 'sun') {
+    art = `<circle cx="80" cy="84" r="34" fill="${fg}"/>
+           <circle cx="80" cy="84" r="50" fill="none" stroke="${fg}" stroke-width="3" opacity="0.5"/>`;
+  } else if (kind === 'dots') {
+    let d = '';
+    for (let r = 0; r < 5; r++) for (let c = 0; c < 5; c++) {
+      d += `<circle cx="${28 + c * 26}" cy="${28 + r * 26}" r="7" fill="${fg}" opacity="${0.35 + ((r + c) % 3) * 0.22}"/>`;
+    }
+    art = d;
+  } else if (kind === 'arc') {
+    art = `<path d="M20 130 A 60 60 0 0 1 140 130" fill="none" stroke="${fg}" stroke-width="14" stroke-linecap="round"/>
+           <path d="M44 130 A 36 36 0 0 1 116 130" fill="none" stroke="${fg}" stroke-width="10" stroke-linecap="round" opacity="0.55"/>`;
+  } else {
+    art = `<rect x="34" y="34" width="92" height="92" rx="18" fill="none" stroke="${fg}" stroke-width="12"/>
+           <rect x="60" y="60" width="40" height="40" rx="8" fill="${fg}"/>`;
+  }
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160">
+      <rect width="160" height="160" rx="20" fill="${bg}"/>${art}</svg>`;
+  return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+}
+
+const images = [
+  tile('#0f5c5c', '#2ec3c3', 'wave'),
+  tile('#1f8a8a', '#fbf7f0', 'sun'),
+  tile('#ece0cd', '#1f8a8a', 'dots'),
+  tile('#2ec3c3', '#0f5c5c', 'arc'),
+  tile('#1c2b33', '#2ec3c3', 'square'),
+  tile('#f4ece0', '#0f5c5c', 'wave'),
+];
+
+/* ---- Inlined copy of animation.js (canonical file lives beside this) ---- */
+function initGravityMouseTrail(stage, options = {}) {
+  if (typeof gsap === 'undefined' || !stage) return { destroy() {} };
+
+  const prefersReduced =
+    window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const imgs = options.images || [];
+  const size = options.size ?? 110;
+  const gravity = options.gravity ?? 1;
+  const maxOnScreen = options.maxOnScreen ?? 30;
+  const getThreshold = () => options.threshold ?? Math.max(60, window.innerWidth / 8);
+
+  const pool = imgs.map((src) => { const i = new Image(); i.src = src; return i; });
+
+  let imgIndex = 0, live = 0, lastX = null, lastY = null, accumulated = 0;
+
+  function spawn(x, y, deltaX) {
+    if (!pool.length || live >= maxOnScreen) return;
+    const src = pool[imgIndex % pool.length].src;
+    imgIndex++;
+
+    const el = document.createElement('img');
+    el.className = 'gmt-img';
+    el.src = src;
+    el.alt = '';
+    el.setAttribute('aria-hidden', 'true');
+    el.draggable = false;
+    el.style.width = size + 'px';
+    el.style.height = size + 'px';
+    stage.appendChild(el);
+    live++;
+
+    const cleanup = () => { if (el.parentNode) el.parentNode.removeChild(el); live--; };
+
+    if (prefersReduced) {
+      gsap.set(el, { xPercent: -50, yPercent: -50, x, y, scale: 0.85, autoAlpha: 0 });
+      gsap.timeline({ onComplete: cleanup })
+        .to(el, { autoAlpha: 1, scale: 1, duration: 0.25, ease: 'power2.out' })
+        .to(el, { autoAlpha: 0, duration: 0.5, ease: 'power1.in' }, '+=0.35');
+      return;
+    }
+
+    const stageH = stage.clientHeight || window.innerHeight;
+    const fallDistance = Math.max(40, stageH - size / 2 - y);
+    const fallTime = Math.min(1.4, Math.max(0.5, (fallDistance / 900) / gravity));
+    const drift = gsap.utils.clamp(-180, 180, deltaX * 2.4);
+    const spin = gsap.utils.clamp(-40, 40, deltaX * 0.6);
+
+    gsap.set(el, { xPercent: -50, yPercent: -50, x, y, scale: 0, rotation: gsap.utils.random(-12, 12), autoAlpha: 1 });
+
+    const tl = gsap.timeline({ onComplete: cleanup });
+    tl.to(el, { scale: 1, duration: 0.6, ease: 'elastic.out(1, 0.55)' });
+    tl.to(el, { x: '+=' + drift, rotation: '+=' + spin, duration: fallTime + 0.4, ease: 'power1.out' }, 0.05);
+    const overshoot = gsap.utils.clamp(0.8, 3.2, fallDistance / 240);
+    tl.to(el, { y: y + fallDistance, duration: fallTime, ease: `back.in(${overshoot.toFixed(2)})` }, 0.1);
+    tl.to(el, { scale: 0.86, autoAlpha: 0, duration: 0.45, ease: 'power2.in' }, '>-0.1');
+  }
+
+  function onMove(e) {
+    const x = e.clientX, y = e.clientY;
+    if (lastX === null) { lastX = x; lastY = y; return; }
+    const dx = x - lastX, dy = y - lastY;
+    accumulated += Math.hypot(dx, dy);
+    if (accumulated >= getThreshold()) {
+      accumulated = 0;
+      const r = stage.getBoundingClientRect();
+      spawn(x - r.left, y - r.top, dx);
+    }
+    lastX = x; lastY = y;
+  }
+  function onLeave() { lastX = null; lastY = null; accumulated = 0; }
+
+  window.addEventListener('mousemove', onMove, { passive: true });
+  document.addEventListener('mouseleave', onLeave);
+
+  return {
+    destroy() {
+      window.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseleave', onLeave);
+      gsap.killTweensOf(stage.querySelectorAll('.gmt-img'));
+      stage.querySelectorAll('.gmt-img').forEach((n) => n.remove());
+    },
+  };
+}
+
+initGravityMouseTrail(document.getElementById('trail'), {
+  images,
+  size: 104,
+  threshold: Math.max(70, window.innerWidth / 8),
+});
+</script>
+</body>
+</html>

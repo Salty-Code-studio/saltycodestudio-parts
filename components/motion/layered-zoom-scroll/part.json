@@ -1,0 +1,13 @@
+{
+  "name": "Layered Zoom Scroll",
+  "slug": "layered-zoom-scroll",
+  "category": "motion",
+  "tier": "showcase",
+  "tags": ["scroll", "zoom", "parallax", "blur", "split-text", "gsap", "scrollsmoother"],
+  "description": "A cinematic trailing-zoom hero where stacked image layers scale and de-blur into focus while split headline text parts to reveal a masked central subject on scroll.",
+  "deps": ["gsap", "gsap/ScrollTrigger", "gsap/ScrollSmoother"],
+  "files": ["animation.js", "styles.css"],
+  "usage": "Drop the smooth-wrapper/smooth-content scaffold and .lzs hero markup into your page, then call initLayeredZoomScroll() after GSAP loads. Tune layer count, start scales, blur, and word travel via the options object.",
+  "source": "https://tympanus.net/codrops/2025/10/29/building-a-layered-zoom-scroll-effect-with-gsap-scrollsmoother-and-scrolltrigger/",
+  "license": "Codrops tutorial — clean reimplementation; credits original Telescope site authors; GSAP plugins (incl. ScrollSmoother) are now free for everyone."
+}

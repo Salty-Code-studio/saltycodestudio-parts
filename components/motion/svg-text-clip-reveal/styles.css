@@ -1,0 +1,87 @@
+/*
+ * SVG Text Clip Reveal — styles
+ * Pairs with animation.js. Brand palette "Sand & Surf".
+ */
+
+.stcr {
+  /* wipe progress is driven by GSAP (0% -> 100%) */
+  --stcr-wipe: 0%;
+  position: relative;
+  width: 100%;
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(2rem, 8vh, 7rem) 1.25rem;
+  background: #fbf7f0; /* sand */
+  overflow: hidden;
+}
+
+.stcr__svg {
+  display: block;
+  width: min(100%, 1200px);
+  height: auto;
+  aspect-ratio: 2 / 1;
+  /* the wipe: reveal the SVG horizontally as --stcr-wipe grows */
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    #000 0,
+    #000 var(--stcr-wipe),
+    transparent var(--stcr-wipe)
+  );
+  mask-image: linear-gradient(
+    90deg,
+    #000 0,
+    #000 var(--stcr-wipe),
+    transparent var(--stcr-wipe)
+  );
+}
+
+/* Display type used as the clip-path source. */
+.stcr__text {
+  font-family: "Arial Black", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 900;
+  font-size: 220px;
+  letter-spacing: -0.04em;
+  text-anchor: middle;
+  dominant-baseline: central;
+  text-transform: uppercase;
+}
+
+/* A faint ink outline of the same word behind the media, so the type
+   still reads even where the revealed image is light. */
+.stcr__ghost {
+  fill: none;
+  stroke: #1c2b33; /* ink */
+  stroke-width: 1.5;
+  opacity: 0.12;
+}
+
+/* The background media (image / pattern) clipped to the text. */
+.stcr__media {
+  /* sits behind, clipped via clip-path="url(#...)" in markup */
+}
+
+/* Optional caption shown under the type. */
+.stcr__caption {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(1.25rem, 5vh, 3rem);
+  transform: translateX(-50%);
+  font-family: "Inter", system-ui, sans-serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #4a5d66; /* soft ink */
+}
+
+/* Respect reduced motion: show fully revealed, no wipe masking. */
+@media (prefers-reduced-motion: reduce) {
+  .stcr__svg {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+  .stcr {
+    --stcr-wipe: 100%;
+  }
+}

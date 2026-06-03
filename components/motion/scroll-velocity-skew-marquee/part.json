@@ -1,0 +1,13 @@
+{
+  "name": "Scroll Velocity Skew Marquee",
+  "slug": "scroll-velocity-skew-marquee",
+  "category": "motion",
+  "tier": "showcase",
+  "tags": ["scroll", "marquee", "skew", "gsap", "velocity", "infinite-loop"],
+  "description": "An infinite horizontal marquee that skews and stretches in proportion to scroll velocity, snapping back to rest when the scroll stops.",
+  "deps": ["gsap", "gsap/ScrollTrigger"],
+  "files": ["animation.js", "styles.css"],
+  "usage": "Import initScrollVelocitySkewMarquee, pass it a wrapper element containing a [data-svm-track] row with two identical sets of items, and the marquee loops infinitely while leaning into your scroll velocity. Include styles.css for layout and reduced-motion handling.",
+  "source": "https://codepen.io/GreenSock/pen/eYpGLYL",
+  "license": "Inspired by an official GreenSock CodePen; reimplemented cleanly. GSAP core is free under the standard GreenSock 'no charge' license."
+}

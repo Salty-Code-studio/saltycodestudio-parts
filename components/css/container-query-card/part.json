@@ -1,0 +1,13 @@
+{
+  "name": "Container-Query Adaptive Card",
+  "slug": "container-query-card",
+  "category": "css",
+  "tier": "practical",
+  "tags": ["container-queries", "@container", "responsive", "component", "layout", "no-js"],
+  "description": "A self-contained card that reflows from stacked to side-by-side based on the width of its parent slot, not the viewport.",
+  "deps": [],
+  "files": ["styles.css", "index.html"],
+  "usage": "Wrap the card in a .cq-slot element (which gets container-type: inline-size) and drop it into any sidebar, modal, or hero — the @container queries in styles.css swap the grid template and type scale based on the slot's width, with no media queries or JavaScript. Put the brand tokens (the .cq-scope block, or your own :root vars) on any ancestor so the colors resolve.",
+  "source": "https://web.dev/blog/cq-stable",
+  "license": "web.dev / content under CC-BY 4.0 — reimplemented; container queries are native Baseline CSS"
+}

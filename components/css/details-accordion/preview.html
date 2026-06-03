@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Animated Details Accordion — Sand &amp; Surf</title>
+<style>
+  /* ====================== PAGE / DEMO CHROME (Sand & Surf) ================ */
+  :root {
+    interpolate-size: allow-keywords;
+
+    --acc-bg:        #fbf7f0;
+    --acc-surface:   #f4ece0;
+    --acc-surface-2: #ece0cd;
+    --acc-ink:       #1c2b33;
+    --acc-ink-soft:  #4a5d66;
+    --acc-teal:      #1f8a8a;
+    --acc-deep:      #0f5c5c;
+    --acc-surf:      #2ec3c3;
+
+    --acc-radius: 14px;
+    --acc-dur: 380ms;
+    --acc-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: var(--acc-ink);
+    background:
+      radial-gradient(1100px 520px at 85% -10%, color-mix(in srgb, var(--acc-surf) 22%, transparent), transparent 60%),
+      radial-gradient(900px 480px at -10% 110%, color-mix(in srgb, var(--acc-teal) 16%, transparent), transparent 60%),
+      linear-gradient(180deg, var(--acc-bg), var(--acc-surface));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 64px 20px 90px;
+  }
+
+  .demo-head {
+    text-align: center;
+    max-width: 640px;
+    margin-bottom: 38px;
+  }
+
+  .demo-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--acc-deep);
+    background: color-mix(in srgb, var(--acc-surf) 26%, var(--acc-bg));
+    padding: 7px 14px;
+    border-radius: 999px;
+    margin-bottom: 18px;
+  }
+  .demo-eyebrow .dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--acc-teal);
+  }
+
+  .demo-head h1 {
+    margin: 0 0 12px;
+    font-size: clamp(1.9rem, 4.5vw, 2.7rem);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    color: var(--acc-ink);
+  }
+  .demo-head h1 em {
+    font-style: normal;
+    color: var(--acc-teal);
+  }
+  .demo-head p {
+    margin: 0;
+    color: var(--acc-ink-soft);
+    font-size: 1.02rem;
+    line-height: 1.6;
+  }
+
+  .demo-foot {
+    margin-top: 34px;
+    font-size: 0.82rem;
+    color: var(--acc-ink-soft);
+    text-align: center;
+  }
+  .demo-foot code {
+    background: color-mix(in srgb, var(--acc-surface-2) 60%, var(--acc-bg));
+    padding: 2px 6px;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    color: var(--acc-deep);
+  }
+
+  /* ============================ THE PART ================================= */
+  .accordion {
+    display: grid;
+    gap: 12px;
+    width: 100%;
+    max-width: 640px;
+    margin-inline: auto;
+  }
+
+  .acc {
+    background: var(--acc-surface);
+    border: 1px solid color-mix(in srgb, var(--acc-surface-2) 70%, var(--acc-ink) 4%);
+    border-radius: var(--acc-radius);
+    overflow: clip;
+    box-shadow:
+      0 1px 0 0 rgba(255, 255, 255, 0.6) inset,
+      0 6px 18px -12px rgba(15, 92, 92, 0.45);
+    transition: border-color var(--acc-dur) var(--acc-ease),
+                box-shadow var(--acc-dur) var(--acc-ease);
+  }
+
+  .acc[open] {
+    border-color: color-mix(in srgb, var(--acc-teal) 45%, var(--acc-surface-2));
+    box-shadow:
+      0 1px 0 0 rgba(255, 255, 255, 0.7) inset,
+      0 14px 34px -16px rgba(15, 92, 92, 0.5);
+  }
+
+  .acc__summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 20px;
+    font-weight: 650;
+    font-size: 1.02rem;
+    color: var(--acc-ink);
+    user-select: none;
+    transition: background-color var(--acc-dur) var(--acc-ease),
+                color var(--acc-dur) var(--acc-ease);
+  }
+  .acc__summary::-webkit-details-marker { display: none; }
+
+  .acc__summary:hover {
+    background: color-mix(in srgb, var(--acc-surf) 10%, transparent);
+  }
+  .acc__summary:focus-visible {
+    outline: 3px solid color-mix(in srgb, var(--acc-teal) 60%, transparent);
+    outline-offset: -3px;
+    border-radius: var(--acc-radius);
+  }
+  .acc[open] > .acc__summary { color: var(--acc-deep); }
+
+  .acc__label { flex: 1 1 auto; }
+
+  .acc__icon {
+    flex: none;
+    width: 22px; height: 22px;
+    display: grid;
+    place-items: center;
+    color: var(--acc-teal);
+    transition: transform var(--acc-dur) var(--acc-ease),
+                color var(--acc-dur) var(--acc-ease);
+  }
+  .acc__icon svg { width: 16px; height: 16px; }
+  .acc[open] > .acc__summary .acc__icon {
+    transform: rotate(180deg);
+    color: var(--acc-deep);
+  }
+
+  .acc__bullet {
+    flex: none;
+    width: 26px; height: 26px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--acc-deep);
+    background: color-mix(in srgb, var(--acc-surf) 28%, var(--acc-bg));
+  }
+
+  /* Modern path */
+  .acc::details-content {
+    height: 0;
+    overflow: clip;
+    opacity: 0;
+    transition: height var(--acc-dur) var(--acc-ease),
+                opacity var(--acc-dur) var(--acc-ease),
+                content-visibility var(--acc-dur) allow-discrete;
+  }
+  .acc[open]::details-content {
+    height: auto;
+    opacity: 1;
+  }
+
+  /* Fallback path */
+  .acc__inner {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows var(--acc-dur) var(--acc-ease);
+  }
+  .acc[open] .acc__inner { grid-template-rows: 1fr; }
+
+  .acc__body { min-height: 0; overflow: hidden; }
+
+  .acc__body-pad {
+    padding: 2px 20px 20px 20px;
+    color: var(--acc-ink-soft);
+    line-height: 1.6;
+    font-size: 0.96rem;
+  }
+  .acc__body-pad p { margin: 0 0 0.8em; }
+  .acc__body-pad p:last-child { margin-bottom: 0; }
+  .acc__body-pad code {
+    background: color-mix(in srgb, var(--acc-surface-2) 55%, var(--acc-bg));
+    padding: 1px 5px;
+    border-radius: 5px;
+    font-size: 0.85em;
+    color: var(--acc-deep);
+  }
+  .acc__body-pad a { color: var(--acc-teal); text-underline-offset: 3px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .acc, .acc__summary, .acc__icon, .acc::details-content, .acc__inner {
+      transition-duration: 1ms;
+    }
+  }
+</style>
+</head>
+<body>
+
+  <header class="demo-head">
+    <span class="demo-eyebrow"><span class="dot"></span> saltycodestudio · Sand &amp; Surf</span>
+    <h1>Frequently asked, <em>smoothly answered</em>.</h1>
+    <p>A native, accessible accordion that animates open and closed from
+       height&nbsp;0 to auto — with exactly zero JavaScript.</p>
+  </header>
+
+  <div class="accordion">
+
+    <details class="acc" name="faq" open>
+      <summary class="acc__summary">
+        <span class="acc__bullet">01</span>
+        <span class="acc__label">How does it animate without JavaScript?</span>
+        <span class="acc__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </span>
+      </summary>
+      <div class="acc__inner"><div class="acc__body"><div class="acc__body-pad">
+        <p>It transitions the native <code>::details-content</code> box from
+        <code>height: 0</code> to <code>height: auto</code>, made possible by
+        <code>interpolate-size: allow-keywords</code> and
+        <code>transition-behavior: allow-discrete</code>. A
+        <code>grid-template-rows: 0fr → 1fr</code> wrapper handles browsers that
+        don't support the modern path yet.</p>
+      </div></div></div>
+    </details>
+
+    <details class="acc" name="faq">
+      <summary class="acc__summary">
+        <span class="acc__bullet">02</span>
+        <span class="acc__label">Is it accessible out of the box?</span>
+        <span class="acc__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </span>
+      </summary>
+      <div class="acc__inner"><div class="acc__body"><div class="acc__body-pad">
+        <p>Yes. <code>&lt;details&gt;</code> and <code>&lt;summary&gt;</code> are
+        focusable, toggle on Enter or Space, and expose proper expanded/collapsed
+        state to screen readers — no ARIA wiring required.</p>
+        <p>The chevron is marked <code>aria-hidden</code> since it's purely
+        decorative.</p>
+      </div></div></div>
+    </details>
+
+    <details class="acc" name="faq">
+      <summary class="acc__summary">
+        <span class="acc__bullet">03</span>
+        <span class="acc__label">Why does only one panel open at a time?</span>
+        <span class="acc__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </span>
+      </summary>
+      <div class="acc__inner"><div class="acc__body"><div class="acc__body-pad">
+        <p>Every <code>&lt;details&gt;</code> in this group shares the same
+        <code>name="faq"</code> attribute. The browser enforces exclusivity
+        natively — opening one closes the others. Remove the <code>name</code> to
+        allow several panels open at once.</p>
+      </div></div></div>
+    </details>
+
+    <details class="acc" name="faq">
+      <summary class="acc__summary">
+        <span class="acc__bullet">04</span>
+        <span class="acc__label">Can I drop it straight into my site?</span>
+        <span class="acc__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </span>
+      </summary>
+      <div class="acc__inner"><div class="acc__body"><div class="acc__body-pad">
+        <p>Absolutely. Copy <code>styles.css</code> and the markup from
+        <code>index.html</code>, swap in your own content, and you're done. It
+        respects <code>prefers-reduced-motion</code> and uses only the
+        Sand&nbsp;&amp;&nbsp;Surf tokens, so it themes cleanly with the rest of
+        the kit.</p>
+      </div></div></div>
+    </details>
+
+  </div>
+
+  <p class="demo-foot">
+    Try it: clicking a header smoothly animates height. Older browsers fall back
+    to the <code>grid-template-rows</code> path automatically.
+  </p>
+
+</body>
+</html>

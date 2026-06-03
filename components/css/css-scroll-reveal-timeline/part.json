@@ -1,0 +1,13 @@
+{
+  "name": "CSS Scroll Reveal Timeline",
+  "slug": "css-scroll-reveal-timeline",
+  "category": "css",
+  "tier": "showcase",
+  "tags": ["scroll-driven", "animation-timeline", "view", "clip-path", "no-js", "progressive-enhancement"],
+  "description": "Zero-JavaScript clip-path and fade reveals plus a top scroll-progress bar driven entirely by the native CSS animation-timeline view() and scroll() functions.",
+  "deps": [],
+  "files": ["styles.css", "index.html"],
+  "usage": "Include styles.css, drop a single <div class=\"srt-progress\"> near the top of <body> for the scroll bar, then add .srt-reveal plus a variant (.srt-fade-up, .srt-clip, .srt-clip--up, or .srt-zoom) to any element you want revealed. Stagger siblings by setting an inline --srt-delay between 0 and 1.",
+  "source": "https://tympanus.net/codrops/2024/01/17/a-practical-introduction-to-scroll-driven-animations-with-css-scroll-and-view/",
+  "license": "Public-domain CSS idiom — reimplemented; technique is a native CSS feature (no library)."
+}

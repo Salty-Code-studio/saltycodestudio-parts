@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CSS Scroll Reveal Timeline — Sand &amp; Surf demo</title>
+<style>
+  /* ---- Sand & Surf palette ---- */
+  :root {
+    --sand-1: #fbf7f0;
+    --sand-2: #f4ece0;
+    --sand-3: #ece0cd;
+    --ink: #1c2b33;
+    --ink-soft: #4a5d66;
+    --teal: #1f8a8a;
+    --teal-deep: #0f5c5c;
+    --surf: #2ec3c3;
+    --maxw: 1080px;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    font-family: "Helvetica Neue", Arial, system-ui, sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(140% 90% at 50% -10%, var(--sand-1), var(--sand-2) 55%, var(--sand-3) 100%);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: var(--maxw); margin-inline: auto; padding-inline: 1.5rem; }
+
+  /* ============================================================
+     SCROLL-DRIVEN ANIMATION ENGINE
+     ============================================================ */
+
+  .srt-progress {
+    position: fixed;
+    inset: 0 0 auto 0;
+    height: 5px;
+    z-index: 100;
+    transform-origin: 0 50%;
+    background: linear-gradient(90deg, var(--teal-deep), var(--surf));
+    transform: scaleX(0);
+    box-shadow: 0 1px 6px rgba(15, 92, 92, 0.35);
+  }
+
+  .srt-reveal { opacity: 1; }
+  .srt-fade-up { --srt-rise: 2.5rem; }
+  .srt-clip { clip-path: inset(0 0 0 0); }
+  .srt-zoom { transform: none; }
+
+  @keyframes srt-fade-up {
+    from { opacity: 0; transform: translateY(var(--srt-rise, 2.5rem)); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes srt-clip-wipe {
+    from { opacity: .001; clip-path: inset(0 100% 0 0); }
+    to   { opacity: 1;    clip-path: inset(0 0 0 0); }
+  }
+  @keyframes srt-clip-up {
+    from { clip-path: inset(100% 0 0 0); }
+    to   { clip-path: inset(0 0 0 0); }
+  }
+  @keyframes srt-zoom-in {
+    from { opacity: 0; transform: scale(1.12); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+  @keyframes srt-progress-grow {
+    from { transform: scaleX(0); }
+    to   { transform: scaleX(1); }
+  }
+
+  @supports (animation-timeline: scroll()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .srt-progress {
+        animation: srt-progress-grow linear both;
+        animation-timeline: scroll(root block);
+      }
+      .srt-fade-up {
+        animation: srt-fade-up linear both;
+        animation-timeline: view();
+        animation-range: entry 0% cover 45%;
+      }
+      .srt-clip {
+        animation: srt-clip-wipe linear both;
+        animation-timeline: view();
+        animation-range: entry 5% cover 40%;
+      }
+      .srt-clip.srt-clip--up { animation-name: srt-clip-up; }
+      .srt-zoom {
+        animation: srt-zoom-in linear both;
+        animation-timeline: view();
+        animation-range: entry 0% cover 50%;
+      }
+      .srt-reveal[style*="--srt-delay"] {
+        animation-range:
+          entry calc(var(--srt-delay, 0) * 30%)
+          cover calc(45% + var(--srt-delay, 0) * 20%);
+      }
+    }
+  }
+
+  /* ============================================================
+     DEMO LAYOUT
+     ============================================================ */
+
+  /* Hero */
+  .hero {
+    min-height: 92vh;
+    display: grid;
+    place-content: center;
+    text-align: center;
+    padding: 6rem 1.5rem 4rem;
+  }
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: .32em;
+    font-size: .72rem;
+    font-weight: 700;
+    color: var(--teal-deep);
+    margin: 0 0 1.2rem;
+  }
+  .hero h1 {
+    font-size: clamp(2.6rem, 7vw, 5.2rem);
+    line-height: 1.02;
+    letter-spacing: -.02em;
+    margin: 0;
+    color: var(--ink);
+  }
+  .hero h1 em {
+    font-style: normal;
+    color: var(--teal-deep);
+  }
+  .hero p {
+    max-width: 44ch;
+    margin: 1.6rem auto 0;
+    color: var(--ink-soft);
+    font-size: 1.15rem;
+  }
+  .scroll-hint {
+    margin-top: 3rem;
+    font-size: .8rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .scroll-hint span {
+    display: block;
+    margin-top: .6rem;
+    font-size: 1.4rem;
+    animation: nudge 1.8s ease-in-out infinite;
+  }
+  @keyframes nudge {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(6px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-hint span { animation: none; }
+  }
+
+  section { padding-block: clamp(4rem, 11vh, 9rem); }
+
+  .section-head { max-width: 56ch; margin-bottom: 3rem; }
+  .section-head h2 {
+    font-size: clamp(1.9rem, 4.5vw, 3rem);
+    letter-spacing: -.015em;
+    line-height: 1.08;
+    margin: 0 0 1rem;
+  }
+  .section-head p { color: var(--ink-soft); font-size: 1.08rem; margin: 0; }
+
+  /* feature cards */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 1.25rem;
+  }
+  .card {
+    background: rgba(255, 255, 255, 0.66);
+    border: 1px solid rgba(28, 43, 51, 0.08);
+    border-radius: 18px;
+    padding: 1.8rem 1.6rem;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 18px 40px -28px rgba(15, 92, 92, 0.5);
+  }
+  .card .num {
+    display: inline-grid;
+    place-content: center;
+    width: 2.6rem; height: 2.6rem;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--teal), var(--surf));
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+  .card h3 { margin: 0 0 .5rem; font-size: 1.2rem; }
+  .card p  { margin: 0; color: var(--ink-soft); font-size: .96rem; }
+
+  /* clip-wipe media band */
+  .band {
+    border-radius: 22px;
+    overflow: hidden;
+    color: #fff;
+    padding: clamp(2.2rem, 6vw, 4.5rem);
+    background:
+      linear-gradient(120deg, rgba(15,92,92,.92), rgba(46,195,195,.85)),
+      repeating-linear-gradient(45deg, rgba(255,255,255,.06) 0 14px, transparent 14px 28px);
+  }
+  .band h2 { font-size: clamp(1.8rem, 5vw, 3.2rem); margin: 0 0 .8rem; letter-spacing: -.02em; }
+  .band p  { margin: 0; max-width: 50ch; opacity: .92; font-size: 1.1rem; }
+
+  /* split: figure + copy */
+  .split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(1.5rem, 4vw, 3.5rem);
+    align-items: center;
+  }
+  @media (max-width: 720px) { .split { grid-template-columns: 1fr; } }
+  .figure {
+    aspect-ratio: 4 / 3;
+    border-radius: 20px;
+    overflow: hidden;
+    background:
+      radial-gradient(120% 120% at 20% 10%, var(--surf), var(--teal-deep) 70%);
+    display: grid;
+    place-content: center;
+    color: rgba(255,255,255,.9);
+    font-size: 3rem;
+    box-shadow: 0 26px 60px -34px rgba(15,92,92,.7);
+  }
+  .split h2 { font-size: clamp(1.7rem, 4vw, 2.6rem); margin: 0 0 1rem; letter-spacing: -.015em; }
+  .split p  { color: var(--ink-soft); margin: 0 0 .8rem; }
+
+  /* stagger list */
+  .steps { list-style: none; padding: 0; margin: 0; display: grid; gap: 1rem; }
+  .steps li {
+    display: flex;
+    align-items: center;
+    gap: 1.1rem;
+    background: rgba(255,255,255,.6);
+    border: 1px solid rgba(28,43,51,.08);
+    border-radius: 14px;
+    padding: 1.1rem 1.4rem;
+  }
+  .steps .dot {
+    flex: none;
+    width: .9rem; height: .9rem; border-radius: 50%;
+    background: var(--teal);
+    box-shadow: 0 0 0 4px rgba(46,195,195,.2);
+  }
+  .steps strong { display: block; }
+  .steps span { color: var(--ink-soft); font-size: .92rem; }
+
+  /* footer */
+  footer {
+    text-align: center;
+    padding: 5rem 1.5rem 6rem;
+    color: var(--ink-soft);
+  }
+  footer .mark { font-weight: 700; color: var(--teal-deep); letter-spacing: -.02em; }
+
+  /* support note */
+  .note {
+    margin-top: 1.5rem;
+    font-size: .82rem;
+    color: var(--ink-soft);
+    background: rgba(255,255,255,.55);
+    border: 1px dashed rgba(31,138,138,.4);
+    border-radius: 12px;
+    padding: .8rem 1rem;
+    display: inline-block;
+  }
+</style>
+</head>
+<body>
+
+  <!-- scroll-progress bar -->
+  <div class="srt-progress" aria-hidden="true"></div>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div>
+      <p class="eyebrow">Sand &amp; Surf · Scroll-driven CSS</p>
+      <h1>Reveals that ride<br />the <em>scroll&nbsp;timeline</em></h1>
+      <p>Every element below animates with zero JavaScript — powered purely by the
+         native <code>animation-timeline: view()</code> and <code>scroll()</code> functions.</p>
+      <p class="scroll-hint">Scroll to reveal<span>↓</span></p>
+      <div><span class="note">Best in Chromium. Gracefully shows static content elsewhere and respects reduced-motion.</span></div>
+    </div>
+  </header>
+
+  <!-- FEATURE CARDS (fade-up, staggered) -->
+  <section class="wrap">
+    <div class="section-head srt-reveal srt-fade-up">
+      <h2>Three timelines, one effect</h2>
+      <p>The browser links each animation to where the element sits in the viewport — no observers, no listeners, no frameworks.</p>
+    </div>
+    <div class="cards">
+      <article class="card srt-reveal srt-fade-up" style="--srt-delay: 0">
+        <span class="num">1</span>
+        <h3>view()</h3>
+        <p>Drives an element's animation by its own progress through the viewport.</p>
+      </article>
+      <article class="card srt-reveal srt-fade-up" style="--srt-delay: .33">
+        <span class="num">2</span>
+        <h3>scroll()</h3>
+        <p>Drives the top progress bar by the document's scroll position.</p>
+      </article>
+      <article class="card srt-reveal srt-fade-up" style="--srt-delay: .66">
+        <span class="num">3</span>
+        <h3>@supports</h3>
+        <p>Wraps it all so unsupported browsers simply see the finished layout.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- CLIP WIPE BAND -->
+  <section class="wrap">
+    <div class="band srt-reveal srt-clip">
+      <h2>Clip-path wipe</h2>
+      <p>This whole panel is masked by <code>clip-path: inset()</code> and the mask is
+         interpolated against its <code>view()</code> timeline — it wipes open as you reach it.</p>
+    </div>
+  </section>
+
+  <!-- SPLIT: zoom figure + clip-up copy -->
+  <section class="wrap">
+    <div class="split">
+      <div class="figure srt-reveal srt-zoom">🌊</div>
+      <div>
+        <h2 class="srt-reveal srt-clip srt-clip--up">Zoom &amp; vertical reveal</h2>
+        <p class="srt-reveal srt-fade-up" style="--srt-delay: .2">
+          The artwork scales in from 112% while the heading uncovers from the bottom up.
+        </p>
+        <p class="srt-reveal srt-fade-up" style="--srt-delay: .4">
+          Mix the variants freely — they all share the same keyframe engine and the
+          same progressive-enhancement guardrails.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- STAGGERED STEPS -->
+  <section class="wrap">
+    <div class="section-head srt-reveal srt-fade-up">
+      <h2>Stagger with a single custom property</h2>
+      <p>Set <code>--srt-delay</code> from 0 to 1 on each child to shift when its
+         entry range begins. The CSS does the sequencing.</p>
+    </div>
+    <ul class="steps">
+      <li class="srt-reveal srt-fade-up" style="--srt-delay: 0">
+        <span class="dot"></span>
+        <div><strong>Add the class</strong><span>Drop .srt-fade-up onto any element.</span></div>
+      </li>
+      <li class="srt-reveal srt-fade-up" style="--srt-delay: .25">
+        <span class="dot"></span>
+        <div><strong>Pick a range</strong><span>entry / cover keywords tune the timing window.</span></div>
+      </li>
+      <li class="srt-reveal srt-fade-up" style="--srt-delay: .5">
+        <span class="dot"></span>
+        <div><strong>Stagger siblings</strong><span>--srt-delay nudges each one later.</span></div>
+      </li>
+      <li class="srt-reveal srt-fade-up" style="--srt-delay: .75">
+        <span class="dot"></span>
+        <div><strong>Ship it</strong><span>No JS bundle, no runtime cost.</span></div>
+      </li>
+    </ul>
+  </section>
+
+  <footer>
+    <p class="srt-reveal srt-fade-up">
+      <span class="mark">saltycodestudio</span> — Sand &amp; Surf parts library
+    </p>
+    <p class="srt-reveal srt-fade-up" style="--srt-delay: .3">
+      Watch the teal bar at the very top fill to 100% right here.
+    </p>
+  </footer>
+
+</body>
+</html>

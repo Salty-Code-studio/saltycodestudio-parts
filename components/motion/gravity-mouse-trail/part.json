@@ -1,0 +1,13 @@
+{
+  "name": "Gravity Mouse Trail",
+  "slug": "gravity-mouse-trail",
+  "category": "motion",
+  "tier": "showcase",
+  "tags": ["mouse", "cursor", "image-trail", "gravity", "physics", "gsap", "bounce"],
+  "description": "Images burst from the cursor as it moves, then fall under simulated gravity, bounce off the bottom of the viewport, and fade away.",
+  "deps": ["gsap"],
+  "files": ["animation.js", "styles.css"],
+  "usage": "Drop in a positioned .gmt-stage element, then call initGravityMouseTrail(stageEl, { images: [...] }); pass an array of preloaded image URLs and the trail spawns from the cursor on mousemove.",
+  "source": "https://tympanus.net/codrops/2026/05/20/made-with-gsap-building-a-fun-gravity-based-mouse-trail/",
+  "license": "Codrops/Tympanus license — free for personal and commercial use, no redistribution as-is. Reimplemented cleanly for saltycodestudio; no physics engine."
+}

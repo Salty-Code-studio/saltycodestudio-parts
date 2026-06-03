@@ -1,0 +1,13 @@
+{
+  "name": "Heart Like Burst",
+  "slug": "heart-like-burst",
+  "category": "css",
+  "tier": "showcase",
+  "tags": ["like", "heart", "burst", "particles", "favorite", "micro-interaction"],
+  "description": "A like button where the heart pops with an elastic bounce and a ring of colorful particles bursts outward, with no images or JavaScript.",
+  "deps": [],
+  "files": ["styles.css", "index.html"],
+  "usage": "Copy styles.css into your stylesheet and drop in the .hlb markup (a hidden checkbox plus .hlb__heart and .hlb__glyph spans) for each button. Tune per instance with the --hlb-size, --hlb-liked, --hlb-idle, and --hlb-ring custom properties on the wrapper.",
+  "source": "https://css-tricks.com/recreating-the-twitter-heart-animation/",
+  "license": "CSS-Tricks tutorial by Ana Tudor — technique reimplemented cleanly, shared for learning"
+}

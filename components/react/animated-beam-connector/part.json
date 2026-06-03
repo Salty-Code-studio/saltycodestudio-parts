@@ -1,0 +1,13 @@
+{
+  "name": "Animated Beam Connector",
+  "slug": "animated-beam-connector",
+  "category": "react",
+  "tier": "showcase",
+  "tags": ["beam", "connector", "diagram", "svg", "integrations", "flow"],
+  "description": "An animated gradient pulse that travels along a curved SVG path connecting two referenced DOM nodes, ideal for integration and architecture diagrams.",
+  "deps": ["motion", "tailwindcss"],
+  "files": ["AnimatedBeam.tsx"],
+  "usage": "Give a relative container a ref, give each node you want to wire its own ref, then render one <AnimatedBeam containerRef fromRef toRef /> per connection; tune curvature, reverse, duration, delay and the gradient colours, and the path auto-recomputes on resize via a ResizeObserver.",
+  "source": "https://magicui.design/docs/components/animated-beam",
+  "license": "MIT (Magic UI, github.com/magicuidesign/magicui) — reimplemented cleanly with credit"
+}

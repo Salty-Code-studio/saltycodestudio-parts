@@ -1,0 +1,13 @@
+{
+  "name": "Lamp Effect",
+  "slug": "lamp-effect",
+  "category": "react",
+  "tier": "showcase",
+  "tags": ["lamp", "spotlight", "section-header", "conic-gradient", "linear-style", "hero"],
+  "description": "A Linear-inspired overhead lamp glow that fans light down onto a section header, with the headline rising into the beam on scroll.",
+  "deps": ["motion", "tailwindcss"],
+  "files": ["LampEffect.tsx"],
+  "usage": "Render <LampEffect title=\"...\" subtitle=\"...\" /> as a section header; pass a `glow` color to retint the beam and optional children for CTAs.",
+  "source": "https://ui.aceternity.com/components/lamp-effect",
+  "license": "MIT (Aceternity UI) — reimplemented cleanly with credit"
+}

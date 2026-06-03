@@ -1,0 +1,52 @@
+/* SVG Line Draw on Scroll — saltycodestudio
+ *
+ * Base styles for the JS/GSAP variant, plus a pure-CSS no-library fallback
+ * driven by scroll-timeline (animation-timeline: view()). Browsers that
+ * support scroll-timeline draw the path with zero JS; others can layer the
+ * GSAP version from animation.js on top.
+ */
+
+.draw-on-scroll {
+  display: block;
+  width: 100%;
+}
+
+/* The path that gets drawn. round caps/joins keep the leading edge clean. */
+.draw-on-scroll path {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ---------------------------------------------------------------------------
+   No-library variant: pure CSS scroll-driven draw.
+   Add the .draw-on-scroll--css class to opt in. The dash length is provided
+   inline per-path as --path-length (= getTotalLength(), or any safe
+   over-estimate), so no JavaScript is needed at all.
+--------------------------------------------------------------------------- */
+@supports (animation-timeline: view()) {
+  .draw-on-scroll--css path {
+    --path-length: 2000; /* fallback; override inline per path */
+    stroke-dasharray: var(--path-length);
+    stroke-dashoffset: var(--path-length);
+    animation: ss-draw-line linear forwards;
+    animation-timeline: view();
+    animation-range: entry 15% cover 55%;
+  }
+}
+
+@keyframes ss-draw-line {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Respect reduced-motion: reveal the finished art, no progressive draw. */
+@media (prefers-reduced-motion: reduce) {
+  .draw-on-scroll path,
+  .draw-on-scroll--css path {
+    stroke-dasharray: none !important;
+    stroke-dashoffset: 0 !important;
+    animation: none !important;
+  }
+}

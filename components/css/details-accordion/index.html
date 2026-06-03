@@ -1,0 +1,58 @@
+<!--
+  Animated Details Accordion — markup snippet (pairs with styles.css)
+
+  Notes:
+  - Every <details> shares name="faq" so only one panel opens at a time
+    (native exclusive accordion behaviour, no JS).
+  - The .acc__inner > .acc__body > .acc__body-pad nesting powers the
+    grid-template-rows fallback. Keep all three levels.
+  - Drop `name="faq"` if you want multiple panels open simultaneously.
+-->
+<div class="accordion">
+
+  <details class="acc" name="faq" open>
+    <summary class="acc__summary">
+      <span class="acc__bullet">01</span>
+      <span class="acc__label">What makes this accordion smooth?</span>
+      <span class="acc__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 9l6 6 6-6" />
+        </svg>
+      </span>
+    </summary>
+    <div class="acc__inner">
+      <div class="acc__body">
+        <div class="acc__body-pad">
+          <p>It animates the native <code>::details-content</code> box from
+          <code>height: 0</code> to <code>height: auto</code> using
+          <code>interpolate-size: allow-keywords</code>, with a
+          <code>grid-template-rows</code> fallback for older engines.</p>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <details class="acc" name="faq">
+    <summary class="acc__summary">
+      <span class="acc__bullet">02</span>
+      <span class="acc__label">Do I need any JavaScript?</span>
+      <span class="acc__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 9l6 6 6-6" />
+        </svg>
+      </span>
+    </summary>
+    <div class="acc__inner">
+      <div class="acc__body">
+        <div class="acc__body-pad">
+          <p>None. The toggling, the exclusive grouping, and the keyboard +
+          screen-reader accessibility all come from the native
+          <code>&lt;details&gt;</code> / <code>&lt;summary&gt;</code> elements.</p>
+        </div>
+      </div>
+    </div>
+  </details>
+
+</div>

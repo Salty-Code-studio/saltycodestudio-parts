@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Border Beam — Sand &amp; Surf preview</title>
+
+    <!-- React 18 UMD -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <!-- framer-motion UMD (exposes window.Motion, reads window.React) -->
+    <script crossorigin src="https://cdn.jsdelivr.net/npm/framer-motion@11/dist/framer-motion.js"></script>
+    <!-- Babel for in-browser JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Tailwind Play CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+      html,
+      body {
+        margin: 0;
+        background: #f4ece0;
+      }
+      /* Soft grain so the cream backdrop doesn't read as flat. */
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0.5;
+        background-image: radial-gradient(rgba(28, 43, 51, 0.05) 1px, transparent 1px);
+        background-size: 18px 18px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel" data-presets="react">
+      const { motion } = window.Motion;
+      const { useState } = React;
+
+      /* ----------------------------------------------------------------
+       * BorderBeam — canonical component (mirrors BorderBeam.tsx).
+       * ---------------------------------------------------------------- */
+      function BorderBeam({
+        size = 60,
+        duration = 6,
+        delay = 0,
+        initialOffset = 0,
+        reverse = false,
+        colorFrom = "#2ec3c3",
+        colorTo = "#0f5c5c",
+        borderWidth = 1.5,
+        className = "",
+        style = {},
+      }) {
+        const prefersReducedMotion =
+          typeof window !== "undefined" &&
+          typeof window.matchMedia === "function" &&
+          window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        const from = reverse
+          ? [100 - initialOffset, -initialOffset]
+          : [initialOffset, initialOffset + 100];
+
+        return (
+          <div
+            className="pointer-events-none absolute inset-0 rounded-[inherit]"
+            style={{
+              border: `${borderWidth}px solid transparent`,
+              WebkitMask:
+                "linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)",
+              WebkitMaskComposite: "xor",
+              maskComposite: "exclude",
+            }}
+          >
+            <motion.div
+              className={`absolute aspect-square ${className}`}
+              style={{
+                width: size,
+                offsetPath: `rect(0 auto auto 0 round ${size}px)`,
+                background: `radial-gradient(circle at center, ${colorFrom}, ${colorTo} 45%, transparent 70%)`,
+                ...style,
+              }}
+              initial={{ offsetDistance: `${from[0]}%` }}
+              animate={
+                prefersReducedMotion
+                  ? { offsetDistance: `${from[0]}%` }
+                  : { offsetDistance: from.map((v) => `${v}%`) }
+              }
+              transition={
+                prefersReducedMotion
+                  ? { duration: 0 }
+                  : {
+                      repeat: Infinity,
+                      ease: "linear",
+                      duration,
+                      delay: -delay,
+                    }
+              }
+            />
+          </div>
+        );
+      }
+
+      /* ---------------- Demo content ---------------- */
+
+      function Check() {
+        return (
+          <svg viewBox="0 0 20 20" className="h-4 w-4 flex-none text-[#1f8a8a]" fill="currentColor">
+            <path
+              fillRule="evenodd"
+              d="M16.7 5.3a1 1 0 010 1.4l-7.5 7.5a1 1 0 01-1.4 0L3.3 9.7a1 1 0 111.4-1.4l3.3 3.3 6.8-6.8a1 1 0 011.4 0z"
+              clipRule="evenodd"
+            />
+          </svg>
+        );
+      }
+
+      function Feature({ children }) {
+        return (
+          <li className="flex items-center gap-2.5 text-sm text-[#4a5d66]">
+            <Check />
+            {children}
+          </li>
+        );
+      }
+
+      function PricingCard({ tier, price, blurb, features, featured, beams }) {
+        return (
+          <div
+            className={`relative overflow-hidden rounded-3xl border p-7 transition-transform duration-300 hover:-translate-y-1 ${
+              featured
+                ? "border-transparent bg-[#1c2b33] text-[#fbf7f0] shadow-[0_30px_70px_-32px_rgba(15,92,92,0.65)]"
+                : "border-[#ece0cd] bg-[#fbf7f0] shadow-[0_24px_60px_-34px_rgba(28,43,51,0.4)]"
+            }`}
+          >
+            {beams}
+
+            <span
+              className={`inline-flex items-center rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] ${
+                featured
+                  ? "bg-[#2ec3c3]/20 text-[#2ec3c3]"
+                  : "bg-[#1f8a8a]/10 text-[#0f5c5c]"
+              }`}
+            >
+              {tier}
+            </span>
+
+            <div className="mt-5 flex items-baseline gap-1">
+              <span className={`text-4xl font-extrabold ${featured ? "text-[#fbf7f0]" : "text-[#1c2b33]"}`}>
+                {price}
+              </span>
+              <span className={`text-sm ${featured ? "text-[#cfe6e6]" : "text-[#4a5d66]"}`}>/ mo</span>
+            </div>
+
+            <p className={`mt-3 text-sm leading-relaxed ${featured ? "text-[#cfe6e6]" : "text-[#4a5d66]"}`}>
+              {blurb}
+            </p>
+
+            <ul className="mt-6 space-y-3">
+              {features.map((f) => (
+                <li
+                  key={f}
+                  className={`flex items-center gap-2.5 text-sm ${featured ? "text-[#cfe6e6]" : "text-[#4a5d66]"}`}
+                >
+                  <svg viewBox="0 0 20 20" className="h-4 w-4 flex-none text-[#2ec3c3]" fill="currentColor">
+                    <path
+                      fillRule="evenodd"
+                      d="M16.7 5.3a1 1 0 010 1.4l-7.5 7.5a1 1 0 01-1.4 0L3.3 9.7a1 1 0 111.4-1.4l3.3 3.3 6.8-6.8a1 1 0 011.4 0z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  {f}
+                </li>
+              ))}
+            </ul>
+
+            <button
+              className={`mt-7 w-full rounded-xl px-4 py-3 text-sm font-semibold transition-colors ${
+                featured
+                  ? "bg-[#2ec3c3] text-[#0f3838] hover:bg-[#5ad6d6]"
+                  : "bg-[#1f8a8a] text-[#fbf7f0] hover:bg-[#0f5c5c]"
+              }`}
+            >
+              Choose {tier}
+            </button>
+          </div>
+        );
+      }
+
+      function App() {
+        return (
+          <main className="mx-auto max-w-6xl px-6 py-16 sm:py-24">
+            <header className="mx-auto max-w-2xl text-center">
+              <span className="inline-flex items-center gap-2 rounded-full border border-[#ece0cd] bg-[#fbf7f0] px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#0f5c5c]">
+                <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#2ec3c3]"></span>
+                Border Beam
+              </span>
+              <h1 className="mt-5 text-4xl font-extrabold tracking-tight text-[#1c2b33] sm:text-5xl">
+                A beam that orbits the edge.
+              </h1>
+              <p className="mt-4 text-base leading-relaxed text-[#4a5d66]">
+                A light traces the border forever, framing any card with a premium,
+                living glow. Stack two beams with offset delays for a chase effect.
+              </p>
+            </header>
+
+            <section className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              <PricingCard
+                tier="Tide"
+                price="$0"
+                blurb="A starting point for side projects and quick experiments."
+                features={["1 project", "Community support", "Sand & Surf theme"]}
+                beams={
+                  <BorderBeam size={70} duration={8} colorFrom="#1f8a8a" colorTo="#0f5c5c" />
+                }
+              />
+
+              <PricingCard
+                tier="Surf"
+                price="$24"
+                blurb="Everything to ship a polished marketing site, framed and glowing."
+                features={["Unlimited projects", "Priority support", "Custom domains", "Analytics"]}
+                featured
+                beams={
+                  <>
+                    <BorderBeam size={90} duration={6} colorFrom="#2ec3c3" colorTo="#1f8a8a" borderWidth={2} />
+                    <BorderBeam
+                      size={90}
+                      duration={6}
+                      delay={3}
+                      colorFrom="#5ad6d6"
+                      colorTo="#0f5c5c"
+                      borderWidth={2}
+                    />
+                  </>
+                }
+              />
+
+              <PricingCard
+                tier="Reef"
+                price="$48"
+                blurb="Scale with the studio: a second beam runs the opposite way."
+                features={["Team seats", "SLA & onboarding", "Audit log", "SSO"]}
+                beams={
+                  <>
+                    <BorderBeam size={70} duration={9} colorFrom="#2ec3c3" colorTo="#0f5c5c" />
+                    <BorderBeam size={70} duration={9} reverse colorFrom="#1f8a8a" colorTo="#2ec3c3" />
+                  </>
+                }
+              />
+            </section>
+
+            <p className="mt-12 text-center text-xs text-[#4a5d66]">
+              Reimplemented from Magic UI&rsquo;s Border Beam (MIT) &middot; Sand &amp; Surf palette
+            </p>
+          </main>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,202 @@
+/* ===========================================================================
+   Animated Details Accordion — Sand & Surf
+   Native <details> accordion that smoothly animates height 0 -> auto with
+   ZERO JavaScript.
+
+   Two stacked techniques are used together so it degrades gracefully:
+
+   1) Modern path (Chrome 129+, etc.): animate ::details-content height with
+      `interpolate-size: allow-keywords` (so `auto` is animatable) plus
+      `transition-behavior: allow-discrete` (so `content-visibility` can flip
+      after the height transition completes).
+
+   2) Fallback path (older engines): wrap the body in `.acc__inner` and
+      animate `grid-template-rows: 0fr -> 1fr`, the classic no-JS smooth-height
+      idiom. Browsers that can't do the modern path still animate via the grid.
+
+   Group exclusivity (only one panel open at a time) comes free from the native
+   `name` attribute shared across the <details> elements.
+   =========================================================================== */
+
+/* Opt every element into animatable intrinsic sizes (auto/min-content/etc.).
+   Browsers that don't understand it simply ignore it. */
+:root {
+  interpolate-size: allow-keywords;
+
+  /* Sand & Surf palette */
+  --acc-bg:        #fbf7f0;
+  --acc-surface:   #f4ece0;
+  --acc-surface-2: #ece0cd;
+  --acc-ink:       #1c2b33;
+  --acc-ink-soft:  #4a5d66;
+  --acc-teal:      #1f8a8a;
+  --acc-deep:      #0f5c5c;
+  --acc-surf:      #2ec3c3;
+
+  --acc-radius: 14px;
+  --acc-dur: 380ms;
+  --acc-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.accordion {
+  display: grid;
+  gap: 12px;
+  width: 100%;
+  max-width: 640px;
+  margin-inline: auto;
+}
+
+/* ---- Each item ---------------------------------------------------------- */
+.acc {
+  background: var(--acc-surface);
+  border: 1px solid color-mix(in srgb, var(--acc-surface-2) 70%, var(--acc-ink) 4%);
+  border-radius: var(--acc-radius);
+  overflow: clip; /* keep the animated content inside the rounded corners */
+  box-shadow:
+    0 1px 0 0 rgba(255, 255, 255, 0.6) inset,
+    0 6px 18px -12px rgba(15, 92, 92, 0.45);
+  transition: border-color var(--acc-dur) var(--acc-ease),
+              box-shadow var(--acc-dur) var(--acc-ease);
+}
+
+.acc[open] {
+  border-color: color-mix(in srgb, var(--acc-teal) 45%, var(--acc-surface-2));
+  box-shadow:
+    0 1px 0 0 rgba(255, 255, 255, 0.7) inset,
+    0 14px 34px -16px rgba(15, 92, 92, 0.5);
+}
+
+/* ---- Summary (the always-visible header / toggle) ----------------------- */
+.acc__summary {
+  list-style: none; /* remove default disclosure marker */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 20px;
+  font-weight: 650;
+  font-size: 1.02rem;
+  color: var(--acc-ink);
+  user-select: none;
+  transition: background-color var(--acc-dur) var(--acc-ease),
+              color var(--acc-dur) var(--acc-ease);
+}
+
+/* Remove the native triangle in WebKit/Blink. */
+.acc__summary::-webkit-details-marker {
+  display: none;
+}
+
+.acc__summary:hover {
+  background: color-mix(in srgb, var(--acc-surf) 10%, transparent);
+}
+
+.acc__summary:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--acc-teal) 60%, transparent);
+  outline-offset: -3px;
+  border-radius: var(--acc-radius);
+}
+
+.acc[open] > .acc__summary {
+  color: var(--acc-deep);
+}
+
+/* Custom chevron icon that rotates on open */
+.acc__icon {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  margin-left: auto;
+  display: grid;
+  place-items: center;
+  color: var(--acc-teal);
+  transition: transform var(--acc-dur) var(--acc-ease),
+              color var(--acc-dur) var(--acc-ease);
+}
+
+.acc__icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.acc[open] > .acc__summary .acc__icon {
+  transform: rotate(180deg);
+  color: var(--acc-deep);
+}
+
+/* Optional leading dot / number bullet */
+.acc__bullet {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--acc-deep);
+  background: color-mix(in srgb, var(--acc-surf) 28%, var(--acc-bg));
+}
+
+/* ---- Animated content --------------------------------------------------- */
+
+/* MODERN PATH: animate the native ::details-content box. */
+.acc::details-content {
+  height: 0;
+  overflow: clip;
+  opacity: 0;
+  /* `allow-discrete` lets content-visibility (which the UA toggles) animate
+     discretely at the right moment, so the panel doesn't pop. */
+  transition: height var(--acc-dur) var(--acc-ease),
+              opacity var(--acc-dur) var(--acc-ease),
+              content-visibility var(--acc-dur) allow-discrete;
+}
+
+.acc[open]::details-content {
+  height: auto; /* animatable thanks to interpolate-size */
+  opacity: 1;
+}
+
+/* FALLBACK PATH: grid 0fr -> 1fr on the wrapper, for engines without
+   ::details-content / interpolate-size support. This is harmless when the
+   modern path is active because the inner row is already fully expanded. */
+.acc__inner {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--acc-dur) var(--acc-ease);
+}
+
+.acc[open] .acc__inner {
+  grid-template-rows: 1fr;
+}
+
+.acc__body {
+  min-height: 0; /* required so the grid row can collapse to 0 */
+  overflow: hidden;
+}
+
+.acc__body-pad {
+  padding: 2px 20px 20px 20px;
+  color: var(--acc-ink-soft);
+  line-height: 1.6;
+  font-size: 0.96rem;
+}
+
+.acc__body-pad p { margin: 0 0 0.8em; }
+.acc__body-pad p:last-child { margin-bottom: 0; }
+
+.acc__body-pad a {
+  color: var(--acc-teal);
+  text-underline-offset: 3px;
+}
+
+/* ---- Reduced motion ----------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .acc,
+  .acc__summary,
+  .acc__icon,
+  .acc::details-content,
+  .acc__inner {
+    transition-duration: 1ms;
+  }
+}

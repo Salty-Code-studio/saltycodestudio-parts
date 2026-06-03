@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Spotlight Card — saltycodestudio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+      body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }
+    </style>
+  </head>
+  <body class="bg-[#f4ece0]">
+    <div id="root"></div>
+    <script type="text/babel" data-presets="react">
+      const { useRef, useState } = React;
+
+      function SpotlightCard({
+        title,
+        description,
+        icon,
+        eyebrow,
+        radius = 320,
+        spotlightColor = "rgba(46, 195, 195, 0.28)",
+        showPattern = true,
+        className = "",
+        children,
+      }) {
+        const ref = useRef(null);
+        const [hovered, setHovered] = useState(false);
+
+        function handleMouseMove(e) {
+          const el = ref.current;
+          if (!el) return;
+          const rect = el.getBoundingClientRect();
+          el.style.setProperty("--x", `${e.clientX - rect.left}px`);
+          el.style.setProperty("--y", `${e.clientY - rect.top}px`);
+        }
+
+        return (
+          <div
+            ref={ref}
+            onMouseMove={handleMouseMove}
+            onMouseEnter={() => setHovered(true)}
+            onMouseLeave={() => setHovered(false)}
+            style={{ "--spot": spotlightColor, "--r": `${radius}px` }}
+            className={`group relative overflow-hidden rounded-3xl border border-[#e7ddcd] bg-[#fbf7f0] p-8 shadow-[0_1px_0_rgba(255,255,255,0.7)_inset] transition-colors duration-300 hover:border-[#1f8a8a]/40 ${className}`}
+          >
+            {showPattern && (
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 motion-reduce:transition-none"
+                style={{
+                  backgroundImage: "radial-gradient(rgba(15, 92, 92, 0.55) 1px, transparent 1px)",
+                  backgroundSize: "16px 16px",
+                  WebkitMaskImage: "radial-gradient(var(--r) circle at var(--x, 50%) var(--y, 50%), #000 0%, transparent 65%)",
+                  maskImage: "radial-gradient(var(--r) circle at var(--x, 50%) var(--y, 50%), #000 0%, transparent 65%)",
+                }}
+              />
+            )}
+
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100 motion-reduce:transition-none"
+              style={{
+                background: "radial-gradient(var(--r) circle at var(--x, 50%) var(--y, 50%), var(--spot), transparent 70%)",
+              }}
+            />
+
+            <div className="relative z-10">
+              {children ?? (
+                <>
+                  {icon && (
+                    <span className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#1c2b33] text-xl text-[#fbf7f0] shadow-sm transition-transform duration-300 group-hover:scale-110">
+                      {icon}
+                    </span>
+                  )}
+                  {eyebrow && (
+                    <span className="mb-2 inline-block text-xs font-semibold uppercase tracking-[0.18em] text-[#1f8a8a]">
+                      {eyebrow}
+                    </span>
+                  )}
+                  <h3 className="text-lg font-semibold tracking-tight text-[#1c2b33]">{title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-[#4a5d66]">{description}</p>
+                </>
+              )}
+            </div>
+
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-inset transition-colors duration-300"
+              style={{ "--tw-ring-color": hovered ? "rgba(46, 195, 195, 0.35)" : "transparent" }}
+            />
+          </div>
+        );
+      }
+
+      const FEATURES = [
+        { icon: "🌊", eyebrow: "Hosting", title: "Edge-first delivery", description: "Static assets cached at the coast nearest your visitor — sub-50ms first paint, worldwide." },
+        { icon: "🛡️", eyebrow: "Security", title: "Hardened by default", description: "Automatic TLS, strict CSP headers, and isolated build sandboxes on every deploy." },
+        { icon: "✨", eyebrow: "Experience", title: "Motion with meaning", description: "Tasteful micro-interactions that guide the eye instead of fighting for attention." },
+        { icon: "📈", eyebrow: "Analytics", title: "Privacy-safe insight", description: "Cookieless, GDPR-friendly metrics that tell you what matters without tracking people." },
+        { icon: "🧩", eyebrow: "DX", title: "Composable parts", description: "Drop-in components that snap together without wrestling your existing design system." },
+        { icon: "🏝️", eyebrow: "Support", title: "Island-time care", description: "Real humans, warm replies, and a roadmap shaped by the people who actually ship on us." },
+      ];
+
+      function Pricing() {
+        return (
+          <div className="grid max-w-5xl gap-4 mx-auto sm:grid-cols-3">
+            {[
+              { name: "Tide", price: "$0", note: "For weekend projects", spot: "rgba(236, 224, 205, 0.7)", feats: ["1 site", "Community support", "Salty subdomain"] },
+              { name: "Surf", price: "$19", note: "For growing studios", spot: "rgba(46, 195, 195, 0.30)", feats: ["10 sites", "Custom domains", "Edge analytics", "Priority email"] },
+              { name: "Deep", price: "$49", note: "For agencies at scale", spot: "rgba(15, 92, 92, 0.30)", feats: ["Unlimited sites", "Team roles", "Audit log", "Dedicated support"] },
+            ].map((p, i) => (
+              <SpotlightCard key={i} spotlightColor={p.spot} radius={300} className="flex flex-col">
+                <span className="text-xs font-semibold uppercase tracking-[0.18em] text-[#1f8a8a]">{p.name}</span>
+                <div className="mt-3 flex items-baseline gap-1">
+                  <span className="text-4xl font-semibold tracking-tight text-[#1c2b33]">{p.price}</span>
+                  <span className="text-sm text-[#4a5d66]">/mo</span>
+                </div>
+                <p className="mt-1 text-sm text-[#4a5d66]">{p.note}</p>
+                <ul className="mt-5 space-y-2 text-sm text-[#1c2b33]">
+                  {p.feats.map((f, j) => (
+                    <li key={j} className="flex items-center gap-2">
+                      <span className="text-[#2ec3c3]">✓</span>{f}
+                    </li>
+                  ))}
+                </ul>
+                <button className="mt-6 rounded-xl bg-[#1c2b33] px-4 py-2.5 text-sm font-semibold text-[#fbf7f0] transition-transform duration-200 hover:scale-[1.02]">
+                  Choose {p.name}
+                </button>
+              </SpotlightCard>
+            ))}
+          </div>
+        );
+      }
+
+      function Demo() {
+        return (
+          <main className="min-h-screen px-6 py-20 sm:px-8">
+            <div className="mx-auto mb-14 max-w-3xl text-center">
+              <span className="inline-block rounded-full bg-[#1f8a8a]/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#0f5c5c]">
+                Move your cursor across the cards
+              </span>
+              <h1 className="mt-4 text-4xl font-semibold leading-tight tracking-tight text-[#1c2b33] sm:text-5xl">
+                A soft spotlight that follows the pointer
+              </h1>
+              <p className="mt-4 text-base leading-relaxed text-[#4a5d66]">
+                Premium-but-safe hover lighting for feature and pricing grids — built on the Sand &amp; Surf palette.
+              </p>
+            </div>
+
+            <div className="mx-auto mb-20 grid max-w-5xl gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {FEATURES.map((f, i) => (
+                <SpotlightCard key={i} {...f} />
+              ))}
+            </div>
+
+            <h2 className="mb-6 text-center text-2xl font-semibold tracking-tight text-[#1c2b33]">
+              Works just as well for pricing
+            </h2>
+            <Pricing />
+          </main>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(<Demo />);
+    </script>
+  </body>
+</html>

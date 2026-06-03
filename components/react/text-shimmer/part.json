@@ -1,0 +1,13 @@
+{
+  "name": "Text Shimmer",
+  "slug": "text-shimmer",
+  "category": "react",
+  "tier": "practical",
+  "tags": ["text", "shimmer", "shine", "gradient", "badge", "loading"],
+  "description": "Text with a soft light sheen sweeping across it left to right, perfect for announcement pills, badges and subtle loading labels.",
+  "deps": ["tailwindcss"],
+  "files": ["TextShimmer.tsx"],
+  "usage": "Import TextShimmer and wrap any short string, e.g. <TextShimmer>Now in beta</TextShimmer> inside a pill, or set as=\"label\" with a longer duration for a subtle loading label. Tune duration, spread, baseColor and shineColor via props.",
+  "source": "https://magicui.design/docs/components/animated-shiny-text",
+  "license": "MIT (Magic UI) — reimplemented cleanly with credit"
+}

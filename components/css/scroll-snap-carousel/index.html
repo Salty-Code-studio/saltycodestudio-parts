@@ -1,0 +1,37 @@
+<!--
+  Markup snippet for the CSS-Only Snap Carousel.
+  Pair this with styles.css. No JavaScript required.
+
+  Structure notes:
+    • .snap-carousel        — grid wrapper that reserves a row for dots.
+    • .snap-carousel__track — the actual scroll container. The browser
+                              generates the ::scroll-button() controls and
+                              the ::scroll-marker-group dots FROM this
+                              element + its children. You write NO buttons
+                              and NO dots in the HTML — they're all CSS.
+    • .snap-carousel__slide — one per slide. Each contributes one dot.
+
+  Give each slide a tabindex="0" + aria-label so keyboard users can land
+  on a slide and so the slide is announced. id + aria-roledescription are
+  optional niceties.
+-->
+<div class="snap-carousel" role="group" aria-roledescription="carousel" aria-label="Featured destinations">
+  <ul class="snap-carousel__track">
+    <li class="snap-carousel__slide" tabindex="0" aria-label="Slide 1 of 4: Bonaire">
+      <h3>Bonaire</h3>
+      <p>Turquoise shallows and salt flats.</p>
+    </li>
+    <li class="snap-carousel__slide" tabindex="0" aria-label="Slide 2 of 4: Curaçao">
+      <h3>Curaçao</h3>
+      <p>Pastel harbours and coral walls.</p>
+    </li>
+    <li class="snap-carousel__slide" tabindex="0" aria-label="Slide 3 of 4: Aruba">
+      <h3>Aruba</h3>
+      <p>Wind-carved dunes and surf.</p>
+    </li>
+    <li class="snap-carousel__slide" tabindex="0" aria-label="Slide 4 of 4: Klein Bonaire">
+      <h3>Klein Bonaire</h3>
+      <p>An untouched ring of reef.</p>
+    </li>
+  </ul>
+</div>

@@ -1,0 +1,166 @@
+/* ============================================================
+   CSS Scroll Reveal Timeline
+   Zero-JS reveals + scroll-progress bar via native
+   animation-timeline: view() and scroll().
+   ============================================================ */
+
+/* ---- Sand & Surf palette as tokens ---- */
+:root {
+  --sand-1: #fbf7f0;
+  --sand-2: #f4ece0;
+  --sand-3: #ece0cd;
+  --ink: #1c2b33;
+  --ink-soft: #4a5d66;
+  --teal: #1f8a8a;
+  --teal-deep: #0f5c5c;
+  --surf: #2ec3c3;
+}
+
+/* ============================================================
+   1. Scroll-progress bar — bound to the document scroll()
+      Fills left→right as the page scrolls top→bottom.
+   ============================================================ */
+.srt-progress {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: 5px;
+  z-index: 100;
+  transform-origin: 0 50%;
+  background: linear-gradient(90deg, var(--teal-deep), var(--surf));
+  /* Fallback: invisible until @supports kicks in so we never
+     show a permanently-full bar in unsupported browsers. */
+  transform: scaleX(0);
+}
+
+/* ============================================================
+   2. Reveal elements — each animation is attached to a
+      view() timeline so it plays as the element crosses
+      the viewport. Defaults to the "settled" state so that,
+      without scroll-timeline support, content is just visible.
+   ============================================================ */
+.srt-reveal {
+  /* settled / final state used as the no-support fallback */
+  opacity: 1;
+}
+
+/* Fade + rise */
+.srt-fade-up {
+  --srt-rise: 2.5rem;
+}
+
+/* Clip-path wipe (slides a reveal mask off the element) */
+.srt-clip {
+  clip-path: inset(0 0 0 0);
+}
+
+/* Scale-in for media */
+.srt-zoom {
+  transform: none;
+}
+
+/* ============================================================
+   3. Keyframes — authored against the element's progress
+      through its view() range.
+   ============================================================ */
+@keyframes srt-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(var(--srt-rise, 2.5rem));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes srt-clip-wipe {
+  from {
+    opacity: 0.001;
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes srt-clip-up {
+  from {
+    clip-path: inset(100% 0 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes srt-zoom-in {
+  from {
+    opacity: 0;
+    transform: scale(1.12);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes srt-progress-grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* ============================================================
+   4. Progressive enhancement — only activate the timelines
+      when the browser actually supports scroll-driven
+      animations AND the user hasn't asked to reduce motion.
+   ============================================================ */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+
+    /* progress bar tracks the whole document */
+    .srt-progress {
+      animation: srt-progress-grow linear both;
+      animation-timeline: scroll(root block);
+    }
+
+    /* fade + rise as the element enters the viewport */
+    .srt-fade-up {
+      animation: srt-fade-up linear both;
+      animation-timeline: view();
+      /* play between entering and 45% up the viewport */
+      animation-range: entry 0% cover 45%;
+    }
+
+    /* horizontal clip wipe */
+    .srt-clip {
+      animation: srt-clip-wipe linear both;
+      animation-timeline: view();
+      animation-range: entry 5% cover 40%;
+    }
+
+    /* vertical clip reveal (use .srt-clip.srt-clip--up) */
+    .srt-clip.srt-clip--up {
+      animation-name: srt-clip-up;
+    }
+
+    /* zoom-in for figures / images */
+    .srt-zoom {
+      animation: srt-zoom-in linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 50%;
+    }
+
+    /* Stagger helper: nudge an element's range later so
+       siblings reveal in sequence. Apply --srt-delay (0–1)
+       to shift the start of the entry range. */
+    .srt-reveal[style*="--srt-delay"] {
+      animation-range:
+        entry calc(var(--srt-delay, 0) * 30%)
+        cover calc(45% + var(--srt-delay, 0) * 20%);
+    }
+  }
+}

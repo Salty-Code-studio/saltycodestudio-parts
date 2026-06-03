@@ -1,0 +1,32 @@
+<!-- Markup snippet for the Container-Query Adaptive Card.
+     Wrap the card in a `.cq-slot` (the query container). The
+     card itself never references the viewport — it sizes
+     against whatever slot it lands in.
+
+     `.cq-scope` only carries the brand CSS variables; put it
+     on any ancestor (or on :root) so the tokens resolve. -->
+
+<div class="cq-scope">
+  <!-- This wrapper is the container. Resize IT and the card reflows. -->
+  <div class="cq-slot">
+    <article class="cq-card">
+      <div class="cq-card__media">
+        <span class="cq-card__tag">Bonaire</span>
+        <!-- optional: <img src="..." alt="..."> -->
+      </div>
+      <div class="cq-card__body">
+        <p class="cq-card__eyebrow">Field Notes</p>
+        <h3 class="cq-card__title">Salt flats at golden hour</h3>
+        <p class="cq-card__text">
+          A self-contained card that reflows from stacked to
+          side-by-side based on the width of its parent slot —
+          no media queries, no JavaScript.
+        </p>
+        <div class="cq-card__footer">
+          <a class="cq-card__cta" href="#">Read story</a>
+          <span class="cq-card__meta">4 min read</span>
+        </div>
+      </div>
+    </article>
+  </div>
+</div>

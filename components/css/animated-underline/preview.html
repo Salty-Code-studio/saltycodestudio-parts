@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sliding Underline Link — Sand &amp; Surf</title>
+<style>
+  /* ---------------- Brand palette: Sand & Surf ---------------- */
+  :root {
+    --sand-bg:   #fbf7f0;
+    --sand-2:    #f4ece0;
+    --sand-3:    #ece0cd;
+    --ink:       #1c2b33;
+    --ink-soft:  #4a5d66;
+    --teal:      #1f8a8a;
+    --deep:      #0f5c5c;
+    --surf:      #2ec3c3;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background:
+      radial-gradient(1200px 600px at 110% -10%, var(--sand-3), transparent 60%),
+      radial-gradient(900px 500px at -10% 110%, var(--sand-2), transparent 55%),
+      var(--sand-bg);
+    color: var(--ink);
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    padding: clamp(1.5rem, 5vw, 4rem);
+  }
+
+  .wrap {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--teal);
+    margin: 0 0 0.75rem;
+  }
+
+  h1 {
+    font-size: clamp(2rem, 6vw, 3.25rem);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin: 0 0 0.5rem;
+    color: var(--ink);
+  }
+
+  .lede {
+    font-size: 1.15rem;
+    color: var(--ink-soft);
+    max-width: 52ch;
+    margin: 0 0 2.5rem;
+  }
+
+  .card {
+    background: rgba(255, 255, 255, 0.55);
+    border: 1px solid var(--sand-3);
+    border-radius: 18px;
+    padding: clamp(1.25rem, 4vw, 2rem);
+    margin-bottom: 1.5rem;
+    backdrop-filter: blur(4px);
+    box-shadow: 0 1px 2px rgba(15, 92, 92, 0.04),
+                0 12px 32px -18px rgba(28, 43, 51, 0.35);
+  }
+
+  .card h2 {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--ink-soft);
+    margin: 0 0 1rem;
+    font-weight: 700;
+  }
+
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem 1.75rem;
+    align-items: center;
+  }
+
+  p { margin: 0 0 1rem; }
+  p:last-child { margin-bottom: 0; }
+
+  .demo-prose { font-size: 1.05rem; color: var(--ink); }
+
+  .narrow {
+    max-width: 24ch;
+    border-left: 3px solid var(--surf);
+    padding-left: 1rem;
+    font-size: 1.05rem;
+  }
+
+  nav.demo-nav {
+    display: flex;
+    gap: 1.75rem;
+    flex-wrap: wrap;
+    font-weight: 600;
+    font-size: 1.05rem;
+  }
+
+  .hint {
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    margin-top: 1rem;
+  }
+  .hint code {
+    background: var(--sand-3);
+    padding: 0.1rem 0.35rem;
+    border-radius: 5px;
+    font-size: 0.82em;
+  }
+
+  footer {
+    margin-top: 2.5rem;
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+  }
+  footer a { color: var(--deep); }
+
+  /* =================================================================
+   *  THE PART — Sliding Underline Link (copy of styles.css)
+   * ================================================================= */
+  .su-link {
+    --su-color: #1f8a8a;
+    --su-thickness: 2px;
+    --su-duration: 320ms;
+    --su-ease: cubic-bezier(0.65, 0, 0.35, 1);
+
+    color: var(--su-color);
+    text-decoration: none;
+    cursor: pointer;
+
+    background-image: linear-gradient(currentColor, currentColor);
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 0% var(--su-thickness);
+    padding-bottom: 1px;
+
+    transition: background-size var(--su-duration) var(--su-ease);
+  }
+
+  .su-link:hover,
+  .su-link:focus-visible {
+    background-size: 100% var(--su-thickness);
+  }
+
+  .su-link:focus-visible {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+  }
+
+  .su-link--reverse { background-position: 100% 100%; }
+
+  .su-link--bold {
+    --su-thickness: 3px;
+    --su-color: #0f5c5c;
+    font-weight: 600;
+  }
+
+  .su-link--retract { background-size: 100% var(--su-thickness); }
+  .su-link--retract:hover,
+  .su-link--retract:focus-visible { background-size: 0% var(--su-thickness); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .su-link { transition-duration: 1ms; }
+  }
+</style>
+</head>
+<body>
+  <main class="wrap">
+    <p class="eyebrow">Sand &amp; Surf · Micro-interaction</p>
+    <h1>Sliding Underline Link</h1>
+    <p class="lede">
+      Hover or tab through the links below. The underline wipes in with an
+      animated <code>background-size</code> — no transforms — so it wraps
+      cleanly across line breaks and honors keyboard focus.
+    </p>
+
+    <section class="card">
+      <h2>In a navigation</h2>
+      <nav class="demo-nav">
+        <a class="su-link" href="#">Story</a>
+        <a class="su-link" href="#">Collection</a>
+        <a class="su-link" href="#">Field Notes</a>
+        <a class="su-link" href="#">Contact</a>
+      </nav>
+      <p class="hint">Tip: press <code>Tab</code> — the wipe fires on <code>:focus-visible</code> too.</p>
+    </section>
+
+    <section class="card">
+      <h2>Inline, inside running text</h2>
+      <p class="demo-prose">
+        We hand-pick every batch on the windward coast, then
+        <a class="su-link" href="#">document the harvest in a deliberately long,
+        multi-line link so you can watch the underline wrap neatly from one line
+        to the next</a>
+        before a single bottle ever leaves the island.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>Wrapping in a narrow column</h2>
+      <p class="narrow">
+        <a class="su-link" href="#">This link is forced to wrap across three
+        lines and the underline still follows every line.</a>
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>Modifiers</h2>
+      <div class="row">
+        <a class="su-link su-link--reverse" href="#">Wipes from the right</a>
+        <a class="su-link su-link--bold" href="#">Bold CTA underline</a>
+        <a class="su-link su-link--retract" href="#">Retracts on hover</a>
+        <a class="su-link" style="--su-color:#2ec3c3" href="#">Surf accent</a>
+      </div>
+      <p class="hint">
+        Color &amp; thickness are tunable per instance via
+        <code>--su-color</code> and <code>--su-thickness</code>.
+      </p>
+    </section>
+
+    <footer>
+      Source / inspiration:
+      <a href="https://css-irl.info/animating-underlines/" target="_blank" rel="noopener">
+        css-irl.info — Animating Underlines (Michelle Barker)</a>.
+      Educational snippet, reimplemented cleanly for the Sand &amp; Surf kit.
+    </footer>
+  </main>
+</body>
+</html>

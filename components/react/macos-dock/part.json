@@ -1,0 +1,13 @@
+{
+  "name": "macOS Dock",
+  "slug": "macos-dock",
+  "category": "react",
+  "tier": "showcase",
+  "tags": ["dock", "navigation", "magnify", "macos", "hover", "toolbar"],
+  "description": "A macOS-style icon dock whose items magnify and lift as the cursor approaches, for portfolio nav bars and app launchers.",
+  "deps": ["motion", "tailwindcss"],
+  "files": ["MacosDock.tsx"],
+  "usage": "Wrap a row of <DockItem label=\"...\"> icons in <MacosDock>; the dock tracks the cursor's X position and springs each icon's size so neighbours scale in a smooth bell curve around the hovered icon. Tune baseSize, maxSize, and distance props to taste.",
+  "source": "https://magicui.design/docs/components/dock",
+  "license": "MIT (Magic UI) — reimplemented cleanly with credit"
+}

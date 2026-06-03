@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Confetti Button — Sand &amp; Surf preview</title>
+
+    <!-- React 18 UMD -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <!-- Babel for in-browser JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Tailwind Play CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- canvas-confetti (exposes window.confetti) -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+    <style>
+      html,
+      body {
+        margin: 0;
+        background: #f4ece0;
+      }
+      /* Soft grain so the cream backdrop doesn't read as flat. */
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0.5;
+        background-image: radial-gradient(rgba(28, 43, 51, 0.05) 1px, transparent 1px);
+        background-size: 18px 18px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel" data-presets="react">
+      const { useRef, useState, useCallback } = React;
+      const confetti = window.confetti;
+
+      const SAND_AND_SURF = ["#2ec3c3", "#1f8a8a", "#0f5c5c", "#fbf7f0", "#ece0cd"];
+
+      /* ----------------------------------------------------------------
+       * ConfettiButton — canonical component (mirrors ConfettiButton.tsx).
+       * Fires confetti from its own on-screen position on click.
+       * ---------------------------------------------------------------- */
+      function ConfettiButton({
+        particleCount = 90,
+        spread = 70,
+        angle = 90,
+        startVelocity = 45,
+        gravity = 1,
+        scalar = 1,
+        colors = SAND_AND_SURF,
+        onConfetti,
+        onClick,
+        children,
+        className,
+        ...props
+      }) {
+        const ref = useRef(null);
+
+        const fire = useCallback(
+          (event) => {
+            const el = ref.current;
+            const prefersReducedMotion =
+              typeof window !== "undefined" &&
+              typeof window.matchMedia === "function" &&
+              window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+            if (el && confetti && !prefersReducedMotion) {
+              const rect = el.getBoundingClientRect();
+              const origin = {
+                x: (rect.left + rect.width / 2) / window.innerWidth,
+                y: (rect.top + rect.height / 2) / window.innerHeight,
+              };
+              confetti({
+                particleCount,
+                spread,
+                angle,
+                startVelocity,
+                gravity,
+                scalar,
+                colors,
+                origin,
+                disableForReducedMotion: true,
+              });
+            }
+
+            onClick && onClick(event);
+            onConfetti && onConfetti();
+          },
+          [particleCount, spread, angle, startVelocity, gravity, scalar, colors, onClick, onConfetti]
+        );
+
+        return (
+          <button
+            ref={ref}
+            type="button"
+            onClick={fire}
+            className={
+              className ||
+              "inline-flex items-center justify-center gap-2 rounded-xl bg-[#1f8a8a] px-6 py-3 text-sm font-semibold text-[#fbf7f0] shadow-[0_14px_30px_-12px_rgba(15,92,92,0.6)] transition-[transform,background-color] duration-200 hover:-translate-y-0.5 hover:bg-[#0f5c5c] active:translate-y-0 active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2ec3c3]"
+            }
+            {...props}
+          >
+            {children}
+          </button>
+        );
+      }
+
+      /* ---------------- Demo content ---------------- */
+
+      function Sparkle() {
+        return (
+          <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor" aria-hidden="true">
+            <path d="M12 2l1.9 5.1L19 9l-5.1 1.9L12 16l-1.9-5.1L5 9l5.1-1.9L12 2z" />
+          </svg>
+        );
+      }
+
+      function DemoCard({ children }) {
+        return (
+          <div className="relative overflow-hidden rounded-3xl border border-[#ece0cd] bg-[#fbf7f0] p-8 shadow-[0_24px_60px_-34px_rgba(28,43,51,0.4)]">
+            {children}
+          </div>
+        );
+      }
+
+      function App() {
+        const [signed, setSigned] = useState(false);
+        const [bought, setBought] = useState(0);
+
+        return (
+          <main className="mx-auto max-w-4xl px-6 py-16 sm:py-24">
+            <header className="mx-auto max-w-2xl text-center">
+              <span className="inline-flex items-center gap-2 rounded-full border border-[#ece0cd] bg-[#fbf7f0] px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#0f5c5c]">
+                <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#2ec3c3]"></span>
+                Confetti Button
+              </span>
+              <h1 className="mt-5 text-4xl font-extrabold tracking-tight text-[#1c2b33] sm:text-5xl">
+                Celebrate the moment.
+              </h1>
+              <p className="mt-4 text-base leading-relaxed text-[#4a5d66]">
+                Each button bursts confetti from its own position on the page —
+                click any of them and the particles fly out from exactly that
+                spot. Great for signups, purchases and other wins.
+              </p>
+            </header>
+
+            <section className="mt-14 grid gap-6 sm:grid-cols-2">
+              <DemoCard>
+                <span className="inline-flex items-center rounded-full bg-[#1f8a8a]/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#0f5c5c]">
+                  Signup
+                </span>
+                <h2 className="mt-4 text-2xl font-bold text-[#1c2b33]">Join the studio</h2>
+                <p className="mt-2 text-sm leading-relaxed text-[#4a5d66]">
+                  {signed
+                    ? "You're in — welcome aboard. Tap again for more confetti."
+                    : "Default upward burst, straight from the button."}
+                </p>
+                <ConfettiButton
+                  className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#1f8a8a] px-6 py-3 text-sm font-semibold text-[#fbf7f0] shadow-[0_14px_30px_-12px_rgba(15,92,92,0.6)] transition-[transform,background-color] duration-200 hover:-translate-y-0.5 hover:bg-[#0f5c5c] active:translate-y-0 active:scale-95"
+                  onConfetti={() => setSigned(true)}
+                >
+                  <Sparkle />
+                  {signed ? "Signed up!" : "Sign up free"}
+                </ConfettiButton>
+              </DemoCard>
+
+              <DemoCard>
+                <span className="inline-flex items-center rounded-full bg-[#1f8a8a]/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#0f5c5c]">
+                  Purchase
+                </span>
+                <h2 className="mt-4 text-2xl font-bold text-[#1c2b33]">Complete order</h2>
+                <p className="mt-2 text-sm leading-relaxed text-[#4a5d66]">
+                  {bought > 0
+                    ? `Order #${1000 + bought} placed — a wider, faster blast.`
+                    : "Tuned for a bigger celebration: more particles, wider spread."}
+                </p>
+                <ConfettiButton
+                  className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#1c2b33] px-6 py-3 text-sm font-semibold text-[#fbf7f0] shadow-[0_14px_30px_-12px_rgba(28,43,51,0.5)] transition-[transform,background-color] duration-200 hover:-translate-y-0.5 hover:bg-[#0f5c5c] active:translate-y-0 active:scale-95"
+                  particleCount={160}
+                  spread={100}
+                  startVelocity={55}
+                  scalar={1.1}
+                  onConfetti={() => setBought((n) => n + 1)}
+                >
+                  <Sparkle />
+                  Buy now — $24
+                </ConfettiButton>
+              </DemoCard>
+            </section>
+
+            <section className="mt-6">
+              <DemoCard>
+                <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:justify-between sm:text-left">
+                  <div>
+                    <h2 className="text-xl font-bold text-[#1c2b33]">Try a few directions</h2>
+                    <p className="mt-1 text-sm leading-relaxed text-[#4a5d66]">
+                      Each button launches from its own spot, so position drives
+                      the angle of celebration.
+                    </p>
+                  </div>
+                  <div className="flex flex-wrap items-center justify-center gap-3">
+                    <ConfettiButton
+                      className="rounded-xl bg-[#2ec3c3] px-5 py-2.5 text-sm font-semibold text-[#0f3838] shadow-[0_12px_26px_-12px_rgba(46,195,195,0.7)] transition-[transform,background-color] duration-200 hover:-translate-y-0.5 hover:bg-[#5ad6d6] active:translate-y-0 active:scale-95"
+                      angle={120}
+                      spread={55}
+                      colors={["#2ec3c3", "#1f8a8a", "#fbf7f0"]}
+                    >
+                      Lean left
+                    </ConfettiButton>
+                    <ConfettiButton
+                      className="rounded-xl border border-[#1f8a8a] bg-transparent px-5 py-2.5 text-sm font-semibold text-[#0f5c5c] transition-[transform,background-color] duration-200 hover:-translate-y-0.5 hover:bg-[#1f8a8a]/10 active:translate-y-0 active:scale-95"
+                      particleCount={120}
+                      startVelocity={60}
+                      scalar={0.85}
+                    >
+                      Tall pop
+                    </ConfettiButton>
+                    <ConfettiButton
+                      className="rounded-xl bg-[#0f5c5c] px-5 py-2.5 text-sm font-semibold text-[#fbf7f0] shadow-[0_12px_26px_-12px_rgba(15,92,92,0.7)] transition-[transform,background-color] duration-200 hover:-translate-y-0.5 hover:bg-[#1f8a8a] active:translate-y-0 active:scale-95"
+                      angle={60}
+                      spread={55}
+                      colors={["#0f5c5c", "#2ec3c3", "#ece0cd"]}
+                    >
+                      Lean right
+                    </ConfettiButton>
+                  </div>
+                </div>
+              </DemoCard>
+            </section>
+
+            <p className="mt-12 text-center text-xs text-[#4a5d66]">
+              Reimplemented from Magic UI&rsquo;s Confetti (MIT), wrapping canvas-confetti (MIT) &middot; Sand &amp; Surf palette
+            </p>
+          </main>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+    </script>
+  </body>
+</html>

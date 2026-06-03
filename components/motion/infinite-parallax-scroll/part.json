@@ -1,0 +1,13 @@
+{
+  "name": "Infinite Parallax Scroll",
+  "slug": "infinite-parallax-scroll",
+  "category": "motion",
+  "tier": "showcase",
+  "tags": ["scroll", "infinite", "parallax", "depth", "snap", "gsap", "lenis"],
+  "description": "Fullscreen sections that loop endlessly with eased snap, while their inner media drifts at a slower rate to create a seamless sense of depth.",
+  "deps": ["gsap", "gsap/ScrollTrigger", "lenis", "lenis/snap"],
+  "files": ["animation.js", "styles.css"],
+  "usage": "Duplicate your first .ips__section as the last child (tag it data-ips-clone) inside a [data-ips] container, then call initInfiniteParallaxScroll() after GSAP and Lenis load. Lenis infinite:true hides the loop seam, GSAP parallaxes each .ips__media, and Lenis Snap eases to whole-viewport stops.",
+  "source": "https://tympanus.net/codrops/2026/05/28/the-never-ending-story-building-a-seamless-infinite-scroll-experience-with-gsap-lenis/",
+  "license": "Codrops/Tympanus — reimplemented; demo code free for personal and commercial use, not redistributed as-is."
+}

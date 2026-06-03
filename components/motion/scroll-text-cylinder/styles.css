@@ -1,0 +1,45 @@
+/* 3D Scroll Text Cylinder — saltycodestudio
+ * The stage owns the perspective; the ring (.cyl) keeps preserve-3d so its
+ * children render as real planes in depth. animation.js positions each line. */
+
+.cyl-stage {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  /* perspective in vw scales the depth feel with the viewport, like the source */
+  perspective: 70vw;
+  perspective-origin: 50% 50%;
+}
+
+.cyl {
+  position: relative;
+  transform-style: preserve-3d;
+  /* will-change keeps the per-frame transform on the compositor */
+  will-change: transform;
+}
+
+.cyl-line {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  /* center each line on the ring's origin before its 3D transform */
+  margin: 0;
+  white-space: nowrap;
+  transform-origin: 50% 50%;
+  /* both faces visible so far-side lines still paint (we fade them in JS) */
+  backface-visibility: visible;
+  translate: -50% -50%; /* keeps text centered regardless of width */
+  will-change: transform, opacity, filter;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cyl-line {
+    filter: none !important;
+  }
+}

@@ -1,0 +1,22 @@
+/* Gravity Mouse Trail — saltycodestudio */
+
+.gmt-stage {
+  position: relative;
+  overflow: hidden;
+  /* The stage must be a positioning context; images are absolute inside it. */
+}
+
+.gmt-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 14px;
+  object-fit: cover;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  will-change: transform, opacity;
+  box-shadow: 0 18px 40px -18px rgba(15, 92, 92, 0.55);
+  /* GSAP sets autoAlpha (visibility + opacity); start hidden to avoid a flash. */
+  visibility: hidden;
+}

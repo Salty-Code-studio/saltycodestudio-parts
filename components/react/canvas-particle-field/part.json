@@ -1,0 +1,13 @@
+{
+  "name": "Canvas Particle Field",
+  "slug": "canvas-particle-field",
+  "category": "react",
+  "tier": "practical",
+  "tags": ["particles", "canvas", "interactive", "depth", "mouse", "background"],
+  "description": "Lightweight canvas particles that drift and gently react to the cursor, adding depth and motion behind hero content.",
+  "deps": [],
+  "files": ["CanvasParticleField.tsx"],
+  "usage": "Render <CanvasParticleField /> as the first child of a position:relative hero section so it sits absolutely behind your content. Tune quantity, size, color, vx/vy drift, staticity, and ease to dial in the depth and mouse responsiveness.",
+  "source": "https://magicui.design/docs/components/particles",
+  "license": "MIT — reimplemented (inspired by Magic UI, magicuidesign/magicui)"
+}

@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Layered Zoom Scroll — Sand &amp; Surf</title>
+
+<!-- GSAP core + ScrollTrigger from cdnjs. ScrollSmoother is a (now-free) bonus
+     plugin that isn't mirrored on cdnjs, so we pull it from the public
+     gsap-trial bundle. The part degrades gracefully if it's absent (the zoom,
+     subject scale and split text all still run on ScrollTrigger alone). -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap-trial@3.12.5/dist/ScrollSmoother.min.js"></script>
+
+<style>
+  :root {
+    --lzs-sand: #fbf7f0;
+    --lzs-sand-2: #f4ece0;
+    --lzs-sand-3: #ece0cd;
+    --lzs-ink: #1c2b33;
+    --lzs-ink-soft: #4a5d66;
+    --lzs-teal: #1f8a8a;
+    --lzs-deep: #0f5c5c;
+    --lzs-surf: #2ec3c3;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--lzs-sand);
+    color: var(--lzs-ink);
+    font-family: "Archivo", "Helvetica Neue", Arial, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  #smooth-wrapper { overflow: hidden; }
+
+  /* ---- top bar (purely demo dressing) ---- */
+  .demo-nav {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.1rem clamp(1rem, 5vw, 3rem);
+    mix-blend-mode: multiply;
+    pointer-events: none;
+  }
+  .demo-nav .mark {
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    font-size: 1.1rem;
+    color: var(--lzs-deep);
+  }
+  .demo-nav .mark b { color: var(--lzs-surf); }
+  .demo-nav .tag {
+    font-size: 0.7rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--lzs-ink-soft);
+  }
+
+  /* =================================================================
+     Layered Zoom Scroll core styles (mirrors styles.css)
+  ================================================================= */
+  .lzs { --progress: 0; position: relative; background: var(--lzs-sand); }
+
+  .lzs__stage {
+    position: relative;
+    width: 100%;
+    height: 100svh;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    isolation: isolate;
+    background: radial-gradient(120% 90% at 50% 30%,
+      var(--lzs-sand) 0%, var(--lzs-sand-2) 55%, var(--lzs-sand-3) 100%);
+  }
+  .lzs__stage::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 30;
+    pointer-events: none;
+    background: radial-gradient(140% 120% at 50% 50%,
+      transparent 40%,
+      rgba(15, 92, 92, calc(0.10 + var(--progress) * 0.12)) 100%);
+    mix-blend-mode: multiply;
+  }
+
+  .lzs__layers {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    display: grid;
+    place-items: center;
+  }
+  .lzs__layer {
+    position: absolute;
+    width: min(82vw, 1100px);
+    aspect-ratio: 16 / 10;
+    border-radius: 22px;
+    background-image: var(--img);
+    background-size: cover;
+    background-position: center;
+    box-shadow:
+      0 30px 80px -30px rgba(15, 92, 92, 0.45),
+      0 2px 0 rgba(255, 255, 255, 0.35) inset;
+    will-change: transform, filter, opacity;
+    backface-visibility: hidden;
+  }
+  .lzs__layer::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(155deg,
+      rgba(46, 195, 195, 0.18), rgba(15, 92, 92, 0.32));
+    mix-blend-mode: multiply;
+  }
+
+  .lzs__subject {
+    position: relative;
+    z-index: 20;
+    margin: 0;
+    width: min(72vw, 880px);
+    aspect-ratio: 16 / 9;
+    background-image: var(--img);
+    background-size: cover;
+    background-position: center 40%;
+    -webkit-mask: var(--mask, none) center / contain no-repeat;
+    mask: var(--mask, none) center / contain no-repeat;
+    will-change: transform;
+    filter: saturate(1.05) contrast(1.04);
+  }
+
+  .lzs__title {
+    position: absolute;
+    z-index: 25;
+    inset: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(0.4rem, 4vw, 3rem);
+    pointer-events: none;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 0.9;
+    font-size: clamp(2.6rem, 12vw, 9.5rem);
+    text-transform: uppercase;
+  }
+  .lzs__word { display: inline-block; will-change: transform; color: var(--lzs-ink);
+    text-shadow: 0 1px 0 rgba(255,255,255,0.6); }
+  .lzs__word--b { color: var(--lzs-deep); }
+
+  .lzs__hint {
+    position: absolute;
+    z-index: 26;
+    bottom: clamp(1rem, 4vh, 2.5rem);
+    left: 50%;
+    transform: translateX(-50%);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    font: 600 0.72rem/1 "Archivo", system-ui, sans-serif;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--lzs-ink-soft);
+    opacity: calc(1 - var(--progress) * 1.4);
+  }
+  .lzs__hint span {
+    width: 1.4rem; height: 1.4rem;
+    border: 1.5px solid currentColor; border-radius: 50%;
+    display: grid; place-items: center;
+  }
+  .lzs__hint span::after {
+    content: "";
+    width: 5px; height: 5px;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    transform: translateY(-1px) rotate(45deg);
+    animation: lzs-bob 1.5s ease-in-out infinite;
+  }
+  @keyframes lzs-bob {
+    0%, 100% { transform: translateY(-2px) rotate(45deg); }
+    50% { transform: translateY(1px) rotate(45deg); }
+  }
+
+  .lzs__spacer { height: 80vh; }
+
+  /* ---- content below the hero so the page is tall & realistic ---- */
+  .after {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: clamp(4rem, 12vh, 9rem) clamp(1.2rem, 6vw, 3rem) 8rem;
+  }
+  .after h2 {
+    font-size: clamp(1.8rem, 5vw, 3.4rem);
+    letter-spacing: -0.02em;
+    margin: 0 0 1rem;
+    color: var(--lzs-deep);
+  }
+  .after p {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    line-height: 1.6;
+    color: var(--lzs-ink-soft);
+    max-width: 60ch;
+  }
+  .cards {
+    margin-top: 3.5rem;
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+  .card {
+    background: var(--lzs-sand-2);
+    border: 1px solid rgba(15, 92, 92, 0.12);
+    border-radius: 18px;
+    padding: 1.6rem 1.5rem;
+  }
+  .card .k {
+    font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--lzs-teal); margin-bottom: 0.6rem;
+  }
+  .card h3 { margin: 0 0 0.4rem; font-size: 1.2rem; }
+  .card p { font-size: 0.95rem; margin: 0; }
+
+  .footer {
+    text-align: center;
+    padding: 3rem 1rem 4rem;
+    color: var(--lzs-ink-soft);
+    font-size: 0.8rem;
+    letter-spacing: 0.04em;
+  }
+  .footer b { color: var(--lzs-deep); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lzs__hint span::after { animation: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="demo-nav">
+  <div class="mark">salty<b>&lt;</b>code</div>
+  <div class="tag">Layered Zoom Scroll</div>
+</div>
+
+<div id="smooth-wrapper">
+  <div id="smooth-content">
+
+    <section class="lzs" data-lzs>
+      <div class="lzs__stage">
+        <div class="lzs__layers" id="layers"><!-- layers injected by JS --></div>
+
+        <figure class="lzs__subject" id="subject"></figure>
+
+        <h1 class="lzs__title">
+          <span class="lzs__word lzs__word--a">SALTY</span>
+          <span class="lzs__word lzs__word--b">SURF</span>
+        </h1>
+
+        <div class="lzs__hint">Scroll <span></span></div>
+      </div>
+      <div class="lzs__spacer"></div>
+    </section>
+
+    <main class="after">
+      <h2>Built to resolve into focus.</h2>
+      <p>
+        Six duplicate panels start scaled down and blurred, then settle to
+        full size and razor sharp as you scroll — a trailing zoom that pulls
+        the eye through depth. Meanwhile the headline parts and the central
+        subject scales up, all driven by a single shared progress value.
+      </p>
+
+      <div class="cards">
+        <div class="card">
+          <div class="k">Technique</div>
+          <h3>Shared --progress</h3>
+          <p>One ScrollTrigger broadcasts a 0&ndash;1 var that scales the subject and splits the type in lockstep.</p>
+        </div>
+        <div class="card">
+          <div class="k">Depth</div>
+          <h3>Descending scales</h3>
+          <p>Each layer seeds a smaller start scale and heavier blur, then eases home with a depth-staggered offset.</p>
+        </div>
+        <div class="card">
+          <div class="k">Feel</div>
+          <h3>Smoother inertia</h3>
+          <p>ScrollSmoother adds weighty momentum so the zoom glides instead of snapping to the scrollbar.</p>
+        </div>
+      </div>
+    </main>
+
+    <div class="footer">
+      <b>salty&lt;code studio</b> &middot; Sand &amp; Surf demo &middot; reimplemented from a Codrops tutorial
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* -------------------------------------------------------------------
+   Self-contained demo imagery: brand-tinted SVG "photos" as data URIs,
+   so the preview never depends on remote image hosts.
+------------------------------------------------------------------- */
+function svgPanel(seed) {
+  const palettes = [
+    ["#2ec3c3", "#0f5c5c"],
+    ["#1f8a8a", "#0f5c5c"],
+    ["#2ec3c3", "#1f8a8a"],
+    ["#0f5c5c", "#1c2b33"],
+    ["#5bd6c9", "#1f8a8a"],
+    ["#1f8a8a", "#2ec3c3"],
+  ];
+  const [a, b] = palettes[seed % palettes.length];
+  // Layered waves + sun to read as a coastline frame.
+  const svg = `
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="688" viewBox="0 0 1100 688">
+  <defs>
+    <linearGradient id="g${seed}" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fbf7f0"/>
+      <stop offset="0.55" stop-color="#f4ece0"/>
+      <stop offset="1" stop-color="${a}"/>
+    </linearGradient>
+  </defs>
+  <rect width="1100" height="688" fill="url(#g${seed})"/>
+  <circle cx="${260 + seed * 90}" cy="200" r="110" fill="#ffe9c6" opacity="0.9"/>
+  <path d="M0 470 C 200 ${420 + seed * 8}, 380 ${500 - seed * 6}, 560 470 S 920 440, 1100 480 L1100 688 L0 688 Z" fill="${b}" opacity="0.85"/>
+  <path d="M0 540 C 240 ${500 + seed * 6}, 460 ${560 - seed * 5}, 700 540 S 980 520, 1100 545 L1100 688 L0 688 Z" fill="${a}" opacity="0.85"/>
+  <path d="M0 610 C 300 590, 520 625, 760 605 S 980 600, 1100 612 L1100 688 L0 688 Z" fill="#0f5c5c" opacity="0.55"/>
+</svg>`.trim();
+  return "data:image/svg+xml;utf8," + encodeURIComponent(svg);
+}
+
+function svgSubject() {
+  const svg = `
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#bfeef0"/>
+      <stop offset="1" stop-color="#2ec3c3"/>
+    </linearGradient>
+    <radialGradient id="sun" cx="0.72" cy="0.28" r="0.5">
+      <stop offset="0" stop-color="#fff4dc"/>
+      <stop offset="1" stop-color="#ffd98f"/>
+    </radialGradient>
+  </defs>
+  <rect width="1280" height="720" fill="url(#sky)"/>
+  <circle cx="920" cy="200" r="150" fill="url(#sun)"/>
+  <path d="M0 470 C 220 430, 440 510, 660 470 S 1060 430, 1280 480 L1280 720 L0 720 Z" fill="#1f8a8a"/>
+  <path d="M0 560 C 260 520, 520 600, 780 560 S 1080 540, 1280 575 L1280 720 L0 720 Z" fill="#0f5c5c"/>
+  <path d="M120 620 q 60 -40 120 0 t 120 0 t 120 0 t 120 0 t 120 0 t 120 0" stroke="#fbf7f0" stroke-width="6" fill="none" opacity="0.6"/>
+</svg>`.trim();
+  return "data:image/svg+xml;utf8," + encodeURIComponent(svg);
+}
+
+// Inject 6 zoom layers + the subject image.
+(function buildScene() {
+  const LAYERS = 6;
+  const host = document.getElementById("layers");
+  for (let i = 0; i < LAYERS; i++) {
+    const div = document.createElement("div");
+    div.className = "lzs__layer";
+    div.style.setProperty("--img", `url("${svgPanel(i)}")`);
+    host.appendChild(div);
+  }
+  const subject = document.getElementById("subject");
+  subject.style.setProperty("--img", `url("${svgSubject()}")`);
+  // Mask the subject through bold type so the image reveals through letters.
+  const maskSvg = encodeURIComponent(`
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <rect width="1280" height="720" fill="black"/>
+  <text x="640" y="430" text-anchor="middle" font-family="Archivo, Helvetica, Arial, sans-serif"
+    font-size="320" font-weight="900" fill="white" letter-spacing="-12">BONAIRE</text>
+</svg>`.trim());
+  subject.style.setProperty("--mask", `url("data:image/svg+xml;utf8,${maskSvg}")`);
+})();
+
+/* -------------------------------------------------------------------
+   The part itself (inlined copy of animation.js).
+------------------------------------------------------------------- */
+function initLayeredZoomScroll(options = {}) {
+  const {
+    gsap = window.gsap,
+    ScrollTrigger = window.ScrollTrigger,
+    ScrollSmoother = window.ScrollSmoother,
+    root = document,
+    layerCount = 6,
+    minLayerScale = 0.15,
+    maxBlur = 18,
+    subjectStartScale = 0.62,
+    wordTravel = 26,
+    scrub = 1.1,
+  } = options;
+
+  if (!gsap || !ScrollTrigger) {
+    console.warn("[layered-zoom-scroll] GSAP + ScrollTrigger are required.");
+    return () => {};
+  }
+
+  gsap.registerPlugin(ScrollTrigger);
+  if (ScrollSmoother) gsap.registerPlugin(ScrollSmoother);
+
+  const reduceMotion = window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const sections = Array.from(root.querySelectorAll("[data-lzs]"));
+  if (!sections.length) return () => {};
+
+  let smoother = null;
+  const triggers = [];
+
+  if (ScrollSmoother && !reduceMotion) {
+    const wrapper = root.querySelector("#smooth-wrapper");
+    const content = root.querySelector("#smooth-content");
+    if (wrapper && content) {
+      smoother = ScrollSmoother.create({
+        wrapper, content, smooth: 1.15, effects: false, normalizeScroll: true,
+      });
+    }
+  }
+
+  sections.forEach((section) => {
+    const stage = section.querySelector(".lzs__stage");
+    const layers = Array.from(section.querySelectorAll(".lzs__layer"));
+    const subject = section.querySelector(".lzs__subject");
+    const wordA = section.querySelector(".lzs__word--a");
+    const wordB = section.querySelector(".lzs__word--b");
+
+    if (reduceMotion) {
+      gsap.set(layers, { scale: 1, filter: "blur(0px)", autoAlpha: 1 });
+      gsap.set(subject, { scale: 1, autoAlpha: 1 });
+      gsap.set([wordA, wordB], { xPercent: 0, autoAlpha: 1 });
+      section.style.setProperty("--progress", "1");
+      return;
+    }
+
+    const n = Math.min(layers.length, layerCount) || layers.length;
+    layers.forEach((layer, i) => {
+      const t = n > 1 ? i / (n - 1) : 0;
+      const startScale = gsap.utils.interpolate(1, minLayerScale, t);
+      const startBlur = gsap.utils.interpolate(0, maxBlur, t);
+      gsap.set(layer, {
+        scale: startScale,
+        filter: `blur(${startBlur}px)`,
+        autoAlpha: gsap.utils.interpolate(1, 0.35, t),
+        zIndex: n - i,
+        transformOrigin: "50% 50%",
+      });
+    });
+
+    if (subject) {
+      gsap.set(subject, { scale: subjectStartScale, autoAlpha: 0.92, transformOrigin: "50% 50%" });
+    }
+    if (wordA) gsap.set(wordA, { xPercent: 0 });
+    if (wordB) gsap.set(wordB, { xPercent: 0 });
+
+    const setProgress = (v) => section.style.setProperty("--progress", v.toFixed(4));
+    const wordASet = wordA ? gsap.quickSetter(wordA, "xPercent") : null;
+    const wordBSet = wordB ? gsap.quickSetter(wordB, "xPercent") : null;
+
+    const tl = gsap.timeline({
+      defaults: { ease: "none" },
+      scrollTrigger: {
+        trigger: section,
+        start: "top top",
+        end: "+=180%",
+        scrub,
+        pin: stage,
+        pinSpacing: true,
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
+        onUpdate: (self) => {
+          const p = self.progress;
+          setProgress(p);
+          const parted = Math.pow(p, 0.72) * wordTravel;
+          if (wordASet) wordASet(-parted);
+          if (wordBSet) wordBSet(parted);
+        },
+      },
+    });
+
+    if (subject) {
+      tl.fromTo(subject, { scale: subjectStartScale }, { scale: 1, autoAlpha: 1, duration: 1 }, 0);
+    }
+
+    layers.forEach((layer, i) => {
+      const t = n > 1 ? i / (n - 1) : 0;
+      tl.to(layer, { scale: 1, filter: "blur(0px)", autoAlpha: 1, duration: 1 }, t * 0.5);
+    });
+
+    triggers.push(tl.scrollTrigger);
+  });
+
+  ScrollTrigger.refresh();
+
+  return function cleanup() {
+    triggers.forEach((t) => t && t.kill());
+    if (smoother) smoother.kill();
+    ScrollTrigger.getAll().forEach((t) => t.kill());
+  };
+}
+
+// Boot.
+window.addEventListener("load", () => initLayeredZoomScroll());
+</script>
+</body>
+</html>

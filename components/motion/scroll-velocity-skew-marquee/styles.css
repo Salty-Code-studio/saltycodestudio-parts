@@ -1,0 +1,72 @@
+/* Scroll Velocity Skew Marquee — structural styles
+   Brand palette "Sand & Surf" tokens are provided as fallbacks; override
+   freely from your own design system. */
+
+.svm {
+  --svm-bg: #0f5c5c;          /* ocean deep */
+  --svm-text: #fbf7f0;        /* sand cream */
+  --svm-accent: #2ec3c3;      /* surf */
+  --svm-size: clamp(2.5rem, 9vw, 7rem);
+
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: var(--svm-bg);
+  color: var(--svm-text);
+  /* Skew pivots from the vertical center for a balanced lean. */
+  transform-origin: center center;
+  padding-block: 0.15em;
+  user-select: none;
+}
+
+/* The track holds two identical rows of items and is animated by GSAP.
+   will-change keeps the skew/stretch on the compositor. */
+.svm__track {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  width: max-content;
+  white-space: nowrap;
+  will-change: transform;
+  transform-origin: center center;
+}
+
+.svm__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  padding-inline: 0.35em;
+  font-size: var(--svm-size);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+
+/* Decorative separator dot between phrases. */
+.svm__item::after {
+  content: '';
+  display: inline-block;
+  width: 0.22em;
+  height: 0.22em;
+  margin-inline: 0.15em;
+  border-radius: 999px;
+  background: var(--svm-accent);
+}
+
+/* Outline variant — alternate items can use this for visual rhythm. */
+.svm__item--outline {
+  color: transparent;
+  -webkit-text-stroke: 2px var(--svm-accent);
+}
+
+/* Reduced motion: the JS bails out, so we present a clean, static marquee
+   that is fully legible and does not creep. */
+@media (prefers-reduced-motion: reduce) {
+  .svm__track {
+    will-change: auto;
+    transform: none !important;
+    /* Clip the duplicated row so only one legible copy shows. */
+    overflow: hidden;
+  }
+}

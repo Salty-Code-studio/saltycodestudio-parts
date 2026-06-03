@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WebGL Mesh Gradient Plasma — Sand &amp; Surf</title>
+
+  <!-- Tailwind Play CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            sand: "#fbf7f0",
+            cream: "#f4ece0",
+            dune: "#ece0cd",
+            ink: "#1c2b33",
+            "ink-soft": "#4a5d66",
+            teal: "#1f8a8a",
+            deep: "#0f5c5c",
+            surf: "#2ec3c3",
+          },
+          fontFamily: {
+            sans: ["Albert Sans", "ui-sans-serif", "system-ui", "sans-serif"],
+          },
+        },
+      },
+    };
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    body { font-family: "Albert Sans", system-ui, sans-serif; }
+    /* Soft falling-up reveal for the hero copy. */
+    @keyframes riseIn {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .rise { animation: riseIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) both; }
+    @media (prefers-reduced-motion: reduce) {
+      .rise { animation: none; }
+    }
+  </style>
+
+  <!--
+    @paper-design/shaders-react is an ESM package, so we load React, ReactDOM
+    and the shader library through an import map (esm.sh) and resolve the JSX
+    via Babel Standalone. This keeps the preview a single standalone file.
+  -->
+  <script type="importmap">
+    {
+      "imports": {
+        "react": "https://esm.sh/react@18.3.1",
+        "react/jsx-runtime": "https://esm.sh/react@18.3.1/jsx-runtime",
+        "react-dom": "https://esm.sh/react-dom@18.3.1",
+        "react-dom/client": "https://esm.sh/react-dom@18.3.1/client",
+        "@paper-design/shaders-react": "https://esm.sh/@paper-design/shaders-react@0.0.76?external=react,react-dom"
+      }
+    }
+  </script>
+  <script src="https://unpkg.com/@babel/standalone@7.25.6/babel.min.js"></script>
+</head>
+
+<body class="bg-sand text-ink antialiased">
+  <div id="root"></div>
+
+  <script type="text/babel" data-type="module" data-presets="react">
+    import React, { useState, useEffect } from "react";
+    import { createRoot } from "react-dom/client";
+    import { MeshGradient } from "@paper-design/shaders-react";
+
+    /* ----------------------------------------------------------------------
+       MeshGradientPlasma — same component shipped in MeshGradientPlasma.tsx,
+       inlined here (JS) so the preview renders standalone.
+    ---------------------------------------------------------------------- */
+    const DEFAULT_COLORS = ["#0f5c5c", "#1f8a8a", "#2ec3c3", "#ece0cd", "#f4ece0"];
+
+    function usePrefersReducedMotion() {
+      const [reduced, setReduced] = useState(false);
+      useEffect(() => {
+        if (typeof window === "undefined" || !window.matchMedia) return;
+        const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+        const update = () => setReduced(mq.matches);
+        update();
+        if (mq.addEventListener) {
+          mq.addEventListener("change", update);
+          return () => mq.removeEventListener("change", update);
+        }
+        mq.addListener(update);
+        return () => mq.removeListener(update);
+      }, []);
+      return reduced;
+    }
+
+    function MeshGradientPlasma({
+      colors = DEFAULT_COLORS,
+      speed = 0.6,
+      distortion = 0.85,
+      swirl = 0.7,
+      grainMixer = 0.18,
+      grainOverlay = 0.32,
+      scale = 1,
+      rotation = 0,
+      frame = 9000,
+      className = "",
+      style,
+      children,
+    }) {
+      const reduced = usePrefersReducedMotion();
+      return (
+        <div className={`relative isolate overflow-hidden ${className}`} style={style}>
+          <MeshGradient
+            colors={colors}
+            speed={reduced ? 0 : speed}
+            frame={frame}
+            distortion={distortion}
+            swirl={swirl}
+            grainMixer={grainMixer}
+            grainOverlay={grainOverlay}
+            scale={scale}
+            rotation={rotation}
+            fit="cover"
+            style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
+          />
+          {children ? <div className="relative z-10">{children}</div> : null}
+        </div>
+      );
+    }
+
+    /* ----------------------------------------------------------------------
+       Demo — a live "Sand & Surf" hero plus a second swirl-only panel.
+    ---------------------------------------------------------------------- */
+    function PlasmaHero() {
+      return (
+        <MeshGradientPlasma className="min-h-[640px] w-full">
+          {/* Legibility veil — keeps copy readable over the live shader. */}
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-deep/30 via-transparent to-ink/45" />
+
+          <div className="relative mx-auto flex min-h-[640px] max-w-6xl flex-col px-6 py-10 sm:px-10">
+            {/* Top bar */}
+            <nav className="flex items-center justify-between text-cream">
+              <span className="text-lg font-extrabold tracking-tight">
+                ~&lt; saltycodestudio
+              </span>
+              <div className="hidden items-center gap-8 text-sm font-medium text-cream/85 sm:flex">
+                <a className="transition hover:text-white" href="#">Work</a>
+                <a className="transition hover:text-white" href="#">Studio</a>
+                <a className="transition hover:text-white" href="#">Journal</a>
+                <a
+                  className="rounded-full bg-cream px-4 py-2 font-semibold text-deep shadow-sm transition hover:bg-white"
+                  href="#"
+                >
+                  Start a build
+                </a>
+              </div>
+            </nav>
+
+            {/* Hero copy */}
+            <div className="mt-auto max-w-2xl pb-4">
+              <span
+                className="rise inline-flex items-center gap-2 rounded-full border border-cream/30 bg-ink/15 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-cream backdrop-blur-sm"
+                style={{ animationDelay: "0.05s" }}
+              >
+                <span className="h-1.5 w-1.5 rounded-full bg-surf" />
+                Live WebGL shader
+              </span>
+
+              <h1
+                className="rise mt-5 text-4xl font-extrabold leading-[1.02] tracking-tight text-cream sm:text-6xl"
+                style={{ animationDelay: "0.15s" }}
+              >
+                Sand &amp; surf,
+                <br />
+                rendered in real time.
+              </h1>
+
+              <p
+                className="rise mt-5 max-w-xl text-base leading-relaxed text-cream/85 sm:text-lg"
+                style={{ animationDelay: "0.28s" }}
+              >
+                A flowing mesh-gradient of color spots, swirled and distorted by
+                a GLSL fragment shader running on a single canvas. Every frame is
+                computed on the GPU — not a CSS trick.
+              </p>
+
+              <div
+                className="rise mt-8 flex flex-wrap items-center gap-3"
+                style={{ animationDelay: "0.4s" }}
+              >
+                <a
+                  className="rounded-full bg-cream px-6 py-3 text-sm font-semibold text-deep shadow-lg shadow-deep/30 transition hover:-translate-y-0.5 hover:bg-white"
+                  href="#"
+                >
+                  See the studio
+                </a>
+                <a
+                  className="rounded-full border border-cream/40 px-6 py-3 text-sm font-semibold text-cream backdrop-blur-sm transition hover:bg-cream/10"
+                  href="#"
+                >
+                  How it works
+                </a>
+              </div>
+            </div>
+          </div>
+        </MeshGradientPlasma>
+      );
+    }
+
+    function Showcase() {
+      return (
+        <main>
+          <PlasmaHero />
+
+          {/* Detail strip on solid Sand & Surf backgrounds */}
+          <section className="bg-sand px-6 py-20 sm:px-10">
+            <div className="mx-auto max-w-6xl">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-teal">
+                Two looks, one shader
+              </p>
+              <h2 className="mt-3 max-w-2xl text-3xl font-extrabold tracking-tight text-ink sm:text-4xl">
+                Dial the plasma from calm tide to full vortex.
+              </h2>
+
+              <div className="mt-10 grid gap-6 md:grid-cols-2">
+                {/* Calm preset */}
+                <article className="overflow-hidden rounded-3xl border border-dune bg-cream shadow-sm">
+                  <MeshGradientPlasma
+                    className="h-60 w-full"
+                    colors={["#0f5c5c", "#1f8a8a", "#2ec3c3", "#f4ece0"]}
+                    speed={0.35}
+                    distortion={0.55}
+                    swirl={0.25}
+                    grainOverlay={0.22}
+                  />
+                  <div className="p-6">
+                    <h3 className="text-lg font-bold text-ink">Calm tide</h3>
+                    <p className="mt-1 text-sm leading-relaxed text-ink-soft">
+                      Low swirl, gentle distortion. Reads as a soft ambient
+                      backdrop behind product UI.
+                    </p>
+                  </div>
+                </article>
+
+                {/* Vortex preset */}
+                <article className="overflow-hidden rounded-3xl border border-dune bg-cream shadow-sm">
+                  <MeshGradientPlasma
+                    className="h-60 w-full"
+                    colors={["#0f5c5c", "#2ec3c3", "#ece0cd", "#1f8a8a", "#f4ece0"]}
+                    speed={0.9}
+                    distortion={1}
+                    swirl={1}
+                    grainMixer={0.3}
+                    grainOverlay={0.4}
+                    rotation={35}
+                  />
+                  <div className="p-6">
+                    <h3 className="text-lg font-bold text-ink">Full vortex</h3>
+                    <p className="mt-1 text-sm leading-relaxed text-ink-soft">
+                      Max swirl and grain for a turbulent, plasma-storm hero that
+                      demands attention.
+                    </p>
+                  </div>
+                </article>
+              </div>
+
+              <p className="mt-10 text-sm text-ink-soft">
+                Tip: set <code class="rounded bg-dune px-1.5 py-0.5 text-ink">speed={"{0}"}</code> or
+                enable “Reduce motion” in your OS — the canvas freezes on a still,
+                still-beautiful frame.
+              </p>
+            </div>
+          </section>
+        </main>
+      );
+    }
+
+    createRoot(document.getElementById("root")).render(<Showcase />);
+  </script>
+</body>
+</html>

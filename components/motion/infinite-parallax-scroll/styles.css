@@ -1,0 +1,97 @@
+/* Infinite Parallax Scroll — saltycodestudio
+ * Pairs with animation.js. Drop these classes onto your markup.
+ *
+ * Layout contract:
+ *   .ips                -> the scroll container (data-ips)
+ *   .ips__section       -> one fullscreen frame (100svh)
+ *   .ips__media         -> oversized media wrapper (120% tall) that drifts
+ *   .ips__content       -> the readable overlay, centered
+ */
+
+.ips {
+  margin: 0;
+}
+
+.ips__section {
+  position: relative;
+  width: 100%;
+  /* 100svh keeps a true fullscreen frame even as mobile browser chrome
+     collapses/expands — the snap stops then map cleanly to viewport heights. */
+  height: 100svh;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  isolation: isolate;
+}
+
+/* The drifting media is taller than the frame so its edges never reveal a gap
+   while animation.js moves it from -50% to +50% of its own height. */
+.ips__media {
+  position: absolute;
+  inset: -10% 0;            /* 120% tall, centered */
+  width: 100%;
+  height: 120%;
+  will-change: transform;
+  z-index: 0;
+}
+
+.ips__media img,
+.ips__media picture,
+.ips__media video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Legibility scrim over busy media. */
+.ips__media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(15, 92, 92, 0.28), rgba(28, 43, 51, 0.5));
+  pointer-events: none;
+}
+
+.ips__content {
+  position: relative;
+  z-index: 1;
+  max-width: min(90vw, 60rem);
+  padding: 1.5rem;
+  text-align: center;
+  color: #fbf7f0;
+}
+
+.ips__index {
+  font-size: 0.78rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+.ips__title {
+  margin: 0.6rem 0 0;
+  font-size: clamp(2.5rem, 9vw, 7rem);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+}
+
+.ips__caption {
+  margin: 1rem auto 0;
+  max-width: 36rem;
+  font-size: clamp(0.95rem, 1.4vw, 1.15rem);
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+/* Reduced motion: animation.js skips Lenis + parallax and removes the clone.
+   Sections then read as plain, fully legible stacked panels with native scroll. */
+@media (prefers-reduced-motion: reduce) {
+  .ips__media {
+    position: absolute;
+    inset: 0;
+    height: 100%;
+    transform: none !important;
+  }
+}

@@ -67,8 +67,8 @@
     <h1>Component &amp; animation gallery</h1>
     <p class="sub">Every part rendered live below. Filter by stack or tier, search by name/tag,
       and click <b>open ↗</b> for the full-screen preview. Source lives in each part's folder.</p>
-    <p class="stats"><b>37</b> parts · 🏆 <b>11</b> showcase · ✅ <b>26</b> practical
-      &nbsp;·&nbsp; CSS-only <b>10</b> · GSAP / Motion <b>9</b> · React + Tailwind <b>10</b> · Vanilla JS <b>8</b></p>
+    <p class="stats"><b>65</b> parts · 🏆 <b>29</b> showcase · ✅ <b>36</b> practical
+      &nbsp;·&nbsp; CSS-only <b>20</b> · GSAP / Motion <b>17</b> · React + Tailwind <b>20</b> · Vanilla JS <b>8</b></p>
   </header>
 
   <div class="controls">
@@ -88,6 +88,21 @@
 
   <main>
     <div class="grid" id="grid">
+      <article class="card" data-cat="css" data-tier="showcase" data-text=":has() sibling dim spotlight :has() parent-selector hover interactive list no-js">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>:has() Sibling Dim Spotlight</h3>
+            <p class="desc">Hovering any item in a grid dims every sibling and lifts the focused one, a focus-spotlight interaction built with pure CSS and no JavaScript.</p>
+          </div>
+          <span class="badge badge-show">🏆 showcase</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/css/has-sibling-spotlight/preview.html" title=":has() Sibling Dim Spotlight preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">CSS-only</span>
+          <div class="tags"><span class="tag">:has()</span><span class="tag">parent-selector</span><span class="tag">hover</span><span class="tag">interactive</span><span class="tag">list</span><span class="tag">no-js</span></div>
+          <a class="open" href="components/css/has-sibling-spotlight/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
       <article class="card" data-cat="css" data-tier="practical" data-text="3d tilt card card 3d tilt hover parallax">
         <div class="card-head">
           <div class="card-titles">
@@ -101,6 +116,21 @@
           <span class="cat">CSS-only</span>
           <div class="tags"><span class="tag">card</span><span class="tag">3d</span><span class="tag">tilt</span><span class="tag">hover</span><span class="tag">parallax</span></div>
           <a class="open" href="components/css/tilt-card-3d/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="css" data-tier="practical" data-text="animated details accordion accordion details summary grid-template-rows no-js accessible">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Animated Details Accordion</h3>
+            <p class="desc">A native, accessible accordion that smoothly animates open and closed from height 0 to auto using the details element with zero JavaScript.</p>
+          </div>
+          <span class="badge badge-prac">✅ practical</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/css/details-accordion/preview.html" title="Animated Details Accordion preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">CSS-only</span>
+          <div class="tags"><span class="tag">accordion</span><span class="tag">details</span><span class="tag">summary</span><span class="tag">grid-template-rows</span><span class="tag">no-js</span><span class="tag">accessible</span></div>
+          <a class="open" href="components/css/details-accordion/preview.html" target="_blank" rel="noopener">open ↗</a>
         </div>
       </article>
       <article class="card" data-cat="css" data-tier="showcase" data-text="animated gradient mesh gradient mesh background animation blobs">
@@ -118,6 +148,21 @@
           <a class="open" href="components/css/animated-gradient-mesh/preview.html" target="_blank" rel="noopener">open ↗</a>
         </div>
       </article>
+      <article class="card" data-cat="css" data-tier="practical" data-text="animated text gradient text gradient background-clip animation headline no-js">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Animated Text Gradient</h3>
+            <p class="desc">A headline filled with a slowly drifting multi-stop gradient for a premium, living-color title with no JS.</p>
+          </div>
+          <span class="badge badge-prac">✅ practical</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/css/animated-text-gradient/preview.html" title="Animated Text Gradient preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">CSS-only</span>
+          <div class="tags"><span class="tag">text</span><span class="tag">gradient</span><span class="tag">background-clip</span><span class="tag">animation</span><span class="tag">headline</span><span class="tag">no-js</span></div>
+          <a class="open" href="components/css/animated-text-gradient/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
       <article class="card" data-cat="css" data-tier="showcase" data-text="aurora background aurora glow background blobs animation">
         <div class="card-head">
           <div class="card-titles">
@@ -131,6 +176,66 @@
           <span class="cat">CSS-only</span>
           <div class="tags"><span class="tag">aurora</span><span class="tag">glow</span><span class="tag">background</span><span class="tag">blobs</span><span class="tag">animation</span></div>
           <a class="open" href="components/css/aurora-background/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="css" data-tier="showcase" data-text="auto-invert difference cursor cursor mix-blend-mode difference invert interactive monochrome">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Auto-Invert Difference Cursor</h3>
+            <p class="desc">A custom circular cursor that auto-inverts whatever it passes over using mix-blend-mode: difference, so it stays legible on any background.</p>
+          </div>
+          <span class="badge badge-show">🏆 showcase</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/css/difference-blend-cursor/preview.html" title="Auto-Invert Difference Cursor preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">CSS-only</span>
+          <div class="tags"><span class="tag">cursor</span><span class="tag">mix-blend-mode</span><span class="tag">difference</span><span class="tag">invert</span><span class="tag">interactive</span><span class="tag">monochrome</span></div>
+          <a class="open" href="components/css/difference-blend-cursor/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="css" data-tier="practical" data-text="container-query adaptive card container-queries @container responsive component layout no-js">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Container-Query Adaptive Card</h3>
+            <p class="desc">A self-contained card that reflows from stacked to side-by-side based on the width of its parent slot, not the viewport.</p>
+          </div>
+          <span class="badge badge-prac">✅ practical</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/css/container-query-card/preview.html" title="Container-Query Adaptive Card preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">CSS-only</span>
+          <div class="tags"><span class="tag">container-queries</span><span class="tag">@container</span><span class="tag">responsive</span><span class="tag">component</span><span class="tag">layout</span><span class="tag">no-js</span></div>
+          <a class="open" href="components/css/container-query-card/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="css" data-tier="showcase" data-text="css scroll reveal timeline scroll-driven animation-timeline view clip-path no-js progressive-enhancement">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>CSS Scroll Reveal Timeline</h3>
+            <p class="desc">Zero-JavaScript clip-path and fade reveals plus a top scroll-progress bar driven entirely by the native CSS animation-timeline view() and scroll() functions.</p>
+          </div>
+          <span class="badge badge-show">🏆 showcase</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/css/css-scroll-reveal-timeline/preview.html" title="CSS Scroll Reveal Timeline preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">CSS-only</span>
+          <div class="tags"><span class="tag">scroll-driven</span><span class="tag">animation-timeline</span><span class="tag">view</span><span class="tag">clip-path</span><span class="tag">no-js</span><span class="tag">progressive-enhancement</span></div>
+          <a class="open" href="components/css/css-scroll-reveal-timeline/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="css" data-tier="practical" data-text="css-only snap carousel carousel scroll-snap scroll-marker scroll-button no-js accessible">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>CSS-Only Snap Carousel</h3>
+            <p class="desc">A swipeable, paginated carousel with prev/next buttons and dot markers built with zero JavaScript via scroll-snap plus the new ::scroll-button and ::scroll-marker pseudo-elements.</p>
+          </div>
+          <span class="badge badge-prac">✅ practical</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/css/scroll-snap-carousel/preview.html" title="CSS-Only Snap Carousel preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">CSS-only</span>
+          <div class="tags"><span class="tag">carousel</span><span class="tag">scroll-snap</span><span class="tag">scroll-marker</span><span class="tag">scroll-button</span><span class="tag">no-js</span><span class="tag">accessible</span></div>
+          <a class="open" href="components/css/scroll-snap-carousel/preview.html" target="_blank" rel="noopener">open ↗</a>
         </div>
       </article>
       <article class="card" data-cat="css" data-tier="practical" data-text="glassmorphism card glass card blur frosted backdrop">
@@ -193,6 +298,21 @@
           <a class="open" href="components/css/grain-noise-overlay/preview.html" target="_blank" rel="noopener">open ↗</a>
         </div>
       </article>
+      <article class="card" data-cat="css" data-tier="showcase" data-text="heart like burst like heart burst particles favorite micro-interaction">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Heart Like Burst</h3>
+            <p class="desc">A like button where the heart pops with an elastic bounce and a ring of colorful particles bursts outward, with no images or JavaScript.</p>
+          </div>
+          <span class="badge badge-show">🏆 showcase</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/css/heart-like-burst/preview.html" title="Heart Like Burst preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">CSS-only</span>
+          <div class="tags"><span class="tag">like</span><span class="tag">heart</span><span class="tag">burst</span><span class="tag">particles</span><span class="tag">favorite</span><span class="tag">micro-interaction</span></div>
+          <a class="open" href="components/css/heart-like-burst/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
       <article class="card" data-cat="css" data-tier="practical" data-text="infinite marquee marquee scroll ticker infinite loop">
         <div class="card-head">
           <div class="card-titles">
@@ -223,6 +343,21 @@
           <a class="open" href="components/css/neon-glow-button/preview.html" target="_blank" rel="noopener">open ↗</a>
         </div>
       </article>
+      <article class="card" data-cat="css" data-tier="showcase" data-text="retro synthwave grid floor background retro synthwave 3d perspective animated no-js">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Retro Synthwave Grid Floor</h3>
+            <p class="desc">An infinitely scrolling Tron/vaporwave floor grid that recedes to a glowing horizon, built entirely from layered gradients and a single 3D transform with no canvas or JavaScript.</p>
+          </div>
+          <span class="badge badge-show">🏆 showcase</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/css/retro-grid-floor/preview.html" title="Retro Synthwave Grid Floor preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">CSS-only</span>
+          <div class="tags"><span class="tag">background</span><span class="tag">retro</span><span class="tag">synthwave</span><span class="tag">3d</span><span class="tag">perspective</span><span class="tag">animated</span><span class="tag">no-js</span></div>
+          <a class="open" href="components/css/retro-grid-floor/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
       <article class="card" data-cat="css" data-tier="practical" data-text="shimmer skeleton skeleton loading shimmer placeholder loader">
         <div class="card-head">
           <div class="card-titles">
@@ -236,6 +371,51 @@
           <span class="cat">CSS-only</span>
           <div class="tags"><span class="tag">skeleton</span><span class="tag">loading</span><span class="tag">shimmer</span><span class="tag">placeholder</span><span class="tag">loader</span></div>
           <a class="open" href="components/css/shimmer-skeleton/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="css" data-tier="practical" data-text="sliding underline link underline hover link background-size micro-interaction multiline">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Sliding Underline Link</h3>
+            <p class="desc">A link underline that wipes in on hover and correctly wraps across multiple lines, using an animated background-size instead of a transform.</p>
+          </div>
+          <span class="badge badge-prac">✅ practical</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/css/animated-underline/preview.html" title="Sliding Underline Link preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">CSS-only</span>
+          <div class="tags"><span class="tag">underline</span><span class="tag">hover</span><span class="tag">link</span><span class="tag">background-size</span><span class="tag">micro-interaction</span><span class="tag">multiline</span></div>
+          <a class="open" href="components/css/animated-underline/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="motion" data-tier="showcase" data-text="3d scroll text cylinder text 3d scroll perspective cylinder gsap transform">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>3D Scroll Text Cylinder</h3>
+            <p class="desc">Lines of text wrapped around an invisible 3D cylinder that rotates through depth as you scroll, with no WebGL required.</p>
+          </div>
+          <span class="badge badge-show">🏆 showcase</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/motion/scroll-text-cylinder/preview.html" title="3D Scroll Text Cylinder preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">GSAP / Motion</span>
+          <div class="tags"><span class="tag">text</span><span class="tag">3d</span><span class="tag">scroll</span><span class="tag">perspective</span><span class="tag">cylinder</span><span class="tag">gsap</span><span class="tag">transform</span></div>
+          <a class="open" href="components/motion/scroll-text-cylinder/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="motion" data-tier="showcase" data-text="gravity mouse trail mouse cursor image-trail gravity physics gsap bounce">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Gravity Mouse Trail</h3>
+            <p class="desc">Images burst from the cursor as it moves, then fall under simulated gravity, bounce off the bottom of the viewport, and fade away.</p>
+          </div>
+          <span class="badge badge-show">🏆 showcase</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/motion/gravity-mouse-trail/preview.html" title="Gravity Mouse Trail preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">GSAP / Motion</span>
+          <div class="tags"><span class="tag">mouse</span><span class="tag">cursor</span><span class="tag">image-trail</span><span class="tag">gravity</span><span class="tag">physics</span><span class="tag">gsap</span><span class="tag">bounce</span></div>
+          <a class="open" href="components/motion/gravity-mouse-trail/preview.html" target="_blank" rel="noopener">open ↗</a>
         </div>
       </article>
       <article class="card" data-cat="motion" data-tier="showcase" data-text="horizontal scroll gallery scroll horizontal gsap gallery pin scrolltrigger">
@@ -266,6 +446,36 @@
           <span class="cat">GSAP / Motion</span>
           <div class="tags"><span class="tag">scroll</span><span class="tag">scrub</span><span class="tag">canvas</span><span class="tag">gsap</span><span class="tag">sequence</span><span class="tag">frames</span><span class="tag">scrolltrigger</span></div>
           <a class="open" href="components/motion/image-scrub-sequence/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="motion" data-tier="showcase" data-text="infinite parallax scroll scroll infinite parallax depth snap gsap lenis">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Infinite Parallax Scroll</h3>
+            <p class="desc">Fullscreen sections that loop endlessly with eased snap, while their inner media drifts at a slower rate to create a seamless sense of depth.</p>
+          </div>
+          <span class="badge badge-show">🏆 showcase</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/motion/infinite-parallax-scroll/preview.html" title="Infinite Parallax Scroll preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">GSAP / Motion</span>
+          <div class="tags"><span class="tag">scroll</span><span class="tag">infinite</span><span class="tag">parallax</span><span class="tag">depth</span><span class="tag">snap</span><span class="tag">gsap</span><span class="tag">lenis</span></div>
+          <a class="open" href="components/motion/infinite-parallax-scroll/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="motion" data-tier="showcase" data-text="layered zoom scroll scroll zoom parallax blur split-text gsap scrollsmoother">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Layered Zoom Scroll</h3>
+            <p class="desc">A cinematic trailing-zoom hero where stacked image layers scale and de-blur into focus while split headline text parts to reveal a masked central subject on scroll.</p>
+          </div>
+          <span class="badge badge-show">🏆 showcase</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/motion/layered-zoom-scroll/preview.html" title="Layered Zoom Scroll preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">GSAP / Motion</span>
+          <div class="tags"><span class="tag">scroll</span><span class="tag">zoom</span><span class="tag">parallax</span><span class="tag">blur</span><span class="tag">split-text</span><span class="tag">gsap</span><span class="tag">scrollsmoother</span></div>
+          <a class="open" href="components/motion/layered-zoom-scroll/preview.html" target="_blank" rel="noopener">open ↗</a>
         </div>
       </article>
       <article class="card" data-cat="motion" data-tier="practical" data-text="magnetic button hover gsap button magnetic cursor micro-interaction">
@@ -343,6 +553,21 @@
           <a class="open" href="components/motion/scroll-text-reveal/preview.html" target="_blank" rel="noopener">open ↗</a>
         </div>
       </article>
+      <article class="card" data-cat="motion" data-tier="showcase" data-text="scroll velocity skew marquee scroll marquee skew gsap velocity infinite-loop">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Scroll Velocity Skew Marquee</h3>
+            <p class="desc">An infinite horizontal marquee that skews and stretches in proportion to scroll velocity, snapping back to rest when the scroll stops.</p>
+          </div>
+          <span class="badge badge-show">🏆 showcase</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/motion/scroll-velocity-skew-marquee/preview.html" title="Scroll Velocity Skew Marquee preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">GSAP / Motion</span>
+          <div class="tags"><span class="tag">scroll</span><span class="tag">marquee</span><span class="tag">skew</span><span class="tag">gsap</span><span class="tag">velocity</span><span class="tag">infinite-loop</span></div>
+          <a class="open" href="components/motion/scroll-velocity-skew-marquee/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
       <article class="card" data-cat="motion" data-tier="practical" data-text="split text stagger text split gsap stagger heading chars words">
         <div class="card-head">
           <div class="card-titles">
@@ -358,6 +583,21 @@
           <a class="open" href="components/motion/split-text-stagger/preview.html" target="_blank" rel="noopener">open ↗</a>
         </div>
       </article>
+      <article class="card" data-cat="motion" data-tier="showcase" data-text="sticky grid scroll scroll pinned grid gallery zoom gsap lenis stagger">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Sticky Grid Scroll</h3>
+            <p class="desc">A pinned 3-column image grid that staggers in, scales and opens up, and reveals an overlaid title and CTA at precise scroll points before releasing.</p>
+          </div>
+          <span class="badge badge-show">🏆 showcase</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/motion/sticky-grid-scroll/preview.html" title="Sticky Grid Scroll preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">GSAP / Motion</span>
+          <div class="tags"><span class="tag">scroll</span><span class="tag">pinned</span><span class="tag">grid</span><span class="tag">gallery</span><span class="tag">zoom</span><span class="tag">gsap</span><span class="tag">lenis</span><span class="tag">stagger</span></div>
+          <a class="open" href="components/motion/sticky-grid-scroll/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
       <article class="card" data-cat="motion" data-tier="showcase" data-text="sticky stacking cards scroll pin cards gsap stack scrolltrigger">
         <div class="card-head">
           <div class="card-titles">
@@ -371,6 +611,51 @@
           <span class="cat">GSAP / Motion</span>
           <div class="tags"><span class="tag">scroll</span><span class="tag">pin</span><span class="tag">cards</span><span class="tag">gsap</span><span class="tag">stack</span><span class="tag">scrolltrigger</span></div>
           <a class="open" href="components/motion/sticky-stacking-cards/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="motion" data-tier="practical" data-text="svg line draw on scroll svg stroke draw scroll gsap drawsvg path">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>SVG Line Draw on Scroll</h3>
+            <p class="desc">An SVG path that progressively draws itself in sync with scroll, ideal for connecting timeline sections or tracing illustrations.</p>
+          </div>
+          <span class="badge badge-prac">✅ practical</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/motion/svg-line-draw-on-scroll/preview.html" title="SVG Line Draw on Scroll preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">GSAP / Motion</span>
+          <div class="tags"><span class="tag">svg</span><span class="tag">stroke</span><span class="tag">draw</span><span class="tag">scroll</span><span class="tag">gsap</span><span class="tag">drawsvg</span><span class="tag">path</span></div>
+          <a class="open" href="components/motion/svg-line-draw-on-scroll/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="motion" data-tier="showcase" data-text="svg text clip reveal text clip-path svg mask scroll gsap wipe">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>SVG Text Clip Reveal</h3>
+            <p class="desc">Large display type used as an SVG clip-path that wipes open on scroll to reveal an image or pattern sliding behind the letters.</p>
+          </div>
+          <span class="badge badge-show">🏆 showcase</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/motion/svg-text-clip-reveal/preview.html" title="SVG Text Clip Reveal preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">GSAP / Motion</span>
+          <div class="tags"><span class="tag">text</span><span class="tag">clip-path</span><span class="tag">svg</span><span class="tag">mask</span><span class="tag">scroll</span><span class="tag">gsap</span><span class="tag">wipe</span></div>
+          <a class="open" href="components/motion/svg-text-clip-reveal/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="react" data-tier="showcase" data-text="animated beam connector beam connector diagram svg integrations flow">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Animated Beam Connector</h3>
+            <p class="desc">An animated gradient pulse that travels along a curved SVG path connecting two referenced DOM nodes, ideal for integration and architecture diagrams.</p>
+          </div>
+          <span class="badge badge-show">🏆 showcase</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/react/animated-beam-connector/preview.html" title="Animated Beam Connector preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">React + Tailwind</span>
+          <div class="tags"><span class="tag">beam</span><span class="tag">connector</span><span class="tag">diagram</span><span class="tag">svg</span><span class="tag">integrations</span><span class="tag">flow</span></div>
+          <a class="open" href="components/react/animated-beam-connector/preview.html" target="_blank" rel="noopener">open ↗</a>
         </div>
       </article>
       <article class="card" data-cat="react" data-tier="practical" data-text="animated counter counter count-up stats scroll intersection-observer">
@@ -403,6 +688,36 @@
           <a class="open" href="components/react/bento-grid/preview.html" target="_blank" rel="noopener">open ↗</a>
         </div>
       </article>
+      <article class="card" data-cat="react" data-tier="showcase" data-text="border beam border beam glow card animated-border tailwind">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Border Beam</h3>
+            <p class="desc">An animated beam of light that continuously travels around the border of any container, framing cards and pricing tiers with a premium glow.</p>
+          </div>
+          <span class="badge badge-show">🏆 showcase</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/react/border-beam/preview.html" title="Border Beam preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">React + Tailwind</span>
+          <div class="tags"><span class="tag">border</span><span class="tag">beam</span><span class="tag">glow</span><span class="tag">card</span><span class="tag">animated-border</span><span class="tag">tailwind</span></div>
+          <a class="open" href="components/react/border-beam/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="react" data-tier="practical" data-text="canvas particle field particles canvas interactive depth mouse background">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Canvas Particle Field</h3>
+            <p class="desc">Lightweight canvas particles that drift and gently react to the cursor, adding depth and motion behind hero content.</p>
+          </div>
+          <span class="badge badge-prac">✅ practical</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/react/canvas-particle-field/preview.html" title="Canvas Particle Field preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">React + Tailwind</span>
+          <div class="tags"><span class="tag">particles</span><span class="tag">canvas</span><span class="tag">interactive</span><span class="tag">depth</span><span class="tag">mouse</span><span class="tag">background</span></div>
+          <a class="open" href="components/react/canvas-particle-field/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
       <article class="card" data-cat="react" data-tier="showcase" data-text="command palette command-palette cmdk search modal keyboard">
         <div class="card-head">
           <div class="card-titles">
@@ -416,6 +731,21 @@
           <span class="cat">React + Tailwind</span>
           <div class="tags"><span class="tag">command-palette</span><span class="tag">cmdk</span><span class="tag">search</span><span class="tag">modal</span><span class="tag">keyboard</span></div>
           <a class="open" href="components/react/command-palette/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="react" data-tier="practical" data-text="confetti button confetti button celebration feedback canvas delight">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Confetti Button</h3>
+            <p class="desc">A button that bursts confetti from its own position on click to celebrate signups, purchases and other success moments.</p>
+          </div>
+          <span class="badge badge-prac">✅ practical</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/react/confetti-button/preview.html" title="Confetti Button preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">React + Tailwind</span>
+          <div class="tags"><span class="tag">confetti</span><span class="tag">button</span><span class="tag">celebration</span><span class="tag">feedback</span><span class="tag">canvas</span><span class="tag">delight</span></div>
+          <a class="open" href="components/react/confetti-button/preview.html" target="_blank" rel="noopener">open ↗</a>
         </div>
       </article>
       <article class="card" data-cat="react" data-tier="practical" data-text="dark mode toggle dark-mode theme toggle accessibility sun-moon">
@@ -463,6 +793,36 @@
           <a class="open" href="components/react/gradient-mesh-hero/preview.html" target="_blank" rel="noopener">open ↗</a>
         </div>
       </article>
+      <article class="card" data-cat="react" data-tier="showcase" data-text="hover glow border glow border cursor conic-gradient card cursor-style">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Hover Glow Border</h3>
+            <p class="desc">A Cursor-style border glow that orbits any card and concentrates toward the mouse pointer, adapting to any container size.</p>
+          </div>
+          <span class="badge badge-show">🏆 showcase</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/react/hover-glow-border/preview.html" title="Hover Glow Border preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">React + Tailwind</span>
+          <div class="tags"><span class="tag">glow</span><span class="tag">border</span><span class="tag">cursor</span><span class="tag">conic-gradient</span><span class="tag">card</span><span class="tag">cursor-style</span></div>
+          <a class="open" href="components/react/hover-glow-border/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="react" data-tier="showcase" data-text="lamp effect lamp spotlight section-header conic-gradient linear-style hero">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Lamp Effect</h3>
+            <p class="desc">A Linear-inspired overhead lamp glow that fans light down onto a section header, with the headline rising into the beam on scroll.</p>
+          </div>
+          <span class="badge badge-show">🏆 showcase</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/react/lamp-effect/preview.html" title="Lamp Effect preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">React + Tailwind</span>
+          <div class="tags"><span class="tag">lamp</span><span class="tag">spotlight</span><span class="tag">section-header</span><span class="tag">conic-gradient</span><span class="tag">linear-style</span><span class="tag">hero</span></div>
+          <a class="open" href="components/react/lamp-effect/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
       <article class="card" data-cat="react" data-tier="practical" data-text="logo marquee marquee logos infinite-scroll social-proof ticker">
         <div class="card-head">
           <div class="card-titles">
@@ -476,6 +836,21 @@
           <span class="cat">React + Tailwind</span>
           <div class="tags"><span class="tag">marquee</span><span class="tag">logos</span><span class="tag">infinite-scroll</span><span class="tag">social-proof</span><span class="tag">ticker</span></div>
           <a class="open" href="components/react/logo-marquee/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="react" data-tier="showcase" data-text="macos dock dock navigation magnify macos hover toolbar">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>macOS Dock</h3>
+            <p class="desc">A macOS-style icon dock whose items magnify and lift as the cursor approaches, for portfolio nav bars and app launchers.</p>
+          </div>
+          <span class="badge badge-show">🏆 showcase</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/react/macos-dock/preview.html" title="macOS Dock preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">React + Tailwind</span>
+          <div class="tags"><span class="tag">dock</span><span class="tag">navigation</span><span class="tag">magnify</span><span class="tag">macos</span><span class="tag">hover</span><span class="tag">toolbar</span></div>
+          <a class="open" href="components/react/macos-dock/preview.html" target="_blank" rel="noopener">open ↗</a>
         </div>
       </article>
       <article class="card" data-cat="react" data-tier="practical" data-text="pricing toggle pricing toggle plans billing cards">
@@ -508,6 +883,21 @@
           <a class="open" href="components/react/shrinking-sticky-navbar/preview.html" target="_blank" rel="noopener">open ↗</a>
         </div>
       </article>
+      <article class="card" data-cat="react" data-tier="practical" data-text="spotlight card card spotlight hover radial-gradient pointer-tracking feature">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Spotlight Card</h3>
+            <p class="desc">A card that reveals a soft radial spotlight following the cursor on hover, ideal for premium-but-safe feature and pricing grids.</p>
+          </div>
+          <span class="badge badge-prac">✅ practical</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/react/spotlight-card/preview.html" title="Spotlight Card preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">React + Tailwind</span>
+          <div class="tags"><span class="tag">card</span><span class="tag">spotlight</span><span class="tag">hover</span><span class="tag">radial-gradient</span><span class="tag">pointer-tracking</span><span class="tag">feature</span></div>
+          <a class="open" href="components/react/spotlight-card/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
       <article class="card" data-cat="react" data-tier="practical" data-text="testimonial carousel testimonial carousel slider reviews social-proof">
         <div class="card-head">
           <div class="card-titles">
@@ -521,6 +911,36 @@
           <span class="cat">React + Tailwind</span>
           <div class="tags"><span class="tag">testimonial</span><span class="tag">carousel</span><span class="tag">slider</span><span class="tag">reviews</span><span class="tag">social-proof</span></div>
           <a class="open" href="components/react/testimonial-carousel/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="react" data-tier="practical" data-text="text shimmer text shimmer shine gradient badge loading">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Text Shimmer</h3>
+            <p class="desc">Text with a soft light sheen sweeping across it left to right, perfect for announcement pills, badges and subtle loading labels.</p>
+          </div>
+          <span class="badge badge-prac">✅ practical</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/react/text-shimmer/preview.html" title="Text Shimmer preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">React + Tailwind</span>
+          <div class="tags"><span class="tag">text</span><span class="tag">shimmer</span><span class="tag">shine</span><span class="tag">gradient</span><span class="tag">badge</span><span class="tag">loading</span></div>
+          <a class="open" href="components/react/text-shimmer/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="react" data-tier="showcase" data-text="webgl mesh gradient plasma mesh gradient plasma webgl shader hero">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>WebGL Mesh Gradient Plasma</h3>
+            <p class="desc">A flowing WebGL mesh-gradient of color spots that swirl and distort like plasma, for a high-end animated hero canvas.</p>
+          </div>
+          <span class="badge badge-show">🏆 showcase</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/react/webgl-mesh-gradient-plasma/preview.html" title="WebGL Mesh Gradient Plasma preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">React + Tailwind</span>
+          <div class="tags"><span class="tag">mesh</span><span class="tag">gradient</span><span class="tag">plasma</span><span class="tag">webgl</span><span class="tag">shader</span><span class="tag">hero</span></div>
+          <a class="open" href="components/react/webgl-mesh-gradient-plasma/preview.html" target="_blank" rel="noopener">open ↗</a>
         </div>
       </article>
       <article class="card" data-cat="vanilla" data-tier="practical" data-text="copy to clipboard clipboard copy button feedback">

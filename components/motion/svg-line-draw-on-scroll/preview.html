@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SVG Line Draw on Scroll — saltycodestudio</title>
+<style>
+  :root {
+    --ss-sand:   #fbf7f0;
+    --ss-sand-2: #f4ece0;
+    --ss-sand-3: #ece0cd;
+    --ss-ink:    #1c2b33;
+    --ss-soft:   #4a5d66;
+    --ss-teal:   #1f8a8a;
+    --ss-deep:   #0f5c5c;
+    --ss-surf:   #2ec3c3;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", system-ui, sans-serif;
+    background: var(--ss-sand);
+    color: var(--ss-ink);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .eyebrow {
+    font-size: 0.78rem; letter-spacing: 0.32em; text-transform: uppercase;
+    color: var(--ss-teal); font-weight: 700; margin-bottom: 1rem;
+  }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    min-height: 92vh;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 6rem 2rem 4rem;
+    max-width: 940px; margin: 0 auto;
+    background:
+      radial-gradient(1200px 480px at 80% -10%, rgba(46,195,195,0.16), transparent 60%);
+  }
+  .hero h1 {
+    font-size: clamp(2.6rem, 8vw, 5.4rem);
+    line-height: 0.98; letter-spacing: -0.035em; color: var(--ss-deep);
+    margin-bottom: 1.4rem; font-weight: 800;
+  }
+  .hero p { font-size: clamp(1.05rem, 2.2vw, 1.35rem); color: var(--ss-soft); max-width: 48ch; }
+  .scroll-cue {
+    margin-top: 3rem; font-size: 0.85rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--ss-teal); display: flex; align-items: center; gap: 0.6rem;
+  }
+  .scroll-cue::after {
+    content: ""; width: 1px; height: 38px;
+    background: linear-gradient(var(--ss-teal), transparent);
+    animation: cueDrop 1.8s ease-in-out infinite;
+  }
+  @keyframes cueDrop { 0%,100%{opacity:.3;transform:scaleY(.7) translateY(-4px);} 50%{opacity:1;transform:scaleY(1) translateY(0);} }
+
+  /* ---------- Coastline route section ---------- */
+  .route {
+    max-width: 1040px; margin: 0 auto; padding: 4rem 2rem 8rem;
+  }
+  .route__head { text-align: center; margin-bottom: 2.5rem; }
+  .route__head h2 {
+    font-size: clamp(1.8rem, 4vw, 2.8rem); color: var(--ss-deep);
+    letter-spacing: -0.02em; font-weight: 800;
+  }
+  .route__head p { color: var(--ss-soft); max-width: 52ch; margin: 0.8rem auto 0; }
+
+  .route__card {
+    background: var(--ss-sand-2);
+    border: 1px solid var(--ss-sand-3);
+    border-radius: 28px;
+    padding: 1.5rem;
+    box-shadow: 0 30px 60px -40px rgba(15,92,92,0.45);
+  }
+  .route__svg { width: 100%; height: auto; display: block; }
+
+  /* ---------- Connected timeline ---------- */
+  .timeline {
+    position: relative; max-width: 720px; margin: 0 auto;
+    padding: 2rem 2rem 10rem;
+  }
+  .timeline__head { text-align: center; margin-bottom: 3rem; }
+  .timeline__head h2 { font-size: clamp(1.8rem,4vw,2.6rem); color: var(--ss-deep); letter-spacing:-0.02em; font-weight:800; }
+  .timeline__head p { color: var(--ss-soft); margin-top: 0.7rem; }
+
+  .timeline__track {
+    position: absolute; left: calc(2rem + 13px); top: 9rem; bottom: 11rem;
+    width: 40px; pointer-events: none;
+  }
+  .timeline__track svg { width: 40px; height: 100%; overflow: visible; }
+
+  .step {
+    position: relative; margin-left: 4.5rem; margin-bottom: 3.2rem;
+    background: #fff;
+    border: 1px solid var(--ss-sand-3);
+    border-radius: 18px; padding: 1.4rem 1.6rem;
+    box-shadow: 0 18px 40px -34px rgba(15,92,92,0.5);
+  }
+  .step::before {
+    content: ""; position: absolute; left: -3.05rem; top: 1.5rem;
+    width: 16px; height: 16px; border-radius: 50%;
+    background: var(--ss-surf); border: 3px solid var(--ss-sand);
+    box-shadow: 0 0 0 3px rgba(46,195,195,0.25);
+  }
+  .step h3 { font-size: 1.15rem; color: var(--ss-deep); margin-bottom: 0.35rem; letter-spacing:-0.01em; }
+  .step p { color: var(--ss-soft); font-size: 0.98rem; }
+  .step .num { font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ss-teal); font-weight: 700; }
+
+  .footer {
+    text-align: center; padding: 3rem 2rem 5rem; color: var(--ss-soft);
+    font-size: 0.9rem; border-top: 1px solid var(--ss-sand-3);
+    max-width: 1040px; margin: 0 auto;
+  }
+  .footer strong { color: var(--ss-deep); }
+</style>
+</head>
+<body>
+
+  <header class="hero">
+    <p class="eyebrow">SVG Line Draw on Scroll</p>
+    <h1>The line follows<br />you down the coast.</h1>
+    <p>Scroll, and watch an SVG stroke paint itself in lockstep with the page — perfect for tracing routes, illustrations, or connecting timeline steps.</p>
+    <div class="scroll-cue">Scroll to draw</div>
+  </header>
+
+  <!-- ============ Coastline route illustration ============ -->
+  <section class="route">
+    <div class="route__head">
+      <h2>Trace a coastline as you read</h2>
+      <p>Each stroke below is hidden via <code>stroke-dashoffset</code>, then scrubbed to zero across this section.</p>
+    </div>
+
+    <div class="route__card">
+      <svg class="draw-on-scroll route__svg" viewBox="0 0 1000 420" fill="none"
+           xmlns="http://www.w3.org/2000/svg" aria-label="A drawn coastline route with markers">
+        <!-- soft static water shimmer underneath -->
+        <path d="M0 360 Q 250 330 500 360 T 1000 360" stroke="#dcefe9" stroke-width="2" opacity="0.7"/>
+        <!-- main coastline path (drawn) -->
+        <path class="route-main"
+              d="M40 330 C 150 300, 180 200, 300 210 S 460 320, 560 250 S 720 120, 820 190 S 950 280, 970 230"
+              stroke="#1f8a8a" stroke-width="5"/>
+        <!-- secondary inland trail (drawn) -->
+        <path class="route-trail"
+              d="M120 360 C 220 360, 260 280, 380 300 S 540 360, 660 300 S 820 220, 920 300"
+              stroke="#2ec3c3" stroke-width="3" stroke-dasharray-hint="dotted"/>
+        <!-- waypoint pins (drawn as quick circles) -->
+        <circle cx="300" cy="210" r="9" stroke="#0f5c5c" stroke-width="4" fill="#fbf7f0"/>
+        <circle cx="560" cy="250" r="9" stroke="#0f5c5c" stroke-width="4" fill="#fbf7f0"/>
+        <circle cx="820" cy="190" r="9" stroke="#0f5c5c" stroke-width="4" fill="#fbf7f0"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ============ Connected timeline ============ -->
+  <section class="timeline">
+    <div class="timeline__head">
+      <h2>Connect timeline steps</h2>
+      <p>One vertical path threads every step and draws as the section scrolls past.</p>
+    </div>
+
+    <div class="timeline__track">
+      <svg class="draw-on-scroll" viewBox="0 0 40 800" preserveAspectRatio="none"
+           xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M20 0 C 6 130, 34 270, 20 400 S 6 670, 20 800"
+              stroke="#1f8a8a" stroke-width="4"/>
+      </svg>
+    </div>
+
+    <article class="step">
+      <span class="num">Step 01</span>
+      <h3>Prime the stroke</h3>
+      <p>Set <code>stroke-dasharray</code> and <code>stroke-dashoffset</code> to the path's total length so nothing shows yet.</p>
+    </article>
+    <article class="step">
+      <span class="num">Step 02</span>
+      <h3>Attach a ScrollTrigger</h3>
+      <p>Use <code>scrub: true</code> so progress maps continuously to scroll position — no jumps.</p>
+    </article>
+    <article class="step">
+      <span class="num">Step 03</span>
+      <h3>Tween offset to zero</h3>
+      <p>GSAP eases <code>stroke-dashoffset</code> down to 0, revealing the stroke from start to finish.</p>
+    </article>
+    <article class="step">
+      <span class="num">Step 04</span>
+      <h3>Reverse on scroll-up</h3>
+      <p>Because it's scrubbed, scrolling back up un-draws the line just as smoothly.</p>
+    </article>
+  </section>
+
+  <footer class="footer">
+    <p><strong>SVG Line Draw on Scroll</strong> — saltycodestudio parts library. Scroll back up to watch every line un-draw in reverse.</p>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script>
+    /* ---- canonical animation.js (inlined for the standalone preview) ---- */
+    (function (global) {
+      'use strict';
+      function toArray(n){ return Array.prototype.slice.call(n); }
+
+      function initSvgLineDraw(options) {
+        options = options || {};
+        if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
+          console.warn('[svg-line-draw] gsap + ScrollTrigger are required.');
+          return [];
+        }
+        gsap.registerPlugin(ScrollTrigger);
+
+        var paths = toArray(document.querySelectorAll(options.pathSelector || '.draw-on-scroll path'));
+        if (!paths.length) return [];
+
+        var reduce = global.matchMedia &&
+          global.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        paths.forEach(function (path) {
+          var len = path.getTotalLength();
+          path.style.strokeDasharray = len + ' ' + len;
+          path.style.strokeDashoffset = reduce ? 0 : len;
+          path.style.willChange = 'stroke-dashoffset';
+        });
+
+        if (reduce) return [];
+
+        var groups = new Map();
+        paths.forEach(function (path) {
+          var trig;
+          if (options.trigger) {
+            trig = typeof options.trigger === 'string'
+              ? document.querySelector(options.trigger) : options.trigger;
+          } else {
+            trig = path.closest('.draw-on-scroll') || path;
+          }
+          if (!groups.has(trig)) groups.set(trig, []);
+          groups.get(trig).push(path);
+        });
+
+        var triggers = [];
+        groups.forEach(function (groupPaths, trig) {
+          var st = gsap.to(groupPaths, {
+            strokeDashoffset: 0,
+            ease: 'none',
+            stagger: groupPaths.length > 1 ? 0.05 : 0,
+            scrollTrigger: {
+              trigger: trig,
+              start: options.start || 'top 80%',
+              end: options.end || 'bottom 60%',
+              scrub: options.scrub === undefined ? true : options.scrub,
+              markers: !!options.markers
+            }
+          });
+          triggers.push(st.scrollTrigger);
+        });
+        return triggers;
+      }
+      global.initSvgLineDraw = initSvgLineDraw;
+    })(window);
+
+    /* ---- demo wiring ---- */
+    // Coastline group: draw across most of the section's scroll.
+    initSvgLineDraw({
+      pathSelector: '.route .draw-on-scroll path, .route .draw-on-scroll circle',
+      trigger: '.route',
+      start: 'top 75%',
+      end: 'bottom 70%'
+    });
+    // Timeline track: draw alongside the steps.
+    initSvgLineDraw({
+      pathSelector: '.timeline .draw-on-scroll path',
+      trigger: '.timeline',
+      start: 'top 70%',
+      end: 'bottom 80%'
+    });
+  </script>
+</body>
+</html>

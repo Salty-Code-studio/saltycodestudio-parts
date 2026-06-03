@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Container-Query Adaptive Card — Sand &amp; Surf</title>
+<style>
+  /* ===== Brand tokens: "Sand & Surf" ===== */
+  :root {
+    --sand-bg: #fbf7f0;
+    --sand-2: #f4ece0;
+    --sand-3: #ece0cd;
+    --ink: #1c2b33;
+    --ink-soft: #4a5d66;
+    --teal: #1f8a8a;
+    --teal-deep: #0f5c5c;
+    --surf: #2ec3c3;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body { margin: 0; }
+
+  body {
+    background:
+      radial-gradient(140% 120% at 100% 0%, #fff 0%, transparent 45%),
+      linear-gradient(180deg, var(--sand-2) 0%, var(--sand-bg) 30%);
+    color: var(--ink);
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+                 Roboto, Helvetica, Arial, sans-serif;
+    min-height: 100vh;
+    padding: clamp(1.25rem, 4vw, 3.5rem);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+
+  header.lede { margin-bottom: 2.25rem; }
+
+  .kicker {
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--teal-deep);
+    margin: 0 0 .55rem;
+  }
+
+  h1 {
+    font-size: clamp(1.7rem, 4vw, 2.6rem);
+    line-height: 1.08;
+    letter-spacing: -.02em;
+    margin: 0 0 .7rem;
+    text-wrap: balance;
+  }
+
+  .lede p {
+    margin: 0;
+    max-width: 60ch;
+    color: var(--ink-soft);
+    font-size: 1.02rem;
+    line-height: 1.6;
+  }
+
+  .lede code {
+    background: var(--sand-3);
+    color: var(--teal-deep);
+    padding: .12em .4em;
+    border-radius: 6px;
+    font-size: .9em;
+  }
+
+  .section-label {
+    display: flex;
+    align-items: baseline;
+    gap: .6rem;
+    margin: 2.75rem 0 1rem;
+  }
+  .section-label h2 {
+    font-size: 1.05rem;
+    margin: 0;
+    letter-spacing: -.01em;
+  }
+  .section-label span {
+    font-size: .82rem;
+    color: var(--ink-soft);
+  }
+
+  /* ===== Demo layout shells (these create the differing slot widths) ===== */
+
+  /* A two-column "app" layout: a narrow sidebar + a wide main column.
+     The SAME card sits in both — and renders completely differently. */
+  .app-shell {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 1.25rem;
+    align-items: start;
+  }
+  @media (max-width: 720px) {
+    .app-shell { grid-template-columns: 1fr; }
+  }
+
+  .panel {
+    background: #fff;
+    border: 1px solid var(--sand-3);
+    border-radius: 20px;
+    padding: 1.1rem;
+    box-shadow: 0 14px 34px -22px rgba(15, 92, 92, .35);
+  }
+  .panel__hd {
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 0 0 .85rem;
+  }
+
+  .sidebar-stack { display: grid; gap: 1rem; }
+
+  .nav-faux { display: grid; gap: .35rem; margin-bottom: 1rem; }
+  .nav-faux a {
+    text-decoration: none;
+    color: var(--ink-soft);
+    font-size: .9rem;
+    padding: .5rem .65rem;
+    border-radius: 10px;
+  }
+  .nav-faux a.active { background: var(--sand-2); color: var(--ink); font-weight: 600; }
+
+  /* The "modal" demo — a constrained medium slot */
+  .modal-frame {
+    max-width: 460px;
+    background: #fff;
+    border: 1px solid var(--sand-3);
+    border-radius: 22px;
+    padding: 1.1rem;
+    box-shadow: 0 30px 70px -30px rgba(15, 92, 92, .55);
+  }
+  .modal-frame .panel__hd { display: flex; justify-content: space-between; }
+  .modal-frame .panel__hd::after { content: "✕"; color: var(--sand-3); }
+
+  /* Wide hero slot */
+  .hero-frame { max-width: 100%; }
+
+  /* The live, drag-to-resize slot */
+  .resizer {
+    resize: horizontal;
+    overflow: auto;
+    min-width: 230px;
+    max-width: 100%;
+    width: 360px;
+    padding: 14px;
+    border: 2px dashed var(--surf);
+    border-radius: 22px;
+    background:
+      repeating-linear-gradient(45deg, var(--sand-2) 0 10px, transparent 10px 20px);
+  }
+  .resizer-hint {
+    font-size: .8rem;
+    color: var(--ink-soft);
+    margin: .5rem 0 0;
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+  }
+  .resizer-hint b { color: var(--teal-deep); }
+
+  /* live width readout */
+  .cq-slot { position: relative; }
+  .cq-slot[data-readout]::before {
+    content: attr(data-readout);
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 2;
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .04em;
+    color: var(--teal-deep);
+    background: rgba(251, 247, 240, .92);
+    padding: .25em .55em;
+    border-radius: 999px;
+    box-shadow: 0 2px 8px rgba(15, 92, 92, .2);
+    pointer-events: none;
+  }
+
+  footer.foot {
+    margin-top: 3rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--sand-3);
+    font-size: .82rem;
+    color: var(--ink-soft);
+  }
+  footer.foot a { color: var(--teal-deep); }
+
+  /* =====================================================================
+     THE PART ITSELF (identical to styles.css). The .cq-scope tokens are
+     already declared on :root above, so the card inherits them globally.
+     ===================================================================== */
+
+  .cq-slot {
+    container-type: inline-size;
+    container-name: card;
+    width: 100%;
+  }
+
+  .cq-card {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-areas: "media" "body";
+    gap: 0;
+    background: var(--sand-bg);
+    color: var(--ink);
+    border: 1px solid var(--sand-3);
+    border-radius: 18px;
+    box-shadow: 0 1px 2px rgba(28, 43, 51, .06),
+                0 12px 30px -12px rgba(15, 92, 92, .22);
+    overflow: hidden;
+    transition: box-shadow .35s ease, transform .35s ease;
+  }
+  .cq-card:hover {
+    box-shadow: 0 1px 2px rgba(28, 43, 51, .06),
+                0 22px 48px -16px rgba(15, 92, 92, .34);
+    transform: translateY(-2px);
+  }
+
+  .cq-card__media {
+    grid-area: media;
+    position: relative;
+    aspect-ratio: 16 / 10;
+    background:
+      radial-gradient(120% 120% at 20% 0%, var(--surf) 0%, transparent 55%),
+      linear-gradient(150deg, var(--teal) 0%, var(--teal-deep) 100%);
+    overflow: hidden;
+  }
+  .cq-card__media::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(-18deg,
+        rgba(251, 247, 240, .12) 0px,
+        rgba(251, 247, 240, .12) 2px,
+        transparent 2px, transparent 16px);
+    mix-blend-mode: soft-light;
+    pointer-events: none;
+  }
+  .cq-card__tag {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    z-index: 1;
+    font-size: .6875rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--teal-deep);
+    background: var(--sand-bg);
+    padding: .32em .7em;
+    border-radius: 999px;
+    box-shadow: 0 2px 8px rgba(15, 92, 92, .2);
+  }
+
+  .cq-card__body {
+    grid-area: body;
+    display: flex;
+    flex-direction: column;
+    gap: .55rem;
+    padding: 1.15rem 1.25rem 1.35rem;
+  }
+  .cq-card__eyebrow {
+    font-size: .7rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--teal-deep);
+    margin: 0;
+  }
+  .cq-card__title {
+    font-size: 1.2rem;
+    line-height: 1.2;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 0;
+    text-wrap: balance;
+  }
+  .cq-card__text {
+    font-size: .9rem;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    margin: 0;
+  }
+  .cq-card__footer {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: .75rem;
+    margin-top: .35rem;
+  }
+  .cq-card__cta {
+    appearance: none;
+    border: 0;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 600;
+    font-size: .85rem;
+    color: var(--sand-bg);
+    background: var(--teal);
+    padding: .6em 1.1em;
+    border-radius: 999px;
+    transition: background .2s ease, transform .2s ease;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .cq-card__cta:hover { background: var(--teal-deep); transform: translateY(-1px); }
+  .cq-card__meta { font-size: .78rem; color: var(--ink-soft); }
+
+  /* --- the adaptive steps --- */
+  @container card (min-width: 24rem) {
+    .cq-card {
+      grid-template-columns: 42% 1fr;
+      grid-template-areas: "media body";
+    }
+    .cq-card__media { aspect-ratio: auto; height: 100%; min-height: 13rem; }
+    .cq-card__body { padding: 1.4rem 1.5rem; justify-content: center; gap: .65rem; }
+    .cq-card__title { font-size: 1.45rem; }
+    .cq-card__text { font-size: .95rem; }
+  }
+  @container card (min-width: 40rem) {
+    .cq-card { grid-template-columns: 48% 1fr; }
+    .cq-card__media { min-height: 16rem; }
+    .cq-card__body { padding: 2rem 2.25rem; gap: .8rem; }
+    .cq-card__title { font-size: 1.9rem; }
+    .cq-card__text { font-size: 1rem; max-width: 46ch; }
+    .cq-card__cta { font-size: .9rem; padding: .7em 1.4em; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cq-card, .cq-card__cta { transition: none; }
+    .cq-card:hover { transform: none; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="lede">
+    <p class="kicker">saltycodestudio · CSS part</p>
+    <h1>Container-Query Adaptive Card</h1>
+    <p>
+      One card, three slots. It reflows from stacked to side-by-side based on
+      the width of its <em>parent</em> — using <code>container-type: inline-size</code>
+      and <code>@container</code> queries. No media queries. No JavaScript.
+      The exact same markup drops into a sidebar, a modal, or a wide hero.
+    </p>
+  </header>
+
+  <!-- ============ DEMO 1: app shell — sidebar vs main ============ -->
+  <div class="section-label">
+    <h2>Same card, two slots</h2>
+    <span>narrow sidebar (stacked) · wide main (side-by-side)</span>
+  </div>
+
+  <div class="app-shell">
+    <!-- NARROW slot -->
+    <aside class="panel">
+      <p class="panel__hd">Sidebar</p>
+      <nav class="nav-faux">
+        <a href="#" class="active">Stories</a>
+        <a href="#">Saltworks</a>
+        <a href="#">Flamingos</a>
+      </nav>
+      <div class="cq-slot">
+        <article class="cq-card">
+          <div class="cq-card__media"><span class="cq-card__tag">Bonaire</span></div>
+          <div class="cq-card__body">
+            <p class="cq-card__eyebrow">Field Notes</p>
+            <h3 class="cq-card__title">Salt flats at golden hour</h3>
+            <p class="cq-card__text">Pink ponds, white pyramids, and a sky that won't quit.</p>
+            <div class="cq-card__footer">
+              <a class="cq-card__cta" href="#">Read</a>
+              <span class="cq-card__meta">4 min</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </aside>
+
+    <!-- WIDE slot -->
+    <main class="panel">
+      <p class="panel__hd">Main column</p>
+      <div class="cq-slot">
+        <article class="cq-card">
+          <div class="cq-card__media"><span class="cq-card__tag">Bonaire</span></div>
+          <div class="cq-card__body">
+            <p class="cq-card__eyebrow">Field Notes</p>
+            <h3 class="cq-card__title">Salt flats at golden hour</h3>
+            <p class="cq-card__text">
+              Pink ponds, white pyramids, and a sky that won't quit. The same
+              component, dropped into a wider slot, automatically promotes itself
+              to a side-by-side layout with a larger headline and roomier copy.
+            </p>
+            <div class="cq-card__footer">
+              <a class="cq-card__cta" href="#">Read story</a>
+              <span class="cq-card__meta">4 min read · Diving the south reef</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </main>
+  </div>
+
+  <!-- ============ DEMO 2: modal (medium) + hero (wide) ============ -->
+  <div class="section-label">
+    <h2>Constrained modal vs full-bleed hero</h2>
+    <span>medium slot crosses the 24rem step · hero crosses 40rem</span>
+  </div>
+
+  <div style="display:grid; gap:1.5rem;">
+    <!-- MEDIUM slot -->
+    <div class="modal-frame">
+      <p class="panel__hd">Quick look</p>
+      <div class="cq-slot">
+        <article class="cq-card">
+          <div class="cq-card__media"><span class="cq-card__tag">Dushi</span></div>
+          <div class="cq-card__body">
+            <p class="cq-card__eyebrow">Featured</p>
+            <h3 class="cq-card__title">Surf line, sun line</h3>
+            <p class="cq-card__text">A medium slot lands past the first breakpoint, so the card goes horizontal — but stays compact.</p>
+            <div class="cq-card__footer">
+              <a class="cq-card__cta" href="#">Open</a>
+              <span class="cq-card__meta">Saved</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <!-- WIDE slot -->
+    <div class="hero-frame">
+      <div class="cq-slot">
+        <article class="cq-card">
+          <div class="cq-card__media"><span class="cq-card__tag">ORIGEN</span></div>
+          <div class="cq-card__body">
+            <p class="cq-card__eyebrow">Hero placement</p>
+            <h3 class="cq-card__title">Built on Bonaire, made for the surf line</h3>
+            <p class="cq-card__text">
+              In a wide hero slot the card crosses the second container step:
+              the media panel grows, the headline scales up, and the copy gets
+              a comfortable measure — all from the parent's width alone.
+            </p>
+            <div class="cq-card__footer">
+              <a class="cq-card__cta" href="#">Explore the collection</a>
+              <span class="cq-card__meta">New season</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ DEMO 3: live drag-to-resize ============ -->
+  <div class="section-label">
+    <h2>Drag to feel it</h2>
+    <span>resize the dashed box — watch the card flip layouts live</span>
+  </div>
+
+  <div class="resizer">
+    <div class="cq-slot" id="liveSlot" data-readout="—">
+      <article class="cq-card">
+        <div class="cq-card__media"><span class="cq-card__tag">Live</span></div>
+        <div class="cq-card__body">
+          <p class="cq-card__eyebrow">Try it</p>
+          <h3 class="cq-card__title">Grab the corner and pull</h3>
+          <p class="cq-card__text">
+            This card reads the width of its parent slot, not the window.
+            Cross <strong>24rem</strong> and it goes side-by-side; cross
+            <strong>40rem</strong> and everything scales up.
+          </p>
+          <div class="cq-card__footer">
+            <a class="cq-card__cta" href="#">Nice</a>
+            <span class="cq-card__meta">no JS doing the layout</span>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+  <p class="resizer-hint">
+    <b>↔</b> Drag the bottom-right handle of the dashed box. The badge shows the live slot width.
+  </p>
+
+  <footer class="foot">
+    <p>
+      Container queries are native Baseline CSS — supported across modern Chrome,
+      Edge, Safari, and Firefox.
+      Source / inspiration:
+      <a href="https://web.dev/blog/cq-stable" target="_blank" rel="noopener">web.dev/blog/cq-stable</a>
+      — content under CC-BY 4.0; the CSS technique is a native web platform feature.
+    </p>
+  </footer>
+
+</div>
+
+<script>
+  /* The ONLY JavaScript here is a non-essential readout that prints the live
+     slot width on the drag-to-resize demo. The layout itself is 100% CSS;
+     remove this script and the card still reflows perfectly. */
+  (function () {
+    var slot = document.getElementById('liveSlot');
+    if (!slot || typeof ResizeObserver === 'undefined') return;
+    var root = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+    var ro = new ResizeObserver(function (entries) {
+      var w = entries[0].contentRect.width;
+      var rem = (w / root).toFixed(1);
+      var step = w >= 40 * root ? 'wide' : w >= 24 * root ? 'side-by-side' : 'stacked';
+      slot.setAttribute('data-readout', Math.round(w) + 'px · ' + rem + 'rem · ' + step);
+    });
+    ro.observe(slot);
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "name": "3D Scroll Text Cylinder",
+  "slug": "scroll-text-cylinder",
+  "category": "motion",
+  "tier": "showcase",
+  "tags": ["text", "3d", "scroll", "perspective", "cylinder", "gsap", "transform"],
+  "description": "Lines of text wrapped around an invisible 3D cylinder that rotates through depth as you scroll, with no WebGL required.",
+  "deps": ["gsap", "gsap/ScrollTrigger", "gsap/ScrollSmoother"],
+  "files": ["animation.js", "styles.css"],
+  "usage": "Wrap .cyl-line spans in a [data-cylinder] element inside a .cyl-stage section, then call initScrollCylinder(); tune via data-radius, data-arc, data-spin and data-axis (\"x\" tube or \"y\" carousel). ScrollSmoother is optional and auto-detected for inertia.",
+  "source": "https://tympanus.net/codrops/2025/11/04/creating-3d-scroll-driven-text-animations-with-css-and-gsap/",
+  "license": "MIT — reimplemented from the Codrops/Tympanus tutorial technique (free for personal and commercial use; GSAP plugins are now free)."
+}

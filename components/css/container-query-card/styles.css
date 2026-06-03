@@ -1,0 +1,260 @@
+/* ============================================================
+   Container-Query Adaptive Card
+   A self-contained card that reflows from stacked to
+   side-by-side based on the width of its PARENT SLOT,
+   not the viewport. No media queries, no JS.
+
+   How it works:
+   1. The slot/wrapper opts into containment with
+      `container-type: inline-size` and a `container-name`.
+   2. The card queries that container with @container.
+      When the slot is >= 24rem wide, the card swaps its
+      grid template and bumps the type scale.
+
+   Drop the same card into a narrow sidebar, a modal, or a
+   wide hero and it always lays out correctly.
+   ============================================================ */
+
+/* --- Brand tokens: "Sand & Surf" --- */
+.cq-scope {
+  --sand-bg: #fbf7f0;
+  --sand-2: #f4ece0;
+  --sand-3: #ece0cd;
+  --ink: #1c2b33;
+  --ink-soft: #4a5d66;
+  --teal: #1f8a8a;
+  --teal-deep: #0f5c5c;
+  --surf: #2ec3c3;
+  --radius: 18px;
+  --shadow: 0 1px 2px rgba(28, 43, 51, .06),
+            0 12px 30px -12px rgba(15, 92, 92, .22);
+}
+
+/* --- 1. The slot becomes a query container --- */
+/* Any element with this class establishes a containment
+   context. Children can then size themselves against the
+   slot's inline-size instead of the viewport. */
+.cq-slot {
+  container-type: inline-size;
+  container-name: card;
+  width: 100%;
+}
+
+/* --- 2. The card: mobile-first / narrow-first defaults --- */
+.cq-card {
+  display: grid;
+  grid-template-columns: 1fr;            /* stacked by default  */
+  grid-template-areas:
+    "media"
+    "body";
+  gap: 0;
+  background: var(--sand-bg);
+  color: var(--ink);
+  border: 1px solid var(--sand-3);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+               Roboto, Helvetica, Arial, sans-serif;
+  transition: box-shadow .35s ease, transform .35s ease;
+}
+
+.cq-card:hover {
+  box-shadow: 0 1px 2px rgba(28, 43, 51, .06),
+              0 22px 48px -16px rgba(15, 92, 92, .34);
+  transform: translateY(-2px);
+}
+
+/* --- Media area --- */
+.cq-card__media {
+  grid-area: media;
+  position: relative;
+  aspect-ratio: 16 / 10;
+  background:
+    radial-gradient(120% 120% at 20% 0%, var(--surf) 0%, transparent 55%),
+    linear-gradient(150deg, var(--teal) 0%, var(--teal-deep) 100%);
+  overflow: hidden;
+}
+
+.cq-card__media img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Decorative "surf line" pattern when no image is present */
+.cq-card__media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(
+      -18deg,
+      rgba(251, 247, 240, .12) 0px,
+      rgba(251, 247, 240, .12) 2px,
+      transparent 2px,
+      transparent 16px
+    );
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+}
+
+.cq-card__tag {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 1;
+  font-size: .6875rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--teal-deep);
+  background: var(--sand-bg);
+  padding: .32em .7em;
+  border-radius: 999px;
+  box-shadow: 0 2px 8px rgba(15, 92, 92, .2);
+}
+
+/* --- Body area --- */
+.cq-card__body {
+  grid-area: body;
+  display: flex;
+  flex-direction: column;
+  gap: .55rem;
+  padding: 1.15rem 1.25rem 1.35rem;
+}
+
+.cq-card__eyebrow {
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--teal-deep);
+  margin: 0;
+}
+
+.cq-card__title {
+  font-size: 1.2rem;
+  line-height: 1.2;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0;
+  text-wrap: balance;
+}
+
+.cq-card__text {
+  font-size: .9rem;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  margin: 0;
+}
+
+.cq-card__footer {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .75rem;
+  margin-top: .35rem;
+}
+
+.cq-card__cta {
+  appearance: none;
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+  font-size: .85rem;
+  color: var(--sand-bg);
+  background: var(--teal);
+  padding: .6em 1.1em;
+  border-radius: 999px;
+  transition: background .2s ease, transform .2s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.cq-card__cta:hover {
+  background: var(--teal-deep);
+  transform: translateY(-1px);
+}
+
+.cq-card__meta {
+  font-size: .78rem;
+  color: var(--ink-soft);
+}
+
+/* ============================================================
+   3. THE ADAPTIVE STEP — width queries against the slot
+   ============================================================ */
+
+/* Medium slot: >= 24rem  ->  go side-by-side, bump the scale */
+@container card (min-width: 24rem) {
+  .cq-card {
+    grid-template-columns: 42% 1fr;
+    grid-template-areas: "media body";
+  }
+
+  .cq-card__media {
+    aspect-ratio: auto;          /* let it fill the column height */
+    height: 100%;
+    min-height: 13rem;
+  }
+
+  .cq-card__body {
+    padding: 1.4rem 1.5rem;
+    justify-content: center;
+    gap: .65rem;
+  }
+
+  .cq-card__title {
+    font-size: 1.45rem;
+  }
+
+  .cq-card__text {
+    font-size: .95rem;
+  }
+}
+
+/* Wide slot: >= 40rem  ->  more generous media + larger headline */
+@container card (min-width: 40rem) {
+  .cq-card {
+    grid-template-columns: 48% 1fr;
+  }
+
+  .cq-card__media {
+    min-height: 16rem;
+  }
+
+  .cq-card__body {
+    padding: 2rem 2.25rem;
+    gap: .8rem;
+  }
+
+  .cq-card__title {
+    font-size: 1.9rem;
+  }
+
+  .cq-card__text {
+    font-size: 1rem;
+    max-width: 46ch;
+  }
+
+  .cq-card__cta {
+    font-size: .9rem;
+    padding: .7em 1.4em;
+  }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .cq-card,
+  .cq-card__cta {
+    transition: none;
+  }
+  .cq-card:hover {
+    transform: none;
+  }
+}

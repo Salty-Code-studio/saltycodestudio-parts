@@ -1,0 +1,13 @@
+{
+  "name": "Hover Glow Border",
+  "slug": "hover-glow-border",
+  "category": "react",
+  "tier": "showcase",
+  "tags": ["glow", "border", "cursor", "conic-gradient", "card", "cursor-style"],
+  "description": "A Cursor-style border glow that orbits any card and concentrates toward the mouse pointer, adapting to any container size.",
+  "deps": ["motion", "tailwindcss"],
+  "files": ["HoverGlowBorder.tsx"],
+  "usage": "Wrap any card or panel in <HoverGlowBorder> and give the inner element a matching rounded background; tune spread, proximity, inactiveZone and movementDuration to shape how tightly the glow chases the cursor.",
+  "source": "https://ui.aceternity.com/components/glowing-effect",
+  "license": "MIT (Aceternity UI) — reimplemented cleanly with credit"
+}

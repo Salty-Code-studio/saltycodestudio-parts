@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Canvas Particle Field — Sand &amp; Surf demo</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      :root {
+        --sand-bg: #fbf7f0;
+        --sand-2: #f4ece0;
+        --sand-3: #ece0cd;
+        --ink: #1c2b33;
+        --ink-soft: #4a5d66;
+        --teal: #1f8a8a;
+        --deep: #0f5c5c;
+        --surf: #2ec3c3;
+      }
+      html,
+      body {
+        margin: 0;
+        background: var(--sand-bg);
+        color: var(--ink);
+        font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel" data-presets="env,react">
+      const { useEffect, useRef } = React;
+
+      function hexToRgb(hex) {
+        let h = hex.replace("#", "").trim();
+        if (h.length === 3) h = h.split("").map((c) => c + c).join("");
+        const int = parseInt(h, 16);
+        return `${(int >> 16) & 255},${(int >> 8) & 255},${int & 255}`;
+      }
+
+      function remap(value, s1, e1, s2, e2) {
+        const m = ((value - s1) * (e2 - s2)) / (e1 - s1) + s2;
+        return m > 0 ? m : 0;
+      }
+
+      function CanvasParticleField({
+        quantity = 80,
+        size = 0.6,
+        color = "#1f8a8a",
+        vx = 0,
+        vy = 0,
+        staticity = 50,
+        ease = 50,
+        className = "",
+      }) {
+        const canvasRef = useRef(null);
+        const containerRef = useRef(null);
+        const contextRef = useRef(null);
+        const circlesRef = useRef([]);
+        const mouseRef = useRef({ x: 0, y: 0 });
+        const canvasSizeRef = useRef({ w: 0, h: 0 });
+        const rafRef = useRef(0);
+        const dprRef = useRef(1);
+
+        useEffect(() => {
+          const canvas = canvasRef.current;
+          const container = containerRef.current;
+          if (!canvas || !container) return;
+
+          contextRef.current = canvas.getContext("2d");
+          dprRef.current = Math.min(window.devicePixelRatio || 1, 2);
+          const rgb = hexToRgb(color);
+          const reduceMotion =
+            typeof window.matchMedia === "function" &&
+            window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+          const resizeCanvas = () => {
+            const ctx = contextRef.current;
+            if (!ctx) return;
+            circlesRef.current = [];
+            canvasSizeRef.current.w = container.offsetWidth;
+            canvasSizeRef.current.h = container.offsetHeight;
+            canvas.width = canvasSizeRef.current.w * dprRef.current;
+            canvas.height = canvasSizeRef.current.h * dprRef.current;
+            canvas.style.width = `${canvasSizeRef.current.w}px`;
+            canvas.style.height = `${canvasSizeRef.current.h}px`;
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            ctx.scale(dprRef.current, dprRef.current);
+          };
+
+          const circleParams = () => ({
+            x: Math.floor(Math.random() * canvasSizeRef.current.w),
+            y: Math.floor(Math.random() * canvasSizeRef.current.h),
+            translateX: 0,
+            translateY: 0,
+            size: Math.floor(Math.random() * 2) + size,
+            alpha: 0,
+            targetAlpha: parseFloat((Math.random() * 0.6 + 0.1).toFixed(2)),
+            dx: (Math.random() - 0.5) * 0.1,
+            dy: (Math.random() - 0.5) * 0.1,
+            magnetism: 0.1 + Math.random() * 4,
+          });
+
+          const drawCircle = (circle, update = false) => {
+            const ctx = contextRef.current;
+            if (!ctx) return;
+            const { x, y, translateX, translateY, size: s, alpha } = circle;
+            ctx.translate(translateX, translateY);
+            ctx.beginPath();
+            ctx.arc(x, y, s, 0, 2 * Math.PI);
+            ctx.fillStyle = `rgba(${rgb}, ${alpha})`;
+            ctx.fill();
+            ctx.setTransform(dprRef.current, 0, 0, dprRef.current, 0, 0);
+            if (!update) circlesRef.current.push(circle);
+          };
+
+          const clearContext = () => {
+            const ctx = contextRef.current;
+            if (!ctx) return;
+            ctx.clearRect(0, 0, canvasSizeRef.current.w, canvasSizeRef.current.h);
+          };
+
+          const drawParticles = () => {
+            clearContext();
+            for (let i = 0; i < quantity; i++) drawCircle(circleParams());
+          };
+
+          const animate = () => {
+            clearContext();
+            circlesRef.current.forEach((circle, i) => {
+              const edge = [
+                circle.x + circle.translateX - circle.size,
+                canvasSizeRef.current.w - circle.x - circle.translateX - circle.size,
+                circle.y + circle.translateY - circle.size,
+                canvasSizeRef.current.h - circle.y - circle.translateY - circle.size,
+              ];
+              const closestEdge = edge.reduce((a, b) => Math.min(a, b));
+              const remapClosestEdge = parseFloat(remap(closestEdge, 0, 20, 0, 1).toFixed(2));
+              if (remapClosestEdge > 1) {
+                circle.alpha += 0.02;
+                if (circle.alpha > circle.targetAlpha) circle.alpha = circle.targetAlpha;
+              } else {
+                circle.alpha = circle.targetAlpha * remapClosestEdge;
+              }
+              circle.x += circle.dx + vx;
+              circle.y += circle.dy + vy;
+              circle.translateX +=
+                (mouseRef.current.x / (staticity / circle.magnetism) - circle.translateX) / ease;
+              circle.translateY +=
+                (mouseRef.current.y / (staticity / circle.magnetism) - circle.translateY) / ease;
+              drawCircle(circle, true);
+              if (
+                circle.x < -circle.size ||
+                circle.x > canvasSizeRef.current.w + circle.size ||
+                circle.y < -circle.size ||
+                circle.y > canvasSizeRef.current.h + circle.size
+              ) {
+                circlesRef.current.splice(i, 1);
+                drawCircle(circleParams());
+              }
+            });
+            rafRef.current = window.requestAnimationFrame(animate);
+          };
+
+          const onMouseMove = (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const { w, h } = canvasSizeRef.current;
+            const x = e.clientX - rect.left - w / 2;
+            const y = e.clientY - rect.top - h / 2;
+            if (x < w / 2 && x > -w / 2 && y < h / 2 && y > -h / 2) {
+              mouseRef.current.x = x;
+              mouseRef.current.y = y;
+            }
+          };
+
+          const init = () => {
+            resizeCanvas();
+            drawParticles();
+            if (!reduceMotion) rafRef.current = window.requestAnimationFrame(animate);
+          };
+
+          init();
+          const handleResize = () => init();
+          window.addEventListener("resize", handleResize);
+          window.addEventListener("mousemove", onMouseMove);
+          return () => {
+            window.cancelAnimationFrame(rafRef.current);
+            window.removeEventListener("resize", handleResize);
+            window.removeEventListener("mousemove", onMouseMove);
+          };
+        }, [quantity, size, color, vx, vy, staticity, ease]);
+
+        return (
+          <div ref={containerRef} className={`pointer-events-none absolute inset-0 ${className}`} aria-hidden="true">
+            <canvas ref={canvasRef} className="h-full w-full" />
+          </div>
+        );
+      }
+
+      function Demo() {
+        return (
+          <main className="min-h-screen w-full" style={{ background: "var(--sand-bg)" }}>
+            {/* HERO with particle field behind it */}
+            <section
+              className="relative flex min-h-screen items-center justify-center overflow-hidden px-6"
+              style={{
+                background:
+                  "radial-gradient(120% 90% at 50% 0%, #f4ece0 0%, #ece0cd 55%, #e3d3ba 100%)",
+              }}
+            >
+              {/* dense teal field */}
+              <CanvasParticleField quantity={140} size={0.7} color="#1f8a8a" staticity={40} ease={50} />
+              {/* sparser surf-colored field for layered depth */}
+              <CanvasParticleField quantity={50} size={1.1} color="#2ec3c3" staticity={28} ease={70} />
+
+              <div className="relative z-10 mx-auto max-w-3xl text-center">
+                <span
+                  className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em]"
+                  style={{ background: "rgba(31,138,138,0.12)", color: "var(--deep)" }}
+                >
+                  <span className="inline-block h-1.5 w-1.5 rounded-full" style={{ background: "var(--surf)" }}></span>
+                  Sand &amp; Surf · saltycodestudio
+                </span>
+                <h1
+                  className="mt-7 text-5xl font-black leading-[1.04] tracking-tight sm:text-7xl"
+                  style={{ color: "var(--ink)" }}
+                >
+                  Depth that follows
+                  <br />
+                  <span style={{ color: "var(--teal)" }}>the cursor.</span>
+                </h1>
+                <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed" style={{ color: "var(--ink-soft)" }}>
+                  A hand-rolled canvas particle field — no engine, no dependencies. Drifting motes that
+                  ease toward your pointer to give a hero quiet, living depth. Move your mouse around.
+                </p>
+                <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
+                  <a
+                    href="#features"
+                    className="rounded-xl px-6 py-3 text-sm font-semibold text-white shadow-lg transition-transform hover:-translate-y-0.5"
+                    style={{ background: "var(--teal)", boxShadow: "0 12px 30px -10px rgba(15,92,92,0.6)" }}
+                  >
+                    Explore the effect
+                  </a>
+                  <a
+                    href="#features"
+                    className="rounded-xl border px-6 py-3 text-sm font-semibold transition-colors"
+                    style={{ borderColor: "rgba(28,43,51,0.18)", color: "var(--ink)" }}
+                  >
+                    View source
+                  </a>
+                </div>
+              </div>
+
+              <div
+                className="pointer-events-none absolute bottom-6 left-1/2 -translate-x-1/2 text-xs uppercase tracking-[0.25em]"
+                style={{ color: "var(--ink-soft)" }}
+              >
+                scroll
+              </div>
+            </section>
+
+            {/* Feature row to show it sitting calmly behind real content */}
+            <section id="features" className="mx-auto max-w-5xl px-6 py-24">
+              <div className="grid gap-6 sm:grid-cols-3">
+                {[
+                  { t: "Zero dependencies", d: "One <canvas>, one rAF loop. Nothing else ships." },
+                  { t: "Cursor-aware", d: "Each mote eases toward the pointer by its own magnetism." },
+                  { t: "Reduced-motion safe", d: "Renders a single static frame when motion is reduced." },
+                ].map((f, i) => (
+                  <div
+                    key={i}
+                    className="rounded-2xl border p-6"
+                    style={{ background: "var(--sand-2)", borderColor: "rgba(28,43,51,0.08)" }}
+                  >
+                    <div
+                      className="mb-4 flex h-9 w-9 items-center justify-center rounded-lg text-sm font-bold text-white"
+                      style={{ background: "var(--deep)" }}
+                    >
+                      {i + 1}
+                    </div>
+                    <h3 className="text-base font-bold" style={{ color: "var(--ink)" }}>
+                      {f.t}
+                    </h3>
+                    <p className="mt-2 text-sm leading-relaxed" style={{ color: "var(--ink-soft)" }}>
+                      {f.d}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            {/* A second, compact panel that re-uses the field on a darker ground */}
+            <section className="px-6 pb-28">
+              <div
+                className="relative mx-auto flex max-w-5xl items-center justify-center overflow-hidden rounded-3xl px-6 py-28 text-center"
+                style={{ background: "linear-gradient(135deg, #0f5c5c 0%, #1f8a8a 100%)" }}
+              >
+                <CanvasParticleField quantity={120} size={0.8} color="#ffffff" staticity={45} ease={55} />
+                <div className="relative z-10 max-w-lg">
+                  <h2 className="text-3xl font-black tracking-tight text-white sm:text-4xl">
+                    Works on any ground tone
+                  </h2>
+                  <p className="mt-4 text-base leading-relaxed" style={{ color: "rgba(255,255,255,0.82)" }}>
+                    Same component, white particles on ocean teal. Pass any color, quantity, size and drift —
+                    layer two instances for parallax depth.
+                  </p>
+                </div>
+              </div>
+            </section>
+          </main>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(<Demo />);
+    </script>
+  </body>
+</html>

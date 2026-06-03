@@ -1,0 +1,13 @@
+{
+  "name": "Confetti Button",
+  "slug": "confetti-button",
+  "category": "react",
+  "tier": "practical",
+  "tags": ["confetti", "button", "celebration", "feedback", "canvas", "delight"],
+  "description": "A button that bursts confetti from its own position on click to celebrate signups, purchases and other success moments.",
+  "deps": ["canvas-confetti"],
+  "files": ["ConfettiButton.tsx"],
+  "usage": "Render <ConfettiButton>Sign up</ConfettiButton> wherever you want a celebratory click; on press it reads its own bounding rect, normalises the centre to viewport-origin coordinates and fires canvas-confetti from that exact spot. Tune particleCount, spread, angle, startVelocity, gravity, scalar and colors, and use onConfetti for follow-up logic.",
+  "source": "https://magicui.design/docs/components/confetti",
+  "license": "MIT (Magic UI; wraps MIT canvas-confetti) — reimplemented cleanly with credit"
+}

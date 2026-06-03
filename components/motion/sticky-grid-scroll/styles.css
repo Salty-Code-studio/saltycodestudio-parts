@@ -1,0 +1,129 @@
+/* Sticky Grid Scroll — saltycodestudio
+ * Structural styles for the pinned 3-column zoom grid.
+ * Colors are intentionally left to the host page; tweak the --sgs-* tokens.
+ */
+
+.sgs {
+  position: relative;
+  /* The section itself is just a tall scroll runway; the stage is pinned. */
+}
+
+.sgs-stage {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background: var(--sgs-bg, #0f2c3a);
+}
+
+/* The grid is the element that scales during the zoom phase. */
+.sgs-grid {
+  position: relative;
+  width: min(92vw, 1100px);
+  height: 100vh;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sgs-gap, 1.1rem);
+  padding: var(--sgs-gap, 1.1rem);
+  will-change: transform, filter;
+}
+
+.sgs-col {
+  display: grid;
+  grid-auto-rows: 1fr;
+  gap: var(--sgs-gap, 1.1rem);
+  align-content: center;
+  will-change: transform;
+}
+
+/* The center column sits slightly taller so the layout reads as a magazine grid. */
+.sgs-col[data-col="center"] {
+  transform: translateY(0);
+}
+
+.sgs-cell {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  border-radius: var(--sgs-radius, 14px);
+  background: #14202a;
+  box-shadow: 0 18px 40px -24px rgba(0, 0, 0, 0.7);
+  will-change: transform, opacity;
+}
+
+.sgs-cell::after {
+  /* Soft vignette keeps overlaid text legible once the grid dims. */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 45%, rgba(15, 44, 58, 0.45) 100%);
+  pointer-events: none;
+}
+
+.sgs-cell img,
+.sgs-cell .sgs-fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Overlaid content — pinned to the stage center, above the grid. */
+.sgs-content {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  padding: 2rem;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.sgs-title {
+  margin: 0;
+  color: var(--sgs-title, #faf6f0);
+  font-size: clamp(2.4rem, 7vw, 5.5rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 0.96;
+  text-shadow: 0 8px 40px rgba(0, 0, 0, 0.45);
+}
+
+.sgs-sub {
+  margin: 1rem auto 0;
+  max-width: 46ch;
+  color: var(--sgs-sub, rgba(250, 246, 240, 0.82));
+  font-size: clamp(1rem, 1.6vw, 1.2rem);
+  line-height: 1.5;
+}
+
+.sgs-cta {
+  pointer-events: auto;
+  display: inline-block;
+  margin-top: 2rem;
+  padding: 0.95rem 2.1rem;
+  border-radius: 999px;
+  background: var(--sgs-accent, #2ec3c3);
+  color: var(--sgs-accent-ink, #0f2c3a);
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  transition: transform 0.25s ease, background 0.25s ease;
+}
+
+.sgs-cta:hover {
+  transform: translateY(-2px);
+  background: var(--sgs-accent-hover, #36d6d6);
+}
+
+/* Honour reduced-motion at the CSS layer too: no transforms, content visible. */
+@media (prefers-reduced-motion: reduce) {
+  .sgs-grid { transform: none !important; filter: none !important; }
+  .sgs-cell { transform: none !important; opacity: 1 !important; }
+  .sgs-content { opacity: 1 !important; transform: none !important; }
+}

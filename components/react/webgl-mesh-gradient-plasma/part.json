@@ -1,0 +1,13 @@
+{
+  "name": "WebGL Mesh Gradient Plasma",
+  "slug": "webgl-mesh-gradient-plasma",
+  "category": "react",
+  "tier": "showcase",
+  "tags": ["mesh", "gradient", "plasma", "webgl", "shader", "hero"],
+  "description": "A flowing WebGL mesh-gradient of color spots that swirl and distort like plasma, for a high-end animated hero canvas.",
+  "deps": ["@paper-design/shaders-react"],
+  "files": ["MeshGradientPlasma.tsx"],
+  "usage": "Wrap your hero content in <MeshGradientPlasma> to lay a live GLSL plasma canvas behind it; tune colors, speed, distortion, swirl, grainMixer and grainOverlay to taste. It freezes on a still frame automatically when prefers-reduced-motion is set.",
+  "source": "https://shaders.paper.design/mesh-gradient",
+  "license": "PolyForm Shield — free for commercial/non-commercial use unless it competes with Paper; wrapper code reimplemented cleanly with credit"
+}

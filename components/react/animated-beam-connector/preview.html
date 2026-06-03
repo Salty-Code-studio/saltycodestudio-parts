@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Animated Beam Connector — Sand &amp; Surf preview</title>
+
+    <!-- React 18 UMD -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <!-- framer-motion UMD (exposes window.Motion, reads window.React) -->
+    <script crossorigin src="https://cdn.jsdelivr.net/npm/framer-motion@11/dist/framer-motion.js"></script>
+    <!-- Babel for in-browser JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Tailwind Play CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+      html,
+      body {
+        margin: 0;
+        background: #f4ece0;
+      }
+      /* Soft grain so the cream backdrop doesn't read as flat. */
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0.5;
+        background-image: radial-gradient(rgba(28, 43, 51, 0.05) 1px, transparent 1px);
+        background-size: 18px 18px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel" data-presets="react">
+      const { motion } = window.Motion;
+      const { useRef, useState, useEffect, useCallback, forwardRef } = React;
+
+      let beamIdCounter = 0;
+
+      /* ----------------------------------------------------------------
+       * AnimatedBeam — canonical component (mirrors AnimatedBeam.tsx).
+       * ---------------------------------------------------------------- */
+      function AnimatedBeam({
+        containerRef,
+        fromRef,
+        toRef,
+        reverse = false,
+        curvature = 0,
+        className = "",
+        pathWidth = 2,
+        pathColor = "#ece0cd",
+        pathOpacity = 1,
+        gradientWidth = 2,
+        gradientStartColor = "#2ec3c3",
+        gradientStopColor = "#0f5c5c",
+        duration = 4,
+        delay = 0,
+        startXOffset = 0,
+        startYOffset = 0,
+        endXOffset = 0,
+        endYOffset = 0,
+      }) {
+        const idRef = useRef(`beam-gradient-${beamIdCounter++}`);
+        const id = idRef.current;
+        const [pathD, setPathD] = useState("");
+        const [dims, setDims] = useState({ width: 0, height: 0 });
+
+        const prefersReducedMotion =
+          typeof window !== "undefined" &&
+          typeof window.matchMedia === "function" &&
+          window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        const gradientCoordinates = reverse
+          ? { x1: ["90%", "-10%"], x2: ["100%", "0%"], y1: ["0%", "0%"], y2: ["0%", "0%"] }
+          : { x1: ["10%", "110%"], x2: ["0%", "100%"], y1: ["0%", "0%"], y2: ["0%", "0%"] };
+
+        const updatePath = useCallback(() => {
+          if (!containerRef.current || !fromRef.current || !toRef.current) return;
+
+          const containerRect = containerRef.current.getBoundingClientRect();
+          const rectA = fromRef.current.getBoundingClientRect();
+          const rectB = toRef.current.getBoundingClientRect();
+
+          setDims({ width: containerRect.width, height: containerRect.height });
+
+          const startX = rectA.left - containerRect.left + rectA.width / 2 + startXOffset;
+          const startY = rectA.top - containerRect.top + rectA.height / 2 + startYOffset;
+          const endX = rectB.left - containerRect.left + rectB.width / 2 + endXOffset;
+          const endY = rectB.top - containerRect.top + rectB.height / 2 + endYOffset;
+
+          const controlY = startY - curvature;
+          const d = `M ${startX},${startY} Q ${(startX + endX) / 2},${controlY} ${endX},${endY}`;
+          setPathD(d);
+        }, [containerRef, fromRef, toRef, curvature, startXOffset, startYOffset, endXOffset, endYOffset]);
+
+        useEffect(() => {
+          updatePath();
+          const ro = new ResizeObserver(() => updatePath());
+          if (containerRef.current) ro.observe(containerRef.current);
+          window.addEventListener("resize", updatePath);
+          const t1 = window.setTimeout(updatePath, 50);
+          const t2 = window.setTimeout(updatePath, 300);
+          return () => {
+            ro.disconnect();
+            window.removeEventListener("resize", updatePath);
+            window.clearTimeout(t1);
+            window.clearTimeout(t2);
+          };
+        }, [updatePath, containerRef]);
+
+        return (
+          <svg
+            fill="none"
+            width={dims.width}
+            height={dims.height}
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox={`0 0 ${dims.width} ${dims.height}`}
+            className={`pointer-events-none absolute left-0 top-0 ${className}`}
+          >
+            <path
+              d={pathD}
+              stroke={pathColor}
+              strokeWidth={pathWidth}
+              strokeOpacity={pathOpacity}
+              strokeLinecap="round"
+            />
+            <path
+              d={pathD}
+              strokeWidth={gradientWidth}
+              stroke={`url(#${id})`}
+              strokeOpacity={1}
+              strokeLinecap="round"
+            />
+            <defs>
+              <motion.linearGradient
+                id={id}
+                gradientUnits="userSpaceOnUse"
+                initial={{ x1: "0%", x2: "0%", y1: "0%", y2: "0%" }}
+                animate={
+                  prefersReducedMotion
+                    ? { x1: "40%", x2: "60%", y1: "0%", y2: "0%" }
+                    : {
+                        x1: gradientCoordinates.x1,
+                        x2: gradientCoordinates.x2,
+                        y1: gradientCoordinates.y1,
+                        y2: gradientCoordinates.y2,
+                      }
+                }
+                transition={
+                  prefersReducedMotion
+                    ? { duration: 0 }
+                    : { delay, duration, ease: [0.16, 1, 0.3, 1], repeat: Infinity, repeatDelay: 0 }
+                }
+              >
+                <stop stopColor={gradientStartColor} stopOpacity="0" />
+                <stop stopColor={gradientStartColor} />
+                <stop offset="32.5%" stopColor={gradientStopColor} />
+                <stop offset="100%" stopColor={gradientStopColor} stopOpacity="0" />
+              </motion.linearGradient>
+            </defs>
+          </svg>
+        );
+      }
+
+      /* ---------------- Demo nodes ---------------- */
+
+      const Node = forwardRef(function Node({ children, label }, ref) {
+        return (
+          <div className="flex flex-col items-center gap-2">
+            <div
+              ref={ref}
+              className="z-10 flex h-16 w-16 items-center justify-center rounded-2xl border border-[#ece0cd] bg-[#fbf7f0] shadow-[0_14px_36px_-16px_rgba(28,43,51,0.45)]"
+            >
+              {children}
+            </div>
+            <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#4a5d66]">
+              {label}
+            </span>
+          </div>
+        );
+      });
+
+      function Hub({ innerRef }) {
+        return (
+          <div
+            ref={innerRef}
+            className="z-10 flex h-24 w-24 items-center justify-center rounded-3xl border-2 border-[#1f8a8a]/30 bg-[#1c2b33] shadow-[0_24px_60px_-24px_rgba(15,92,92,0.7)]"
+          >
+            <div className="text-center leading-tight">
+              <div className="text-2xl font-extrabold text-[#2ec3c3]">~&lt;</div>
+              <div className="mt-0.5 text-[9px] font-semibold uppercase tracking-[0.2em] text-[#cfe6e6]">
+                Core
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      /* Simple monogram glyphs standing in for service logos. */
+      function Glyph({ char, color }) {
+        return <span className="text-xl font-extrabold" style={{ color }}>{char}</span>;
+      }
+
+      function Diagram() {
+        const containerRef = useRef(null);
+        const hubRef = useRef(null);
+        const dbRef = useRef(null);
+        const apiRef = useRef(null);
+        const authRef = useRef(null);
+        const cdnRef = useRef(null);
+        const queueRef = useRef(null);
+        const mailRef = useRef(null);
+
+        return (
+          <div
+            ref={containerRef}
+            className="relative flex h-[440px] w-full items-center justify-between rounded-[28px] border border-[#ece0cd] bg-[#fbf7f0] px-10 py-12 shadow-[0_40px_90px_-50px_rgba(28,43,51,0.5)] sm:px-16"
+          >
+            {/* Left column of services */}
+            <div className="flex flex-col justify-between gap-10">
+              <Node ref={dbRef} label="Postgres">
+                <Glyph char="DB" color="#0f5c5c" />
+              </Node>
+              <Node ref={apiRef} label="REST API">
+                <Glyph char="API" color="#1f8a8a" />
+              </Node>
+              <Node ref={authRef} label="Auth">
+                <Glyph char="ID" color="#0f5c5c" />
+              </Node>
+            </div>
+
+            {/* Centre hub */}
+            <Hub innerRef={hubRef} />
+
+            {/* Right column of services */}
+            <div className="flex flex-col justify-between gap-10">
+              <Node ref={cdnRef} label="CDN">
+                <Glyph char="CD" color="#1f8a8a" />
+              </Node>
+              <Node ref={queueRef} label="Queue">
+                <Glyph char="MQ" color="#0f5c5c" />
+              </Node>
+              <Node ref={mailRef} label="Email">
+                <Glyph char="@" color="#1f8a8a" />
+              </Node>
+            </div>
+
+            {/* Left -> hub */}
+            <AnimatedBeam containerRef={containerRef} fromRef={dbRef} toRef={hubRef} curvature={70} duration={4} />
+            <AnimatedBeam containerRef={containerRef} fromRef={apiRef} toRef={hubRef} duration={3.4} delay={0.4} />
+            <AnimatedBeam containerRef={containerRef} fromRef={authRef} toRef={hubRef} curvature={-70} duration={4.6} delay={0.8} />
+
+            {/* hub -> right (reverse so the pulse still flows outward from core) */}
+            <AnimatedBeam
+              containerRef={containerRef}
+              fromRef={cdnRef}
+              toRef={hubRef}
+              curvature={70}
+              duration={3.8}
+              delay={0.2}
+              reverse
+              gradientStartColor="#5ad6d6"
+              gradientStopColor="#1f8a8a"
+            />
+            <AnimatedBeam
+              containerRef={containerRef}
+              fromRef={queueRef}
+              toRef={hubRef}
+              duration={3.2}
+              delay={0.6}
+              reverse
+              gradientStartColor="#5ad6d6"
+              gradientStopColor="#1f8a8a"
+            />
+            <AnimatedBeam
+              containerRef={containerRef}
+              fromRef={mailRef}
+              toRef={hubRef}
+              curvature={-70}
+              duration={4.2}
+              delay={1}
+              reverse
+              gradientStartColor="#5ad6d6"
+              gradientStopColor="#1f8a8a"
+            />
+          </div>
+        );
+      }
+
+      function App() {
+        return (
+          <main className="mx-auto max-w-4xl px-6 py-16 sm:py-24">
+            <header className="mx-auto max-w-2xl text-center">
+              <span className="inline-flex items-center gap-2 rounded-full border border-[#ece0cd] bg-[#fbf7f0] px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#0f5c5c]">
+                <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#2ec3c3]"></span>
+                Animated Beam Connector
+              </span>
+              <h1 className="mt-5 text-4xl font-extrabold tracking-tight text-[#1c2b33] sm:text-5xl">
+                Wire your architecture together.
+              </h1>
+              <p className="mt-4 text-base leading-relaxed text-[#4a5d66]">
+                Gradient pulses travel along curved SVG paths between any two DOM
+                nodes. Resize the window — every beam recomputes its path live.
+              </p>
+            </header>
+
+            <section className="mt-14 flex justify-center">
+              <Diagram />
+            </section>
+
+            <p className="mt-12 text-center text-xs text-[#4a5d66]">
+              Reimplemented from Magic UI&rsquo;s Animated Beam (MIT) &middot; Sand &amp; Surf palette
+            </p>
+          </main>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sticky Grid Scroll — saltycodestudio</title>
+<style>
+  :root {
+    --ss-sand: #f4ece0; --ss-cream: #fbf7f0; --ss-shell: #ece0cd;
+    --ss-ink: #1c2b33; --ss-soft: #4a5d66;
+    --ss-teal: #1f8a8a; --ss-deep: #0f5c5c; --ss-surf: #2ec3c3;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: auto; }
+  body {
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    background: var(--ss-cream); color: var(--ss-ink);
+  }
+
+  /* ---- Intro / Outro runway --------------------------------------------- */
+  .intro, .outro {
+    min-height: 100vh; display: grid; place-items: center;
+    text-align: center; padding: 2rem;
+  }
+  .intro { background: radial-gradient(130% 100% at 50% 0%, var(--ss-cream) 0%, var(--ss-sand) 60%, var(--ss-shell) 100%); }
+  .eyebrow { font-size: 0.78rem; letter-spacing: 0.32em; text-transform: uppercase; color: var(--ss-deep); }
+  .intro h1 { margin-top: 1rem; font-size: clamp(2.6rem, 8vw, 6rem); letter-spacing: -0.035em; line-height: 0.95; color: var(--ss-ink); }
+  .intro p { margin-top: 1.2rem; max-width: 46ch; color: var(--ss-soft); font-size: 1.1rem; line-height: 1.6; }
+  .scroll-hint { margin-top: 2.6rem; font-size: 0.78rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--ss-teal); }
+  .outro { background: linear-gradient(180deg, var(--ss-shell), var(--ss-sand) 55%, var(--ss-cream)); }
+  .outro h2 { font-size: clamp(1.8rem, 4.5vw, 3rem); letter-spacing: -0.02em; color: var(--ss-deep); }
+  .outro p { margin-top: 0.8rem; color: var(--ss-soft); }
+
+  /* ---- Sticky Grid Scroll ----------------------------------------------- */
+  .sgs { position: relative; }
+  .sgs-stage {
+    position: relative; height: 100vh; width: 100%; overflow: hidden;
+    display: grid; place-items: center; background: var(--ss-ink);
+  }
+  .sgs-grid {
+    position: relative; width: min(92vw, 1080px); height: 100vh;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.1rem;
+    padding: 1.1rem; will-change: transform, filter;
+  }
+  .sgs-col { display: grid; grid-auto-rows: 1fr; gap: 1.1rem; align-content: center; will-change: transform; }
+  .sgs-cell {
+    position: relative; margin: 0; overflow: hidden; border-radius: 14px;
+    background: #14202a; box-shadow: 0 18px 44px -26px rgba(0,0,0,0.75);
+    will-change: transform, opacity;
+  }
+  .sgs-cell::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(180deg, transparent 42%, rgba(15,44,58,0.5) 100%);
+  }
+  .sgs-fill { display: block; width: 100%; height: 100%; }
+  .sgs-tag {
+    position: absolute; left: 12px; bottom: 10px; z-index: 2;
+    font-size: 0.66rem; letter-spacing: 0.22em; text-transform: uppercase;
+    color: rgba(250,246,240,0.92); font-weight: 600;
+  }
+
+  .sgs-content {
+    position: absolute; inset: 0; z-index: 3; display: grid; place-content: center;
+    text-align: center; padding: 2rem; pointer-events: none; will-change: transform, opacity;
+  }
+  .sgs-kicker { font-size: 0.78rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--ss-surf); margin-bottom: 1rem; }
+  .sgs-title {
+    margin: 0; color: var(--ss-cream); font-size: clamp(2.4rem, 7vw, 5.5rem);
+    font-weight: 800; letter-spacing: -0.03em; line-height: 0.96;
+    text-shadow: 0 10px 50px rgba(0,0,0,0.5);
+  }
+  .sgs-sub { margin: 1rem auto 0; max-width: 44ch; color: rgba(250,246,240,0.85); font-size: clamp(1rem, 1.6vw, 1.2rem); line-height: 1.55; }
+  .sgs-cta {
+    pointer-events: auto; display: inline-block; margin-top: 2rem;
+    padding: 0.95rem 2.2rem; border-radius: 999px; background: var(--ss-surf);
+    color: var(--ss-ink); font-weight: 700; font-size: 0.95rem; letter-spacing: 0.02em;
+    text-decoration: none; transition: transform 0.25s ease, background 0.25s ease;
+  }
+  .sgs-cta:hover { transform: translateY(-2px); background: #36d6d6; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sgs-grid { transform: none !important; filter: none !important; }
+    .sgs-cell { transform: none !important; opacity: 1 !important; }
+    .sgs-content { opacity: 1 !important; transform: none !important; }
+  }
+</style>
+</head>
+<body>
+
+  <section class="intro">
+    <div>
+      <p class="eyebrow">saltycodestudio · motion</p>
+      <h1>Sticky Grid Scroll</h1>
+      <p>Keep scrolling. The studio grid staggers in, the whole thing zooms open, and the headline lands right on cue before the page releases.</p>
+      <div class="scroll-hint">Scroll ↓</div>
+    </div>
+  </section>
+
+  <section class="sgs" aria-label="Sticky grid scroll showcase">
+    <div class="sgs-stage">
+      <div class="sgs-grid">
+        <!-- LEFT column (flies in from bottom) -->
+        <div class="sgs-col" data-col="left">
+          <figure class="sgs-cell">
+            <span class="sgs-tag">Tide / 01</span>
+            <svg class="sgs-fill" viewBox="0 0 300 360" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Teal coastal gradient">
+              <defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#2ec3c3"/><stop offset="1" stop-color="#0f5c5c"/></linearGradient></defs>
+              <rect width="300" height="360" fill="url(#g1)"/>
+              <circle cx="80" cy="90" r="120" fill="#1f8a8a" opacity="0.45"/>
+            </svg>
+          </figure>
+          <figure class="sgs-cell">
+            <span class="sgs-tag">Dune / 02</span>
+            <svg class="sgs-fill" viewBox="0 0 300 360" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Sand gradient">
+              <defs><linearGradient id="g2" x1="0" y1="1" x2="1" y2="0">
+                <stop offset="0" stop-color="#ece0cd"/><stop offset="1" stop-color="#1f8a8a"/></linearGradient></defs>
+              <rect width="300" height="360" fill="url(#g2)"/>
+              <path d="M0 250 Q150 180 300 260 V360 H0 Z" fill="#0f5c5c" opacity="0.55"/>
+            </svg>
+          </figure>
+        </div>
+
+        <!-- CENTER column (flies in from top) -->
+        <div class="sgs-col" data-col="center">
+          <figure class="sgs-cell">
+            <span class="sgs-tag">Reef / 03</span>
+            <svg class="sgs-fill" viewBox="0 0 300 480" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Deep ocean gradient">
+              <defs><radialGradient id="g3" cx="0.4" cy="0.3" r="0.9">
+                <stop offset="0" stop-color="#36d6d6"/><stop offset="1" stop-color="#0f2c3a"/></radialGradient></defs>
+              <rect width="300" height="480" fill="url(#g3)"/>
+              <circle cx="210" cy="120" r="70" fill="#2ec3c3" opacity="0.4"/>
+              <circle cx="120" cy="340" r="100" fill="#1f8a8a" opacity="0.3"/>
+            </svg>
+          </figure>
+          <figure class="sgs-cell">
+            <span class="sgs-tag">Swell / 04</span>
+            <svg class="sgs-fill" viewBox="0 0 300 480" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Surf gradient">
+              <defs><linearGradient id="g4" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#0f5c5c"/><stop offset="1" stop-color="#2ec3c3"/></linearGradient></defs>
+              <rect width="300" height="480" fill="url(#g4)"/>
+              <path d="M0 200 Q100 120 200 200 T400 200" fill="none" stroke="#fbf7f0" stroke-width="3" opacity="0.35"/>
+              <path d="M-20 300 Q90 230 200 300 T420 300" fill="none" stroke="#ece0cd" stroke-width="3" opacity="0.3"/>
+            </svg>
+          </figure>
+        </div>
+
+        <!-- RIGHT column (flies in from bottom) -->
+        <div class="sgs-col" data-col="right">
+          <figure class="sgs-cell">
+            <span class="sgs-tag">Shore / 05</span>
+            <svg class="sgs-fill" viewBox="0 0 300 360" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Shell gradient">
+              <defs><linearGradient id="g5" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#f4ece0"/><stop offset="1" stop-color="#2ec3c3"/></linearGradient></defs>
+              <rect width="300" height="360" fill="url(#g5)"/>
+              <circle cx="230" cy="260" r="110" fill="#0f5c5c" opacity="0.4"/>
+            </svg>
+          </figure>
+          <figure class="sgs-cell">
+            <span class="sgs-tag">Foam / 06</span>
+            <svg class="sgs-fill" viewBox="0 0 300 360" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Ink to teal gradient">
+              <defs><radialGradient id="g6" cx="0.6" cy="0.7" r="0.9">
+                <stop offset="0" stop-color="#1f8a8a"/><stop offset="1" stop-color="#1c2b33"/></radialGradient></defs>
+              <rect width="300" height="360" fill="url(#g6)"/>
+              <circle cx="90" cy="80" r="60" fill="#36d6d6" opacity="0.35"/>
+            </svg>
+          </figure>
+        </div>
+      </div>
+
+      <div class="sgs-content" data-sgs-content>
+        <p class="sgs-kicker">Selected work · 2026</p>
+        <h2 class="sgs-title">Built by<br/>the coast.</h2>
+        <p class="sgs-sub">Identity, motion, and the web — designed in warm sand and deep ocean teal.</p>
+        <a class="sgs-cta" href="#" onclick="return false;">See the studio</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="outro">
+    <div>
+      <h2>Pin released.</h2>
+      <p>Normal vertical scrolling resumes below the grid.</p>
+    </div>
+  </section>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    function initStickyGridScroll(root, userOptions) {
+      root = root || document;
+      var opts = Object.assign({
+        scrollLength: 2.6, zoom: 2.05, columnOffset: 18,
+        stagger: 0.06, revealStart: 0.7, revealEnd: 0.86
+      }, userOptions || {});
+
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      root.querySelectorAll('.sgs').forEach(function (section) {
+        var stage = section.querySelector('.sgs-stage');
+        var grid = section.querySelector('.sgs-grid');
+        var content = section.querySelector('[data-sgs-content]');
+        var cells = gsap.utils.toArray(section.querySelectorAll('.sgs-cell'));
+        var leftCol = section.querySelector('[data-col="left"]');
+        var centerCol = section.querySelector('[data-col="center"]');
+        var rightCol = section.querySelector('[data-col="right"]');
+        if (!stage || !grid || !cells.length) return;
+
+        var fromTop = [], fromBottom = [];
+        gsap.utils.toArray(section.querySelectorAll('.sgs-col')).forEach(function (col) {
+          var colCells = gsap.utils.toArray(col.querySelectorAll('.sgs-cell'));
+          if (col === centerCol) fromTop = fromTop.concat(colCells);
+          else fromBottom = fromBottom.concat(colCells);
+        });
+
+        if (reduce) {
+          gsap.set(cells, { autoAlpha: 1, yPercent: 0, scale: 1 });
+          gsap.set(grid, { scale: 1 });
+          if (content) gsap.set(content, { autoAlpha: 1, y: 0 });
+          return;
+        }
+
+        gsap.set(fromTop, { yPercent: -160, autoAlpha: 0, scale: 0.92 });
+        gsap.set(fromBottom, { yPercent: 160, autoAlpha: 0, scale: 0.92 });
+        gsap.set(grid, { scale: 0.86, transformOrigin: '50% 50%' });
+        if (content) gsap.set(content, { autoAlpha: 0, y: 28 });
+
+        var tl = gsap.timeline({
+          defaults: { ease: 'none' },
+          scrollTrigger: {
+            trigger: section, start: 'top top',
+            end: function () { return '+=' + window.innerHeight * opts.scrollLength; },
+            scrub: 1, pin: stage, anticipatePin: 1, invalidateOnRefresh: true
+          }
+        });
+
+        tl.to(fromTop, { yPercent: 0, autoAlpha: 1, scale: 1, duration: 1.1,
+          ease: 'power2.out', stagger: { each: opts.stagger, from: 'start' } }, 0);
+        tl.to(fromBottom, { yPercent: 0, autoAlpha: 1, scale: 1, duration: 1.1,
+          ease: 'power2.out', stagger: { each: opts.stagger, from: 'end' } }, 0.12);
+
+        tl.to(grid, { scale: opts.zoom, duration: 1.6, ease: 'power1.inOut' }, 0.9);
+        if (leftCol) tl.to(leftCol, { xPercent: -opts.columnOffset, duration: 1.6, ease: 'power1.inOut' }, 0.9);
+        if (rightCol) tl.to(rightCol, { xPercent: opts.columnOffset, duration: 1.6, ease: 'power1.inOut' }, 0.9);
+        if (centerCol) tl.to(centerCol, { yPercent: -4, duration: 1.6, ease: 'power1.inOut' }, 0.9);
+
+        if (content) {
+          var total = tl.duration() || 1;
+          var inAt = opts.revealStart * total;
+          var outAt = opts.revealEnd * total;
+          tl.to(content, { autoAlpha: 1, y: 0, duration: Math.max(0.001, outAt - inAt), ease: 'power2.out' }, inAt);
+          tl.to(grid, { filter: 'brightness(0.55)', duration: outAt - inAt }, inAt);
+        }
+      });
+
+      ScrollTrigger.refresh();
+    }
+
+    initStickyGridScroll();
+  </script>
+</body>
+</html>

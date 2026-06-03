@@ -1,0 +1,31 @@
+<!-- ============================================================
+     Markup snippet for CSS Scroll Reveal Timeline
+     Pair with styles.css. Add the .srt-* classes to any element
+     you want revealed; the timelines are wired up purely in CSS.
+     ============================================================ -->
+
+<!-- 1. Top-of-page scroll-progress bar (place once, near <body>) -->
+<div class="srt-progress" aria-hidden="true"></div>
+
+<!-- 2. Reveal variants -->
+
+<!-- fade + rise -->
+<h2 class="srt-reveal srt-fade-up">Fades up on enter</h2>
+
+<!-- horizontal clip wipe -->
+<p class="srt-reveal srt-clip">Wipes in from the left</p>
+
+<!-- vertical clip reveal -->
+<p class="srt-reveal srt-clip srt-clip--up">Reveals from the bottom up</p>
+
+<!-- zoom-in for media -->
+<figure class="srt-reveal srt-zoom">
+  <img src="photo.jpg" alt="" />
+</figure>
+
+<!-- 3. Staggered group: set --srt-delay (0 → 1) per child -->
+<ul class="srt-list">
+  <li class="srt-reveal srt-fade-up" style="--srt-delay: 0">One</li>
+  <li class="srt-reveal srt-fade-up" style="--srt-delay: .33">Two</li>
+  <li class="srt-reveal srt-fade-up" style="--srt-delay: .66">Three</li>
+</ul>

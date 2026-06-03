@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>SVG Text Clip Reveal — Sand &amp; Surf</title>
+
+<!-- GSAP + ScrollTrigger -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<style>
+  :root {
+    --sand:   #fbf7f0;
+    --sand-2: #f4ece0;
+    --sand-3: #ece0cd;
+    --ink:    #1c2b33;
+    --ink-soft:#4a5d66;
+    --teal:   #1f8a8a;
+    --deep:   #0f5c5c;
+    --surf:   #2ec3c3;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    color: var(--ink);
+    background: var(--sand);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---- intro / outro spacer copy so there is something to scroll ---- */
+  .intro, .outro {
+    min-height: 92vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem 1.5rem;
+    gap: 1rem;
+  }
+  .intro { background: linear-gradient(180deg, var(--sand) 0%, var(--sand-2) 100%); }
+  .outro { background: linear-gradient(180deg, var(--sand-2) 0%, var(--sand) 100%); }
+
+  .eyebrow {
+    font-size: 0.72rem;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin: 0;
+  }
+  .intro h1, .outro h2 {
+    font-family: "Arial Black", "Helvetica Neue", Arial, sans-serif;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    font-size: clamp(2.2rem, 6vw, 4.5rem);
+    line-height: 0.98;
+    margin: 0;
+    max-width: 16ch;
+  }
+  .intro p, .outro p {
+    max-width: 42ch;
+    color: var(--ink-soft);
+    line-height: 1.6;
+    margin: 0;
+    font-size: 1.05rem;
+  }
+  .scroll-hint {
+    margin-top: 1.5rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    animation: bob 1.8s ease-in-out infinite;
+  }
+  @keyframes bob { 0%,100% { transform: translateY(0);} 50% { transform: translateY(6px);} }
+
+  /* =====================  THE PART  ===================== */
+  .stcr {
+    --stcr-wipe: 0%;
+    position: relative;
+    width: 100%;
+    min-height: 78vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(2rem, 8vh, 7rem) 1.25rem;
+    background: var(--sand-3);
+    overflow: hidden;
+  }
+
+  .stcr + .stcr { border-top: 1px solid rgba(28,43,51,0.06); }
+
+  .stcr__svg {
+    display: block;
+    width: min(100%, 1200px);
+    height: auto;
+    aspect-ratio: 2 / 1;
+    -webkit-mask-image: linear-gradient(90deg,#000 0,#000 var(--stcr-wipe),transparent var(--stcr-wipe));
+            mask-image: linear-gradient(90deg,#000 0,#000 var(--stcr-wipe),transparent var(--stcr-wipe));
+  }
+
+  .stcr__text {
+    font-family: "Arial Black", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 900;
+    font-size: 240px;
+    letter-spacing: -0.04em;
+    text-anchor: middle;
+    dominant-baseline: central;
+    text-transform: uppercase;
+  }
+
+  .stcr__ghost {
+    fill: none;
+    stroke: var(--ink);
+    stroke-width: 1.4;
+    opacity: 0.12;
+  }
+
+  .stcr__caption {
+    position: absolute;
+    left: 50%;
+    bottom: clamp(1.25rem, 5vh, 3rem);
+    transform: translateX(-50%);
+    font-size: 0.74rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .stcr__svg { -webkit-mask-image: none; mask-image: none; }
+    .stcr { --stcr-wipe: 100%; }
+    .scroll-hint { animation: none; }
+  }
+
+  @media (max-width: 640px) {
+    .stcr__text { font-size: 150px; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ============ intro ============ -->
+  <header class="intro">
+    <p class="eyebrow">saltycodestudio · motion</p>
+    <h1>Type that opens like a window.</h1>
+    <p>Display letters become an SVG clip-path. As you scroll, the mask wipes
+       open and an ocean pattern slides through the words behind them.</p>
+    <div class="scroll-hint">scroll ↓</div>
+  </header>
+
+  <!-- ============ reveal block 1 ============ -->
+  <section class="stcr" data-stcr>
+    <svg class="stcr__svg" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid slice"
+         role="img" aria-label="The word SALTY revealing a teal wave pattern">
+      <defs>
+        <!-- The text becomes the clip mask -->
+        <clipPath id="clip-salty">
+          <g data-stcr-clip-group>
+            <text class="stcr__text" x="600" y="300" data-stcr-text>SALTY</text>
+          </g>
+        </clipPath>
+
+        <!-- Background pattern that will show through the letters -->
+        <linearGradient id="grad-1" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0"   stop-color="#0f5c5c"/>
+          <stop offset="0.5" stop-color="#1f8a8a"/>
+          <stop offset="1"   stop-color="#2ec3c3"/>
+        </linearGradient>
+        <pattern id="waves-1" width="120" height="120" patternUnits="userSpaceOnUse" patternTransform="rotate(8)">
+          <rect width="120" height="120" fill="url(#grad-1)"/>
+          <path d="M0 90 Q 30 60 60 90 T 120 90" fill="none" stroke="#fbf7f0" stroke-opacity="0.30" stroke-width="6"/>
+          <path d="M0 50 Q 30 20 60 50 T 120 50" fill="none" stroke="#fbf7f0" stroke-opacity="0.18" stroke-width="6"/>
+          <circle cx="30" cy="20" r="5" fill="#fbf7f0" fill-opacity="0.22"/>
+          <circle cx="95" cy="105" r="4" fill="#fbf7f0" fill-opacity="0.22"/>
+        </pattern>
+      </defs>
+
+      <!-- faint ink outline so the word always reads -->
+      <text class="stcr__text stcr__ghost" x="600" y="300">SALTY</text>
+
+      <!-- the media layer, clipped to the text -->
+      <g clip-path="url(#clip-salty)">
+        <rect data-stcr-media x="-120" y="-60" width="1440" height="720" fill="url(#waves-1)"/>
+      </g>
+    </svg>
+    <span class="stcr__caption">clip-path: text · scroll to wipe</span>
+  </section>
+
+  <!-- ============ reveal block 2 ============ -->
+  <section class="stcr" data-stcr style="background:var(--sand-2);">
+    <svg class="stcr__svg" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid slice"
+         role="img" aria-label="The word SURF revealing a tonal sand-and-teal pattern">
+      <defs>
+        <clipPath id="clip-surf">
+          <g data-stcr-clip-group>
+            <text class="stcr__text" x="600" y="300" data-stcr-text>SURF</text>
+          </g>
+        </clipPath>
+
+        <linearGradient id="grad-2" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0"   stop-color="#1f8a8a"/>
+          <stop offset="1"   stop-color="#0f5c5c"/>
+        </linearGradient>
+        <pattern id="dots-2" width="80" height="80" patternUnits="userSpaceOnUse">
+          <rect width="80" height="80" fill="url(#grad-2)"/>
+          <circle cx="20" cy="20" r="9" fill="#2ec3c3" fill-opacity="0.55"/>
+          <circle cx="60" cy="60" r="9" fill="#fbf7f0" fill-opacity="0.35"/>
+          <circle cx="60" cy="20" r="4" fill="#fbf7f0" fill-opacity="0.5"/>
+          <circle cx="20" cy="60" r="4" fill="#fbf7f0" fill-opacity="0.5"/>
+        </pattern>
+      </defs>
+
+      <text class="stcr__text stcr__ghost" x="600" y="300">SURF</text>
+
+      <g clip-path="url(#clip-surf)">
+        <rect data-stcr-media x="-120" y="-60" width="1440" height="720" fill="url(#dots-2)"/>
+      </g>
+    </svg>
+    <span class="stcr__caption">background slides through the letters</span>
+  </section>
+
+  <!-- ============ outro ============ -->
+  <footer class="outro">
+    <p class="eyebrow">that's the part</p>
+    <h2>Drop it on any image.</h2>
+    <p>Swap the inline pattern for an <code>&lt;image href="..."&gt;</code> or a
+       muted video to mask film through your headline. Reduced-motion users get
+       the fully revealed state with no wipe.</p>
+  </footer>
+
+  <!-- ===== the part's animation script (inlined for the standalone preview) ===== -->
+  <script>
+  (function () {
+    'use strict';
+
+    function initSvgTextClipReveal(opts) {
+      opts = opts || {};
+      var drift = opts.drift != null ? opts.drift : 120;
+      var mediaDrift = opts.mediaDrift != null ? opts.mediaDrift : 90;
+      var scrub = opts.scrub != null ? opts.scrub : 1;
+      var start = opts.start || 'top bottom';
+      var end = opts.end || 'bottom top';
+
+      if (typeof gsap === 'undefined') {
+        console.warn('[svg-text-clip-reveal] GSAP not found.');
+        return [];
+      }
+      if (typeof ScrollTrigger !== 'undefined') {
+        gsap.registerPlugin(ScrollTrigger);
+      }
+
+      var reduce = window.matchMedia &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      var blocks = Array.prototype.slice.call(document.querySelectorAll('[data-stcr]'));
+      var triggers = [];
+
+      blocks.forEach(function (block) {
+        var clipGroup = block.querySelector('[data-stcr-clip-group]');
+        var textEl = block.querySelector('[data-stcr-text]');
+        var mediaEl = block.querySelector('[data-stcr-media]');
+        if (!textEl) return;
+
+        if (reduce) {
+          if (clipGroup) gsap.set(clipGroup, { x: 0 });
+          if (mediaEl) gsap.set(mediaEl, { x: 0 });
+          block.classList.add('is-revealed');
+          return;
+        }
+
+        var driftTarget = clipGroup || textEl;
+
+        gsap.set(driftTarget, { x: -drift / 2 });
+        if (mediaEl) gsap.set(mediaEl, { x: mediaDrift / 2 });
+        gsap.set(block, { '--stcr-wipe': '0%' });
+
+        var tl = gsap.timeline({
+          scrollTrigger: { trigger: block, start: start, end: end, scrub: scrub }
+        });
+
+        tl.to(driftTarget, { x: drift / 2, ease: 'none' }, 0);
+        if (mediaEl) tl.to(mediaEl, { x: -mediaDrift / 2, ease: 'none' }, 0);
+        tl.to(block, { '--stcr-wipe': '100%', ease: 'none' }, 0);
+
+        block.classList.add('is-revealed');
+        if (tl.scrollTrigger) triggers.push(tl.scrollTrigger);
+      });
+
+      return triggers;
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function () { initSvgTextClipReveal(); });
+    } else {
+      initSvgTextClipReveal();
+    }
+  })();
+  </script>
+</body>
+</html>

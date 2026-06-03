@@ -1,0 +1,13 @@
+{
+  "name": "SVG Text Clip Reveal",
+  "slug": "svg-text-clip-reveal",
+  "category": "motion",
+  "tier": "showcase",
+  "tags": ["text", "clip-path", "svg", "mask", "scroll", "gsap", "wipe"],
+  "description": "Large display type used as an SVG clip-path that wipes open on scroll to reveal an image or pattern sliding behind the letters.",
+  "deps": ["gsap", "gsap/ScrollTrigger"],
+  "files": ["animation.js", "styles.css"],
+  "usage": "Include styles.css and animation.js, register GSAP + ScrollTrigger, and add a [data-stcr] section whose SVG has a <clipPath> wrapping the text and a media layer clipped to it. animation.js auto-inits on DOMContentLoaded; call initSvgTextClipReveal(opts) manually to tune drift/scrub.",
+  "source": "https://tympanus.net/codrops/2024/01/10/experimental-on-scroll-text-animations-with-svg-clip-path/",
+  "license": "Inspired by Codrops/Tympanus demo; reimplemented from scratch. Codrops license: free for personal and commercial use, no redistribution as-is."
+}

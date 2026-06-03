@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scroll Velocity Skew Marquee — Sand &amp; Surf</title>
+
+  <!-- GSAP + ScrollTrigger (motion part requirement) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <style>
+    :root {
+      /* Sand & Surf palette */
+      --sand-cream: #fbf7f0;
+      --sand-mid: #f4ece0;
+      --sand-deep: #ece0cd;
+      --ink: #1c2b33;
+      --ink-soft: #4a5d66;
+      --teal: #1f8a8a;
+      --ocean: #0f5c5c;
+      --surf: #2ec3c3;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--sand-cream);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ---- Hero ---- */
+    .hero {
+      min-height: 78vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 4rem 1.5rem;
+      background:
+        radial-gradient(120% 90% at 50% -10%, var(--sand-deep), transparent 60%),
+        var(--sand-cream);
+    }
+    .eyebrow {
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 1.1rem;
+    }
+    .hero h1 {
+      font-size: clamp(2.4rem, 6vw, 4.5rem);
+      line-height: 1.02;
+      letter-spacing: -0.02em;
+      max-width: 14ch;
+      color: var(--ink);
+    }
+    .hero p {
+      margin-top: 1.4rem;
+      max-width: 46ch;
+      font-size: 1.05rem;
+      line-height: 1.6;
+      color: var(--ink-soft);
+    }
+    .scroll-cue {
+      margin-top: 2.6rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+    .scroll-cue span {
+      display: inline-block;
+      width: 26px; height: 26px;
+      border-radius: 999px;
+      border: 2px solid var(--surf);
+      position: relative;
+      animation: bob 1.6s ease-in-out infinite;
+    }
+    .scroll-cue span::after {
+      content: "";
+      position: absolute;
+      inset: 7px 0 auto 0;
+      margin: auto;
+      width: 4px; height: 6px;
+      border-radius: 2px;
+      background: var(--surf);
+    }
+    @keyframes bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(4px)} }
+
+    /* ---- Marquee component (mirrors styles.css) ---- */
+    .svm {
+      --svm-bg: var(--ocean);
+      --svm-text: var(--sand-cream);
+      --svm-accent: var(--surf);
+      --svm-size: clamp(2.5rem, 9vw, 7rem);
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      background: var(--svm-bg);
+      color: var(--svm-text);
+      transform-origin: center center;
+      padding-block: 0.15em;
+      user-select: none;
+    }
+    .svm--alt { --svm-bg: var(--teal); }
+    .svm__track {
+      display: flex;
+      flex-wrap: nowrap;
+      align-items: center;
+      width: max-content;
+      white-space: nowrap;
+      will-change: transform;
+      transform-origin: center center;
+    }
+    .svm__item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4em;
+      padding-inline: 0.35em;
+      font-size: var(--svm-size);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+    }
+    .svm__item::after {
+      content: "";
+      display: inline-block;
+      width: 0.22em; height: 0.22em;
+      margin-inline: 0.15em;
+      border-radius: 999px;
+      background: var(--svm-accent);
+    }
+    .svm__item--outline {
+      color: transparent;
+      -webkit-text-stroke: 2px var(--svm-accent);
+    }
+
+    /* ---- Filler content so the page is tall + scrollable ---- */
+    .section {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 7rem 1.5rem;
+    }
+    .section h2 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      letter-spacing: -0.015em;
+      margin-bottom: 1.2rem;
+      color: var(--ink);
+    }
+    .section p {
+      font-size: 1.08rem;
+      line-height: 1.75;
+      color: var(--ink-soft);
+      max-width: 62ch;
+      margin-bottom: 1.1rem;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.2rem;
+      margin-top: 2.4rem;
+    }
+    .card {
+      background: var(--sand-mid);
+      border: 1px solid var(--sand-deep);
+      border-radius: 18px;
+      padding: 1.8rem;
+    }
+    .card h3 { font-size: 1.15rem; margin-bottom: 0.5rem; color: var(--ink); }
+    .card p { font-size: 0.98rem; margin: 0; }
+    .band {
+      background: var(--sand-deep);
+    }
+    .footer {
+      background: var(--ink);
+      color: var(--sand-mid);
+      text-align: center;
+      padding: 4rem 1.5rem;
+      font-size: 0.95rem;
+      letter-spacing: 0.02em;
+    }
+    .footer strong { color: var(--surf); }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .scroll-cue span { animation: none; }
+      .svm__track { will-change: auto; transform: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="hero">
+    <div class="eyebrow">saltycodestudio · motion</div>
+    <h1>Scroll Velocity Skew Marquee</h1>
+    <p>
+      Scroll up and down — fast or slow. The marquee below leans into your
+      momentum, stretching with speed and snapping upright the moment you stop.
+    </p>
+    <div class="scroll-cue"><span></span> Scroll to feel it</div>
+  </header>
+
+  <!-- Marquee #1 -->
+  <div class="svm" data-svm>
+    <div class="svm__track" data-svm-track>
+      <!-- Row A -->
+      <span class="svm__item">Sand &amp; Surf</span>
+      <span class="svm__item svm__item--outline">Build Fast</span>
+      <span class="svm__item">Ship Calm</span>
+      <span class="svm__item svm__item--outline">Ride the Scroll</span>
+      <!-- Row B (identical copy for a seamless -50% loop) -->
+      <span class="svm__item">Sand &amp; Surf</span>
+      <span class="svm__item svm__item--outline">Build Fast</span>
+      <span class="svm__item">Ship Calm</span>
+      <span class="svm__item svm__item--outline">Ride the Scroll</span>
+    </div>
+  </div>
+
+  <section class="section">
+    <h2>Momentum you can read</h2>
+    <p>
+      The effect samples <code>ScrollTrigger.getVelocity()</code> on every frame
+      and maps that raw px/second figure to a skew angle, clamped to roughly
+      twenty degrees so the type never tears itself apart. A matching vertical
+      stretch makes the lean feel physical.
+    </p>
+    <p>
+      Because the distortion is driven by <code>gsap.quickTo</code>, the per-frame
+      cost stays tiny — it reuses a single tween instead of spawning a new one on
+      each update. When the scroll settles, a debounced snap-back tween eases the
+      skew and stretch back to rest.
+    </p>
+    <div class="cards">
+      <div class="card"><h3>Velocity-mapped</h3><p>Skew scales with how hard you scroll, in either direction.</p></div>
+      <div class="card"><h3>Seamless loop</h3><p>Two identical rows animate to −50% for an infinite belt.</p></div>
+      <div class="card"><h3>Self-righting</h3><p>Stops are detected and the type snaps back upright.</p></div>
+    </div>
+  </section>
+
+  <section class="section band">
+    <h2>Keep scrolling</h2>
+    <p>
+      A marquee like this earns its keep as a divider between sections. Give the
+      page enough height and the interaction reveals itself naturally as the
+      reader moves through your content.
+    </p>
+    <p>
+      Try a quick flick versus a slow drag — the lean direction follows your
+      scroll direction, and the loop itself speeds up while you move.
+    </p>
+  </section>
+
+  <!-- Marquee #2 (alternate teal band) -->
+  <div class="svm svm--alt" data-svm data-svm-duplicate="false">
+    <div class="svm__track" data-svm-track>
+      <span class="svm__item svm__item--outline">Bonaire</span>
+      <span class="svm__item">Ocean Teal</span>
+      <span class="svm__item svm__item--outline">Cream Sand</span>
+      <span class="svm__item">Surf Spray</span>
+      <span class="svm__item svm__item--outline">Bonaire</span>
+      <span class="svm__item">Ocean Teal</span>
+      <span class="svm__item svm__item--outline">Cream Sand</span>
+      <span class="svm__item">Surf Spray</span>
+    </div>
+  </div>
+
+  <section class="section">
+    <h2>Plenty of runway</h2>
+    <p>
+      This filler section exists so the demo page is genuinely tall and the
+      scroll interaction has room to breathe. Scroll back up and the marquees
+      lean the other way.
+    </p>
+    <p>
+      Nothing here is required by the component — only the <code>.svm</code>
+      wrapper with its <code>[data-svm-track]</code> row of items matters. Drop
+      that anywhere and call the initializer.
+    </p>
+    <div class="cards">
+      <div class="card"><h3>Reduced motion</h3><p>Respects <code>prefers-reduced-motion</code> by staying static.</p></div>
+      <div class="card"><h3>No build step</h3><p>Plain ES module + two GSAP scripts. Paste and go.</p></div>
+      <div class="card"><h3>Brand-ready</h3><p>All colors are CSS variables — restyle in seconds.</p></div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>Demo built on the <strong>Sand &amp; Surf</strong> palette for saltycodestudio.</p>
+  </footer>
+
+  <!-- Inlined component logic (mirrors animation.js) -->
+  <script>
+    (function () {
+      function initScrollVelocitySkewMarquee(root, options) {
+        if (!root) return function () {};
+        var cfg = Object.assign({
+          baseSpeed: 18,
+          velocityToSkew: 0.018,
+          maxSkew: 20,
+          maxStretch: 0.18,
+          timeScaleBoost: 4,
+          snapDuration: 0.7,
+          direction: 1,
+          duplicateTrack: false
+        }, options || {});
+
+        if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
+          console.warn('[scroll-velocity-skew-marquee] gsap + ScrollTrigger required.');
+          return function () {};
+        }
+        gsap.registerPlugin(ScrollTrigger);
+
+        var track = root.querySelector('[data-svm-track]') || root.firstElementChild;
+        if (!track) return function () {};
+
+        var reduceMotion = window.matchMedia &&
+          window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (reduceMotion) {
+          gsap.set(track, { xPercent: 0, skewX: 0, scaleY: 1 });
+          return function () {};
+        }
+
+        if (cfg.duplicateTrack) {
+          track.innerHTML += track.innerHTML;
+        }
+
+        var loop = gsap.to(track, {
+          xPercent: -50 * cfg.direction,
+          repeat: -1,
+          duration: cfg.baseSpeed,
+          ease: 'none'
+        });
+
+        var setSkew = gsap.quickTo(track, 'skewX', { duration: 0.4, ease: 'power3.out' });
+        var setStretch = gsap.quickTo(track, 'scaleY', { duration: 0.4, ease: 'power3.out' });
+
+        var snapTimer = null;
+        function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
+
+        function snapBack() {
+          setSkew(0);
+          setStretch(1);
+          gsap.to(loop, { timeScale: cfg.direction, duration: cfg.snapDuration, ease: 'power2.out' });
+        }
+
+        var st = ScrollTrigger.create({
+          onUpdate: function (self) {
+            var velocity = self.getVelocity();
+            var skew = clamp(velocity * cfg.velocityToSkew, -cfg.maxSkew, cfg.maxSkew);
+            var stretch = 1 + (Math.abs(skew) / cfg.maxSkew) * cfg.maxStretch;
+            setSkew(skew);
+            setStretch(stretch);
+            var dir = velocity > 0 ? 1 : -1;
+            var boost = cfg.direction * (1 + (Math.abs(skew) / cfg.maxSkew) * cfg.timeScaleBoost);
+            loop.timeScale(dir < 0 ? -boost : boost);
+            if (snapTimer) clearTimeout(snapTimer);
+            snapTimer = setTimeout(snapBack, 120);
+          }
+        });
+
+        return function destroy() {
+          if (snapTimer) clearTimeout(snapTimer);
+          st.kill();
+          loop.kill();
+          gsap.set(track, { clearProps: 'transform' });
+        };
+      }
+
+      window.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('[data-svm]').forEach(function (el) {
+          var duplicateTrack = el.getAttribute('data-svm-duplicate') === 'true';
+          initScrollVelocitySkewMarquee(el, { duplicateTrack: duplicateTrack });
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

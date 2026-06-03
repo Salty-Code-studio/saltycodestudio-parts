@@ -1,0 +1,13 @@
+{
+  "name": "Animated Details Accordion",
+  "slug": "details-accordion",
+  "category": "css",
+  "tier": "practical",
+  "tags": ["accordion", "details", "summary", "grid-template-rows", "no-js", "accessible"],
+  "description": "A native, accessible accordion that smoothly animates open and closed from height 0 to auto using the details element with zero JavaScript.",
+  "deps": [],
+  "files": ["styles.css", "index.html"],
+  "usage": "Copy styles.css and the markup from index.html, then give every <details> in a group the same name attribute for exclusive (one-open-at-a-time) behaviour. Add the open attribute to whichever panel should start expanded.",
+  "source": "https://www.builder.io/blog/animated-css-accordions",
+  "license": "Builder.io blog article — code shared for reuse; details/::details-content are native HTML/CSS. Reimplemented cleanly."
+}

@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Heart Like Burst — Sand &amp; Surf preview</title>
+<style>
+  /* ---- Sand & Surf palette ---- */
+  :root {
+    --sand-bg:   #fbf7f0;
+    --sand-2:    #f4ece0;
+    --sand-3:    #ece0cd;
+    --ink:       #1c2b33;
+    --ink-soft:  #4a5d66;
+    --teal:      #1f8a8a;
+    --teal-deep: #0f5c5c;
+    --surf:      #2ec3c3;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body { margin: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(120% 90% at 100% 0%, var(--sand-3) 0%, transparent 55%),
+      radial-gradient(120% 90% at 0% 100%, var(--sand-2) 0%, transparent 55%),
+      var(--sand-bg);
+    min-height: 100vh;
+    padding: 56px 20px 80px;
+    line-height: 1.55;
+  }
+
+  .wrap { max-width: 960px; margin: 0 auto; }
+
+  header { text-align: center; margin-bottom: 52px; }
+
+  .eyebrow {
+    display: inline-block;
+    font-size: 12px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--teal-deep);
+    background: rgba(46,195,195,.14);
+    border: 1px solid rgba(31,138,138,.25);
+    padding: 6px 14px;
+    border-radius: 999px;
+    margin-bottom: 18px;
+  }
+
+  h1 {
+    font-size: clamp(30px, 5vw, 48px);
+    margin: 0 0 10px;
+    letter-spacing: -.02em;
+  }
+
+  header p {
+    margin: 0 auto;
+    max-width: 540px;
+    color: var(--ink-soft);
+    font-size: 17px;
+  }
+
+  /* ---- Feed of cards ---- */
+  .feed {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 22px;
+    margin-bottom: 56px;
+  }
+
+  .card {
+    background: #fffdfa;
+    border: 1px solid var(--sand-3);
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 14px 30px -22px rgba(28,43,51,.5);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card__cover {
+    height: 132px;
+    display: grid;
+    place-items: center;
+    font-size: 46px;
+    color: #fff;
+  }
+  .card:nth-child(1) .card__cover { background: linear-gradient(135deg, var(--teal), var(--surf)); }
+  .card:nth-child(2) .card__cover { background: linear-gradient(135deg, var(--teal-deep), var(--teal)); }
+  .card:nth-child(3) .card__cover { background: linear-gradient(135deg, #e0a25e, #e0455e); }
+
+  .card__body {
+    padding: 18px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+  }
+
+  .card__body h3 { margin: 0; font-size: 18px; letter-spacing: -.01em; }
+  .card__body p  { margin: 0; color: var(--ink-soft); font-size: 14px; }
+
+  .card__foot {
+    margin-top: auto;
+    padding-top: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid var(--sand-2);
+  }
+
+  .likes {
+    font-size: 13px;
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+  }
+  .likes b { color: var(--ink); }
+
+  /* ---- Hero demo strip ---- */
+  .stage {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 38px;
+    padding: 40px 24px;
+    background: #fffdfa;
+    border: 1px solid var(--sand-3);
+    border-radius: 22px;
+    box-shadow: 0 22px 50px -34px rgba(28,43,51,.55);
+  }
+
+  .stage__col { text-align: center; }
+  .stage__col small {
+    display: block;
+    margin-top: 8px;
+    font-size: 12px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .hint {
+    text-align: center;
+    margin-top: 34px;
+    color: var(--ink-soft);
+    font-size: 14px;
+  }
+
+  /* =====================================================================
+     PART CSS — Heart Like Burst (inlined from styles.css)
+     ===================================================================== */
+  @property --hlb-r {
+    syntax: "<length>";
+    inherits: true;
+    initial-value: 0px;
+  }
+  @property --hlb-o {
+    syntax: "<number>";
+    inherits: true;
+    initial-value: 0;
+  }
+
+  .hlb {
+    --hlb-size: 64px;
+    --hlb-idle: #b9c6cc;
+    --hlb-liked: #e0455e;
+    --hlb-ring: #2ec3c3;
+    --hlb-r: 0px;
+    --hlb-o: 0;
+
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    width: calc(var(--hlb-size) * 1.9);
+    height: calc(var(--hlb-size) * 1.9);
+    isolation: isolate;
+  }
+
+  .hlb__input {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 3;
+  }
+
+  .hlb__heart {
+    position: relative;
+    display: block;
+    width: var(--hlb-size);
+    height: var(--hlb-size);
+    font-size: 0;
+    line-height: 1;
+    color: var(--hlb-idle);
+    transition: color .25s ease;
+    -webkit-user-select: none;
+    user-select: none;
+    z-index: 2;
+  }
+
+  .hlb__heart::before,
+  .hlb__heart::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .hlb__heart::before {
+    width: var(--hlb-size);
+    height: var(--hlb-size);
+    border-radius: 50%;
+    border: 0 solid var(--hlb-ring);
+    opacity: 0;
+  }
+
+  .hlb__glyph {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-size: var(--hlb-size);
+    line-height: 1;
+    color: var(--hlb-idle);
+    transition:
+      color .25s ease,
+      transform .25s ease;
+    z-index: 1;
+  }
+
+  .hlb__glyph::before {
+    content: "\2665";
+    display: block;
+  }
+
+  .hlb__heart::after {
+    width: calc(var(--hlb-size) * 0.13);
+    height: calc(var(--hlb-size) * 0.13);
+    border-radius: 50%;
+    background: transparent;
+    opacity: var(--hlb-o);
+    box-shadow:
+      calc(var(--hlb-r) *  1.000) calc(var(--hlb-r) *  0.000) 0 #e0455e,
+      calc(var(--hlb-r) *  0.866) calc(var(--hlb-r) *  0.500) 0 #f3a847,
+      calc(var(--hlb-r) *  0.500) calc(var(--hlb-r) *  0.866) 0 #2ec3c3,
+      calc(var(--hlb-r) *  0.000) calc(var(--hlb-r) *  1.000) 0 #1f8a8a,
+      calc(var(--hlb-r) * -0.500) calc(var(--hlb-r) *  0.866) 0 #e0455e,
+      calc(var(--hlb-r) * -0.866) calc(var(--hlb-r) *  0.500) 0 #f3a847,
+      calc(var(--hlb-r) * -1.000) calc(var(--hlb-r) *  0.000) 0 #2ec3c3,
+      calc(var(--hlb-r) * -0.866) calc(var(--hlb-r) * -0.500) 0 #1f8a8a,
+      calc(var(--hlb-r) * -0.500) calc(var(--hlb-r) * -0.866) 0 #e0455e,
+      calc(var(--hlb-r) *  0.000) calc(var(--hlb-r) * -1.000) 0 #f3a847,
+      calc(var(--hlb-r) *  0.500) calc(var(--hlb-r) * -0.866) 0 #2ec3c3,
+      calc(var(--hlb-r) *  0.866) calc(var(--hlb-r) * -0.500) 0 #1f8a8a;
+  }
+
+  .hlb__input:hover ~ .hlb__glyph,
+  .hlb__input:focus-visible ~ .hlb__glyph {
+    color: #c9a0a8;
+    transform: scale(1.06);
+  }
+
+  .hlb:focus-within {
+    border-radius: 50%;
+    outline: 2px solid var(--hlb-ring);
+    outline-offset: 4px;
+  }
+  .hlb:not(:focus-within),
+  .hlb__input:not(:focus-visible) ~ * {
+    outline: none;
+  }
+
+  .hlb__input:checked ~ .hlb__glyph {
+    color: var(--hlb-liked);
+    animation: hlb-pop .7s cubic-bezier(.18, 1.55, .42, 1.06) both;
+  }
+
+  .hlb__input:checked ~ .hlb__heart::before {
+    animation: hlb-bubble .55s ease-out both;
+  }
+
+  .hlb__input:checked ~ .hlb__heart::after {
+    animation: hlb-burst .65s ease-out .04s both;
+  }
+
+  @keyframes hlb-pop {
+    0%   { transform: scale(0); }
+    60%  { transform: scale(1.18); }
+    100% { transform: scale(1); }
+  }
+
+  @keyframes hlb-bubble {
+    0% {
+      opacity: 1;
+      border-width: calc(var(--hlb-size) * 0.5);
+      width: 0;
+      height: 0;
+    }
+    70% {
+      opacity: .55;
+      border-width: 0;
+      width: calc(var(--hlb-size) * 1.5);
+      height: calc(var(--hlb-size) * 1.5);
+    }
+    100% {
+      opacity: 0;
+      border-width: 0;
+      width: calc(var(--hlb-size) * 1.6);
+      height: calc(var(--hlb-size) * 1.6);
+    }
+  }
+
+  @keyframes hlb-burst {
+    0% {
+      --hlb-r: calc(var(--hlb-size) * 0.35);
+      --hlb-o: 1;
+    }
+    70% {
+      --hlb-r: calc(var(--hlb-size) * 0.95);
+      --hlb-o: 1;
+    }
+    100% {
+      --hlb-r: calc(var(--hlb-size) * 1.15);
+      --hlb-o: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hlb__input:checked ~ .hlb__glyph,
+    .hlb__input:checked ~ .hlb__heart::before,
+    .hlb__input:checked ~ .hlb__heart::after {
+      animation: none;
+    }
+    .hlb__input:checked ~ .hlb__glyph {
+      color: var(--hlb-liked);
+      transform: scale(1);
+      transition: color .2s ease;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <span class="eyebrow">Sand &amp; Surf · micro-interaction</span>
+      <h1>Heart Like Burst</h1>
+      <p>Tap a heart. It pops with an elastic spring while a ring of colorful particles flings outward. Pure CSS — no images, no JavaScript.</p>
+    </header>
+
+    <!-- Big hero demo at three sizes -->
+    <section class="stage" aria-label="Heart sizes demo">
+      <div class="stage__col">
+        <span class="hlb" style="--hlb-size: 44px">
+          <input class="hlb__input" type="checkbox" id="hero-sm" aria-label="Like, small" />
+          <span class="hlb__heart" aria-hidden="true"></span>
+          <span class="hlb__glyph" aria-hidden="true"></span>
+        </span>
+        <small>44px</small>
+      </div>
+
+      <div class="stage__col">
+        <span class="hlb" style="--hlb-size: 84px">
+          <input class="hlb__input" type="checkbox" id="hero-lg" aria-label="Like, large" checked />
+          <span class="hlb__heart" aria-hidden="true"></span>
+          <span class="hlb__glyph" aria-hidden="true"></span>
+        </span>
+        <small>84px · starts liked</small>
+      </div>
+
+      <div class="stage__col">
+        <span class="hlb" style="--hlb-size: 56px; --hlb-liked: #1f8a8a; --hlb-ring: #e0455e">
+          <input class="hlb__input" type="checkbox" id="hero-md" aria-label="Like, teal variant" />
+          <span class="hlb__heart" aria-hidden="true"></span>
+          <span class="hlb__glyph" aria-hidden="true"></span>
+        </span>
+        <small>56px · teal variant</small>
+      </div>
+    </section>
+
+    <p class="hint">Click the hearts. Try tabbing to one and pressing Space — it is a real checkbox, fully keyboard accessible.</p>
+
+    <!-- Realistic feed showing the button in context -->
+    <section class="feed" aria-label="Sample feed" style="margin-top:48px">
+      <article class="card">
+        <div class="card__cover">🏝️</div>
+        <div class="card__body">
+          <h3>Sunrise at Sorobon</h3>
+          <p>Shallow turquoise flats and the first light over the windward coast.</p>
+          <div class="card__foot">
+            <span class="likes"><b>1,204</b> likes</span>
+            <span class="hlb" style="--hlb-size: 30px">
+              <input class="hlb__input" type="checkbox" id="feed-1" aria-label="Like Sunrise at Sorobon" />
+              <span class="hlb__heart" aria-hidden="true"></span>
+              <span class="hlb__glyph" aria-hidden="true"></span>
+            </span>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card__cover">🌊</div>
+        <div class="card__body">
+          <h3>Surf check, Lac Bay</h3>
+          <p>Steady trade winds, glassy inside, perfect for the morning session.</p>
+          <div class="card__foot">
+            <span class="likes"><b>876</b> likes</span>
+            <span class="hlb" style="--hlb-size: 30px">
+              <input class="hlb__input" type="checkbox" id="feed-2" aria-label="Like Surf check, Lac Bay" checked />
+              <span class="hlb__heart" aria-hidden="true"></span>
+              <span class="hlb__glyph" aria-hidden="true"></span>
+            </span>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card__cover">🐚</div>
+        <div class="card__body">
+          <h3>Found on the sand</h3>
+          <p>Tiny treasures from a slow walk down the cream-colored shore.</p>
+          <div class="card__foot">
+            <span class="likes"><b>2,331</b> likes</span>
+            <span class="hlb" style="--hlb-size: 30px">
+              <input class="hlb__input" type="checkbox" id="feed-3" aria-label="Like Found on the sand" />
+              <span class="hlb__heart" aria-hidden="true"></span>
+              <span class="hlb__glyph" aria-hidden="true"></span>
+            </span>
+          </div>
+        </div>
+      </article>
+    </section>
+  </div>
+</body>
+</html>

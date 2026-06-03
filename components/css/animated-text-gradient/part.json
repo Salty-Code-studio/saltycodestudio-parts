@@ -1,0 +1,13 @@
+{
+  "name": "Animated Text Gradient",
+  "slug": "animated-text-gradient",
+  "category": "css",
+  "tier": "practical",
+  "tags": ["text", "gradient", "background-clip", "animation", "headline", "no-js"],
+  "description": "A headline filled with a slowly drifting multi-stop gradient for a premium, living-color title with no JS.",
+  "deps": [],
+  "files": ["styles.css"],
+  "usage": "Copy styles.css into your stylesheet and add the .animated-gradient-text class to any heading. Tune angle, size, speed, and color stops via the --atg-* custom properties (inline or in CSS).",
+  "source": "https://web.dev/articles/speedy-css-tip-animated-gradient-text",
+  "license": "web.dev article (Adam Argyle), content under CC-BY 4.0; technique is native CSS — reimplemented"
+}

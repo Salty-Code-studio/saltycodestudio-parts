@@ -1,0 +1,244 @@
+/* ===========================================================================
+   Heart Like Burst — a pure-CSS like button.
+   No images, no JavaScript. The checkbox hack drives every state.
+
+   Structure (see index.html for markup):
+     .hlb            wrapper, sets the --hlb-size scale
+       input         visually-hidden checkbox (the real toggle / focus target)
+       label.hlb__heart  the heart glyph + the two pseudo-element effects
+
+   How it works:
+     - The heart is the "♥" character set as the label's content. When the
+       checkbox is :checked we animate font-size with an easeOutBack
+       cubic-bezier so it overshoots and springs back (the elastic pop).
+     - ::before is a hollow ring that scales up and dissolves — the bubble.
+     - ::after carries a single transparent dot whose box-shadow list is a
+       ring of N particles. We place each particle with trig
+       (cos/sin around a circle) and animate two custom properties
+       (--hlb-r distance, --hlb-o opacity) so the ring flings outward and
+       fades. @property makes those properties animatable.
+   =========================================================================== */
+
+/* Make the radius + opacity tweenable so the particle ring can animate. */
+@property --hlb-r {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0px;
+}
+@property --hlb-o {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+.hlb {
+  /* Tunables. Override --hlb-size to scale the whole control. */
+  --hlb-size: 64px;
+  --hlb-idle: #b9c6cc;          /* soft un-liked outline grey */
+  --hlb-liked: #e0455e;         /* warm liked red             */
+  --hlb-ring: #2ec3c3;          /* surf-teal dissolving bubble */
+  --hlb-r: 0px;                 /* animated particle distance  */
+  --hlb-o: 0;                   /* animated particle opacity   */
+
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: calc(var(--hlb-size) * 1.9);
+  height: calc(var(--hlb-size) * 1.9);
+  isolation: isolate;
+}
+
+/* The real control: hidden but still focusable & accessible. */
+.hlb__input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 3;
+}
+
+/* The heart itself. */
+.hlb__heart {
+  position: relative;
+  display: block;
+  width: var(--hlb-size);
+  height: var(--hlb-size);
+  font-size: 0;                  /* hide any text node           */
+  line-height: 1;
+  color: var(--hlb-idle);
+  transition: color .25s ease;
+  -webkit-user-select: none;
+  user-select: none;
+  z-index: 2;
+}
+
+/* Draw the heart glyph centred in the box. */
+.hlb__heart::before,
+.hlb__heart::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+/* ::before = the dissolving bubble ring around the heart. */
+.hlb__heart::before {
+  width: var(--hlb-size);
+  height: var(--hlb-size);
+  border-radius: 50%;
+  border: 0 solid var(--hlb-ring);
+  opacity: 0;
+}
+
+/* The visible heart shape — built from the unicode glyph so we need no SVG.
+   We stamp it on the label via a stacked text glyph using a nested span-free
+   technique: a heart drawn with two ::* would be complex, so instead the
+   glyph lives on the label background using a mask-free emoji-free approach:
+   we use the CSS "content" heart on a third layer below. */
+.hlb__glyph {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: var(--hlb-size);
+  line-height: 1;
+  color: var(--hlb-idle);
+  transition:
+    color .25s ease,
+    transform .25s ease;
+  z-index: 1;
+}
+
+.hlb__glyph::before {
+  content: "\2665";              /* ♥ BLACK HEART SUIT */
+  display: block;
+}
+
+/* ::after = the particle ring. One transparent dot, many box-shadows.
+   Each shadow is a coloured dot pushed out to --hlb-r along an angle. */
+.hlb__heart::after {
+  width: calc(var(--hlb-size) * 0.13);
+  height: calc(var(--hlb-size) * 0.13);
+  border-radius: 50%;
+  background: transparent;
+  opacity: var(--hlb-o);
+  /* 12 particles at 30deg steps. cos/sin precomputed:
+     0:( 1.000, 0.000)  30:( 0.866, 0.500)  60:( 0.500, 0.866)
+     90:( 0.000, 1.000) 120:(-0.500, 0.866) 150:(-0.866, 0.500)
+     180:(-1.000,0.000) 210:(-0.866,-0.500) 240:(-0.500,-0.866)
+     270:(0.000,-1.000) 300:( 0.500,-0.866) 330:( 0.866,-0.500)        */
+  box-shadow:
+    calc(var(--hlb-r) *  1.000) calc(var(--hlb-r) *  0.000) 0 #e0455e,
+    calc(var(--hlb-r) *  0.866) calc(var(--hlb-r) *  0.500) 0 #f3a847,
+    calc(var(--hlb-r) *  0.500) calc(var(--hlb-r) *  0.866) 0 #2ec3c3,
+    calc(var(--hlb-r) *  0.000) calc(var(--hlb-r) *  1.000) 0 #1f8a8a,
+    calc(var(--hlb-r) * -0.500) calc(var(--hlb-r) *  0.866) 0 #e0455e,
+    calc(var(--hlb-r) * -0.866) calc(var(--hlb-r) *  0.500) 0 #f3a847,
+    calc(var(--hlb-r) * -1.000) calc(var(--hlb-r) *  0.000) 0 #2ec3c3,
+    calc(var(--hlb-r) * -0.866) calc(var(--hlb-r) * -0.500) 0 #1f8a8a,
+    calc(var(--hlb-r) * -0.500) calc(var(--hlb-r) * -0.866) 0 #e0455e,
+    calc(var(--hlb-r) *  0.000) calc(var(--hlb-r) * -1.000) 0 #f3a847,
+    calc(var(--hlb-r) *  0.500) calc(var(--hlb-r) * -0.866) 0 #2ec3c3,
+    calc(var(--hlb-r) *  0.866) calc(var(--hlb-r) * -0.500) 0 #1f8a8a;
+}
+
+/* ----------------------------- HOVER / FOCUS ---------------------------- */
+
+.hlb__input:hover ~ .hlb__glyph,
+.hlb__input:focus-visible ~ .hlb__glyph {
+  color: #c9a0a8;
+  transform: scale(1.06);
+}
+
+.hlb:focus-within {
+  border-radius: 50%;
+  outline: 2px solid var(--hlb-ring);
+  outline-offset: 4px;
+}
+/* Only show the ring for keyboard users. */
+.hlb:not(:focus-within),
+.hlb__input:not(:focus-visible) ~ * {
+  outline: none;
+}
+
+/* ------------------------------- CHECKED -------------------------------- */
+
+/* Heart turns red and springs with an easeOutBack pop. */
+.hlb__input:checked ~ .hlb__glyph {
+  color: var(--hlb-liked);
+  animation: hlb-pop .7s cubic-bezier(.18, 1.55, .42, 1.06) both;
+}
+
+/* Bubble: expands as a thinning ring, then dissolves. */
+.hlb__input:checked ~ .hlb__heart::before {
+  animation: hlb-bubble .55s ease-out both;
+}
+
+/* Particle ring: flings outward and fades. */
+.hlb__input:checked ~ .hlb__heart::after {
+  animation: hlb-burst .65s ease-out .04s both;
+}
+
+/* --------------------------------- KEYFRAMES ---------------------------- */
+
+@keyframes hlb-pop {
+  0%   { transform: scale(0); }
+  60%  { transform: scale(1.18); }
+  100% { transform: scale(1); }
+}
+
+@keyframes hlb-bubble {
+  0% {
+    opacity: 1;
+    border-width: calc(var(--hlb-size) * 0.5);
+    width: 0;
+    height: 0;
+  }
+  70% {
+    opacity: .55;
+    border-width: 0;
+    width: calc(var(--hlb-size) * 1.5);
+    height: calc(var(--hlb-size) * 1.5);
+  }
+  100% {
+    opacity: 0;
+    border-width: 0;
+    width: calc(var(--hlb-size) * 1.6);
+    height: calc(var(--hlb-size) * 1.6);
+  }
+}
+
+@keyframes hlb-burst {
+  0% {
+    --hlb-r: calc(var(--hlb-size) * 0.35);
+    --hlb-o: 1;
+  }
+  70% {
+    --hlb-r: calc(var(--hlb-size) * 0.95);
+    --hlb-o: 1;
+  }
+  100% {
+    --hlb-r: calc(var(--hlb-size) * 1.15);
+    --hlb-o: 0;
+  }
+}
+
+/* ------------------------- REDUCED MOTION ------------------------------- */
+/* Keep the meaning (red on / grey off) but drop the springs and burst. */
+@media (prefers-reduced-motion: reduce) {
+  .hlb__input:checked ~ .hlb__glyph,
+  .hlb__input:checked ~ .hlb__heart::before,
+  .hlb__input:checked ~ .hlb__heart::after {
+    animation: none;
+  }
+  .hlb__input:checked ~ .hlb__glyph {
+    color: var(--hlb-liked);
+    transform: scale(1);
+    transition: color .2s ease;
+  }
+}

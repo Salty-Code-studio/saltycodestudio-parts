@@ -1,0 +1,64 @@
+/* ============================================================
+   Animated Text Gradient
+   A headline filled with a slowly drifting multi-stop gradient.
+   Pure CSS, no JS. Inspired by web.dev "speedy CSS tip".
+   ============================================================ */
+
+.animated-gradient-text {
+  /* --- Tunable knobs --------------------------------------- */
+  --atg-stops:
+    #1f8a8a,  /* ocean teal   */
+    #2ec3c3,  /* surf         */
+    #0f5c5c,  /* deep ocean   */
+    #2ec3c3,  /* surf         */
+    #1f8a8a;  /* loop back to first stop for a seamless cycle  */
+  --atg-angle: 100deg;
+  --atg-size: 280%;     /* extra room so the drift has somewhere to go */
+  --atg-duration: 9s;   /* slower = more premium / "living" feel       */
+
+  /* --- The technique --------------------------------------- */
+  background-image: linear-gradient(var(--atg-angle), var(--atg-stops));
+  background-size: var(--atg-size) 100%;
+  background-repeat: no-repeat;
+
+  /* Clip the painted background to the glyph shapes... */
+  -webkit-background-clip: text;
+  background-clip: text;
+
+  /* ...and make the actual text fill transparent so the gradient shows */
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+
+  /* Drive the drift by sliding background-position. */
+  animation: atg-drift var(--atg-duration) linear infinite;
+
+  /* Keep descenders/letterforms crisp while clipped. */
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+@keyframes atg-drift {
+  /* Move one "panel" of the oversized gradient across the text and back
+     to the start. Because the last color stop equals the first, the
+     wrap-around is invisible. */
+  from { background-position: 0% 50%; }
+  to   { background-position: 200% 50%; }
+}
+
+/* Optional warm/sand variant for light-on-dark or accent headlines. */
+.animated-gradient-text--sand {
+  --atg-stops:
+    #d9a441,
+    #e6b860,
+    #1f8a8a,
+    #2ec3c3,
+    #d9a441;
+}
+
+/* Respect users who prefer less motion: show the gradient, hold it still. */
+@media (prefers-reduced-motion: reduce) {
+  .animated-gradient-text {
+    animation: none;
+    background-position: 50% 50%;
+  }
+}

@@ -1,0 +1,99 @@
+/* =====================================================================
+   Auto-Invert Difference Cursor
+   A custom circular cursor that auto-inverts whatever it passes over.
+   Pure CSS + a tiny bit of JS to feed --x / --y custom properties.
+
+   How it works:
+   - A position: fixed circle sits above everything (high z-index).
+   - mix-blend-mode: difference compares the white cursor against the
+     backdrop and renders the per-channel inverse, so it stays legible
+     on any background — light, dark, image, or video.
+   - The cursor is white (#fff). difference(white, X) = (255 - X),
+     i.e. a true photographic invert of whatever is underneath.
+   - pointer-events: none lets every click pass straight through.
+   - Mouse position is fed in via --x / --y (set in JS), and we use
+     translate3d for GPU-accelerated, jank-free movement.
+   ===================================================================== */
+
+/* Hide the native cursor only when the custom one is active.
+   Toggled by adding .scs-cursor-active to <html> in JS, so the page
+   stays usable if JS fails or is disabled. */
+.scs-cursor-active,
+.scs-cursor-active * {
+  cursor: none;
+}
+
+.scs-difference-cursor {
+  /* sizing */
+  --scs-cursor-size: 28px;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: var(--scs-cursor-size);
+  height: var(--scs-cursor-size);
+  margin: calc(var(--scs-cursor-size) / -2) 0 0 calc(var(--scs-cursor-size) / -2);
+
+  border-radius: 50%;
+  background: #fff;
+
+  /* THE trick: invert whatever is beneath the cursor */
+  mix-blend-mode: difference;
+
+  /* never block interaction */
+  pointer-events: none;
+
+  /* keep it above content */
+  z-index: 2147483647;
+
+  /* position driven by JS custom props */
+  transform: translate3d(var(--x, -100px), var(--y, -100px), 0)
+    scale(var(--scs-scale, 1));
+
+  /* smooth grow/shrink on hover/press; movement itself is instant
+     so the dot tracks the pointer 1:1 */
+  transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+
+  will-change: transform;
+}
+
+/* Grow over interactive targets (anything tagged .scs-cursor-target,
+   plus native links/buttons via the JS hook). */
+.scs-difference-cursor.is-hovering {
+  --scs-scale: 2.6;
+}
+
+/* Pinch in on mouse-down for tactile feedback. */
+.scs-difference-cursor.is-pressing {
+  --scs-scale: 1.6;
+}
+
+/* Fade out when the pointer leaves the window. */
+.scs-difference-cursor.is-hidden {
+  opacity: 0;
+}
+
+/* ---------------------------------------------------------------------
+   Accessibility / device fallbacks
+   --------------------------------------------------------------------- */
+
+/* Respect reduced-motion: drop the scale transition so nothing animates,
+   but keep the invert effect (which is static, not motion). */
+@media (prefers-reduced-motion: reduce) {
+  .scs-difference-cursor {
+    transition: none;
+  }
+}
+
+/* Touch / coarse pointers have no hoverable cursor — never show it and
+   restore the native pointer. The JS also guards this, this is defense
+   in depth for no-JS / progressive contexts. */
+@media (hover: none), (pointer: coarse) {
+  .scs-difference-cursor {
+    display: none;
+  }
+  .scs-cursor-active,
+  .scs-cursor-active * {
+    cursor: auto;
+  }
+}

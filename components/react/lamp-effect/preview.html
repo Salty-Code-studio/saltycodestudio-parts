@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lamp Effect — saltycodestudio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://cdn.jsdelivr.net/npm/framer-motion@11/dist/framer-motion.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+      body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }
+      /* prefers-reduced-motion: present the lamp fully open with no transitions */
+      @media (prefers-reduced-motion: reduce) {
+        * { transition-duration: 0.001ms !important; animation-duration: 0.001ms !important; }
+      }
+    </style>
+  </head>
+  <body class="bg-[#0f1f24] text-white">
+    <div id="root"></div>
+    <script type="text/babel" data-presets="react">
+      // framer-motion UMD exposes the global `Motion`.
+      const motion = (window.Motion || window.framerMotion).motion;
+      const MotionConfig = (window.Motion || window.framerMotion).MotionConfig;
+
+      function LampEffect({
+        title = "Build at the speed of light.",
+        subtitle = "saltycodestudio ships premium, fast, conversion-ready sites.",
+        eyebrow = "saltycodestudio",
+        glow = "#2ec3c3",
+        className = "",
+        children,
+      }) {
+        const coneEnter = {
+          hidden: { opacity: 0.45, width: "14rem" },
+          show: { opacity: 1, width: "32rem" },
+        };
+        const vp = { once: false, amount: 0.4 };
+
+        return (
+          <section className={`relative isolate z-0 flex min-h-[36rem] w-full flex-col items-center justify-center overflow-hidden bg-[#0f1f24] ${className}`}>
+            <div className="absolute inset-0 top-1/2 -z-10 flex w-full -translate-y-1/2 scale-y-125 items-center justify-center isolate">
+              {/* Left cone */}
+              <motion.div
+                aria-hidden="true"
+                initial="hidden" whileInView="show" viewport={vp} variants={coneEnter}
+                transition={{ duration: 0.9, ease: "easeInOut" }}
+                style={{ backgroundImage: `conic-gradient(from 70deg at center top, ${glow}, transparent, transparent)` }}
+                className="absolute right-1/2 h-56 overflow-visible text-white"
+              >
+                <div className="absolute bottom-0 left-0 z-20 h-40 w-full bg-[#0f1f24] [mask-image:linear-gradient(to_top,white,transparent)]" />
+                <div className="absolute bottom-0 left-0 z-20 h-full w-40 bg-[#0f1f24] [mask-image:linear-gradient(to_right,white,transparent)]" />
+              </motion.div>
+
+              {/* Right cone (mirrored) */}
+              <motion.div
+                aria-hidden="true"
+                initial="hidden" whileInView="show" viewport={vp} variants={coneEnter}
+                transition={{ duration: 0.9, ease: "easeInOut" }}
+                style={{ backgroundImage: `conic-gradient(from 290deg at center top, transparent, transparent, ${glow})` }}
+                className="absolute left-1/2 h-56 text-white"
+              >
+                <div className="absolute bottom-0 right-0 z-20 h-full w-40 bg-[#0f1f24] [mask-image:linear-gradient(to_left,white,transparent)]" />
+                <div className="absolute bottom-0 right-0 z-20 h-40 w-full bg-[#0f1f24] [mask-image:linear-gradient(to_top,white,transparent)]" />
+              </motion.div>
+
+              {/* Depth fog */}
+              <div className="absolute top-1/2 h-48 w-full -translate-y-1/2 bg-[#0f1f24] blur-2xl" />
+              <div className="absolute top-1/2 z-50 h-48 w-full bg-transparent opacity-10 backdrop-blur-md" />
+
+              {/* Bulb glow ellipse */}
+              <motion.div
+                aria-hidden="true"
+                initial={{ width: "8rem", opacity: 0.5 }} whileInView={{ width: "16rem", opacity: 1 }} viewport={vp}
+                transition={{ duration: 0.9, ease: "easeInOut" }}
+                style={{ backgroundColor: glow }}
+                className="absolute top-1/2 z-30 h-36 -translate-y-[6rem] rounded-full opacity-50 blur-3xl"
+              />
+              {/* Inner core glow */}
+              <motion.div
+                aria-hidden="true"
+                initial={{ width: "10rem" }} whileInView={{ width: "20rem" }} viewport={vp}
+                transition={{ duration: 0.9, ease: "easeInOut" }}
+                style={{ backgroundColor: glow }}
+                className="absolute top-1/2 z-40 h-36 -translate-y-[7rem] rounded-full blur-2xl"
+              />
+              {/* Filament bar */}
+              <motion.div
+                aria-hidden="true"
+                initial={{ width: "10rem" }} whileInView={{ width: "30rem" }} viewport={vp}
+                transition={{ duration: 0.9, ease: "easeInOut" }}
+                style={{ backgroundColor: glow }}
+                className="absolute top-1/2 z-50 h-0.5 -translate-y-[7rem] rounded-full"
+              />
+              {/* Top mask */}
+              <div className="absolute top-1/2 z-40 h-44 w-full -translate-y-[12.5rem] bg-[#0f1f24]" />
+            </div>
+
+            {/* Header content rising into the beam */}
+            <div className="relative z-50 flex -translate-y-20 flex-col items-center px-6 text-center">
+              <motion.span
+                initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={vp}
+                transition={{ delay: 0.25, duration: 0.7, ease: "easeInOut" }}
+                className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-[#9fe6e6] backdrop-blur"
+              >
+                <span className="h-1.5 w-1.5 rounded-full bg-[#2ec3c3]" />{eyebrow}
+              </motion.span>
+              <motion.h2
+                initial={{ opacity: 0.5, y: 60 }} whileInView={{ opacity: 1, y: 0 }} viewport={vp}
+                transition={{ delay: 0.3, duration: 0.8, ease: "easeInOut" }}
+                className="bg-gradient-to-b from-[#f4ece0] to-[#9fe6e6] bg-clip-text text-4xl font-semibold tracking-tight text-transparent sm:text-6xl"
+              >
+                {title}
+              </motion.h2>
+              {subtitle ? (
+                <motion.p
+                  initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={vp}
+                  transition={{ delay: 0.45, duration: 0.8, ease: "easeInOut" }}
+                  className="mt-5 max-w-xl text-base leading-relaxed text-white/60 sm:text-lg"
+                >
+                  {subtitle}
+                </motion.p>
+              ) : null}
+              {children ? (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={vp}
+                  transition={{ delay: 0.6, duration: 0.7, ease: "easeInOut" }}
+                  className="mt-8"
+                >
+                  {children}
+                </motion.div>
+              ) : null}
+            </div>
+          </section>
+        );
+      }
+
+      function Demo() {
+        const cta = (
+          <div className="flex flex-col items-center gap-3 sm:flex-row">
+            <a href="#" className="rounded-full bg-[#2ec3c3] px-6 py-3 text-sm font-semibold text-[#0f1f24] shadow-lg shadow-[#2ec3c3]/20 transition hover:bg-[#9fe6e6]">Start a project</a>
+            <a href="#" className="rounded-full border border-white/20 px-6 py-3 text-sm font-semibold text-white transition hover:border-white/50 hover:bg-white/5">See the work</a>
+          </div>
+        );
+        return (
+          <MotionConfig reducedMotion="user">
+            {/* Tall scroll spacer so the whileInView trigger is demonstrable */}
+            <div className="flex min-h-[80vh] flex-col items-center justify-center gap-3 bg-[#fbf7f0] px-6 text-center text-[#1c2b33]">
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#1f8a8a]">scroll down</p>
+              <h1 className="max-w-2xl text-3xl font-semibold tracking-tight sm:text-5xl">The lamp lights up as it enters the viewport.</h1>
+              <p className="max-w-md text-[#4a5d66]">Keep scrolling — the cone fans open and the headline rises into the beam.</p>
+              <svg className="mt-4 h-6 w-6 animate-bounce text-[#1f8a8a]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 5v14M19 12l-7 7-7-7" /></svg>
+            </div>
+
+            <LampEffect>{cta}</LampEffect>
+
+            {/* Second instance with a different glow + section content */}
+            <section className="bg-[#f4ece0] px-6 py-24 text-[#1c2b33]">
+              <div className="mx-auto grid max-w-4xl gap-6 sm:grid-cols-3">
+                {[
+                  { k: "Edge-rendered", v: "Sub-100ms TTFB on every route." },
+                  { k: "Conversion-first", v: "Layouts tuned to move the metric." },
+                  { k: "Hand-built", v: "No bloated page builders, ever." },
+                ].map((c) => (
+                  <div key={c.k} className="rounded-2xl border border-[#ece0cd] bg-[#fbf7f0] p-6 shadow-sm">
+                    <h3 className="text-base font-semibold text-[#0f5c5c]">{c.k}</h3>
+                    <p className="mt-2 text-sm text-[#4a5d66]">{c.v}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            <LampEffect
+              eyebrow="Pricing"
+              title="Light, fast, built to convert."
+              subtitle="Retint the beam with the deep-ocean glow."
+              glow="#1f8a8a"
+            />
+
+            <footer className="bg-[#0f1f24] px-6 py-16 text-center text-sm text-white/40">
+              saltycodestudio — Sand &amp; Surf · scroll back up and the lamp re-triggers
+            </footer>
+          </MotionConfig>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(<Demo />);
+    </script>
+  </body>
+</html>

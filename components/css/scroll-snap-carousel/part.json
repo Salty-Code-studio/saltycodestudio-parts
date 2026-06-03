@@ -1,0 +1,13 @@
+{
+  "name": "CSS-Only Snap Carousel",
+  "slug": "scroll-snap-carousel",
+  "category": "css",
+  "tier": "practical",
+  "tags": ["carousel", "scroll-snap", "scroll-marker", "scroll-button", "no-js", "accessible"],
+  "description": "A swipeable, paginated carousel with prev/next buttons and dot markers built with zero JavaScript via scroll-snap plus the new ::scroll-button and ::scroll-marker pseudo-elements.",
+  "deps": [],
+  "files": ["styles.css", "index.html"],
+  "usage": "Copy styles.css into your project and mark up a .snap-carousel wrapper containing a .snap-carousel__track list with one .snap-carousel__slide per item (see index.html). The browser generates the prev/next buttons and dot pagination automatically — no scripts, no extra markup.",
+  "source": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Overflow/Carousels",
+  "license": "Public-domain CSS idiom — reimplemented from MDN docs (CC-BY-SA 2.5); CSS Overflow L5 features are native and unencumbered"
+}

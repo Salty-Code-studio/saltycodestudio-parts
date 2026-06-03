@@ -1,0 +1,70 @@
+<!-- =====================================================================
+     Auto-Invert Difference Cursor — markup + JS snippet
+     Paste the single cursor element once (anywhere, it's position: fixed),
+     link styles.css, then drop in the script below.
+     ===================================================================== -->
+
+<!-- 1) The cursor element (only one needed for the whole page). -->
+<div class="scs-difference-cursor" aria-hidden="true"></div>
+
+<!-- 2) Mark anything you want the cursor to "grow" over.
+        Native <a> and <button> are picked up automatically — add the
+        class to anything else you want treated as interactive. -->
+<a href="#" class="scs-cursor-target">A link the cursor reacts to</a>
+
+<!-- 3) The script: feeds pointer position into --x / --y and toggles
+        hover/press/visibility state classes. -->
+<script>
+  (function () {
+    var root = document.documentElement;
+    var cursor = document.querySelector(".scs-difference-cursor");
+    if (!cursor) return;
+
+    // Bail entirely on touch / coarse pointers (no real cursor to track).
+    var fine = window.matchMedia("(hover: hover) and (pointer: fine)");
+    if (!fine.matches) return;
+
+    // Take over the native cursor only now that we know JS is alive.
+    root.classList.add("scs-cursor-active");
+
+    var x = window.innerWidth / 2;
+    var y = window.innerHeight / 2;
+    var raf = null;
+
+    function render() {
+      raf = null;
+      cursor.style.setProperty("--x", x + "px");
+      cursor.style.setProperty("--y", y + "px");
+    }
+
+    function onMove(e) {
+      x = e.clientX;
+      y = e.clientY;
+      cursor.classList.remove("is-hidden");
+      if (raf === null) raf = requestAnimationFrame(render);
+    }
+
+    // Treat links, buttons, and anything tagged as a hover target.
+    var HOVER_SELECTOR = 'a, button, [role="button"], .scs-cursor-target';
+
+    document.addEventListener("mousemove", onMove, { passive: true });
+    document.addEventListener("mousedown", function () {
+      cursor.classList.add("is-pressing");
+    });
+    document.addEventListener("mouseup", function () {
+      cursor.classList.remove("is-pressing");
+    });
+    document.addEventListener("mouseover", function (e) {
+      if (e.target.closest(HOVER_SELECTOR)) cursor.classList.add("is-hovering");
+    });
+    document.addEventListener("mouseout", function (e) {
+      if (e.target.closest(HOVER_SELECTOR)) cursor.classList.remove("is-hovering");
+    });
+    document.addEventListener("mouseleave", function () {
+      cursor.classList.add("is-hidden");
+    });
+    document.addEventListener("mouseenter", function () {
+      cursor.classList.remove("is-hidden");
+    });
+  })();
+</script>

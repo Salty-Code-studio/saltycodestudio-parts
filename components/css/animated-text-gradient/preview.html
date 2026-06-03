@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Animated Text Gradient — Sand &amp; Surf</title>
+  <style>
+    /* ---- Sand & Surf demo shell ---- */
+    :root {
+      --sand-bg:    #fbf7f0;
+      --sand-2:     #f4ece0;
+      --sand-3:     #ece0cd;
+      --ink:        #1c2b33;
+      --ink-soft:   #4a5d66;
+      --teal:       #1f8a8a;
+      --deep:       #0f5c5c;
+      --surf:       #2ec3c3;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(1200px 600px at 80% -10%, var(--sand-2), transparent 60%),
+        radial-gradient(900px 500px at -10% 110%, var(--sand-3), transparent 55%),
+        var(--sand-bg);
+      color: var(--ink);
+      font-family: "Albert Sans", "Inter", system-ui, -apple-system, Segoe UI, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3.5rem;
+      padding: 5rem 1.5rem;
+    }
+
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.32em;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--teal);
+      margin: 0 0 0.9rem;
+    }
+
+    .stage {
+      text-align: center;
+      max-width: 56rem;
+    }
+
+    h1.hero {
+      font-size: clamp(2.6rem, 9vw, 6.5rem);
+      line-height: 0.98;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin: 0;
+    }
+
+    .sub {
+      margin: 1.4rem auto 0;
+      max-width: 34rem;
+      color: var(--ink-soft);
+      font-size: clamp(1rem, 2.2vw, 1.18rem);
+      line-height: 1.6;
+    }
+
+    /* Secondary cards demonstrating reuse + the sand variant */
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+      justify-content: center;
+      width: 100%;
+      max-width: 60rem;
+    }
+
+    .card {
+      flex: 1 1 16rem;
+      background: rgba(255, 255, 255, 0.55);
+      border: 1px solid rgba(28, 43, 51, 0.08);
+      border-radius: 18px;
+      padding: 1.8rem 1.6rem;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 18px 40px -28px rgba(15, 92, 92, 0.5);
+    }
+
+    .card h2 {
+      margin: 0 0 0.4rem;
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      font-weight: 800;
+      letter-spacing: -0.01em;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--ink-soft);
+      font-size: 0.95rem;
+      line-height: 1.55;
+    }
+
+    .badge-line {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+
+    .dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--surf);
+      box-shadow: 0 0 0 4px rgba(46, 195, 195, 0.18);
+    }
+
+    footer {
+      color: var(--ink-soft);
+      font-size: 0.8rem;
+      opacity: 0.8;
+    }
+
+    /* ============================================================
+       PART: Animated Text Gradient  (copy of styles.css)
+       ============================================================ */
+    .animated-gradient-text {
+      --atg-stops:
+        #1f8a8a,
+        #2ec3c3,
+        #0f5c5c,
+        #2ec3c3,
+        #1f8a8a;
+      --atg-angle: 100deg;
+      --atg-size: 280%;
+      --atg-duration: 9s;
+
+      background-image: linear-gradient(var(--atg-angle), var(--atg-stops));
+      background-size: var(--atg-size) 100%;
+      background-repeat: no-repeat;
+
+      -webkit-background-clip: text;
+      background-clip: text;
+
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+
+      animation: atg-drift var(--atg-duration) linear infinite;
+
+      -webkit-box-decoration-break: clone;
+      box-decoration-break: clone;
+    }
+
+    @keyframes atg-drift {
+      from { background-position: 0% 50%; }
+      to   { background-position: 200% 50%; }
+    }
+
+    .animated-gradient-text--sand {
+      --atg-stops:
+        #d9a441,
+        #e6b860,
+        #1f8a8a,
+        #2ec3c3,
+        #d9a441;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .animated-gradient-text {
+        animation: none;
+        background-position: 50% 50%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="stage">
+    <p class="eyebrow">Sand &amp; Surf · saltycodestudio</p>
+    <h1 class="hero">
+      Color that <span class="animated-gradient-text">never stands still</span>.
+    </h1>
+    <p class="sub">
+      A single headline filled with a slowly drifting multi-stop gradient —
+      clipped to the letterforms with <code>background-clip: text</code>. No
+      JavaScript, no canvas, just a couple of <code>@keyframes</code>.
+    </p>
+  </div>
+
+  <div class="row">
+    <div class="card">
+      <span class="badge-line"><span class="dot"></span> Hero titles</span>
+      <h2 class="animated-gradient-text">Living headlines</h2>
+      <p>Drop the class on any heading. The gradient loops seamlessly because the last color stop repeats the first.</p>
+    </div>
+
+    <div class="card">
+      <span class="badge-line"><span class="dot"></span> Tune per use</span>
+      <h2 class="animated-gradient-text" style="--atg-duration: 5s; --atg-angle: 70deg;">Faster drift</h2>
+      <p>Every knob is a CSS custom property — angle, size, speed, and color stops — so each headline can feel different.</p>
+    </div>
+
+    <div class="card">
+      <span class="badge-line"><span class="dot"></span> Sand variant</span>
+      <h2 class="animated-gradient-text animated-gradient-text--sand">Warm gold</h2>
+      <p>Swap the <code>--sand</code> modifier for a gold-into-ocean blend that suits accent or seasonal titles.</p>
+    </div>
+  </div>
+
+  <footer>Reduce-motion friendly · the gradient holds still when a visitor prefers reduced motion.</footer>
+
+</body>
+</html>

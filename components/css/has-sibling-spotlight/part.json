@@ -1,0 +1,13 @@
+{
+  "name": ":has() Sibling Dim Spotlight",
+  "slug": "has-sibling-spotlight",
+  "category": "css",
+  "tier": "showcase",
+  "tags": [":has()", "parent-selector", "hover", "interactive", "list", "no-js"],
+  "description": "Hovering any item in a grid dims every sibling and lifts the focused one, a focus-spotlight interaction built with pure CSS and no JavaScript.",
+  "deps": [],
+  "files": ["styles.css", "index.html"],
+  "usage": "Drop styles.css into your stylesheet and wrap focusable cards in a .spotlight-grid using the markup from index.html. Hover or keyboard-focus any .spotlight-card and its siblings dim while it lifts — no script required.",
+  "source": "https://blog.logrocket.com/blog/different-ways-to-use-css-has/",
+  "license": "LogRocket Blog article — code snippets free to reuse; reimplemented cleanly. :has() is native Baseline CSS."
+}

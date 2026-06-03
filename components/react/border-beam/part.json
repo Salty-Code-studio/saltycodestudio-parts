@@ -1,0 +1,13 @@
+{
+  "name": "Border Beam",
+  "slug": "border-beam",
+  "category": "react",
+  "tier": "showcase",
+  "tags": ["border", "beam", "glow", "card", "animated-border", "tailwind"],
+  "description": "An animated beam of light that continuously travels around the border of any container, framing cards and pricing tiers with a premium glow.",
+  "deps": ["motion", "tailwindcss"],
+  "files": ["BorderBeam.tsx"],
+  "usage": "Drop <BorderBeam /> inside any relative + overflow-hidden, rounded container to frame it with a travelling glow; tune colorFrom/colorTo, duration, delay, reverse and initialOffset, and stack two beams with offset delays for a chasing effect.",
+  "source": "https://magicui.design/docs/components/border-beam",
+  "license": "MIT (Magic UI, github.com/magicuidesign/magicui) — reimplemented cleanly with credit"
+}

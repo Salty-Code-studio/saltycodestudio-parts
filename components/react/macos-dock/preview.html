@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>macOS Dock — Sand &amp; Surf</title>
+
+    <!-- React 18 UMD + ReactDOM + Babel Standalone -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- framer-motion UMD (exposes window.Motion) -->
+    <script src="https://cdn.jsdelivr.net/npm/framer-motion@11.0.8/dist/framer-motion.js"></script>
+
+    <!-- Tailwind Play CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+      :root {
+        --sand-bg: #fbf7f0;
+        --sand-2: #f4ece0;
+        --sand-3: #ece0cd;
+        --ink: #1c2b33;
+        --ink-soft: #4a5d66;
+        --teal: #1f8a8a;
+        --deep: #0f5c5c;
+        --surf: #2ec3c3;
+      }
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+      }
+      body {
+        font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+          Roboto, sans-serif;
+        color: var(--ink);
+        background:
+          radial-gradient(120% 90% at 50% 0%, #ffffff 0%, var(--sand-bg) 42%, var(--sand-2) 100%);
+        min-height: 100%;
+      }
+      /* Animated "desktop wallpaper" stripes behind the dock for context. */
+      .wallpaper {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        z-index: 0;
+      }
+      .wallpaper::before {
+        content: "";
+        position: absolute;
+        inset: -20%;
+        background:
+          radial-gradient(40% 50% at 18% 22%, rgba(46, 195, 195, 0.22), transparent 70%),
+          radial-gradient(46% 55% at 82% 30%, rgba(31, 138, 138, 0.18), transparent 72%),
+          radial-gradient(50% 60% at 50% 90%, rgba(236, 224, 205, 0.6), transparent 75%);
+        filter: blur(2px);
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel" data-presets="react">
+      const { useRef, useContext, createContext } = React;
+      const {
+        motion,
+        useMotionValue,
+        useSpring,
+        useTransform,
+        useReducedMotion,
+      } = window.Motion;
+
+      /* ---- Dock context (mirrors MacosDock.tsx) -------------------------- */
+      const DockContext = createContext(null);
+      const useDock = () => useContext(DockContext);
+
+      function MacosDock({
+        children,
+        baseSize = 48,
+        maxSize = 80,
+        distance = 140,
+        className = "",
+      }) {
+        const mouseX = useMotionValue(Infinity);
+        const reduced = useReducedMotion() ?? false;
+        return (
+          <DockContext.Provider
+            value={{ mouseX, baseSize, maxSize, distance, reduced }}
+          >
+            <motion.div
+              role="toolbar"
+              aria-label="Application dock"
+              onMouseMove={(e) => mouseX.set(e.pageX)}
+              onMouseLeave={() => mouseX.set(Infinity)}
+              className={[
+                "mx-auto flex items-end gap-3 rounded-2xl px-4 pb-3 pt-3",
+                "border border-white/40 bg-white/55 backdrop-blur-xl",
+                "shadow-[0_18px_50px_-12px_rgba(15,92,92,0.45)]",
+                className,
+              ].join(" ")}
+              style={{ height: maxSize + 24 }}
+            >
+              {children}
+            </motion.div>
+          </DockContext.Provider>
+        );
+      }
+
+      function DockItem({ children, label, onClick, className = "" }) {
+        const { mouseX, baseSize, maxSize, distance, reduced } = useDock();
+        const ref = useRef(null);
+
+        const distanceFromCursor = useTransform(mouseX, (x) => {
+          const bounds = ref.current?.getBoundingClientRect() ?? {
+            x: 0,
+            width: baseSize,
+          };
+          return x - bounds.x - bounds.width / 2;
+        });
+
+        const sizeTarget = useTransform(
+          distanceFromCursor,
+          [-distance, 0, distance],
+          [baseSize, maxSize, baseSize]
+        );
+
+        const size = useSpring(sizeTarget, {
+          mass: 0.1,
+          stiffness: 170,
+          damping: 14,
+        });
+
+        const width = reduced ? baseSize : size;
+
+        return (
+          <div className="group relative flex flex-col items-center">
+            {label && (
+              <span className="pointer-events-none absolute -top-9 whitespace-nowrap rounded-md bg-[#1c2b33] px-2.5 py-1 text-xs font-medium text-[#fbf7f0] opacity-0 shadow-lg transition-opacity duration-150 group-hover:opacity-100">
+                {label}
+              </span>
+            )}
+            <motion.div
+              ref={ref}
+              style={{ width, height: width }}
+              onClick={onClick}
+              role={onClick ? "button" : undefined}
+              tabIndex={onClick ? 0 : undefined}
+              onKeyDown={(e) => {
+                if ((e.key === "Enter" || e.key === " ") && onClick) {
+                  e.preventDefault();
+                  onClick();
+                }
+              }}
+              className={[
+                "flex aspect-square items-center justify-center rounded-2xl",
+                "bg-white/80 shadow-md ring-1 ring-black/5",
+                "transition-shadow hover:shadow-xl",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2ec3c3]",
+                onClick ? "cursor-pointer" : "",
+                className,
+              ].join(" ")}
+            >
+              {children}
+            </motion.div>
+          </div>
+        );
+      }
+
+      function DockDivider() {
+        return (
+          <div
+            className="mx-1 h-10 w-px self-center bg-[#1c2b33]/15"
+            aria-hidden
+          />
+        );
+      }
+
+      /* ---- Demo glyphs (inline SVG, Sand & Surf palette) ----------------- */
+      const Glyph = ({ children, bg }) => (
+        <div
+          className="flex h-[72%] w-[72%] items-center justify-center rounded-xl"
+          style={{ background: bg }}
+        >
+          {children}
+        </div>
+      );
+
+      const Icons = {
+        finder: (
+          <Glyph bg="linear-gradient(160deg,#2ec3c3,#0f5c5c)">
+            <svg width="60%" height="60%" viewBox="0 0 24 24" fill="none">
+              <path d="M8 9v3M16 9v3" stroke="#fbf7f0" strokeWidth="2.2" strokeLinecap="round" />
+              <path d="M8.5 16c1.6 1.4 5.4 1.4 7 0" stroke="#fbf7f0" strokeWidth="2.2" strokeLinecap="round" />
+            </svg>
+          </Glyph>
+        ),
+        mail: (
+          <Glyph bg="linear-gradient(160deg,#1f8a8a,#0f5c5c)">
+            <svg width="58%" height="58%" viewBox="0 0 24 24" fill="none">
+              <rect x="3" y="5.5" width="18" height="13" rx="2.4" stroke="#fbf7f0" strokeWidth="1.9" />
+              <path d="M4 7l8 6 8-6" stroke="#fbf7f0" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </Glyph>
+        ),
+        photos: (
+          <Glyph bg="linear-gradient(160deg,#f4ece0,#ece0cd)">
+            <svg width="58%" height="58%" viewBox="0 0 24 24" fill="none">
+              <rect x="3.5" y="4.5" width="17" height="15" rx="2.4" stroke="#0f5c5c" strokeWidth="1.9" />
+              <circle cx="9" cy="9.5" r="1.7" fill="#1f8a8a" />
+              <path d="M5 17l4.5-4.5 3 3 3-3.5L20 17" stroke="#0f5c5c" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </Glyph>
+        ),
+        music: (
+          <Glyph bg="linear-gradient(160deg,#2ec3c3,#1f8a8a)">
+            <svg width="56%" height="56%" viewBox="0 0 24 24" fill="none">
+              <path d="M9 18V6l9-2v12" stroke="#fbf7f0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <circle cx="7" cy="18" r="2.2" fill="#fbf7f0" />
+              <circle cx="16" cy="16" r="2.2" fill="#fbf7f0" />
+            </svg>
+          </Glyph>
+        ),
+        terminal: (
+          <Glyph bg="linear-gradient(160deg,#1c2b33,#0f5c5c)">
+            <svg width="58%" height="58%" viewBox="0 0 24 24" fill="none">
+              <path d="M6 8l4 4-4 4" stroke="#2ec3c3" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M12.5 16H18" stroke="#fbf7f0" strokeWidth="2.2" strokeLinecap="round" />
+            </svg>
+          </Glyph>
+        ),
+        calendar: (
+          <Glyph bg="linear-gradient(160deg,#fbf7f0,#f4ece0)">
+            <svg width="58%" height="58%" viewBox="0 0 24 24" fill="none">
+              <rect x="4" y="5" width="16" height="15" rx="2.4" stroke="#0f5c5c" strokeWidth="1.9" />
+              <path d="M4 9.5h16M8 3v4M16 3v4" stroke="#1f8a8a" strokeWidth="1.9" strokeLinecap="round" />
+            </svg>
+          </Glyph>
+        ),
+        settings: (
+          <Glyph bg="linear-gradient(160deg,#4a5d66,#1c2b33)">
+            <svg width="58%" height="58%" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="3.1" stroke="#2ec3c3" strokeWidth="1.9" />
+              <path d="M12 3v2.5M12 18.5V21M3 12h2.5M18.5 12H21M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M18.4 5.6l-1.8 1.8M7.4 16.6l-1.8 1.8" stroke="#fbf7f0" strokeWidth="1.8" strokeLinecap="round" />
+            </svg>
+          </Glyph>
+        ),
+        trash: (
+          <Glyph bg="linear-gradient(160deg,#ece0cd,#f4ece0)">
+            <svg width="56%" height="56%" viewBox="0 0 24 24" fill="none">
+              <path d="M5 7h14M9 7V5h6v2M7 7l1 12h8l1-12" stroke="#0f5c5c" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </Glyph>
+        ),
+      };
+
+      function Demo() {
+        const [opened, setOpened] = React.useState(null);
+
+        const apps = [
+          { key: "finder", label: "Finder" },
+          { key: "mail", label: "Mail" },
+          { key: "photos", label: "Photos" },
+          { key: "music", label: "Music" },
+          { key: "terminal", label: "Terminal" },
+          { key: "calendar", label: "Calendar" },
+          { key: "settings", label: "Settings" },
+        ];
+
+        return (
+          <main className="relative z-10 flex min-h-screen flex-col items-center justify-between px-6 py-14">
+            <header className="mx-auto max-w-2xl text-center">
+              <p className="mb-3 inline-block rounded-full border border-[#1f8a8a]/30 bg-white/60 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#0f5c5c]">
+                Sand &amp; Surf · React
+              </p>
+              <h1 className="text-4xl font-bold tracking-tight text-[#1c2b33] sm:text-5xl">
+                macOS Dock
+              </h1>
+              <p className="mt-3 text-base leading-relaxed text-[#4a5d66]">
+                Move your cursor across the dock below. Each icon measures its
+                distance to the pointer and springs to a larger size, so its
+                neighbours scale in a smooth bell curve around the one you hover.
+              </p>
+            </header>
+
+            <section className="flex w-full flex-1 flex-col items-center justify-center">
+              <div
+                className="mb-10 flex h-28 min-w-[280px] items-center justify-center rounded-2xl border border-[#1f8a8a]/15 bg-white/55 px-8 text-center text-sm font-medium text-[#4a5d66] backdrop-blur"
+                aria-live="polite"
+              >
+                {opened
+                  ? `Opened “${opened}” — click another icon to switch.`
+                  : "No app open yet. Click any dock icon."}
+              </div>
+            </section>
+
+            <footer className="w-full pb-4">
+              <MacosDock>
+                {apps.map((a) => (
+                  <DockItem
+                    key={a.key}
+                    label={a.label}
+                    onClick={() => setOpened(a.label)}
+                  >
+                    {Icons[a.key]}
+                  </DockItem>
+                ))}
+                <DockDivider />
+                <DockItem label="Trash" onClick={() => setOpened("Trash")}>
+                  {Icons.trash}
+                </DockItem>
+              </MacosDock>
+              <p className="mt-5 text-center text-xs text-[#4a5d66]/70">
+                Tip: try keyboard focus (Tab) + Enter, and toggle
+                reduced-motion in your OS to see the static fallback.
+              </p>
+            </footer>
+          </main>
+        );
+      }
+
+      function App() {
+        return (
+          <React.Fragment>
+            <div className="wallpaper" aria-hidden />
+            <Demo />
+          </React.Fragment>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+    </script>
+  </body>
+</html>
