@@ -1,0 +1,24 @@
+/* Smooth Scroll — saltycodestudio
+ * When active, the content wrapper is fixed and translated via transform while
+ * the <body> is given a real height (= content height) so the native scrollbar
+ * still works and drives the animation. */
+
+/* Applied by script.js only when smooth scroll is engaged. */
+html.has-smooth-scroll,
+html.has-smooth-scroll body {
+  margin: 0;
+  /* The scrollbar lives on the window; body height is set in JS. */
+}
+
+html.has-smooth-scroll #scroll-content {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  will-change: transform;
+}
+
+/* Without JS (or when disabled) the wrapper behaves like a normal block. */
+#scroll-content {
+  width: 100%;
+}

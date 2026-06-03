@@ -1,0 +1,75 @@
+/* Tabs — saltycodestudio */
+
+:root {
+  --tabs-teal: #0e7c86;
+  --tabs-navy: #0c2a33;
+  --tabs-muted: #6a7f85;
+  --tabs-track: rgba(12, 42, 51, 0.1);
+}
+
+.tabs {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: var(--tabs-navy);
+}
+
+.tabs__list {
+  position: relative;
+  display: flex;
+  gap: 0.25rem;
+  border-bottom: 1px solid var(--tabs-track);
+}
+
+.tabs__tab {
+  font: inherit;
+  font-weight: 600;
+  font-size: 0.98rem;
+  color: var(--tabs-muted);
+  background: transparent;
+  border: none;
+  padding: 0.85rem 1.1rem;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.2s ease;
+  white-space: nowrap;
+}
+
+.tabs__tab:hover { color: var(--tabs-navy); }
+.tabs__tab[aria-selected="true"] { color: var(--tabs-teal); }
+.tabs__tab:focus-visible {
+  outline: 2px solid var(--tabs-teal);
+  outline-offset: -2px;
+  border-radius: 6px;
+}
+
+/* Sliding active indicator — positioned/sized by JS. */
+.tabs__indicator {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  height: 2px;
+  width: 0;
+  background: var(--tabs-teal);
+  border-radius: 2px;
+  transform: translateX(0);
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+              width 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+.tabs__panel {
+  padding: 1.4rem 0.25rem;
+  line-height: 1.6;
+  animation: tabs-fade 0.25s ease;
+}
+.tabs__panel:focus-visible { outline: 2px solid var(--tabs-teal); outline-offset: 4px; border-radius: 8px; }
+.tabs__panel[hidden] { display: none; }
+
+@keyframes tabs-fade {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tabs__indicator { transition: none; }
+  .tabs__panel { animation: none; }
+}

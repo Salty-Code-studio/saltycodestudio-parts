@@ -1,0 +1,11 @@
+{
+  "name": "Aurora Background",
+  "slug": "aurora-background",
+  "category": "css",
+  "tier": "showcase",
+  "tags": ["aurora", "glow", "background", "blobs", "animation"],
+  "description": "Soft northern-lights glow blobs that slowly drift, scale, and fade behind your content.",
+  "deps": [],
+  "files": ["styles.css", "index.html"],
+  "usage": "Wrap content in .scs-aurora and include the .scs-aurora__lights layer with its four spans. Give the wrapper a height; content sits above the aurora automatically."
+}

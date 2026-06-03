@@ -1,0 +1,51 @@
+/* Image Scrub Sequence — saltycodestudio */
+:root {
+  --ss-sand: #f4ebe0; --ss-cream: #faf6f0; --ss-teal: #2a7f80;
+  --ss-deep: #0f2c3a; --ss-ink: #14202a;
+}
+
+/* tall section gives the scroll runway that drives the scrub */
+.scrub-section {
+  position: relative;
+  height: 400vh; /* 4 viewport heights of scroll = the whole sequence */
+  background: var(--ss-deep);
+}
+
+.scrub-sticky {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+.scrub-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.scrub-caption {
+  position: absolute;
+  left: 0;
+  bottom: clamp(2rem, 6vh, 5rem);
+  width: 100%;
+  text-align: center;
+  color: var(--ss-cream);
+  pointer-events: none;
+  padding: 0 1.5rem;
+}
+
+.scrub-caption .eyebrow {
+  font-size: 0.8rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(250, 246, 240, 0.7);
+  margin-bottom: 0.6rem;
+}
+
+.scrub-caption h2 {
+  font-size: clamp(1.6rem, 4vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin: 0;
+}

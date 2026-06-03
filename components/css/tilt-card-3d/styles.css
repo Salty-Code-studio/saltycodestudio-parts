@@ -1,0 +1,76 @@
+/* saltycodestudio — 3D Tilt Card (pure CSS)
+   On hover the card lifts and tilts in 3D; inner layers float at different
+   depths (parallax) and a sheen sweeps across. No JS. */
+
+.scs-tilt {
+  perspective: 1000px;          /* the 3D viewing distance */
+  display: inline-block;
+}
+
+.scs-tilt__card {
+  position: relative;
+  width: 300px;
+  min-height: 380px;
+  border-radius: 20px;
+  padding: 1.75rem;
+  background: linear-gradient(160deg, #134e5e, #0d2a3a);
+  color: #eaf6f8;
+  transform-style: preserve-3d;
+  transform: rotateX(0) rotateY(0) translateZ(0);
+  box-shadow: 0 10px 30px rgba(5, 17, 26, 0.45);
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.4s ease;
+  overflow: hidden;
+}
+
+/* lift + tilt on hover */
+.scs-tilt:hover .scs-tilt__card {
+  transform: rotateX(8deg) rotateY(-12deg) translateZ(24px) scale(1.02);
+  box-shadow: 28px 34px 60px rgba(5, 17, 26, 0.55);
+}
+
+/* sheen sweep */
+.scs-tilt__card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent 30%, rgba(255, 255, 255, 0.22) 50%, transparent 70%);
+  transform: translateX(-120%);
+  transition: transform 0.7s ease;
+  pointer-events: none;
+}
+.scs-tilt:hover .scs-tilt__card::before {
+  transform: translateX(120%);
+}
+
+/* inner floating layers — each pushed forward on Z so they parallax */
+.scs-tilt__layer {
+  position: relative;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.scs-tilt__eyebrow { transform: translateZ(20px); }
+.scs-tilt__title   { transform: translateZ(40px); }
+.scs-tilt__body    { transform: translateZ(28px); }
+.scs-tilt__tag     { transform: translateZ(60px); }
+
+.scs-tilt:hover .scs-tilt__eyebrow { transform: translateZ(40px); }
+.scs-tilt:hover .scs-tilt__title   { transform: translateZ(70px); }
+.scs-tilt:hover .scs-tilt__body    { transform: translateZ(48px); }
+.scs-tilt:hover .scs-tilt__tag     { transform: translateZ(100px); }
+
+/* sample content styling */
+.scs-tilt__eyebrow { margin: 0 0 .5rem; font: 600 .72rem/1 system-ui; letter-spacing: .14em; text-transform: uppercase; color: #4ec4a3; }
+.scs-tilt__title   { margin: 0 0 .75rem; font: 800 1.7rem/1.1 system-ui; letter-spacing: -.02em; }
+.scs-tilt__body    { margin: 0; font: 400 .95rem/1.55 system-ui; color: rgba(234, 246, 248, .8); }
+.scs-tilt__tag {
+  position: absolute; bottom: 1.75rem; left: 1.75rem;
+  display: inline-block; padding: .4rem .85rem; border-radius: 999px;
+  background: #f4a259; color: #0d2a3a; font: 700 .75rem/1 system-ui; letter-spacing: .03em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scs-tilt__card,
+  .scs-tilt__layer,
+  .scs-tilt__card::before { transition: none; }
+  .scs-tilt:hover .scs-tilt__card { transform: translateZ(0) scale(1.01); }
+}

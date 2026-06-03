@@ -1,0 +1,17 @@
+<!-- 1) Put this FIRST in <head>, before any CSS, to avoid a flash of wrong theme. -->
+<script>
+  (function () {
+    try {
+      var stored = localStorage.getItem('theme');
+      var sysDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      var theme = stored || (sysDark ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    } catch (e) {}
+  })();
+</script>
+
+<!-- 2) The toggle button (anywhere in the page, e.g. your header) -->
+<button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle color theme">
+  <span class="theme-toggle__icon theme-toggle__sun" aria-hidden="true">&#9728;</span>
+  <span class="theme-toggle__icon theme-toggle__moon" aria-hidden="true">&#9789;</span>
+</button>

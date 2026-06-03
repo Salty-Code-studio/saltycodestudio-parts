@@ -1,0 +1,11 @@
+{
+  "name": "Animated Counter",
+  "slug": "animated-counter",
+  "category": "react",
+  "tier": "practical",
+  "tags": ["counter", "count-up", "stats", "scroll", "intersection-observer"],
+  "description": "A number that eases up to a target value when it scrolls into view, with prefix/suffix and locale formatting.",
+  "deps": ["react", "tailwindcss"],
+  "files": ["AnimatedCounter.tsx"],
+  "usage": "Use <AnimatedCounter value={1200} suffix='+' /> for a single stat, or <StatGrid /> for the sample row."
+}

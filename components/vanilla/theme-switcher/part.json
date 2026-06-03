@@ -1,0 +1,11 @@
+{
+  "name": "Theme Switcher",
+  "slug": "theme-switcher",
+  "category": "vanilla",
+  "tier": "practical",
+  "tags": ["theme", "dark-mode", "css-variables", "localstorage", "prefers-color-scheme"],
+  "description": "A light/dark theme toggle built on CSS variables and a data-theme attribute that persists to localStorage and respects the OS prefers-color-scheme.",
+  "deps": [],
+  "files": ["styles.css", "script.js"],
+  "usage": "Add the inline no-flash snippet in <head>, a button with id=\"theme-toggle\", then link styles.css and script.js. Build your UI with the provided CSS variables."
+}

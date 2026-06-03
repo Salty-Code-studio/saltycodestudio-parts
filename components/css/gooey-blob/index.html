@@ -1,0 +1,20 @@
+<!-- OPTION A: single morphing blob (simplest, no SVG needed) -->
+<div class="scs-blob"></div>
+
+
+<!-- OPTION B: gooey merge — needs the SVG goo filter once per page.
+     Paste this hidden SVG anywhere in the document: -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <filter id="scs-goo">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+      <feColorMatrix in="blur" mode="matrix"
+        values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -10" result="goo" />
+      <feBlend in="SourceGraphic" in2="goo" />
+    </filter>
+  </defs>
+</svg>
+
+<div class="scs-goo">
+  <span></span><span></span><span></span>
+</div>

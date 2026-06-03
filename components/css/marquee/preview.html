@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Infinite Marquee — saltycodestudio</title>
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;display:flex;flex-direction:column;justify-content:center;gap:2rem;background:#fdf6ec;font-family:system-ui,sans-serif;padding:2rem 0}
+
+  /* ---- component ---- */
+  .scs-marquee{--scs-marquee-duration:28s;--scs-marquee-gap:3rem;position:relative;width:100%;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+  .scs-marquee__track{display:flex;width:max-content;gap:var(--scs-marquee-gap);animation:scs-marquee-scroll var(--scs-marquee-duration) linear infinite;will-change:transform}
+  .scs-marquee__group{display:flex;flex-shrink:0;gap:var(--scs-marquee-gap);padding-right:var(--scs-marquee-gap)}
+  .scs-marquee:hover .scs-marquee__track{animation-play-state:paused}
+  .scs-marquee--reverse .scs-marquee__track{animation-direction:reverse}
+  @keyframes scs-marquee-scroll{to{transform:translateX(-50%)}}
+  @media (prefers-reduced-motion:reduce){.scs-marquee__track{animation:none}}
+  .scs-marquee__item{flex-shrink:0;font:700 1.4rem/1 system-ui,sans-serif;letter-spacing:-.01em;color:#134e5e;white-space:nowrap;display:inline-flex;align-items:center;gap:.75rem}
+  .scs-marquee__item::before{content:"";width:8px;height:8px;border-radius:50%;background:#f4a259}
+
+  .hint{text-align:center;color:#7a8b91;font-size:.85rem}
+</style>
+</head>
+<body>
+  <p class="hint">Hover to pause &middot; second row scrolls in reverse</p>
+
+  <div class="scs-marquee">
+    <div class="scs-marquee__track">
+      <div class="scs-marquee__group">
+        <span class="scs-marquee__item">Sand &amp; Surf</span>
+        <span class="scs-marquee__item">Premium Builds</span>
+        <span class="scs-marquee__item">saltycodestudio</span>
+        <span class="scs-marquee__item">Award-grade</span>
+      </div>
+      <div class="scs-marquee__group" aria-hidden="true">
+        <span class="scs-marquee__item">Sand &amp; Surf</span>
+        <span class="scs-marquee__item">Premium Builds</span>
+        <span class="scs-marquee__item">saltycodestudio</span>
+        <span class="scs-marquee__item">Award-grade</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="scs-marquee scs-marquee--reverse" style="--scs-marquee-duration:34s">
+    <div class="scs-marquee__track">
+      <div class="scs-marquee__group">
+        <span class="scs-marquee__item">Ocean Teal</span>
+        <span class="scs-marquee__item">Deep Navy</span>
+        <span class="scs-marquee__item">Warm Sand</span>
+        <span class="scs-marquee__item">Cream</span>
+      </div>
+      <div class="scs-marquee__group" aria-hidden="true">
+        <span class="scs-marquee__item">Ocean Teal</span>
+        <span class="scs-marquee__item">Deep Navy</span>
+        <span class="scs-marquee__item">Warm Sand</span>
+        <span class="scs-marquee__item">Cream</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

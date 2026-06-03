@@ -1,0 +1,29 @@
+/* Split Text Stagger — saltycodestudio */
+:root {
+  --ss-sand: #f4ebe0; --ss-cream: #faf6f0; --ss-teal: #2a7f80;
+  --ss-deep: #0f2c3a; --ss-ink: #14202a;
+}
+
+/* keep whole words from breaking mid-word when splitting chars */
+.split-word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+/* each unit is a mask; its inner element does the rising */
+.split-unit {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  line-height: 1; /* tighten so descenders aren't clipped oddly */
+}
+
+.split-unit-inner {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+/* a heading using this should have line-height room so masks look clean */
+[data-split] {
+  line-height: 1.05;
+}

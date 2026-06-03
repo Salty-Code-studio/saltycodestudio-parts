@@ -1,0 +1,11 @@
+{
+  "name": "Magnetic Button",
+  "slug": "magnetic-button",
+  "category": "motion",
+  "tier": "practical",
+  "tags": ["hover", "gsap", "button", "magnetic", "cursor", "micro-interaction"],
+  "description": "A button (and its label) is magnetically pulled toward the cursor while hovered and springs back on leave.",
+  "deps": ["gsap"],
+  "files": ["animation.js", "styles.css"],
+  "usage": "Add class .magnetic with an inner .magnetic-label, then call initMagneticButtons()."
+}

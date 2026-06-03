@@ -1,0 +1,31 @@
+/* Scroll Text Reveal — saltycodestudio
+ * The masking overflow:hidden is what gives the "rise from behind a line" feel. */
+
+/* word mode: outer masks, inner moves */
+.reveal-word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+}
+.reveal-word-inner {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+/* line mode: author each line as a .reveal-line block */
+.reveal-line {
+  display: block;
+  overflow: hidden;
+}
+.reveal-line > * {
+  display: block;
+}
+
+/* element mode wrapper helper (optional): mask whatever is inside */
+[data-reveal] {
+  overflow: hidden; /* clips the rise so it emerges from a clean edge */
+}
+[data-reveal="words"],
+[data-reveal="lines"] {
+  overflow: visible; /* child elements own their own masking */
+}

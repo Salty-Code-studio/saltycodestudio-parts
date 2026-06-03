@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Image Scrub Sequence — saltycodestudio</title>
+<style>
+  :root { --ss-sand:#f4ebe0; --ss-cream:#faf6f0; --ss-teal:#2a7f80; --ss-deep:#0f2c3a; --ss-ink:#14202a; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system,"Segoe UI",system-ui,sans-serif; background: var(--ss-cream); color: var(--ss-ink); }
+
+  .intro, .outro { min-height: 100vh; display: grid; place-items: center; text-align: center; padding: 2rem; }
+  .intro { background: radial-gradient(120% 100% at 50% 0%, #fff, var(--ss-sand)); }
+  .intro h1 { font-size: clamp(2.5rem,8vw,6rem); color: var(--ss-deep); letter-spacing: -0.03em; }
+  .intro p { margin-top: 1rem; color: #5a6a72; }
+  .scroll-hint { margin-top: 2.5rem; font-size: 0.8rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--ss-teal); }
+  .outro { background: linear-gradient(180deg, var(--ss-deep), var(--ss-cream)); }
+  .outro p { font-size: clamp(1.6rem,4vw,2.6rem); font-weight: 700; color: var(--ss-deep); }
+
+  .scrub-section { position: relative; height: 400vh; background: var(--ss-deep); }
+  .scrub-sticky { position: relative; height: 100vh; width: 100%; overflow: hidden; }
+  .scrub-canvas { display: block; width: 100%; height: 100%; }
+  .scrub-caption { position: absolute; left: 0; bottom: clamp(2rem,6vh,5rem); width: 100%; text-align: center; color: var(--ss-cream); pointer-events: none; padding: 0 1.5rem; }
+  .scrub-caption .eyebrow { font-size: 0.8rem; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(250,246,240,0.7); margin-bottom: 0.6rem; }
+  .scrub-caption h2 { font-size: clamp(1.6rem,4vw,3rem); font-weight: 800; letter-spacing: -0.02em; margin: 0; }
+</style>
+</head>
+<body>
+
+  <section class="intro">
+    <div>
+      <h1>Scrub Sequence</h1>
+      <p>Scroll down — your scroll position is the playhead. The canvas sequence plays as you move.</p>
+      <div class="scroll-hint">Scroll ↓</div>
+    </div>
+  </section>
+
+  <section class="scrub-section">
+    <div class="scrub-sticky">
+      <canvas class="scrub-canvas"></canvas>
+      <div class="scrub-caption">
+        <p class="eyebrow">Procedural frame sequence</p>
+        <h2>Scroll is the timeline</h2>
+      </div>
+    </div>
+  </section>
+
+  <section class="outro"><p>Sequence complete.</p></section>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+    var FRAME_COUNT = 120;
+    var PALETTE = { cream:[250,246,240], sand:[232,167,107], teal:[42,127,128], deep:[15,44,58] };
+    function lerp(a,b,t){return a+(b-a)*t;}
+    function mixRGB(c1,c2,t){return [Math.round(lerp(c1[0],c2[0],t)),Math.round(lerp(c1[1],c2[1],t)),Math.round(lerp(c1[2],c2[2],t))];}
+    function rgb(c,a){a=a===undefined?1:a;return 'rgba('+c[0]+','+c[1]+','+c[2]+','+a+')';}
+    function drawFrame(ctx,w,h,p){
+      ctx.clearRect(0,0,w,h);
+      var top = mixRGB(PALETTE.cream,PALETTE.teal,Math.min(p*1.4,1));
+      var bot = mixRGB(PALETTE.teal,PALETTE.deep,p);
+      var g = ctx.createLinearGradient(0,0,w*0.3,h);
+      g.addColorStop(0,rgb(top)); g.addColorStop(1,rgb(bot));
+      ctx.fillStyle = g; ctx.fillRect(0,0,w,h);
+      var cx=w/2, cy=h/2;
+      var baseR = Math.min(w,h)*(0.16+0.12*Math.sin(p*Math.PI));
+      var rings=5;
+      for(var i=0;i<rings;i++){
+        var ringP=i/rings;
+        var radius=baseR+ringP*Math.min(w,h)*0.28;
+        var rot=p*Math.PI*3+i*0.5;
+        var span=Math.PI*(0.6+0.4*Math.sin(p*Math.PI*2+i));
+        var tint=mixRGB(PALETTE.sand,PALETTE.cream,ringP);
+        ctx.beginPath(); ctx.arc(cx,cy,radius,rot,rot+span);
+        ctx.lineWidth=Math.max(2,Math.min(w,h)*0.012*(1-ringP*0.5));
+        ctx.strokeStyle=rgb(tint,0.85-ringP*0.45); ctx.lineCap='round'; ctx.stroke();
+      }
+      var core=mixRGB(PALETTE.cream,PALETTE.sand,p);
+      ctx.beginPath(); ctx.arc(cx,cy,baseR*0.35,0,Math.PI*2); ctx.fillStyle=rgb(core,0.95); ctx.fill();
+      var ticks=24, active=Math.floor(p*ticks);
+      for(var j=0;j<ticks;j++){
+        var tx=(w/(ticks+1))*(j+1); var on=j<=active;
+        ctx.beginPath(); ctx.rect(tx-1,h-40,2,on?16:8);
+        ctx.fillStyle=rgb(on?PALETTE.cream:PALETTE.deep,on?0.9:0.25); ctx.fill();
+      }
+    }
+    function initScrubSequence(root){
+      root=root||document;
+      root.querySelectorAll('.scrub-section').forEach(function(section){
+        var canvas=section.querySelector('.scrub-canvas'); if(!canvas) return;
+        var ctx=canvas.getContext('2d');
+        var dpr=Math.min(window.devicePixelRatio||1,2);
+        var state={frame:0};
+        function render(){ var rect=canvas.getBoundingClientRect(); drawFrame(ctx,rect.width,rect.height,state.frame/(FRAME_COUNT-1)); }
+        function resize(){ var rect=canvas.getBoundingClientRect(); canvas.width=rect.width*dpr; canvas.height=rect.height*dpr; ctx.setTransform(dpr,0,0,dpr,0,0); render(); }
+        ScrollTrigger.create({
+          trigger:section, start:'top top', end:'bottom bottom', scrub:0.4,
+          pin: section.querySelector('.scrub-sticky')||canvas, anticipatePin:1,
+          onUpdate:function(self){ state.frame=Math.round(self.progress*(FRAME_COUNT-1)); render(); },
+          invalidateOnRefresh:true
+        });
+        window.addEventListener('resize',resize); resize();
+      });
+    }
+    initScrubSequence();
+  </script>
+</body>
+</html>

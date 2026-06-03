@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Magnetic Button — saltycodestudio</title>
+<style>
+  :root { --ss-sand:#f4ebe0; --ss-cream:#faf6f0; --ss-teal:#2a7f80; --ss-deep:#0f2c3a; --ss-ink:#14202a; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system,"Segoe UI",system-ui,sans-serif; background: radial-gradient(120% 120% at 50% 0%, var(--ss-cream), var(--ss-sand)); color: var(--ss-ink); min-height: 100vh; }
+  .stage { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3rem; padding: 2rem; text-align: center; }
+  h1 { font-size: clamp(2rem,6vw,4rem); color: var(--ss-deep); letter-spacing: -0.03em; }
+  p.sub { color: #5a6a72; max-width: 44ch; line-height: 1.55; }
+  .row { display: flex; gap: 2.5rem; flex-wrap: wrap; justify-content: center; align-items: center; }
+
+  .magnetic { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 0.6em; padding: 1.1rem 2.4rem; border: none; border-radius: 999px; background: var(--ss-deep); color: var(--ss-cream); font: inherit; font-weight: 600; font-size: 1.05rem; letter-spacing: 0.01em; cursor: pointer; will-change: transform; -webkit-tap-highlight-color: transparent; transition: background-color 0.3s ease; }
+  .magnetic:hover { background: var(--ss-teal); }
+  .magnetic-label { position: relative; display: inline-flex; align-items: center; gap: 0.5em; will-change: transform; pointer-events: none; }
+  .magnetic--ghost { background: transparent; color: var(--ss-deep); box-shadow: inset 0 0 0 1.5px var(--ss-deep); }
+  .magnetic--ghost:hover { background: var(--ss-deep); color: var(--ss-cream); box-shadow: inset 0 0 0 1.5px var(--ss-deep); }
+  @media (prefers-reduced-motion: reduce) { .magnetic, .magnetic-label { transform: none !important; } }
+
+  .hint { font-size: 0.8rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--ss-teal); }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <div>
+      <h1>Magnetic Button</h1>
+      <p class="sub" style="margin-top:1rem;">Move your cursor near a button. It leans toward you, the label drifts a touch further for depth, then springs back when you leave.</p>
+    </div>
+    <div class="row">
+      <button class="magnetic" data-magnetic-strength="0.4">
+        <span class="magnetic-label">Get in touch →</span>
+      </button>
+      <button class="magnetic magnetic--ghost" data-magnetic-strength="0.5" data-magnetic-label="0.25">
+        <span class="magnetic-label">View work</span>
+      </button>
+      <button class="magnetic" data-magnetic-strength="0.3" style="background:var(--ss-teal);">
+        <span class="magnetic-label">● Start project</span>
+      </button>
+    </div>
+    <div class="hint">Hover the buttons</div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script>
+    function initMagneticButtons(root) {
+      root = root || document;
+      root.querySelectorAll('.magnetic').forEach(function (btn) {
+        var label = btn.querySelector('.magnetic-label') || btn;
+        var strength = parseFloat(btn.getAttribute('data-magnetic-strength')) || 0.4;
+        var labelExtra = parseFloat(btn.getAttribute('data-magnetic-label')) || 0.2;
+        var xToBtn = gsap.quickTo(btn, 'x', { duration: 0.5, ease: 'power3.out' });
+        var yToBtn = gsap.quickTo(btn, 'y', { duration: 0.5, ease: 'power3.out' });
+        var xToLabel = gsap.quickTo(label, 'x', { duration: 0.6, ease: 'power3.out' });
+        var yToLabel = gsap.quickTo(label, 'y', { duration: 0.6, ease: 'power3.out' });
+        btn.addEventListener('mousemove', function (e) {
+          var r = btn.getBoundingClientRect();
+          var relX = e.clientX - (r.left + r.width / 2);
+          var relY = e.clientY - (r.top + r.height / 2);
+          xToBtn(relX * strength); yToBtn(relY * strength);
+          xToLabel(relX * (strength + labelExtra)); yToLabel(relY * (strength + labelExtra));
+        });
+        btn.addEventListener('mouseleave', function () {
+          gsap.to(btn, { x: 0, y: 0, duration: 0.7, ease: 'elastic.out(1, 0.4)' });
+          gsap.to(label, { x: 0, y: 0, duration: 0.8, ease: 'elastic.out(1, 0.35)' });
+        });
+      });
+    }
+    initMagneticButtons();
+  </script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "name": "Parallax Layers",
+  "slug": "parallax-layers",
+  "category": "motion",
+  "tier": "practical",
+  "tags": ["scroll", "parallax", "gsap", "depth", "layers", "scrolltrigger"],
+  "description": "Multiple depth layers translate at different speeds on scroll to create a sense of dimensional depth.",
+  "deps": ["gsap", "gsap/ScrollTrigger"],
+  "files": ["animation.js", "styles.css"],
+  "usage": "Give layer elements data-parallax-speed (e.g. -0.3 to 0.6) inside a .parallax-scene and call initParallaxLayers()."
+}

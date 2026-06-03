@@ -1,0 +1,11 @@
+{
+  "name": "Preloader",
+  "slug": "preloader",
+  "category": "vanilla",
+  "tier": "showcase",
+  "tags": ["preloader", "loader", "intro", "counter", "page-load"],
+  "description": "A polished full-screen preloader with an animated count-up and progress sweep that slides away once the page has finished loading.",
+  "deps": [],
+  "files": ["styles.css", "script.js"],
+  "usage": "Paste the preloader markup as the first child of <body>, link styles.css and script.js. It removes itself on window load; reveals page content via a body class."
+}

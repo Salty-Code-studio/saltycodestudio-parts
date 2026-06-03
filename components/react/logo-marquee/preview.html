@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Logo Marquee — saltycodestudio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style> body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; } </style>
+  </head>
+  <body class="bg-[#faf6ef]">
+    <div id="root"></div>
+    <script type="text/babel" data-presets="react">
+      const DEFAULT_LOGOS = ["Tideline", "Reef & Co.", "Coastline", "Marea", "Saltwater", "Harborlight", "Driftwood", "Bluefin"];
+
+      function LogoMarquee({ logos = DEFAULT_LOGOS, speed = 30, direction = "left", title = "Trusted by teams along every coast", className = "" }) {
+        const track = [...logos, ...logos];
+        return (
+          <section className={`bg-[#faf6ef] py-14 ${className}`}>
+            {title && <p className="mb-8 text-center text-xs font-semibold uppercase tracking-[0.18em] text-[#a89c84]">{title}</p>}
+            <div className="group relative overflow-hidden" style={{ maskImage: "linear-gradient(to right, transparent, #000 12%, #000 88%, transparent)", WebkitMaskImage: "linear-gradient(to right, transparent, #000 12%, #000 88%, transparent)" }}>
+              <ul className="flex w-max items-center gap-14 will-change-transform group-hover:[animation-play-state:paused] motion-reduce:[animation:none]" style={{ animation: `scs-marquee ${speed}s linear infinite`, animationDirection: direction === "right" ? "reverse" : "normal" }}>
+                {track.map((logo, i) => (
+                  <li key={i} aria-hidden={i >= logos.length} className="flex shrink-0 items-center text-xl font-semibold tracking-tight text-[#5b6b72] opacity-70 transition-opacity hover:opacity-100">{logo}</li>
+                ))}
+              </ul>
+            </div>
+            <style>{`@keyframes scs-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }`}</style>
+          </section>
+        );
+      }
+
+      function Demo() {
+        return (
+          <div className="min-h-screen">
+            <div className="px-6 pt-24 pb-4 text-center">
+              <h1 className="text-3xl font-semibold tracking-tight text-[#1c2b33]">Logo Marquee</h1>
+              <p className="mt-2 text-[#5b6b72]">Hover to pause. Two rows show both directions.</p>
+            </div>
+            <LogoMarquee />
+            <LogoMarquee direction="right" speed={38} title="" />
+          </div>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(<Demo />);
+    </script>
+  </body>
+</html>

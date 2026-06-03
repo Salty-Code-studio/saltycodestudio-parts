@@ -1,0 +1,19 @@
+<!-- Tabs — accessible. The .tabs wrapper is required for the indicator. -->
+<div class="tabs" data-tabs>
+  <div class="tabs__list" role="tablist" aria-label="Sample tabs">
+    <button class="tabs__tab" role="tab" id="tab-1" aria-controls="panel-1" aria-selected="true" tabindex="0">Overview</button>
+    <button class="tabs__tab" role="tab" id="tab-2" aria-controls="panel-2" aria-selected="false" tabindex="-1">Details</button>
+    <button class="tabs__tab" role="tab" id="tab-3" aria-controls="panel-3" aria-selected="false" tabindex="-1">Reviews</button>
+    <span class="tabs__indicator" aria-hidden="true"></span>
+  </div>
+
+  <div class="tabs__panel" role="tabpanel" id="panel-1" aria-labelledby="tab-1" tabindex="0">
+    Overview content.
+  </div>
+  <div class="tabs__panel" role="tabpanel" id="panel-2" aria-labelledby="tab-2" tabindex="0" hidden>
+    Details content.
+  </div>
+  <div class="tabs__panel" role="tabpanel" id="panel-3" aria-labelledby="tab-3" tabindex="0" hidden>
+    Reviews content.
+  </div>
+</div>

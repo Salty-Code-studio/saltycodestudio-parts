@@ -1,0 +1,69 @@
+/* saltycodestudio — Infinite Marquee
+   Seamless horizontal scroll. The track holds TWO identical groups; it
+   translates by exactly -50% so the second group lands where the first started,
+   making the loop seamless. Pauses on hover. */
+
+.scs-marquee {
+  --scs-marquee-duration: 28s;
+  --scs-marquee-gap: 3rem;
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  /* fade the edges */
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+.scs-marquee__track {
+  display: flex;
+  width: max-content;
+  gap: var(--scs-marquee-gap);
+  animation: scs-marquee-scroll var(--scs-marquee-duration) linear infinite;
+  will-change: transform;
+}
+
+/* Each duplicated group; the gap between groups must match the inner gap so
+   the seam is invisible. */
+.scs-marquee__group {
+  display: flex;
+  flex-shrink: 0;
+  gap: var(--scs-marquee-gap);
+  /* add a trailing gap so group-to-group spacing equals item spacing */
+  padding-right: var(--scs-marquee-gap);
+}
+
+.scs-marquee:hover .scs-marquee__track {
+  animation-play-state: paused;
+}
+
+/* reverse direction modifier */
+.scs-marquee--reverse .scs-marquee__track {
+  animation-direction: reverse;
+}
+
+@keyframes scs-marquee-scroll {
+  to { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scs-marquee__track { animation: none; }
+}
+
+/* sample item styling (optional — replace with your own) */
+.scs-marquee__item {
+  flex-shrink: 0;
+  font: 700 1.4rem/1 system-ui, sans-serif;
+  letter-spacing: -0.01em;
+  color: #134e5e;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.scs-marquee__item::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #f4a259;
+}

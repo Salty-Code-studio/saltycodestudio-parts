@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Preloader — saltycodestudio</title>
+<style>
+  :root {
+    --sand: #f6ede0; --cream: #fbf6ee; --teal: #0e7c86; --navy: #0c2a33;
+    --pre-bg: #0c2a33; --pre-fg: #f6ede0; --pre-accent: #2bb3c0;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: var(--navy); background: radial-gradient(120% 120% at 50% 0%, var(--cream), var(--sand));
+  }
+  .preloader { position: fixed; inset: 0; z-index: 100000; display: flex; align-items: center; justify-content: center; background: var(--pre-bg); color: var(--pre-fg); transition: transform 0.8s cubic-bezier(0.76,0,0.24,1); will-change: transform; }
+  .preloader.is-done { transform: translateY(-100%); }
+  body.preloader-active { overflow: hidden; }
+  .preloader__inner { display: flex; flex-direction: column; align-items: center; gap: 1.4rem; width: min(80vw, 360px); }
+  .preloader__brand { font-weight: 700; letter-spacing: 0.04em; font-size: 1.1rem; opacity: 0.85; }
+  .preloader__bar { width: 100%; height: 2px; background: rgba(246,237,224,0.18); border-radius: 2px; overflow: hidden; }
+  .preloader__fill { display: block; height: 100%; width: 0%; background: var(--pre-accent); border-radius: 2px; transition: width 0.2s ease-out; }
+  .preloader__count { font-variant-numeric: tabular-nums; font-size: clamp(2.5rem,12vw,4.5rem); font-weight: 800; line-height: 1; letter-spacing: -0.03em; }
+  @media (prefers-reduced-motion: reduce) { .preloader { transition: opacity 0.3s ease; } .preloader.is-done { transform: none; opacity: 0; } .preloader__fill { transition: none; } }
+
+  .hero { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.5rem; padding: 4rem 1.5rem; text-align: center; }
+  h1 { font-size: clamp(2.5rem, 8vw, 5rem); margin: 0; letter-spacing: -0.03em; }
+  p { max-width: 48ch; color: #436069; font-size: 1.1rem; line-height: 1.6; }
+  .replay { font: inherit; font-weight: 600; padding: 0.85rem 1.6rem; border-radius: 999px; border: 1.5px solid var(--teal); background: var(--teal); color: var(--cream); cursor: pointer; }
+</style>
+</head>
+<body class="preloader-active">
+
+  <!-- Preloader -->
+  <div class="preloader" id="preloader" role="status" aria-live="polite" aria-label="Loading">
+    <div class="preloader__inner">
+      <span class="preloader__brand">saltycodestudio</span>
+      <div class="preloader__bar"><span class="preloader__fill"></span></div>
+      <span class="preloader__count">0%</span>
+    </div>
+  </div>
+
+  <main class="hero">
+    <h1>Sand &amp; Surf</h1>
+    <p>The page faded in once everything finished loading. The loader counted up, hit 100%, and slid away.</p>
+    <button class="replay" id="replay">Replay loader</button>
+  </main>
+
+  <script src="script.js"></script>
+  <script>
+    // Demo-only: reload to replay the preloader.
+    document.getElementById('replay').addEventListener('click', function () {
+      location.reload();
+    });
+  </script>
+</body>
+</html>

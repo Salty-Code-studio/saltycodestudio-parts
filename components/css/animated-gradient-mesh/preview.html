@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Animated Gradient Mesh — saltycodestudio</title>
+<style>
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0;font-family:system-ui,sans-serif}
+
+  /* ---- component ---- */
+  .scs-mesh{position:relative;width:100%;min-height:100%;overflow:hidden;background-color:#0d2a3a;isolation:isolate}
+  .scs-mesh::before,.scs-mesh::after{content:"";position:absolute;inset:-25%;z-index:-1;background-repeat:no-repeat;filter:blur(40px);will-change:transform,background-position}
+  .scs-mesh::before{
+    background-image:
+      radial-gradient(38% 38% at 25% 30%, #16b8c4 0%, rgba(22,184,196,0) 60%),
+      radial-gradient(42% 42% at 75% 25%, #2a9d8f 0%, rgba(42,157,143,0) 62%),
+      radial-gradient(45% 45% at 60% 80%, #134e5e 0%, rgba(19,78,94,0) 60%);
+    animation:scs-mesh-drift-a 18s ease-in-out infinite alternate;
+  }
+  .scs-mesh::after{
+    background-image:
+      radial-gradient(40% 40% at 80% 70%, #f4a259 0%, rgba(244,162,89,0) 60%),
+      radial-gradient(36% 36% at 20% 75%, #e9c46a 0%, rgba(233,196,106,0) 62%),
+      radial-gradient(48% 48% at 50% 15%, #0e7c86 0%, rgba(14,124,134,0) 60%);
+    mix-blend-mode:screen;animation:scs-mesh-drift-b 24s ease-in-out infinite alternate;
+  }
+  @keyframes scs-mesh-drift-a{0%{transform:translate3d(-4%,-2%,0) scale(1.05) rotate(0)}50%{transform:translate3d(3%,4%,0) scale(1.15) rotate(8deg)}100%{transform:translate3d(5%,-3%,0) scale(1.08) rotate(-6deg)}}
+  @keyframes scs-mesh-drift-b{0%{transform:translate3d(4%,3%,0) scale(1.1) rotate(0)}50%{transform:translate3d(-3%,-4%,0) scale(1.2) rotate(-10deg)}100%{transform:translate3d(-5%,2%,0) scale(1.05) rotate(7deg)}}
+  @media (prefers-reduced-motion:reduce){.scs-mesh::before,.scs-mesh::after{animation:none}}
+
+  /* demo content */
+  .scs-mesh{display:grid;place-items:center;text-align:center;color:#fff}
+  .demo h1{margin:0;font-size:clamp(2rem,6vw,4rem);font-weight:800;letter-spacing:-.02em;text-shadow:0 2px 24px rgba(0,0,0,.35)}
+  .demo p{margin:.75rem 0 0;font-size:1.1rem;opacity:.85}
+</style>
+</head>
+<body>
+  <div class="scs-mesh">
+    <div class="demo">
+      <h1>Living Mesh</h1>
+      <p>A slowly drifting multi-color gradient background — pure CSS.</p>
+    </div>
+  </div>
+</body>
+</html>

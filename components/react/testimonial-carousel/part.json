@@ -1,0 +1,11 @@
+{
+  "name": "Testimonial Carousel",
+  "slug": "testimonial-carousel",
+  "category": "react",
+  "tier": "practical",
+  "tags": ["testimonial", "carousel", "slider", "reviews", "social-proof"],
+  "description": "An auto-advancing testimonial slider with dot navigation, pause-on-hover, and smooth fade/slide transitions.",
+  "deps": ["react", "tailwindcss"],
+  "files": ["TestimonialCarousel.tsx"],
+  "usage": "Render <TestimonialCarousel testimonials={...} /> or use the built-in sample quotes."
+}

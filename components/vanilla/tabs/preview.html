@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tabs — saltycodestudio</title>
+<style>
+  :root { --sand:#f6ede0; --cream:#fbf6ee; --teal:#0e7c86; --navy:#0c2a33; --tabs-teal:#0e7c86; --tabs-navy:#0c2a33; --tabs-muted:#6a7f85; --tabs-track:rgba(12,42,51,0.1); }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: var(--navy); background: radial-gradient(120% 120% at 50% 0%, var(--cream), var(--sand)); display: flex; align-items: center; justify-content: center; padding: 3rem 1.5rem; }
+  .panel-card { width: min(92vw, 540px); background: var(--cream); border-radius: 18px; padding: 1.75rem 2rem 2rem; box-shadow: 0 30px 70px -35px rgba(12,42,51,0.5); }
+
+  .tabs { font-family: inherit; color: var(--tabs-navy); }
+  .tabs__list { position: relative; display: flex; gap: 0.25rem; border-bottom: 1px solid var(--tabs-track); }
+  .tabs__tab { font: inherit; font-weight: 600; font-size: 0.98rem; color: var(--tabs-muted); background: transparent; border: none; padding: 0.85rem 1.1rem; cursor: pointer; position: relative; transition: color 0.2s ease; white-space: nowrap; }
+  .tabs__tab:hover { color: var(--tabs-navy); }
+  .tabs__tab[aria-selected="true"] { color: var(--tabs-teal); }
+  .tabs__tab:focus-visible { outline: 2px solid var(--tabs-teal); outline-offset: -2px; border-radius: 6px; }
+  .tabs__indicator { position: absolute; bottom: -1px; left: 0; height: 2px; width: 0; background: var(--tabs-teal); border-radius: 2px; transition: transform 0.3s cubic-bezier(0.22,1,0.36,1), width 0.3s cubic-bezier(0.22,1,0.36,1); pointer-events: none; }
+  .tabs__panel { padding: 1.4rem 0.25rem; line-height: 1.6; animation: tabs-fade 0.25s ease; color: #3a565d; }
+  .tabs__panel:focus-visible { outline: 2px solid var(--tabs-teal); outline-offset: 4px; border-radius: 8px; }
+  .tabs__panel[hidden] { display: none; }
+  @keyframes tabs-fade { from { opacity: 0; transform: translateY(4px);} to { opacity: 1; transform: translateY(0);} }
+  @media (prefers-reduced-motion: reduce) { .tabs__indicator { transition: none; } .tabs__panel { animation: none; } }
+  h1 { margin: 0 0 1.25rem; font-size: 1.4rem; letter-spacing: -0.02em; }
+</style>
+</head>
+<body>
+  <div class="panel-card">
+    <h1>Cabana Suite</h1>
+    <div class="tabs" data-tabs>
+      <div class="tabs__list" role="tablist" aria-label="Suite information">
+        <button class="tabs__tab" role="tab" id="tab-1" aria-controls="panel-1" aria-selected="true" tabindex="0">Overview</button>
+        <button class="tabs__tab" role="tab" id="tab-2" aria-controls="panel-2" aria-selected="false" tabindex="-1">Amenities</button>
+        <button class="tabs__tab" role="tab" id="tab-3" aria-controls="panel-3" aria-selected="false" tabindex="-1">Reviews</button>
+        <span class="tabs__indicator" aria-hidden="true"></span>
+      </div>
+      <div class="tabs__panel" role="tabpanel" id="panel-1" aria-labelledby="tab-1" tabindex="0">An airy beachfront suite with floor-to-ceiling glass and a private deck facing the surf. Use the arrow keys to move between tabs.</div>
+      <div class="tabs__panel" role="tabpanel" id="panel-2" aria-labelledby="tab-2" tabindex="0" hidden>Outdoor shower, hammock, espresso bar, and a board rack stocked with longboards.</div>
+      <div class="tabs__panel" role="tabpanel" id="panel-3" aria-labelledby="tab-3" tabindex="0" hidden>"Woke up to the sound of waves and the smell of salt. Perfect." — 4.9 / 5 from 212 stays.</div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Testimonial Carousel — saltycodestudio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style> body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; } </style>
+  </head>
+  <body class="bg-[#faf6ef]">
+    <div id="root"></div>
+    <script type="text/babel" data-presets="react">
+      const { useCallback, useEffect, useRef, useState } = React;
+
+      const DEFAULT_TESTIMONIALS = [
+        { quote: "saltycodestudio rebuilt our booking flow and conversions jumped 38% in the first month. It feels like the site was carved for us.", name: "Maya Okonkwo", role: "Founder, Tideline Resorts" },
+        { quote: "The fastest, calmest launch we have ever had. Premium polish without the agency overhead — every detail considered.", name: "Daniel Reyes", role: "Head of Growth, Reef & Co." },
+        { quote: "They speak design and engineering fluently. Our marketing team can finally ship pages without filing a ticket.", name: "Priya Nair", role: "CMO, Coastline Collective" },
+      ];
+
+      function initials(name) { return name.split(" ").map((p) => p[0]).slice(0, 2).join("").toUpperCase(); }
+
+      function TestimonialCarousel({ testimonials = DEFAULT_TESTIMONIALS, interval = 5000, className = "" }) {
+        const [index, setIndex] = useState(0);
+        const [paused, setPaused] = useState(false);
+        const count = testimonials.length;
+        const go = useCallback((next) => setIndex(((next % count) + count) % count), [count]);
+        const timer = useRef(null);
+        useEffect(() => {
+          if (!interval || paused || count <= 1) return;
+          timer.current = setInterval(() => setIndex((i) => (i + 1) % count), interval);
+          return () => { if (timer.current) clearInterval(timer.current); };
+        }, [interval, paused, count]);
+        return (
+          <section className={`bg-[#faf6ef] py-20 px-6 ${className}`} aria-roledescription="carousel" aria-label="Testimonials" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
+            <div className="mx-auto max-w-3xl">
+              <div className="relative overflow-hidden rounded-3xl border border-[#e7ddcd] bg-white/70 p-8 shadow-sm backdrop-blur sm:p-12">
+                <span className="pointer-events-none absolute -top-2 left-6 select-none font-serif text-8xl leading-none text-teal-700/15" aria-hidden="true">“</span>
+                <div className="relative min-h-[180px]">
+                  {testimonials.map((t, i) => (
+                    <figure key={i} aria-hidden={i !== index} className={`transition-all duration-500 ease-out ${i === index ? "relative opacity-100 translate-x-0" : "pointer-events-none absolute inset-0 translate-x-4 opacity-0"}`}>
+                      <blockquote className="relative z-10 text-lg font-medium leading-relaxed text-[#1c2b33] sm:text-xl">{t.quote}</blockquote>
+                      <figcaption className="mt-6 flex items-center gap-3">
+                        {t.avatar ? <img src={t.avatar} alt={t.name} className="h-11 w-11 rounded-full object-cover" /> : <span className="grid h-11 w-11 place-items-center rounded-full bg-teal-700 text-sm font-semibold text-white">{initials(t.name)}</span>}
+                        <div>
+                          <p className="text-sm font-semibold text-[#1c2b33]">{t.name}</p>
+                          <p className="text-sm text-[#5b6b72]">{t.role}</p>
+                        </div>
+                      </figcaption>
+                    </figure>
+                  ))}
+                </div>
+                <div className="mt-8 flex items-center justify-between">
+                  <div className="flex gap-2" role="tablist" aria-label="Choose testimonial">
+                    {testimonials.map((_, i) => (
+                      <button key={i} role="tab" aria-selected={i === index} aria-label={`Go to testimonial ${i + 1}`} onClick={() => go(i)} className={`h-2 rounded-full transition-all duration-300 ${i === index ? "w-6 bg-teal-700" : "w-2 bg-[#d8cdb8] hover:bg-[#c2b69e]"}`} />
+                    ))}
+                  </div>
+                  <div className="flex gap-2">
+                    <button onClick={() => go(index - 1)} aria-label="Previous testimonial" className="grid h-9 w-9 place-items-center rounded-full border border-[#e7ddcd] text-[#42525a] transition hover:border-teal-700/40 hover:text-teal-700">‹</button>
+                    <button onClick={() => go(index + 1)} aria-label="Next testimonial" className="grid h-9 w-9 place-items-center rounded-full border border-[#e7ddcd] text-[#42525a] transition hover:border-teal-700/40 hover:text-teal-700">›</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(<TestimonialCarousel />);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,19 @@
+<!-- The track holds TWO identical .scs-marquee__group blocks.
+     Duplicating the group is what makes the loop seamless. -->
+<div class="scs-marquee">
+  <div class="scs-marquee__track">
+    <div class="scs-marquee__group">
+      <span class="scs-marquee__item">Sand &amp; Surf</span>
+      <span class="scs-marquee__item">Premium Builds</span>
+      <span class="scs-marquee__item">saltycodestudio</span>
+      <span class="scs-marquee__item">Award-grade</span>
+    </div>
+    <!-- exact duplicate, aria-hidden so screen readers don't read it twice -->
+    <div class="scs-marquee__group" aria-hidden="true">
+      <span class="scs-marquee__item">Sand &amp; Surf</span>
+      <span class="scs-marquee__item">Premium Builds</span>
+      <span class="scs-marquee__item">saltycodestudio</span>
+      <span class="scs-marquee__item">Award-grade</span>
+    </div>
+  </div>
+</div>

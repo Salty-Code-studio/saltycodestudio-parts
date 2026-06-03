@@ -1,0 +1,875 @@
+[
+  {
+    "name": "3D Tilt Card",
+    "slug": "tilt-card-3d",
+    "category": "css",
+    "tier": "practical",
+    "tags": [
+      "card",
+      "3d",
+      "tilt",
+      "hover",
+      "parallax"
+    ],
+    "description": "A card that lifts and tilts in 3D perspective on hover, with inner layers floating at different depths and a sheen sweep.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "index.html"
+    ],
+    "usage": "Wrap the card in .scs-tilt (sets perspective). Inner content gets .scs-tilt__layer plus a depth class; tune the rotateX/rotateY and translateZ values to taste.",
+    "path": "components/css/tilt-card-3d",
+    "preview": "components/css/tilt-card-3d/preview.html"
+  },
+  {
+    "name": "Animated Gradient Mesh",
+    "slug": "animated-gradient-mesh",
+    "category": "css",
+    "tier": "showcase",
+    "tags": [
+      "gradient",
+      "mesh",
+      "background",
+      "animation",
+      "blobs"
+    ],
+    "description": "A living, slowly-shifting multi-color radial-gradient mesh background driven entirely by CSS keyframes.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "index.html"
+    ],
+    "usage": "Wrap your section in a .scs-mesh element. The mesh fills the container; give the container a height (or use it full-screen) and place your content inside.",
+    "path": "components/css/animated-gradient-mesh",
+    "preview": "components/css/animated-gradient-mesh/preview.html"
+  },
+  {
+    "name": "Aurora Background",
+    "slug": "aurora-background",
+    "category": "css",
+    "tier": "showcase",
+    "tags": [
+      "aurora",
+      "glow",
+      "background",
+      "blobs",
+      "animation"
+    ],
+    "description": "Soft northern-lights glow blobs that slowly drift, scale, and fade behind your content.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "index.html"
+    ],
+    "usage": "Wrap content in .scs-aurora and include the .scs-aurora__lights layer with its four spans. Give the wrapper a height; content sits above the aurora automatically.",
+    "path": "components/css/aurora-background",
+    "preview": "components/css/aurora-background/preview.html"
+  },
+  {
+    "name": "Glassmorphism Card",
+    "slug": "glassmorphism-card",
+    "category": "css",
+    "tier": "practical",
+    "tags": [
+      "glass",
+      "card",
+      "blur",
+      "frosted",
+      "backdrop"
+    ],
+    "description": "A frosted glass card using backdrop-blur with a subtle light border and an inner top-left highlight.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "index.html"
+    ],
+    "usage": "Copy the markup from index.html and styles.css. Place the card over a photo or gradient background so the backdrop-blur has something to frost.",
+    "path": "components/css/glassmorphism-card",
+    "preview": "components/css/glassmorphism-card/preview.html"
+  },
+  {
+    "name": "Gooey Blob",
+    "slug": "gooey-blob",
+    "category": "css",
+    "tier": "showcase",
+    "tags": [
+      "blob",
+      "gooey",
+      "morph",
+      "organic",
+      "svg-filter"
+    ],
+    "description": "An organic morphing gooey blob — a border-radius morph variant plus an SVG goo-filter variant that melts moving circles together.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "index.html"
+    ],
+    "usage": "Option A: drop a .scs-blob div for a self-morphing blob (no SVG). Option B: paste the hidden SVG goo filter once, then use .scs-goo with child spans for circles that gooily merge.",
+    "path": "components/css/gooey-blob",
+    "preview": "components/css/gooey-blob/preview.html"
+  },
+  {
+    "name": "Gradient Border Glow",
+    "slug": "gradient-border-glow",
+    "category": "css",
+    "tier": "practical",
+    "tags": [
+      "border",
+      "gradient",
+      "glow",
+      "conic",
+      "animated"
+    ],
+    "description": "An element wrapped in an animated rotating conic-gradient border with a soft blurred glow that brightens on hover.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "index.html"
+    ],
+    "usage": "Add class .scs-gradient-border to any container and put content inside. Tune --scs-border-width and --scs-radius; recolor via the conic-gradient stops. Uses @property to animate the angle.",
+    "path": "components/css/gradient-border-glow",
+    "preview": "components/css/gradient-border-glow/preview.html"
+  },
+  {
+    "name": "Grain / Noise Overlay",
+    "slug": "grain-noise-overlay",
+    "category": "css",
+    "tier": "practical",
+    "tags": [
+      "grain",
+      "noise",
+      "texture",
+      "film",
+      "overlay"
+    ],
+    "description": "A fine film-grain texture overlay built from an inline SVG noise data-uri, addable to any section via one class.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "index.html"
+    ],
+    "usage": "Add class .scs-grain to any positioned section. Optional modifiers: .scs-grain--film (heavier) and .scs-grain--animated (flicker).",
+    "path": "components/css/grain-noise-overlay",
+    "preview": "components/css/grain-noise-overlay/preview.html"
+  },
+  {
+    "name": "Infinite Marquee",
+    "slug": "marquee",
+    "category": "css",
+    "tier": "practical",
+    "tags": [
+      "marquee",
+      "scroll",
+      "ticker",
+      "infinite",
+      "loop"
+    ],
+    "description": "A smooth, seamless infinite horizontal marquee that loops without a jump and pauses on hover.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "index.html"
+    ],
+    "usage": "Duplicate the content group twice inside the track (mark the copy aria-hidden). Tune speed/spacing with the --scs-marquee-duration and --scs-marquee-gap variables; add .scs-marquee--reverse to flip direction.",
+    "path": "components/css/marquee",
+    "preview": "components/css/marquee/preview.html"
+  },
+  {
+    "name": "Neon Glow Button",
+    "slug": "neon-glow-button",
+    "category": "css",
+    "tier": "practical",
+    "tags": [
+      "button",
+      "neon",
+      "glow",
+      "hover",
+      "cta"
+    ],
+    "description": "A pill button with a layered neon glow (outer halo, ring, inner fill, text glow) that intensifies on hover and focus.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "index.html"
+    ],
+    "usage": "Add class .scs-neon-btn to a <button> or <a>. Change glow color via the --scs-neon variable or the --sand / --violet modifier classes.",
+    "path": "components/css/neon-glow-button",
+    "preview": "components/css/neon-glow-button/preview.html"
+  },
+  {
+    "name": "Shimmer Skeleton",
+    "slug": "shimmer-skeleton",
+    "category": "css",
+    "tier": "practical",
+    "tags": [
+      "skeleton",
+      "loading",
+      "shimmer",
+      "placeholder",
+      "loader"
+    ],
+    "description": "Loading placeholder blocks with an animated shimmer sweep, plus shape and width helper classes.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "index.html"
+    ],
+    "usage": "Use .scs-skeleton with a shape helper (--text, --title, --avatar, --thumb, --btn) and optional width helper (--w90/--w75/--w60/--w40). Compose blocks to mirror your real content, then swap in content when loaded.",
+    "path": "components/css/shimmer-skeleton",
+    "preview": "components/css/shimmer-skeleton/preview.html"
+  },
+  {
+    "name": "Horizontal Scroll Gallery",
+    "slug": "horizontal-scroll-gallery",
+    "category": "motion",
+    "tier": "showcase",
+    "tags": [
+      "scroll",
+      "horizontal",
+      "gsap",
+      "gallery",
+      "pin",
+      "scrolltrigger"
+    ],
+    "description": "Pins a track and translates it horizontally so vertical scrolling sweeps a row of panels sideways across the viewport.",
+    "deps": [
+      "gsap",
+      "gsap/ScrollTrigger"
+    ],
+    "files": [
+      "animation.js",
+      "styles.css"
+    ],
+    "usage": "Wrap panels in .hscroll > .hscroll-track > .hscroll-panel and call initHorizontalGallery().",
+    "path": "components/motion/horizontal-scroll-gallery",
+    "preview": "components/motion/horizontal-scroll-gallery/preview.html"
+  },
+  {
+    "name": "Image Scrub Sequence",
+    "slug": "image-scrub-sequence",
+    "category": "motion",
+    "tier": "showcase",
+    "tags": [
+      "scroll",
+      "scrub",
+      "canvas",
+      "gsap",
+      "sequence",
+      "frames",
+      "scrolltrigger"
+    ],
+    "description": "Scrubbing the scroll plays through a frame sequence rendered to canvas (procedurally generated, no external image assets required).",
+    "deps": [
+      "gsap",
+      "gsap/ScrollTrigger"
+    ],
+    "files": [
+      "animation.js",
+      "styles.css"
+    ],
+    "usage": "Provide a tall .scrub-section wrapping a pinned <canvas class=\"scrub-canvas\">, then call initScrubSequence().",
+    "path": "components/motion/image-scrub-sequence",
+    "preview": "components/motion/image-scrub-sequence/preview.html"
+  },
+  {
+    "name": "Magnetic Button",
+    "slug": "magnetic-button",
+    "category": "motion",
+    "tier": "practical",
+    "tags": [
+      "hover",
+      "gsap",
+      "button",
+      "magnetic",
+      "cursor",
+      "micro-interaction"
+    ],
+    "description": "A button (and its label) is magnetically pulled toward the cursor while hovered and springs back on leave.",
+    "deps": [
+      "gsap"
+    ],
+    "files": [
+      "animation.js",
+      "styles.css"
+    ],
+    "usage": "Add class .magnetic with an inner .magnetic-label, then call initMagneticButtons().",
+    "path": "components/motion/magnetic-button",
+    "preview": "components/motion/magnetic-button/preview.html"
+  },
+  {
+    "name": "Parallax Layers",
+    "slug": "parallax-layers",
+    "category": "motion",
+    "tier": "practical",
+    "tags": [
+      "scroll",
+      "parallax",
+      "gsap",
+      "depth",
+      "layers",
+      "scrolltrigger"
+    ],
+    "description": "Multiple depth layers translate at different speeds on scroll to create a sense of dimensional depth.",
+    "deps": [
+      "gsap",
+      "gsap/ScrollTrigger"
+    ],
+    "files": [
+      "animation.js",
+      "styles.css"
+    ],
+    "usage": "Give layer elements data-parallax-speed (e.g. -0.3 to 0.6) inside a .parallax-scene and call initParallaxLayers().",
+    "path": "components/motion/parallax-layers",
+    "preview": "components/motion/parallax-layers/preview.html"
+  },
+  {
+    "name": "Pinned Scroll Section",
+    "slug": "pinned-scroll-section",
+    "category": "motion",
+    "tier": "showcase",
+    "tags": [
+      "scroll",
+      "pin",
+      "gsap",
+      "hero",
+      "scrolltrigger",
+      "stages"
+    ],
+    "description": "Pins a full-height section in place while its inner content animates through distinct stages as the user scrolls past it.",
+    "deps": [
+      "gsap",
+      "gsap/ScrollTrigger"
+    ],
+    "files": [
+      "animation.js",
+      "styles.css"
+    ],
+    "usage": "Wrap your section in .pin-section with a .pin-inner and stage elements; call initPinnedSection() after GSAP + ScrollTrigger load.",
+    "path": "components/motion/pinned-scroll-section",
+    "preview": "components/motion/pinned-scroll-section/preview.html"
+  },
+  {
+    "name": "Scroll Progress Bar",
+    "slug": "scroll-progress-bar",
+    "category": "motion",
+    "tier": "practical",
+    "tags": [
+      "scroll",
+      "progress",
+      "gsap",
+      "bar",
+      "indicator",
+      "scrolltrigger"
+    ],
+    "description": "A slim fixed bar at the top of the page that fills from 0 to 100% as the user scrolls through the document.",
+    "deps": [
+      "gsap",
+      "gsap/ScrollTrigger"
+    ],
+    "files": [
+      "animation.js",
+      "styles.css"
+    ],
+    "usage": "Add a <div class=\"scroll-progress\"><span class=\"scroll-progress-fill\"></span></div> at the top of body and call initScrollProgress().",
+    "path": "components/motion/scroll-progress-bar",
+    "preview": "components/motion/scroll-progress-bar/preview.html"
+  },
+  {
+    "name": "Scroll Text Reveal",
+    "slug": "scroll-text-reveal",
+    "category": "motion",
+    "tier": "practical",
+    "tags": [
+      "scroll",
+      "text",
+      "reveal",
+      "gsap",
+      "fade",
+      "stagger",
+      "scrolltrigger"
+    ],
+    "description": "Lines or words rise up and fade in with a stagger as each block enters the viewport.",
+    "deps": [
+      "gsap",
+      "gsap/ScrollTrigger"
+    ],
+    "files": [
+      "animation.js",
+      "styles.css"
+    ],
+    "usage": "Add data-reveal (optionally data-reveal=\"words\") to text elements and call initScrollReveal().",
+    "path": "components/motion/scroll-text-reveal",
+    "preview": "components/motion/scroll-text-reveal/preview.html"
+  },
+  {
+    "name": "Split Text Stagger",
+    "slug": "split-text-stagger",
+    "category": "motion",
+    "tier": "practical",
+    "tags": [
+      "text",
+      "split",
+      "gsap",
+      "stagger",
+      "heading",
+      "chars",
+      "words"
+    ],
+    "description": "Splits a heading into characters or words in plain JS and staggers them into view (no paid SplitText plugin required).",
+    "deps": [
+      "gsap",
+      "gsap/ScrollTrigger"
+    ],
+    "files": [
+      "animation.js",
+      "styles.css"
+    ],
+    "usage": "Add data-split (\"chars\" or \"words\") to a heading and call initSplitStagger(); fires on scroll into view.",
+    "path": "components/motion/split-text-stagger",
+    "preview": "components/motion/split-text-stagger/preview.html"
+  },
+  {
+    "name": "Sticky Stacking Cards",
+    "slug": "sticky-stacking-cards",
+    "category": "motion",
+    "tier": "showcase",
+    "tags": [
+      "scroll",
+      "pin",
+      "cards",
+      "gsap",
+      "stack",
+      "scrolltrigger"
+    ],
+    "description": "A stack of cards where each pins in place and slightly scales back as the next card slides up and covers it on scroll.",
+    "deps": [
+      "gsap",
+      "gsap/ScrollTrigger"
+    ],
+    "files": [
+      "animation.js",
+      "styles.css"
+    ],
+    "usage": "Wrap .stack-card items in a .stack-cards container and call initStackingCards().",
+    "path": "components/motion/sticky-stacking-cards",
+    "preview": "components/motion/sticky-stacking-cards/preview.html"
+  },
+  {
+    "name": "Animated Counter",
+    "slug": "animated-counter",
+    "category": "react",
+    "tier": "practical",
+    "tags": [
+      "counter",
+      "count-up",
+      "stats",
+      "scroll",
+      "intersection-observer"
+    ],
+    "description": "A number that eases up to a target value when it scrolls into view, with prefix/suffix and locale formatting.",
+    "deps": [
+      "react",
+      "tailwindcss"
+    ],
+    "files": [
+      "AnimatedCounter.tsx"
+    ],
+    "usage": "Use <AnimatedCounter value={1200} suffix='+' /> for a single stat, or <StatGrid /> for the sample row.",
+    "path": "components/react/animated-counter",
+    "preview": "components/react/animated-counter/preview.html"
+  },
+  {
+    "name": "Bento Grid",
+    "slug": "bento-grid",
+    "category": "react",
+    "tier": "practical",
+    "tags": [
+      "bento",
+      "grid",
+      "layout",
+      "cards",
+      "features"
+    ],
+    "description": "A responsive asymmetric bento grid of feature cards with a subtle hover-lift and glow.",
+    "deps": [
+      "react",
+      "tailwindcss"
+    ],
+    "files": [
+      "BentoGrid.tsx"
+    ],
+    "usage": "Import BentoGrid and pass an items array, or use the default Sand & Surf sample content.",
+    "path": "components/react/bento-grid",
+    "preview": "components/react/bento-grid/preview.html"
+  },
+  {
+    "name": "Command Palette",
+    "slug": "command-palette",
+    "category": "react",
+    "tier": "showcase",
+    "tags": [
+      "command-palette",
+      "cmdk",
+      "search",
+      "modal",
+      "keyboard"
+    ],
+    "description": "A ⌘K-style command palette modal with fuzzy filtering, keyboard navigation, and grouped commands.",
+    "deps": [
+      "react",
+      "tailwindcss"
+    ],
+    "files": [
+      "CommandPalette.tsx"
+    ],
+    "usage": "Render <CommandPalette commands={...} /> anywhere; press ⌘K / Ctrl+K to open. Pass your own commands array.",
+    "path": "components/react/command-palette",
+    "preview": "components/react/command-palette/preview.html"
+  },
+  {
+    "name": "Dark Mode Toggle",
+    "slug": "dark-mode-toggle",
+    "category": "react",
+    "tier": "practical",
+    "tags": [
+      "dark-mode",
+      "theme",
+      "toggle",
+      "accessibility",
+      "sun-moon"
+    ],
+    "description": "An accessible animated theme toggle that morphs a sun into a moon and persists the choice to localStorage.",
+    "deps": [
+      "react",
+      "tailwindcss"
+    ],
+    "files": [
+      "DarkModeToggle.tsx"
+    ],
+    "usage": "Render <DarkModeToggle />; it toggles the `dark` class on <html> and remembers the preference.",
+    "path": "components/react/dark-mode-toggle",
+    "preview": "components/react/dark-mode-toggle/preview.html"
+  },
+  {
+    "name": "Feature Accordion",
+    "slug": "feature-accordion",
+    "category": "react",
+    "tier": "practical",
+    "tags": [
+      "accordion",
+      "features",
+      "faq",
+      "disclosure",
+      "animation"
+    ],
+    "description": "A single-open accordion of features with smooth grid-based height animation and accessible disclosure semantics.",
+    "deps": [
+      "react",
+      "tailwindcss"
+    ],
+    "files": [
+      "FeatureAccordion.tsx"
+    ],
+    "usage": "Render <FeatureAccordion items={[...]} /> or use the built-in sample features.",
+    "path": "components/react/feature-accordion",
+    "preview": "components/react/feature-accordion/preview.html"
+  },
+  {
+    "name": "Gradient Mesh Hero",
+    "slug": "gradient-mesh-hero",
+    "category": "react",
+    "tier": "showcase",
+    "tags": [
+      "hero",
+      "gradient",
+      "mesh",
+      "blob",
+      "animation",
+      "framer-motion"
+    ],
+    "description": "A hero section with an animated gradient-mesh blob background, grain overlay, and a bold headline.",
+    "deps": [
+      "react",
+      "tailwindcss",
+      "framer-motion"
+    ],
+    "files": [
+      "GradientMeshHero.tsx"
+    ],
+    "usage": "Render <GradientMeshHero /> at the top of a page; pass eyebrow/title/subtitle/CTA props to customize.",
+    "path": "components/react/gradient-mesh-hero",
+    "preview": "components/react/gradient-mesh-hero/preview.html"
+  },
+  {
+    "name": "Logo Marquee",
+    "slug": "logo-marquee",
+    "category": "react",
+    "tier": "practical",
+    "tags": [
+      "marquee",
+      "logos",
+      "infinite-scroll",
+      "social-proof",
+      "ticker"
+    ],
+    "description": "An infinite horizontal marquee of client/partner logos with edge fade and pause-on-hover.",
+    "deps": [
+      "react",
+      "tailwindcss"
+    ],
+    "files": [
+      "LogoMarquee.tsx"
+    ],
+    "usage": "Render <LogoMarquee logos={[...]} /> with text or node logos; defaults to sample wordmarks.",
+    "path": "components/react/logo-marquee",
+    "preview": "components/react/logo-marquee/preview.html"
+  },
+  {
+    "name": "Pricing Toggle",
+    "slug": "pricing-toggle",
+    "category": "react",
+    "tier": "practical",
+    "tags": [
+      "pricing",
+      "toggle",
+      "plans",
+      "billing",
+      "cards"
+    ],
+    "description": "Pricing cards with a monthly/annual switch that animates the displayed price and shows annual savings.",
+    "deps": [
+      "react",
+      "tailwindcss"
+    ],
+    "files": [
+      "PricingToggle.tsx"
+    ],
+    "usage": "Render <PricingToggle plans={...} /> or use the built-in sample tiers.",
+    "path": "components/react/pricing-toggle",
+    "preview": "components/react/pricing-toggle/preview.html"
+  },
+  {
+    "name": "Shrinking Sticky Navbar",
+    "slug": "shrinking-sticky-navbar",
+    "category": "react",
+    "tier": "practical",
+    "tags": [
+      "navbar",
+      "sticky",
+      "scroll",
+      "header",
+      "blur"
+    ],
+    "description": "A sticky navbar that condenses its height and gains a backdrop blur once the page is scrolled.",
+    "deps": [
+      "react",
+      "tailwindcss"
+    ],
+    "files": [
+      "ShrinkingStickyNavbar.tsx"
+    ],
+    "usage": "Render <ShrinkingStickyNavbar /> at the top of your layout; it manages its own scroll listener.",
+    "path": "components/react/shrinking-sticky-navbar",
+    "preview": "components/react/shrinking-sticky-navbar/preview.html"
+  },
+  {
+    "name": "Testimonial Carousel",
+    "slug": "testimonial-carousel",
+    "category": "react",
+    "tier": "practical",
+    "tags": [
+      "testimonial",
+      "carousel",
+      "slider",
+      "reviews",
+      "social-proof"
+    ],
+    "description": "An auto-advancing testimonial slider with dot navigation, pause-on-hover, and smooth fade/slide transitions.",
+    "deps": [
+      "react",
+      "tailwindcss"
+    ],
+    "files": [
+      "TestimonialCarousel.tsx"
+    ],
+    "usage": "Render <TestimonialCarousel testimonials={...} /> or use the built-in sample quotes.",
+    "path": "components/react/testimonial-carousel",
+    "preview": "components/react/testimonial-carousel/preview.html"
+  },
+  {
+    "name": "Copy to Clipboard",
+    "slug": "copy-to-clipboard",
+    "category": "vanilla",
+    "tier": "practical",
+    "tags": [
+      "clipboard",
+      "copy",
+      "button",
+      "feedback"
+    ],
+    "description": "A copy button that uses the async Clipboard API (with a legacy fallback) and shows an animated \"Copied!\" confirmation state.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "script.js"
+    ],
+    "usage": "Add a button with data-copy=\"text\" or data-copy-target=\"#selector\". script.js handles copying and the confirmation state automatically.",
+    "path": "components/vanilla/copy-to-clipboard",
+    "preview": "components/vanilla/copy-to-clipboard/preview.html"
+  },
+  {
+    "name": "Custom Cursor",
+    "slug": "custom-cursor",
+    "category": "vanilla",
+    "tier": "showcase",
+    "tags": [
+      "cursor",
+      "pointer",
+      "interaction",
+      "lerp",
+      "trailing"
+    ],
+    "description": "A custom cursor with a precise dot and a lerp-trailing ring that grows and changes over links and buttons; hides the native cursor and disables itself on touch devices.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "script.js"
+    ],
+    "usage": "Link styles.css and script.js, add <div class=\"cursor-dot\"></div><div class=\"cursor-ring\"></div> to the page. Mark interactive elements with [data-cursor] or rely on a/button auto-detection.",
+    "path": "components/vanilla/custom-cursor",
+    "preview": "components/vanilla/custom-cursor/preview.html"
+  },
+  {
+    "name": "Modal Dialog",
+    "slug": "modal",
+    "category": "vanilla",
+    "tier": "practical",
+    "tags": [
+      "modal",
+      "dialog",
+      "focus-trap",
+      "accessible",
+      "overlay"
+    ],
+    "description": "An accessible modal dialog with focus trap, Esc-to-close, backdrop-click close, body scroll lock, and a fade/scale-in animation.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "script.js"
+    ],
+    "usage": "Add the modal markup, give triggers data-modal-open=\"<id>\". script.js wires open/close, focus trapping and scroll lock automatically.",
+    "path": "components/vanilla/modal",
+    "preview": "components/vanilla/modal/preview.html"
+  },
+  {
+    "name": "Preloader",
+    "slug": "preloader",
+    "category": "vanilla",
+    "tier": "showcase",
+    "tags": [
+      "preloader",
+      "loader",
+      "intro",
+      "counter",
+      "page-load"
+    ],
+    "description": "A polished full-screen preloader with an animated count-up and progress sweep that slides away once the page has finished loading.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "script.js"
+    ],
+    "usage": "Paste the preloader markup as the first child of <body>, link styles.css and script.js. It removes itself on window load; reveals page content via a body class.",
+    "path": "components/vanilla/preloader",
+    "preview": "components/vanilla/preloader/preview.html"
+  },
+  {
+    "name": "Scrollspy Nav",
+    "slug": "scrollspy-nav",
+    "category": "vanilla",
+    "tier": "practical",
+    "tags": [
+      "scrollspy",
+      "navigation",
+      "intersection-observer",
+      "anchor",
+      "smooth-scroll"
+    ],
+    "description": "A navigation that highlights the current section using IntersectionObserver and smooth-scrolls to anchors on click.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "script.js"
+    ],
+    "usage": "Give nav links href=\"#section-id\" and a data-scrollspy attribute on the nav. Sections need matching ids. script.js observes them and toggles .is-active.",
+    "path": "components/vanilla/scrollspy-nav",
+    "preview": "components/vanilla/scrollspy-nav/preview.html"
+  },
+  {
+    "name": "Smooth Scroll",
+    "slug": "smooth-scroll",
+    "category": "vanilla",
+    "tier": "practical",
+    "tags": [
+      "scroll",
+      "smooth-scroll",
+      "lerp",
+      "raf",
+      "inertia"
+    ],
+    "description": "Lerp-based smooth (inertia) page scrolling driven by requestAnimationFrame, with automatic opt-out for prefers-reduced-motion and touch devices.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "script.js"
+    ],
+    "usage": "Link styles.css and script.js. Wrap page content in <div id=\"scroll-content\">...</div>. Disable by removing the script or via prefers-reduced-motion.",
+    "path": "components/vanilla/smooth-scroll",
+    "preview": "components/vanilla/smooth-scroll/preview.html"
+  },
+  {
+    "name": "Tabs",
+    "slug": "tabs",
+    "category": "vanilla",
+    "tier": "practical",
+    "tags": [
+      "tabs",
+      "accessible",
+      "aria",
+      "keyboard",
+      "indicator"
+    ],
+    "description": "Accessible tabs with full ARIA roles and arrow-key navigation, plus a sliding active indicator that animates between tabs.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "script.js"
+    ],
+    "usage": "Use the tablist/tab/tabpanel markup with matching ids and aria-controls. script.js handles selection, keyboard nav and the moving indicator.",
+    "path": "components/vanilla/tabs",
+    "preview": "components/vanilla/tabs/preview.html"
+  },
+  {
+    "name": "Theme Switcher",
+    "slug": "theme-switcher",
+    "category": "vanilla",
+    "tier": "practical",
+    "tags": [
+      "theme",
+      "dark-mode",
+      "css-variables",
+      "localstorage",
+      "prefers-color-scheme"
+    ],
+    "description": "A light/dark theme toggle built on CSS variables and a data-theme attribute that persists to localStorage and respects the OS prefers-color-scheme.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "script.js"
+    ],
+    "usage": "Add the inline no-flash snippet in <head>, a button with id=\"theme-toggle\", then link styles.css and script.js. Build your UI with the provided CSS variables.",
+    "path": "components/vanilla/theme-switcher",
+    "preview": "components/vanilla/theme-switcher/preview.html"
+  }
+]

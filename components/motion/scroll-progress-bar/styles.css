@@ -1,0 +1,27 @@
+/* Scroll Progress Bar — saltycodestudio */
+:root {
+  --ss-teal: #2a7f80;
+  --ss-deep: #0f2c3a;
+  --ss-progress-height: 4px;
+}
+
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--ss-progress-height);
+  background: rgba(15, 44, 58, 0.08);
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.scroll-progress-fill {
+  display: block;
+  height: 100%;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: left center;
+  background: linear-gradient(90deg, var(--ss-teal), var(--ss-deep));
+  will-change: transform;
+}

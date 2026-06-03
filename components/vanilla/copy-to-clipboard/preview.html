@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Copy to Clipboard — saltycodestudio</title>
+<style>
+  :root { --sand:#f6ede0; --cream:#fbf6ee; --teal:#0e7c86; --navy:#0c2a33; --copy-teal:#0e7c86; --copy-navy:#0c2a33; --copy-cream:#fbf6ee; --copy-green:#1f9d6b; }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: var(--navy); background: radial-gradient(120% 120% at 50% 0%, var(--cream), var(--sand)); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2rem; padding: 4rem 1.5rem; }
+  h1 { font-size: clamp(1.8rem,5vw,2.8rem); margin: 0; letter-spacing: -0.02em; }
+  .stack { display: flex; flex-direction: column; gap: 1.25rem; width: min(92vw, 480px); }
+  .field { display: flex; align-items: center; gap: 0.75rem; background: var(--cream); border: 1px solid rgba(12,42,51,0.1); border-radius: 12px; padding: 0.6rem 0.6rem 0.6rem 1rem; box-shadow: 0 18px 40px -30px rgba(12,42,51,0.5); }
+  .field code { flex: 1; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--navy); font-size: 0.92rem; overflow: auto; white-space: nowrap; }
+
+  .copy-btn { font-family: inherit; font-weight: 600; font-size: 0.9rem; color: var(--copy-cream); background: var(--copy-teal); border: 1.5px solid var(--copy-teal); border-radius: 10px; padding: 0.55rem 1rem; cursor: pointer; display: inline-flex; align-items: center; gap: 0.4rem; transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.08s ease; }
+  .copy-btn:hover { filter: brightness(1.05); }
+  .copy-btn:active { transform: scale(0.97); }
+  .copy-btn:focus-visible { outline: 2px solid var(--copy-navy); outline-offset: 2px; }
+  .copy-btn__label { position: relative; display: inline-grid; }
+  .copy-btn__idle, .copy-btn__done { grid-area: 1 / 1; transition: opacity 0.2s ease, transform 0.2s ease; }
+  .copy-btn__done { opacity: 0; transform: translateY(4px); }
+  .copy-btn.is-copied { background: var(--copy-green); border-color: var(--copy-green); }
+  .copy-btn.is-copied .copy-btn__idle { opacity: 0; transform: translateY(-4px); }
+  .copy-btn.is-copied .copy-btn__done { opacity: 1; transform: translateY(0); }
+  .copy-btn.is-error { background: #b04a3a; border-color: #b04a3a; }
+  @media (prefers-reduced-motion: reduce) { .copy-btn, .copy-btn__idle, .copy-btn__done { transition: opacity 0.12s ease; } }
+</style>
+</head>
+<body>
+  <h1>Copy to Clipboard</h1>
+  <div class="stack">
+    <div class="field">
+      <code id="cmd">npm i saltycodestudio-parts</code>
+      <button class="copy-btn" type="button" data-copy-target="#cmd" aria-label="Copy install command">
+        <span class="copy-btn__label"><span class="copy-btn__idle">Copy</span><span class="copy-btn__done">Copied!</span></span>
+      </button>
+    </div>
+    <div class="field">
+      <code>#0e7c86 · Ocean Teal</code>
+      <button class="copy-btn" type="button" data-copy="#0e7c86">
+        <span class="copy-btn__label"><span class="copy-btn__idle">Copy</span><span class="copy-btn__done">Copied!</span></span>
+      </button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

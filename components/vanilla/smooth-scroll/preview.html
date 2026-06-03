@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Smooth Scroll — saltycodestudio</title>
+<style>
+  :root { --sand:#f6ede0; --cream:#fbf6ee; --teal:#0e7c86; --navy:#0c2a33; }
+  * { box-sizing: border-box; }
+  html.has-smooth-scroll, html.has-smooth-scroll body { margin: 0; }
+  html.has-smooth-scroll #scroll-content { position: fixed; top: 0; left: 0; width: 100%; will-change: transform; }
+  #scroll-content { width: 100%; }
+  body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: var(--navy); background: var(--cream); }
+  .section { min-height: 90vh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; padding: 4rem 1.5rem; text-align: center; }
+  .section:nth-child(odd) { background: radial-gradient(120% 120% at 50% 0%, var(--cream), var(--sand)); }
+  .section:nth-child(even) { background: var(--navy); color: var(--sand); }
+  h2 { font-size: clamp(2rem, 7vw, 4rem); margin: 0; letter-spacing: -0.03em; }
+  p { max-width: 50ch; line-height: 1.6; opacity: 0.85; }
+  nav { position: fixed; top: 1rem; left: 50%; transform: translateX(-50%); z-index: 10; display: flex; gap: 0.75rem; background: rgba(255,255,255,0.7); backdrop-filter: blur(8px); padding: 0.5rem 0.75rem; border-radius: 999px; box-shadow: 0 10px 30px -15px rgba(12,42,51,0.5); }
+  nav a { color: var(--teal); text-decoration: none; font-weight: 600; font-size: 0.9rem; padding: 0.3rem 0.6rem; border-radius: 999px; }
+</style>
+</head>
+<body>
+  <nav>
+    <a href="#one">Top</a>
+    <a href="#two">Surf</a>
+    <a href="#three">Sand</a>
+    <a href="#four">End</a>
+  </nav>
+
+  <div id="scroll-content">
+    <section class="section" id="one"><h2>Scroll down</h2><p>The page glides with eased inertia. The native scrollbar still drives it, and anchor links above jump correctly.</p></section>
+    <section class="section" id="two"><h2>Surf</h2><p>Each section is full-height so you can feel the lerp between stops.</p></section>
+    <section class="section" id="three"><h2>Sand</h2><p>On touch devices and with reduced-motion enabled this disables itself automatically.</p></section>
+    <section class="section" id="four"><h2>End of the line</h2><p>That's the whole effect — no library, just requestAnimationFrame.</p></section>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

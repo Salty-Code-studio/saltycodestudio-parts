@@ -1,0 +1,11 @@
+{
+  "name": "Command Palette",
+  "slug": "command-palette",
+  "category": "react",
+  "tier": "showcase",
+  "tags": ["command-palette", "cmdk", "search", "modal", "keyboard"],
+  "description": "A ⌘K-style command palette modal with fuzzy filtering, keyboard navigation, and grouped commands.",
+  "deps": ["react", "tailwindcss"],
+  "files": ["CommandPalette.tsx"],
+  "usage": "Render <CommandPalette commands={...} /> anywhere; press ⌘K / Ctrl+K to open. Pass your own commands array."
+}

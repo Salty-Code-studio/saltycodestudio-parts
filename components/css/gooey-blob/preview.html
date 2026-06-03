@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Gooey Blob — saltycodestudio</title>
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;display:flex;flex-wrap:wrap;gap:4rem;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 40%,#fdf6ec,#e7ddd0);font-family:system-ui,sans-serif;padding:3rem}
+
+  /* ---- component ---- */
+  .scs-blob{width:280px;height:280px;background:linear-gradient(135deg,#16b8c4,#2a9d8f 55%,#134e5e);box-shadow:0 20px 60px rgba(19,78,94,.35);border-radius:42% 58% 63% 37%/41% 44% 56% 59%;animation:scs-blob-morph 8s ease-in-out infinite,scs-blob-spin 16s linear infinite;will-change:border-radius,transform}
+  @keyframes scs-blob-morph{0%,100%{border-radius:42% 58% 63% 37%/41% 44% 56% 59%}33%{border-radius:67% 33% 41% 59%/58% 62% 38% 42%}66%{border-radius:38% 62% 56% 44%/63% 36% 64% 37%}}
+  @keyframes scs-blob-spin{to{transform:rotate(360deg)}}
+
+  .scs-goo{position:relative;width:320px;height:320px;filter:url(#scs-goo)}
+  .scs-goo span{position:absolute;top:50%;left:50%;width:110px;height:110px;margin:-55px 0 0 -55px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#4ec4a3,#16b8c4 70%);will-change:transform}
+  .scs-goo span:nth-child(1){animation:scs-goo-orbit-1 6s ease-in-out infinite}
+  .scs-goo span:nth-child(2){animation:scs-goo-orbit-2 7s ease-in-out infinite;background:radial-gradient(circle at 35% 30%,#2a9d8f,#134e5e 70%)}
+  .scs-goo span:nth-child(3){animation:scs-goo-orbit-3 5.5s ease-in-out infinite;background:radial-gradient(circle at 35% 30%,#6fd6c1,#2a9d8f 70%)}
+  @keyframes scs-goo-orbit-1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(70px,-40px) scale(.8)}}
+  @keyframes scs-goo-orbit-2{0%,100%{transform:translate(0,0) scale(1.1)}50%{transform:translate(-65px,50px) scale(.85)}}
+  @keyframes scs-goo-orbit-3{0%,100%{transform:translate(0,0) scale(.9)}50%{transform:translate(45px,60px) scale(1.05)}}
+  @media (prefers-reduced-motion:reduce){.scs-blob,.scs-goo span{animation:none}}
+
+  .label{margin-top:1rem;text-align:center;color:#7a8b91;font-size:.8rem}
+  figure{margin:0;display:flex;flex-direction:column;align-items:center}
+</style>
+</head>
+<body>
+  <!-- goo filter, hidden -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <filter id="scs-goo">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+        <feColorMatrix in="blur" mode="matrix"
+          values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -10" result="goo" />
+        <feBlend in="SourceGraphic" in2="goo" />
+      </filter>
+    </defs>
+  </svg>
+
+  <figure>
+    <div class="scs-blob"></div>
+    <figcaption class="label">Morphing blob (border-radius)</figcaption>
+  </figure>
+
+  <figure>
+    <div class="scs-goo"><span></span><span></span><span></span></div>
+    <figcaption class="label">Gooey merge (SVG goo filter)</figcaption>
+  </figure>
+</body>
+</html>

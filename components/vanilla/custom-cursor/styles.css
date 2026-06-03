@@ -1,0 +1,76 @@
+/* Custom Cursor — saltycodestudio
+   Hides the native cursor and renders a dot + trailing ring.
+   Touch devices opt out via the .has-custom-cursor class added by script.js. */
+
+:root {
+  --cursor-dot-size: 7px;
+  --cursor-ring-size: 36px;
+  --cursor-color: #0e7c86;        /* ocean teal */
+  --cursor-ring-color: rgba(14, 124, 134, 0.55);
+}
+
+/* Only hide the native cursor once JS confirms a fine pointer is present. */
+.has-custom-cursor,
+.has-custom-cursor * {
+  cursor: none !important;
+}
+
+.cursor-dot,
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 99999;
+  border-radius: 50%;
+  opacity: 0;
+  /* Centering is done in JS via translate(-50%, -50%); keep transform here too as fallback */
+  transform: translate(-50%, -50%);
+  will-change: transform, opacity;
+}
+
+.has-custom-cursor .cursor-dot,
+.has-custom-cursor .cursor-ring {
+  opacity: 1;
+}
+
+.cursor-dot {
+  width: var(--cursor-dot-size);
+  height: var(--cursor-dot-size);
+  background: var(--cursor-color);
+  transition: opacity 0.25s ease, background-color 0.25s ease;
+}
+
+.cursor-ring {
+  width: var(--cursor-ring-size);
+  height: var(--cursor-ring-size);
+  border: 1.5px solid var(--cursor-ring-color);
+  background: transparent;
+  /* transform handled in JS; only animate the non-positional props */
+  transition: opacity 0.25s ease, width 0.25s ease, height 0.25s ease,
+              border-color 0.25s ease, background-color 0.25s ease;
+}
+
+/* Hover / interactive state — toggled by script.js */
+.cursor-ring.is-active {
+  width: calc(var(--cursor-ring-size) * 1.7);
+  height: calc(var(--cursor-ring-size) * 1.7);
+  border-color: var(--cursor-color);
+  background: rgba(14, 124, 134, 0.12);
+}
+
+.cursor-dot.is-active {
+  background: #f6ede0; /* sand — flip color against the filled ring */
+}
+
+/* Pressed state */
+.cursor-ring.is-down {
+  width: calc(var(--cursor-ring-size) * 0.8);
+  height: calc(var(--cursor-ring-size) * 0.8);
+}
+
+/* Hidden when the pointer leaves the window */
+.cursor-dot.is-hidden,
+.cursor-ring.is-hidden {
+  opacity: 0 !important;
+}

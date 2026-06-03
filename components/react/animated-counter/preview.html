@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Animated Counter — saltycodestudio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style> body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; } </style>
+  </head>
+  <body class="bg-[#faf6ef]">
+    <div id="root"></div>
+    <script type="text/babel" data-presets="react">
+      const { useEffect, useRef, useState } = React;
+      const easeOutExpo = (t) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t));
+
+      function AnimatedCounter({ value, duration = 1800, decimals = 0, prefix = "", suffix = "", separator = true, className = "" }) {
+        const [display, setDisplay] = useState(0);
+        const ref = useRef(null);
+        const started = useRef(false);
+        useEffect(() => {
+          const el = ref.current;
+          if (!el) return;
+          const run = () => {
+            if (started.current) return;
+            started.current = true;
+            const start = performance.now();
+            const tick = (now) => {
+              const t = Math.min(1, (now - start) / duration);
+              setDisplay(value * easeOutExpo(t));
+              if (t < 1) requestAnimationFrame(tick); else setDisplay(value);
+            };
+            requestAnimationFrame(tick);
+          };
+          if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) { setDisplay(value); started.current = true; return; }
+          const obs = new IntersectionObserver((entries) => { for (const e of entries) if (e.isIntersecting) run(); }, { threshold: 0.4 });
+          obs.observe(el);
+          return () => obs.disconnect();
+        }, [value, duration]);
+        const formatted = (() => {
+          const fixed = display.toFixed(decimals);
+          if (!separator) return fixed;
+          const [int, dec] = fixed.split(".");
+          const withSep = Number(int).toLocaleString("en-US");
+          return dec !== undefined ? `${withSep}.${dec}` : withSep;
+        })();
+        return <span ref={ref} className={className}>{prefix}{formatted}{suffix}</span>;
+      }
+
+      const DEFAULT_STATS = [
+        { value: 240, label: "Projects shipped", suffix: "+" },
+        { value: 98, label: "Avg. Lighthouse score" },
+        { value: 4.9, label: "Client rating", decimals: 1, suffix: "/5" },
+        { value: 32, label: "Countries served" },
+      ];
+
+      function StatGrid({ stats = DEFAULT_STATS, className = "" }) {
+        return (
+          <section className={`bg-[#faf6ef] py-20 px-6 ${className}`}>
+            <div className="mx-auto grid max-w-5xl grid-cols-2 gap-8 md:grid-cols-4">
+              {stats.map((s) => (
+                <div key={s.label} className="text-center">
+                  <AnimatedCounter value={s.value} decimals={s.decimals} prefix={s.prefix} suffix={s.suffix} className="block text-4xl font-semibold tracking-tight text-teal-700 sm:text-5xl" />
+                  <p className="mt-2 text-sm text-[#5b6b72]">{s.label}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        );
+      }
+
+      function Demo() {
+        return (
+          <div>
+            <div className="grid min-h-screen place-items-center px-6 text-center">
+              <div>
+                <h1 className="text-3xl font-semibold tracking-tight text-[#1c2b33]">Scroll down ↓</h1>
+                <p className="mt-3 text-[#5b6b72]">The counters below start when they enter the viewport.</p>
+              </div>
+            </div>
+            <StatGrid />
+            <div className="grid h-[40vh] place-items-center text-[#9aa6ab]">— fin —</div>
+          </div>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(<Demo />);
+    </script>
+  </body>
+</html>

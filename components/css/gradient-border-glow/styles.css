@@ -1,0 +1,67 @@
+/* saltycodestudio — Gradient Border Glow
+   An animated rotating conic-gradient border with a soft outer glow.
+   Uses @property so the conic gradient angle can be animated smoothly. */
+
+@property --scs-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.scs-gradient-border {
+  --scs-border-width: 2px;
+  --scs-radius: 18px;
+  position: relative;
+  border-radius: var(--scs-radius);
+  /* content surface */
+  background: #0d2a3a;
+  color: #eaf6f8;
+  padding: 1.75rem 2rem;
+  z-index: 0;
+  isolation: isolate;
+}
+
+/* the rotating gradient ring (drawn just outside the content via a padding box) */
+.scs-gradient-border::before {
+  content: "";
+  position: absolute;
+  inset: calc(-1 * var(--scs-border-width));
+  border-radius: inherit;
+  z-index: -1;
+  background: conic-gradient(
+    from var(--scs-angle),
+    #16b8c4, #4ec4a3, #e9c46a, #f4a259, #16b8c4
+  );
+  animation: scs-border-spin 4s linear infinite;
+}
+
+/* a blurred copy underneath = the glow */
+.scs-gradient-border::after {
+  content: "";
+  position: absolute;
+  inset: calc(-1 * var(--scs-border-width));
+  border-radius: inherit;
+  z-index: -2;
+  background: conic-gradient(
+    from var(--scs-angle),
+    #16b8c4, #4ec4a3, #e9c46a, #f4a259, #16b8c4
+  );
+  filter: blur(16px);
+  opacity: 0.7;
+  animation: scs-border-spin 4s linear infinite;
+}
+
+@keyframes scs-border-spin {
+  to { --scs-angle: 360deg; }
+}
+
+/* glow intensifies on hover */
+.scs-gradient-border:hover::after {
+  opacity: 1;
+  filter: blur(22px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scs-gradient-border::before,
+  .scs-gradient-border::after { animation: none; }
+}

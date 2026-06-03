@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gradient Mesh Hero — saltycodestudio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://cdn.jsdelivr.net/npm/framer-motion@11/dist/framer-motion.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style> body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; } </style>
+  </head>
+  <body class="bg-[#08161c]">
+    <div id="root"></div>
+    <script type="text/babel" data-presets="react">
+      // framer-motion UMD exposes the global `Motion`.
+      const motion = (window.Motion || window.framerMotion).motion;
+
+      const BLOBS = [
+        { className: "left-[-10%] top-[-10%] h-[40rem] w-[40rem]", color: "rgba(13,148,136,0.55)", duration: 18, x: [0, 60, -30, 0], y: [0, -40, 30, 0] },
+        { className: "right-[-12%] top-[5%] h-[34rem] w-[34rem]", color: "rgba(245,158,11,0.40)", duration: 22, x: [0, -50, 40, 0], y: [0, 50, -20, 0] },
+        { className: "bottom-[-18%] left-[25%] h-[38rem] w-[38rem]", color: "rgba(8,47,73,0.55)", duration: 26, x: [0, 40, -60, 0], y: [0, -30, 20, 0] },
+      ];
+
+      function GradientMeshHero({
+        eyebrow = "saltycodestudio",
+        title = "Websites with the calm of the coast and the power of code.",
+        subtitle = "We design and build premium, fast, conversion-ready sites for brands that live by the water — and everywhere else.",
+        primaryCta = { label: "Start a project", href: "#contact" },
+        secondaryCta = { label: "See our work", href: "#work" },
+        className = "",
+      }) {
+        return (
+          <section className={`relative isolate overflow-hidden bg-[#08161c] ${className}`}>
+            <div className="absolute inset-0 -z-10" aria-hidden="true">
+              {BLOBS.map((b, i) => (
+                <motion.div key={i} className={`absolute rounded-full blur-3xl ${b.className}`} style={{ backgroundColor: b.color }} animate={{ x: b.x, y: b.y }} transition={{ duration: b.duration, repeat: Infinity, ease: "easeInOut" }} />
+              ))}
+            </div>
+            <div className="absolute inset-0 -z-10 opacity-[0.07] mix-blend-overlay" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")" }} aria-hidden="true" />
+            <div className="mx-auto flex min-h-[88vh] max-w-5xl flex-col items-center justify-center px-6 py-28 text-center">
+              <motion.span initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-amber-200 backdrop-blur">
+                <span className="h-1.5 w-1.5 rounded-full bg-amber-300" />{eyebrow}
+              </motion.span>
+              <motion.h1 initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.08 }} className="mt-6 max-w-3xl text-4xl font-semibold leading-[1.08] tracking-tight text-white sm:text-6xl">{title}</motion.h1>
+              <motion.p initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.16 }} className="mt-6 max-w-xl text-lg leading-relaxed text-white/70">{subtitle}</motion.p>
+              <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.24 }} className="mt-9 flex flex-col items-center gap-3 sm:flex-row">
+                <a href={primaryCta.href} className="rounded-full bg-amber-400 px-6 py-3 text-sm font-semibold text-[#08161c] shadow-lg shadow-amber-400/20 transition hover:bg-amber-300">{primaryCta.label}</a>
+                <a href={secondaryCta.href} className="rounded-full border border-white/20 px-6 py-3 text-sm font-semibold text-white transition hover:border-white/50 hover:bg-white/5">{secondaryCta.label}</a>
+              </motion.div>
+            </div>
+          </section>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(<GradientMeshHero />);
+    </script>
+  </body>
+</html>

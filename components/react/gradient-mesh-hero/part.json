@@ -1,0 +1,11 @@
+{
+  "name": "Gradient Mesh Hero",
+  "slug": "gradient-mesh-hero",
+  "category": "react",
+  "tier": "showcase",
+  "tags": ["hero", "gradient", "mesh", "blob", "animation", "framer-motion"],
+  "description": "A hero section with an animated gradient-mesh blob background, grain overlay, and a bold headline.",
+  "deps": ["react", "tailwindcss", "framer-motion"],
+  "files": ["GradientMeshHero.tsx"],
+  "usage": "Render <GradientMeshHero /> at the top of a page; pass eyebrow/title/subtitle/CTA props to customize."
+}

@@ -1,0 +1,58 @@
+/* saltycodestudio — Glassmorphism Card */
+.scs-glass-card {
+  position: relative;
+  width: 100%;
+  max-width: 360px;
+  padding: 1.75rem;
+  border-radius: 20px;
+  /* The frosted pane */
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.18),
+    rgba(255, 255, 255, 0.06)
+  );
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  backdrop-filter: blur(16px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  box-shadow:
+    0 8px 32px rgba(13, 42, 58, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.45);
+  color: #0d2a3a;
+  overflow: hidden;
+}
+
+/* Inner highlight sweep — a soft light catch on the top-left edge */
+.scs-glass-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    120% 80% at 0% 0%,
+    rgba(255, 255, 255, 0.35),
+    rgba(255, 255, 255, 0) 60%
+  );
+  pointer-events: none;
+}
+
+.scs-glass-card__eyebrow {
+  position: relative;
+  margin: 0 0 0.5rem;
+  font: 600 0.72rem/1 system-ui, sans-serif;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #0e7c86;
+}
+
+.scs-glass-card__title {
+  position: relative;
+  margin: 0 0 0.5rem;
+  font: 700 1.4rem/1.2 system-ui, sans-serif;
+}
+
+.scs-glass-card__body {
+  position: relative;
+  margin: 0;
+  font: 400 0.95rem/1.55 system-ui, sans-serif;
+  color: rgba(13, 42, 58, 0.78);
+}

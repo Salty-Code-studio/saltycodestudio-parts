@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Neon Glow Button — saltycodestudio</title>
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;display:flex;flex-wrap:wrap;gap:1.5rem;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 30%,#0d2a3a,#05111a);font-family:system-ui,sans-serif}
+
+  /* ---- component ---- */
+  .scs-neon-btn{--scs-neon:#16b8c4;--scs-neon-ink:#eafdff;position:relative;display:inline-flex;align-items:center;justify-content:center;gap:.5rem;padding:.9rem 2rem;border:2px solid var(--scs-neon);border-radius:999px;background:transparent;color:var(--scs-neon-ink);font:700 1rem/1 system-ui,sans-serif;letter-spacing:.04em;text-decoration:none;cursor:pointer;box-shadow:0 0 4px var(--scs-neon),0 0 14px color-mix(in srgb,var(--scs-neon) 60%,transparent),inset 0 0 8px color-mix(in srgb,var(--scs-neon) 22%,transparent);text-shadow:0 0 6px color-mix(in srgb,var(--scs-neon) 70%,transparent);transition:box-shadow .3s ease,text-shadow .3s ease,color .3s ease,transform .15s ease}
+  .scs-neon-btn:hover,.scs-neon-btn:focus-visible{color:#fff;outline:none;box-shadow:0 0 6px var(--scs-neon),0 0 22px var(--scs-neon),0 0 48px color-mix(in srgb,var(--scs-neon) 75%,transparent),inset 0 0 16px color-mix(in srgb,var(--scs-neon) 35%,transparent);text-shadow:0 0 8px #fff,0 0 18px var(--scs-neon)}
+  .scs-neon-btn:active{transform:translateY(1px) scale(.99)}
+  .scs-neon-btn--sand{--scs-neon:#f4a259;--scs-neon-ink:#fff4e8}
+  .scs-neon-btn--violet{--scs-neon:#8a6cff;--scs-neon-ink:#f1edff}
+
+  .hint{position:fixed;bottom:1.5rem;width:100%;text-align:center;color:#3f5b66;font-size:.8rem}
+</style>
+</head>
+<body>
+  <button class="scs-neon-btn" type="button">Launch</button>
+  <a class="scs-neon-btn scs-neon-btn--sand" href="#">View Work</a>
+  <button class="scs-neon-btn scs-neon-btn--violet" type="button">Get Started</button>
+  <p class="hint">Hover any button to intensify the glow</p>
+</body>
+</html>

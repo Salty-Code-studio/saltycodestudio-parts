@@ -1,0 +1,85 @@
+/* Theme Switcher — saltycodestudio
+ * Tokens are defined on :root (light by default) and overridden when
+ * [data-theme="dark"] is set on <html>. Build your UI from these variables. */
+
+:root {
+  --bg: #fbf6ee;          /* cream */
+  --surface: #ffffff;
+  --text: #0c2a33;        /* navy */
+  --text-muted: #5b727a;
+  --border: rgba(12, 42, 51, 0.12);
+  --accent: #0e7c86;      /* ocean teal */
+  --accent-contrast: #fbf6ee;
+  --shadow: 0 24px 60px -34px rgba(12, 42, 51, 0.45);
+}
+
+:root[data-theme="dark"] {
+  --bg: #0c1f25;          /* deep navy */
+  --surface: #12303a;
+  --text: #f2e9da;        /* warm sand */
+  --text-muted: #9fb3b8;
+  --border: rgba(242, 233, 218, 0.14);
+  --accent: #2bb3c0;      /* brighter teal for contrast */
+  --accent-contrast: #06181d;
+  --shadow: 0 24px 60px -30px rgba(0, 0, 0, 0.6);
+}
+
+/* Smooth the color change when toggling (not on first paint). */
+:root.theme-ready,
+:root.theme-ready body {
+  transition: background-color 0.35s ease, color 0.35s ease;
+}
+
+/* The toggle */
+.theme-toggle {
+  position: relative;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  display: inline-grid;
+  place-items: center;
+  overflow: hidden;
+  transition: border-color 0.2s ease, background-color 0.3s ease;
+}
+.theme-toggle:hover { border-color: var(--accent); }
+.theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+.theme-toggle__icon {
+  grid-area: 1 / 1;
+  font-size: 1.2rem;
+  line-height: 1;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease;
+}
+
+/* Light theme shows the moon (switch TO dark); dark shows the sun. */
+.theme-toggle__moon { color: var(--text); }
+.theme-toggle__sun  { color: #e9b949; }
+
+:root[data-theme="light"] .theme-toggle__sun,
+:root:not([data-theme="dark"]) .theme-toggle__sun {
+  opacity: 0;
+  transform: translateY(-120%) rotate(-90deg);
+}
+:root[data-theme="light"] .theme-toggle__moon,
+:root:not([data-theme="dark"]) .theme-toggle__moon {
+  opacity: 1;
+  transform: translateY(0) rotate(0);
+}
+
+:root[data-theme="dark"] .theme-toggle__moon {
+  opacity: 0;
+  transform: translateY(120%) rotate(90deg);
+}
+:root[data-theme="dark"] .theme-toggle__sun {
+  opacity: 1;
+  transform: translateY(0) rotate(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root.theme-ready, :root.theme-ready body { transition: none; }
+  .theme-toggle__icon { transition: opacity 0.15s ease; }
+}

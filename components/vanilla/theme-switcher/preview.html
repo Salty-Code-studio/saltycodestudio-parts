@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Theme Switcher — saltycodestudio</title>
+
+<!-- No-flash: set theme before styles paint -->
+<script>
+  (function () {
+    try {
+      var stored = localStorage.getItem('theme');
+      var sysDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.setAttribute('data-theme', stored || (sysDark ? 'dark' : 'light'));
+    } catch (e) {}
+  })();
+</script>
+
+<style>
+  :root { --bg:#fbf6ee; --surface:#ffffff; --text:#0c2a33; --text-muted:#5b727a; --border:rgba(12,42,51,0.12); --accent:#0e7c86; --accent-contrast:#fbf6ee; --shadow:0 24px 60px -34px rgba(12,42,51,0.45); }
+  :root[data-theme="dark"] { --bg:#0c1f25; --surface:#12303a; --text:#f2e9da; --text-muted:#9fb3b8; --border:rgba(242,233,218,0.14); --accent:#2bb3c0; --accent-contrast:#06181d; --shadow:0 24px 60px -30px rgba(0,0,0,0.6); }
+  :root.theme-ready, :root.theme-ready body { transition: background-color 0.35s ease, color 0.35s ease; }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--text); display: flex; flex-direction: column; }
+  header { display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); }
+  header strong { letter-spacing: 0.02em; }
+  main { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.5rem; padding: 3rem 1.5rem; text-align: center; }
+  h1 { font-size: clamp(2rem, 6vw, 3.5rem); margin: 0; letter-spacing: -0.03em; }
+  p { max-width: 46ch; color: var(--text-muted); line-height: 1.6; margin: 0; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 2rem; box-shadow: var(--shadow); max-width: 420px; }
+  .btn { font: inherit; font-weight: 600; padding: 0.8rem 1.6rem; border-radius: 999px; border: none; background: var(--accent); color: var(--accent-contrast); cursor: pointer; margin-top: 1rem; }
+
+  .theme-toggle { position: relative; width: 46px; height: 46px; border-radius: 50%; border: 1.5px solid var(--border); background: var(--surface); color: var(--text); cursor: pointer; display: inline-grid; place-items: center; overflow: hidden; transition: border-color 0.2s ease, background-color 0.3s ease; }
+  .theme-toggle:hover { border-color: var(--accent); }
+  .theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .theme-toggle__icon { grid-area: 1 / 1; font-size: 1.2rem; line-height: 1; transition: transform 0.4s cubic-bezier(0.22,1,0.36,1), opacity 0.3s ease; }
+  .theme-toggle__moon { color: var(--text); }
+  .theme-toggle__sun { color: #e9b949; }
+  :root[data-theme="light"] .theme-toggle__sun, :root:not([data-theme="dark"]) .theme-toggle__sun { opacity: 0; transform: translateY(-120%) rotate(-90deg); }
+  :root[data-theme="light"] .theme-toggle__moon, :root:not([data-theme="dark"]) .theme-toggle__moon { opacity: 1; transform: translateY(0) rotate(0); }
+  :root[data-theme="dark"] .theme-toggle__moon { opacity: 0; transform: translateY(120%) rotate(90deg); }
+  :root[data-theme="dark"] .theme-toggle__sun { opacity: 1; transform: translateY(0) rotate(0); }
+  @media (prefers-reduced-motion: reduce) { :root.theme-ready, :root.theme-ready body { transition: none; } .theme-toggle__icon { transition: opacity 0.15s ease; } }
+</style>
+</head>
+<body>
+  <header>
+    <strong>saltycodestudio</strong>
+    <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle color theme">
+      <span class="theme-toggle__icon theme-toggle__sun" aria-hidden="true">&#9728;</span>
+      <span class="theme-toggle__icon theme-toggle__moon" aria-hidden="true">&#9789;</span>
+    </button>
+  </header>
+  <main>
+    <h1>Sand by day, navy by night</h1>
+    <p>Toggle the theme top-right. Your choice is saved to localStorage; clear it to follow the system again. The page also picks up your OS preference on first visit.</p>
+    <div class="card">
+      <strong>Everything is built from CSS variables</strong>
+      <p style="margin-top:0.5rem">Backgrounds, text, borders and accents all swap from the same token set.</p>
+      <button class="btn">Accent button</button>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

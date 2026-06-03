@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Parallax Layers — saltycodestudio</title>
+<style>
+  :root { --ss-sand:#f4ebe0; --ss-cream:#faf6f0; --ss-teal:#2a7f80; --ss-deep:#0f2c3a; --ss-ink:#14202a; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system,"Segoe UI",system-ui,sans-serif; background: var(--ss-cream); color: var(--ss-ink); }
+  .pad { min-height: 100vh; display: grid; place-items: center; text-align: center; padding: 2rem; }
+  .pad.top { background: radial-gradient(120% 100% at 50% 0%, #fff, var(--ss-sand)); }
+  .pad.bottom { background: linear-gradient(180deg, var(--ss-sand), var(--ss-deep)); color: var(--ss-cream); }
+  .pad h1 { font-size: clamp(2rem,6vw,4rem); color: var(--ss-deep); letter-spacing: -0.02em; }
+  .pad.bottom h1 { color: var(--ss-cream); }
+  .scroll-hint { margin-top: 2rem; font-size: 0.8rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--ss-teal); }
+
+  .parallax-scene { position: relative; height: 100vh; overflow: hidden; display: grid; place-items: center; background: linear-gradient(180deg,#cfe6e4 0%,#eaf4f2 60%,var(--ss-sand) 100%); }
+  .parallax-layer { position: absolute; inset: -20% 0; display: grid; place-items: center; will-change: transform; pointer-events: none; }
+  .parallax-layer.is-content { pointer-events: auto; }
+  .parallax-blob { border-radius: 50%; filter: blur(2px); opacity: 0.9; }
+  .parallax-title { font-size: clamp(2.6rem,9vw,8rem); font-weight: 900; letter-spacing: -0.03em; color: var(--ss-deep); text-align: center; line-height: 0.9; }
+  .parallax-sub { display: block; font-size: clamp(0.9rem,1.4vw,1.1rem); letter-spacing: 0.3em; text-transform: uppercase; font-weight: 600; color: var(--ss-teal); margin-top: 1.5rem; }
+</style>
+</head>
+<body>
+
+  <section class="pad top">
+    <div>
+      <h1>Parallax Layers</h1>
+      <p style="margin-top:1rem;color:#5a6a72;">Scroll into the scene — the blobs and type drift at different speeds.</p>
+      <div class="scroll-hint">Scroll ↓</div>
+    </div>
+  </section>
+
+  <section class="parallax-scene">
+    <!-- far / slow background blob -->
+    <div class="parallax-layer" data-parallax-speed="-0.35">
+      <div class="parallax-blob" style="width:60vmin;height:60vmin;background:radial-gradient(circle at 40% 35%, #7fc8c0, #2a7f80);transform:translate(-30vw,-10vh);"></div>
+    </div>
+    <!-- mid blob -->
+    <div class="parallax-layer" data-parallax-speed="0.12">
+      <div class="parallax-blob" style="width:42vmin;height:42vmin;background:radial-gradient(circle at 60% 40%, #e8a76b, #d2783f);transform:translate(28vw,12vh);opacity:0.85;"></div>
+    </div>
+    <!-- foreground content (fastest, readable) -->
+    <div class="parallax-layer is-content" data-parallax-speed="0.4">
+      <h2 class="parallax-title">DEPTH<br>BY MOTION<span class="parallax-sub">Three layers, three speeds</span></h2>
+    </div>
+    <!-- nearest small accent -->
+    <div class="parallax-layer" data-parallax-speed="0.6">
+      <div class="parallax-blob" style="width:18vmin;height:18vmin;background:radial-gradient(circle at 50% 50%, #fff, #2a7f80);transform:translate(34vw,-24vh);opacity:0.7;"></div>
+    </div>
+  </section>
+
+  <section class="pad bottom"><h1>Scene cleared.</h1></section>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+    function initParallaxLayers(root) {
+      root = root || document;
+      root.querySelectorAll('.parallax-scene').forEach(function (scene) {
+        scene.querySelectorAll('[data-parallax-speed]').forEach(function (layer) {
+          var speed = parseFloat(layer.getAttribute('data-parallax-speed')) || 0;
+          gsap.fromTo(layer, { yPercent: -speed * 50 }, { yPercent: speed * 50, ease: 'none',
+            scrollTrigger: { trigger: scene, start: 'top bottom', end: 'bottom top', scrub: true, invalidateOnRefresh: true } });
+        });
+      });
+    }
+    initParallaxLayers();
+  </script>
+</body>
+</html>

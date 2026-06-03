@@ -1,0 +1,11 @@
+{
+  "name": "Gooey Blob",
+  "slug": "gooey-blob",
+  "category": "css",
+  "tier": "showcase",
+  "tags": ["blob", "gooey", "morph", "organic", "svg-filter"],
+  "description": "An organic morphing gooey blob — a border-radius morph variant plus an SVG goo-filter variant that melts moving circles together.",
+  "deps": [],
+  "files": ["styles.css", "index.html"],
+  "usage": "Option A: drop a .scs-blob div for a self-morphing blob (no SVG). Option B: paste the hidden SVG goo filter once, then use .scs-goo with child spans for circles that gooily merge."
+}

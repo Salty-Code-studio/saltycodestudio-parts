@@ -1,0 +1,53 @@
+/* Parallax Layers — saltycodestudio */
+:root {
+  --ss-sand: #f4ebe0; --ss-cream: #faf6f0; --ss-teal: #2a7f80;
+  --ss-deep: #0f2c3a; --ss-ink: #14202a;
+}
+
+.parallax-scene {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(180deg, #cfe6e4 0%, #eaf4f2 60%, var(--ss-sand) 100%);
+}
+
+.parallax-layer {
+  position: absolute;
+  inset: -20% 0; /* extra bleed so layers never reveal an edge while moving */
+  display: grid;
+  place-items: center;
+  will-change: transform;
+  pointer-events: none;
+}
+
+/* the readable content layer should still be interactive */
+.parallax-layer.is-content {
+  pointer-events: auto;
+}
+
+.parallax-blob {
+  border-radius: 50%;
+  filter: blur(2px);
+  opacity: 0.9;
+}
+
+.parallax-title {
+  font-size: clamp(2.6rem, 9vw, 8rem);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  color: var(--ss-deep);
+  text-align: center;
+  line-height: 0.9;
+}
+
+.parallax-sub {
+  display: block;
+  font-size: clamp(0.9rem, 1.4vw, 1.1rem);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--ss-teal);
+  margin-top: 1.5rem;
+}

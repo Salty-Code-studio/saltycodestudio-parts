@@ -1,0 +1,56 @@
+/* saltycodestudio — Neon Glow Button
+   Layered glow that intensifies on hover. */
+
+.scs-neon-btn {
+  --scs-neon: #16b8c4;          /* glow color */
+  --scs-neon-ink: #eafdff;      /* label color */
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.9rem 2rem;
+  border: 2px solid var(--scs-neon);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--scs-neon-ink);
+  font: 700 1rem/1 system-ui, sans-serif;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  cursor: pointer;
+  /* resting glow: a tight ring + a soft outer halo + a faint inner fill */
+  box-shadow:
+    0 0 4px var(--scs-neon),
+    0 0 14px color-mix(in srgb, var(--scs-neon) 60%, transparent),
+    inset 0 0 8px color-mix(in srgb, var(--scs-neon) 22%, transparent);
+  text-shadow: 0 0 6px color-mix(in srgb, var(--scs-neon) 70%, transparent);
+  transition:
+    box-shadow 0.3s ease,
+    text-shadow 0.3s ease,
+    color 0.3s ease,
+    transform 0.15s ease;
+}
+
+.scs-neon-btn:hover,
+.scs-neon-btn:focus-visible {
+  color: #fff;
+  outline: none;
+  /* intensified glow on hover */
+  box-shadow:
+    0 0 6px var(--scs-neon),
+    0 0 22px var(--scs-neon),
+    0 0 48px color-mix(in srgb, var(--scs-neon) 75%, transparent),
+    inset 0 0 16px color-mix(in srgb, var(--scs-neon) 35%, transparent);
+  text-shadow:
+    0 0 8px #fff,
+    0 0 18px var(--scs-neon);
+}
+
+.scs-neon-btn:active {
+  transform: translateY(1px) scale(0.99);
+}
+
+/* warm sand variant */
+.scs-neon-btn--sand { --scs-neon: #f4a259; --scs-neon-ink: #fff4e8; }
+/* coral/pink variant */
+.scs-neon-btn--violet { --scs-neon: #8a6cff; --scs-neon-ink: #f1edff; }

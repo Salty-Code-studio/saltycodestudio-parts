@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Split Text Stagger — saltycodestudio</title>
+<style>
+  :root { --ss-sand:#f4ebe0; --ss-cream:#faf6f0; --ss-teal:#2a7f80; --ss-deep:#0f2c3a; --ss-ink:#14202a; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system,"Segoe UI",system-ui,sans-serif; background: var(--ss-cream); color: var(--ss-ink); }
+  .wrap { max-width: 1000px; margin: 0 auto; padding: 0 2rem; }
+  section { min-height: 92vh; display: flex; flex-direction: column; justify-content: center; }
+  .hero { min-height: 78vh; background: radial-gradient(120% 100% at 0% 0%, #fff, transparent 60%); }
+  .eyebrow { font-size: 0.8rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--ss-teal); font-weight: 600; margin-bottom: 1.2rem; }
+  h1 { font-size: clamp(2.8rem,10vw,7rem); font-weight: 900; letter-spacing: -0.04em; color: var(--ss-deep); }
+  h2 { font-size: clamp(2rem,6vw,4.5rem); font-weight: 800; letter-spacing: -0.03em; color: var(--ss-deep); }
+  .scroll-hint { margin-top: 2.5rem; font-size: 0.8rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--ss-teal); }
+  .divider { border-top: 1px solid rgba(15,44,58,0.12); }
+
+  .split-word { display: inline-block; white-space: nowrap; }
+  .split-unit { display: inline-block; overflow: hidden; vertical-align: top; line-height: 1; }
+  .split-unit-inner { display: inline-block; will-change: transform, opacity; }
+  [data-split] { line-height: 1.05; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <p class="eyebrow">Split Text Stagger</p>
+      <h1 data-split="chars">Make it move.</h1>
+      <div class="scroll-hint">Chars staggered on load · scroll for more ↓</div>
+    </section>
+
+    <section class="divider">
+      <p class="eyebrow">data-split="words" + scroll trigger</p>
+      <h2 data-split="words" data-split-scroll>These words rise one after another as the line enters view.</h2>
+    </section>
+
+    <section class="divider">
+      <p class="eyebrow">data-split="chars" + scroll trigger</p>
+      <h2 data-split="chars" data-split-scroll>Character by character, tighter and snappier.</h2>
+    </section>
+
+    <section class="divider">
+      <p class="eyebrow">Custom stagger</p>
+      <h2 data-split="chars" data-split-scroll data-split-stagger="0.06">Slower, more deliberate.</h2>
+    </section>
+
+    <section class="divider" style="min-height:50vh; justify-content:flex-start; padding-top:6rem;">
+      <p class="eyebrow">Done</p>
+      <h2 data-split="words" data-split-scroll>End of demo.</h2>
+    </section>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script>
+    function splitText(el, mode) {
+      var source = el.textContent; el.textContent = '';
+      el.setAttribute('aria-label', source);
+      var units = [];
+      function makeUnit(text, parent) {
+        var outer = document.createElement('span'); outer.className = 'split-unit'; outer.setAttribute('aria-hidden','true');
+        var inner = document.createElement('span'); inner.className = 'split-unit-inner'; inner.textContent = text;
+        outer.appendChild(inner); (parent||el).appendChild(outer); units.push(inner);
+      }
+      if (mode === 'words') {
+        source.split(/(\s+)/).forEach(function (chunk) {
+          if (chunk === '') return;
+          if (/^\s+$/.test(chunk)) el.appendChild(document.createTextNode(chunk));
+          else makeUnit(chunk);
+        });
+      } else {
+        source.split(/(\s+)/).forEach(function (chunk) {
+          if (chunk === '') return;
+          if (/^\s+$/.test(chunk)) { el.appendChild(document.createTextNode(chunk)); return; }
+          var word = document.createElement('span'); word.className = 'split-word';
+          Array.from(chunk).forEach(function (ch) { makeUnit(ch, word); });
+          el.appendChild(word);
+        });
+      }
+      return units;
+    }
+    function initSplitStagger(root) {
+      root = root || document;
+      gsap.registerPlugin(ScrollTrigger);
+      root.querySelectorAll('[data-split]').forEach(function (el) {
+        var mode = el.getAttribute('data-split') === 'words' ? 'words' : 'chars';
+        var units = splitText(el, mode);
+        var stagger = parseFloat(el.getAttribute('data-split-stagger')) || (mode === 'words' ? 0.07 : 0.03);
+        gsap.set(units, { yPercent: 120, autoAlpha: 0 });
+        var animate = function () { gsap.to(units, { yPercent: 0, autoAlpha: 1, duration: 0.8, ease: 'power4.out', stagger: stagger }); };
+        if (el.hasAttribute('data-split-scroll')) {
+          ScrollTrigger.create({ trigger: el, start: 'top 85%', once: true, onEnter: animate });
+        } else { animate(); }
+      });
+    }
+    initSplitStagger();
+  </script>
+</body>
+</html>

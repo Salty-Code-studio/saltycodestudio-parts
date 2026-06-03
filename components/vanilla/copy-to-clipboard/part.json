@@ -1,0 +1,11 @@
+{
+  "name": "Copy to Clipboard",
+  "slug": "copy-to-clipboard",
+  "category": "vanilla",
+  "tier": "practical",
+  "tags": ["clipboard", "copy", "button", "feedback"],
+  "description": "A copy button that uses the async Clipboard API (with a legacy fallback) and shows an animated \"Copied!\" confirmation state.",
+  "deps": [],
+  "files": ["styles.css", "script.js"],
+  "usage": "Add a button with data-copy=\"text\" or data-copy-target=\"#selector\". script.js handles copying and the confirmation state automatically."
+}

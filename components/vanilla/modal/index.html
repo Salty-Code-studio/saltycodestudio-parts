@@ -1,0 +1,16 @@
+<!-- Trigger: any element with data-modal-open pointing at a modal id -->
+<button type="button" data-modal-open="demo-modal">Open dialog</button>
+
+<!-- Modal — place anywhere; commonly near the end of <body> -->
+<div class="modal" id="demo-modal" aria-hidden="true">
+  <div class="modal__backdrop" data-modal-close></div>
+  <div class="modal__dialog" role="dialog" aria-modal="true" aria-labelledby="demo-modal-title" aria-describedby="demo-modal-desc">
+    <button type="button" class="modal__close" data-modal-close aria-label="Close dialog">&times;</button>
+    <h2 class="modal__title" id="demo-modal-title">Dialog title</h2>
+    <p class="modal__desc" id="demo-modal-desc">Dialog body content goes here.</p>
+    <div class="modal__actions">
+      <button type="button" class="btn btn--ghost" data-modal-close>Cancel</button>
+      <button type="button" class="btn">Confirm</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,11 @@
+{
+  "name": "Bento Grid",
+  "slug": "bento-grid",
+  "category": "react",
+  "tier": "practical",
+  "tags": ["bento", "grid", "layout", "cards", "features"],
+  "description": "A responsive asymmetric bento grid of feature cards with a subtle hover-lift and glow.",
+  "deps": ["react", "tailwindcss"],
+  "files": ["BentoGrid.tsx"],
+  "usage": "Import BentoGrid and pass an items array, or use the default Sand & Surf sample content."
+}
