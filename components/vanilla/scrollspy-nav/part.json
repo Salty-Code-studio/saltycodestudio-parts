@@ -3,9 +3,20 @@
   "slug": "scrollspy-nav",
   "category": "vanilla",
   "tier": "practical",
-  "tags": ["scrollspy", "navigation", "intersection-observer", "anchor", "smooth-scroll"],
+  "tags": [
+    "scrollspy",
+    "navigation",
+    "intersection-observer",
+    "anchor",
+    "smooth-scroll"
+  ],
   "description": "A navigation that highlights the current section using IntersectionObserver and smooth-scrolls to anchors on click.",
   "deps": [],
-  "files": ["styles.css", "script.js"],
-  "usage": "Give nav links href=\"#section-id\" and a data-scrollspy attribute on the nav. Sections need matching ids. script.js observes them and toggles .is-active."
+  "files": [
+    "styles.css",
+    "script.js"
+  ],
+  "usage": "Give nav links href=\"#section-id\" and a data-scrollspy attribute on the nav. Sections need matching ids. script.js observes them and toggles .is-active.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
 }

@@ -19,12 +19,22 @@ export function initPinnedSection(root = document) {
   }
   gsap.registerPlugin(ScrollTrigger);
 
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   const sections = root.querySelectorAll('.pin-section');
 
   sections.forEach((section) => {
     const inner = section.querySelector('.pin-inner');
     const stages = gsap.utils.toArray(section.querySelectorAll('.pin-stage'));
     if (!inner || stages.length === 0) return;
+
+    // Reduced motion: reveal every stage as plain stacked content, no pin/scrub.
+    if (prefersReduced) {
+      gsap.set(stages, { autoAlpha: 1, yPercent: 0 });
+      const progress = section.querySelector('[data-pin-progress]');
+      if (progress) gsap.set(progress, { scaleX: 1, transformOrigin: 'left center' });
+      return;
+    }
 
     // How many viewport heights of scroll the pin should last.
     const stageCount = stages.length;

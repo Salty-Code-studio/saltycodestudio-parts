@@ -31,7 +31,13 @@ export default function LogoMarquee({
   className = "",
 }: LogoMarqueeProps) {
   // Duplicate the set so the track can loop seamlessly with a -50% translate.
-  const track = [...logos, ...logos];
+  // Tag each entry with which copy (set) it belongs to so keys stay unique
+  // across the duplicated track. The original set is aria-visible; the clone
+  // is hidden from assistive tech.
+  const track = [
+    ...logos.map((logo, i) => ({ logo, set: 0, i })),
+    ...logos.map((logo, i) => ({ logo, set: 1, i })),
+  ];
 
   return (
     <section className={`bg-[#faf6ef] py-14 ${className}`}>
@@ -57,10 +63,10 @@ export default function LogoMarquee({
             animationDirection: direction === "right" ? "reverse" : "normal",
           }}
         >
-          {track.map((logo, i) => (
+          {track.map(({ logo, set, i }) => (
             <li
-              key={i}
-              aria-hidden={i >= logos.length}
+              key={`${set}-${typeof logo === "string" ? logo : i}`}
+              aria-hidden={set === 1}
               className="flex shrink-0 items-center text-xl font-semibold tracking-tight text-[#5b6b72] opacity-70 transition-opacity hover:opacity-100"
             >
               {logo}

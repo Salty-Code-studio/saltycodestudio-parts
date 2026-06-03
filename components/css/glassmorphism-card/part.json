@@ -3,9 +3,20 @@
   "slug": "glassmorphism-card",
   "category": "css",
   "tier": "practical",
-  "tags": ["glass", "card", "blur", "frosted", "backdrop"],
+  "tags": [
+    "glass",
+    "card",
+    "blur",
+    "frosted",
+    "backdrop"
+  ],
   "description": "A frosted glass card using backdrop-blur with a subtle light border and an inner top-left highlight.",
   "deps": [],
-  "files": ["styles.css", "index.html"],
-  "usage": "Copy the markup from index.html and styles.css. Place the card over a photo or gradient background so the backdrop-blur has something to frost."
+  "files": [
+    "styles.css",
+    "index.html"
+  ],
+  "usage": "Copy the markup from index.html and styles.css. Place the card over a photo or gradient background so the backdrop-blur has something to frost.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
 }

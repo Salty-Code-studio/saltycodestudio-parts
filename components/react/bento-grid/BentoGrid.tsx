@@ -90,9 +90,9 @@ export default function BentoGrid({
         </div>
 
         <div className="grid auto-rows-[minmax(11rem,1fr)] grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
-          {items.map((item, i) => (
+          {items.map((item) => (
             <article
-              key={i}
+              key={item.title}
               className={`group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-[#e7ddcd] bg-white/70 p-6 shadow-[0_1px_0_rgba(255,255,255,0.6)_inset] backdrop-blur transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-teal-700/30 hover:shadow-xl hover:shadow-teal-900/10 ${item.span ?? ""}`}
             >
               <div

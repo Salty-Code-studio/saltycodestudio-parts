@@ -54,3 +54,7 @@
 .scs-neon-btn--sand { --scs-neon: #f4a259; --scs-neon-ink: #fff4e8; }
 /* coral/pink variant */
 .scs-neon-btn--violet { --scs-neon: #8a6cff; --scs-neon-ink: #f1edff; }
+
+@media (prefers-reduced-motion: reduce) {
+  .scs-neon-btn { transition: none; }
+}

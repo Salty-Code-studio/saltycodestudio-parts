@@ -3,9 +3,22 @@
   "slug": "pricing-toggle",
   "category": "react",
   "tier": "practical",
-  "tags": ["pricing", "toggle", "plans", "billing", "cards"],
+  "tags": [
+    "pricing",
+    "toggle",
+    "plans",
+    "billing",
+    "cards"
+  ],
   "description": "Pricing cards with a monthly/annual switch that animates the displayed price and shows annual savings.",
-  "deps": ["react", "tailwindcss"],
-  "files": ["PricingToggle.tsx"],
-  "usage": "Render <PricingToggle plans={...} /> or use the built-in sample tiers."
+  "deps": [
+    "react",
+    "tailwindcss"
+  ],
+  "files": [
+    "PricingToggle.tsx"
+  ],
+  "usage": "Render <PricingToggle plans={...} /> or use the built-in sample tiers.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
 }

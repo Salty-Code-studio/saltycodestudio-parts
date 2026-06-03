@@ -3,9 +3,22 @@
   "slug": "dark-mode-toggle",
   "category": "react",
   "tier": "practical",
-  "tags": ["dark-mode", "theme", "toggle", "accessibility", "sun-moon"],
+  "tags": [
+    "dark-mode",
+    "theme",
+    "toggle",
+    "accessibility",
+    "sun-moon"
+  ],
   "description": "An accessible animated theme toggle that morphs a sun into a moon and persists the choice to localStorage.",
-  "deps": ["react", "tailwindcss"],
-  "files": ["DarkModeToggle.tsx"],
-  "usage": "Render <DarkModeToggle />; it toggles the `dark` class on <html> and remembers the preference."
+  "deps": [
+    "react",
+    "tailwindcss"
+  ],
+  "files": [
+    "DarkModeToggle.tsx"
+  ],
+  "usage": "Render <DarkModeToggle />; it toggles the `dark` class on <html> and remembers the preference.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
 }

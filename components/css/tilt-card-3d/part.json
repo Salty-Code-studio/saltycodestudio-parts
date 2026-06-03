@@ -3,9 +3,20 @@
   "slug": "tilt-card-3d",
   "category": "css",
   "tier": "practical",
-  "tags": ["card", "3d", "tilt", "hover", "parallax"],
+  "tags": [
+    "card",
+    "3d",
+    "tilt",
+    "hover",
+    "parallax"
+  ],
   "description": "A card that lifts and tilts in 3D perspective on hover, with inner layers floating at different depths and a sheen sweep.",
   "deps": [],
-  "files": ["styles.css", "index.html"],
-  "usage": "Wrap the card in .scs-tilt (sets perspective). Inner content gets .scs-tilt__layer plus a depth class; tune the rotateX/rotateY and translateZ values to taste."
+  "files": [
+    "styles.css",
+    "index.html"
+  ],
+  "usage": "Wrap the card in .scs-tilt (sets perspective). Inner content gets .scs-tilt__layer plus a depth class; tune the rotateX/rotateY and translateZ values to taste.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
 }

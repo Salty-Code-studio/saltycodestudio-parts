@@ -3,9 +3,20 @@
   "slug": "smooth-scroll",
   "category": "vanilla",
   "tier": "practical",
-  "tags": ["scroll", "smooth-scroll", "lerp", "raf", "inertia"],
+  "tags": [
+    "scroll",
+    "smooth-scroll",
+    "lerp",
+    "raf",
+    "inertia"
+  ],
   "description": "Lerp-based smooth (inertia) page scrolling driven by requestAnimationFrame, with automatic opt-out for prefers-reduced-motion and touch devices.",
   "deps": [],
-  "files": ["styles.css", "script.js"],
-  "usage": "Link styles.css and script.js. Wrap page content in <div id=\"scroll-content\">...</div>. Disable by removing the script or via prefers-reduced-motion."
+  "files": [
+    "styles.css",
+    "script.js"
+  ],
+  "usage": "Link styles.css and script.js. Wrap page content in <div id=\"scroll-content\">...</div>. Disable by removing the script or via prefers-reduced-motion.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
 }

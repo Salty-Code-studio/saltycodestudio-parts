@@ -92,7 +92,7 @@ export default function TestimonialCarousel({
           <div className="relative min-h-[180px]">
             {testimonials.map((t, i) => (
               <figure
-                key={i}
+                key={t.name}
                 aria-hidden={i !== index}
                 className={`transition-all duration-500 ease-out ${
                   i === index
@@ -127,9 +127,9 @@ export default function TestimonialCarousel({
           {/* Controls */}
           <div className="mt-8 flex items-center justify-between">
             <div className="flex gap-2" role="tablist" aria-label="Choose testimonial">
-              {testimonials.map((_, i) => (
+              {testimonials.map((t, i) => (
                 <button
-                  key={i}
+                  key={t.name}
                   role="tab"
                   aria-selected={i === index}
                   aria-label={`Go to testimonial ${i + 1}`}

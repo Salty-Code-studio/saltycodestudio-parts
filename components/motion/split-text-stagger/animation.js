@@ -78,12 +78,20 @@ export function initSplitStagger(root = document) {
   const hasScrollTrigger = typeof ScrollTrigger !== 'undefined';
   if (hasScrollTrigger) gsap.registerPlugin(ScrollTrigger);
 
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   root.querySelectorAll('[data-split]').forEach((el) => {
     const mode = el.getAttribute('data-split') === 'words' ? 'words' : 'chars';
     const units = splitText(el, mode);
     const stagger =
       parseFloat(el.getAttribute('data-split-stagger')) ||
       (mode === 'words' ? 0.07 : 0.03);
+
+    // Reduced motion: show the split text in its final, visible state, no stagger.
+    if (prefersReduced) {
+      gsap.set(units, { yPercent: 0, autoAlpha: 1 });
+      return;
+    }
 
     gsap.set(units, { yPercent: 120, autoAlpha: 0 });
 

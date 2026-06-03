@@ -31,11 +31,45 @@ const CAT_LABEL = {
 async function exists(p) { try { await stat(p); return true; } catch { return false; } }
 
 async function readPart(dir, relPath, { kind, previewFile = "preview.html" }) {
-  const meta = JSON.parse(await readFile(join(dir, "part.json"), "utf8"));
+  const file = join(dir, "part.json");
+  let meta;
+  try {
+    meta = JSON.parse(await readFile(file, "utf8"));
+  } catch (err) {
+    throw new Error(`Failed to read/parse part.json at ${file}: ${err.message}`);
+  }
   meta.path = relPath;
   meta.kind = meta.kind || kind;
   meta.preview = (await exists(join(dir, previewFile))) ? `${relPath}/${previewFile}` : null;
+  await validate(meta, dir);
   return meta;
+}
+
+const REQUIRED_FIELDS = ["name", "slug", "category", "tier", "tags", "description", "deps", "files", "usage", "source", "license"];
+const problems = [];
+
+async function validate(meta, dir) {
+  const label = meta.path || dir;
+  for (const field of REQUIRED_FIELDS) {
+    if (!(field in meta) || meta[field] === undefined || meta[field] === null || meta[field] === "") {
+      problems.push(`${label}: missing required field "${field}"`);
+    }
+  }
+  if ("tier" in meta && meta.tier !== "showcase" && meta.tier !== "practical") {
+    problems.push(`${label}: tier must be "showcase" or "practical" (got "${meta.tier}")`);
+  }
+  for (const arrField of ["tags", "deps", "files"]) {
+    if (arrField in meta && !Array.isArray(meta[arrField])) {
+      problems.push(`${label}: "${arrField}" must be an array`);
+    }
+  }
+  if (Array.isArray(meta.files)) {
+    for (const f of meta.files) {
+      if (!(await exists(join(dir, f)))) {
+        problems.push(`${label}: listed file "${f}" does not exist on disk`);
+      }
+    }
+  }
 }
 
 async function scanFlat(root, relRoot, opts) {
@@ -122,6 +156,14 @@ function buildIndex(parts, guides) {
 
 const parts = await collect();
 const guides = await listGuides();
+
+if (problems.length) {
+  console.error(`✗ Validation failed — ${problems.length} problem(s) found:\n`);
+  for (const p of problems) console.error(`  • ${p}`);
+  console.error(`\nFix the issues above and re-run. INDEX.md / manifest.json were NOT regenerated.`);
+  process.exit(1);
+}
+
 await writeFile(join(ROOT, "manifest.json"), JSON.stringify(parts, null, 2) + "\n");
 await writeFile(join(ROOT, "INDEX.md"), buildIndex(parts, guides));
 const n = (k) => parts.filter((p) => p.kind === k).length;

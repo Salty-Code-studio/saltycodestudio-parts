@@ -3,9 +3,20 @@
   "slug": "marquee",
   "category": "css",
   "tier": "practical",
-  "tags": ["marquee", "scroll", "ticker", "infinite", "loop"],
+  "tags": [
+    "marquee",
+    "scroll",
+    "ticker",
+    "infinite",
+    "loop"
+  ],
   "description": "A smooth, seamless infinite horizontal marquee that loops without a jump and pauses on hover.",
   "deps": [],
-  "files": ["styles.css", "index.html"],
-  "usage": "Duplicate the content group twice inside the track (mark the copy aria-hidden). Tune speed/spacing with the --scs-marquee-duration and --scs-marquee-gap variables; add .scs-marquee--reverse to flip direction."
+  "files": [
+    "styles.css",
+    "index.html"
+  ],
+  "usage": "Duplicate the content group twice inside the track (mark the copy aria-hidden). Tune speed/spacing with the --scs-marquee-duration and --scs-marquee-gap variables; add .scs-marquee--reverse to flip direction.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
 }

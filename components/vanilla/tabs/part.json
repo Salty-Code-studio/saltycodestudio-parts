@@ -3,9 +3,20 @@
   "slug": "tabs",
   "category": "vanilla",
   "tier": "practical",
-  "tags": ["tabs", "accessible", "aria", "keyboard", "indicator"],
+  "tags": [
+    "tabs",
+    "accessible",
+    "aria",
+    "keyboard",
+    "indicator"
+  ],
   "description": "Accessible tabs with full ARIA roles and arrow-key navigation, plus a sliding active indicator that animates between tabs.",
   "deps": [],
-  "files": ["styles.css", "script.js"],
-  "usage": "Use the tablist/tab/tabpanel markup with matching ids and aria-controls. script.js handles selection, keyboard nav and the moving indicator."
+  "files": [
+    "styles.css",
+    "script.js"
+  ],
+  "usage": "Use the tablist/tab/tabpanel markup with matching ids and aria-controls. script.js handles selection, keyboard nav and the moving indicator.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
 }

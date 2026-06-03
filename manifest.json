@@ -77,6 +77,8 @@
       "AnimatedCounter.tsx"
     ],
     "usage": "Use <AnimatedCounter value={1200} suffix='+' /> for a single stat, or <StatGrid /> for the sample row.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
     "path": "components/react/animated-counter",
     "kind": "component",
     "preview": "components/react/animated-counter/preview.html"
@@ -157,6 +159,8 @@
       "BentoGrid.tsx"
     ],
     "usage": "Import BentoGrid and pass an items array, or use the default Sand & Surf sample content.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
     "path": "components/react/bento-grid",
     "kind": "component",
     "preview": "components/react/bento-grid/preview.html"
@@ -343,6 +347,8 @@
       "CommandPalette.tsx"
     ],
     "usage": "Render <CommandPalette commands={...} /> anywhere; press ⌘K / Ctrl+K to open. Pass your own commands array.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
     "path": "components/react/command-palette",
     "kind": "component",
     "preview": "components/react/command-palette/preview.html"
@@ -395,6 +401,8 @@
       "DarkModeToggle.tsx"
     ],
     "usage": "Render <DarkModeToggle />; it toggles the `dark` class on <html> and remembers the preference.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
     "path": "components/react/dark-mode-toggle",
     "kind": "component",
     "preview": "components/react/dark-mode-toggle/preview.html"
@@ -444,6 +452,8 @@
       "FeatureAccordion.tsx"
     ],
     "usage": "Render <FeatureAccordion items={[...]} /> or use the built-in sample features.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
     "path": "components/react/feature-accordion",
     "kind": "component",
     "preview": "components/react/feature-accordion/preview.html"
@@ -471,6 +481,8 @@
       "GradientMeshHero.tsx"
     ],
     "usage": "Render <GradientMeshHero /> at the top of a page; pass eyebrow/title/subtitle/CTA props to customize.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
     "path": "components/react/gradient-mesh-hero",
     "kind": "component",
     "preview": "components/react/gradient-mesh-hero/preview.html"
@@ -577,6 +589,8 @@
       "LogoMarquee.tsx"
     ],
     "usage": "Render <LogoMarquee logos={[...]} /> with text or node logos; defaults to sample wordmarks.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
     "path": "components/react/logo-marquee",
     "kind": "component",
     "preview": "components/react/logo-marquee/preview.html"
@@ -654,6 +668,8 @@
       "PricingToggle.tsx"
     ],
     "usage": "Render <PricingToggle plans={...} /> or use the built-in sample tiers.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
     "path": "components/react/pricing-toggle",
     "kind": "component",
     "preview": "components/react/pricing-toggle/preview.html"
@@ -733,6 +749,8 @@
       "ShrinkingStickyNavbar.tsx"
     ],
     "usage": "Render <ShrinkingStickyNavbar /> at the top of your layout; it manages its own scroll listener.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
     "path": "components/react/shrinking-sticky-navbar",
     "kind": "component",
     "preview": "components/react/shrinking-sticky-navbar/preview.html"
@@ -786,6 +804,8 @@
       "TestimonialCarousel.tsx"
     ],
     "usage": "Render <TestimonialCarousel testimonials={...} /> or use the built-in sample quotes.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
     "path": "components/react/testimonial-carousel",
     "kind": "component",
     "preview": "components/react/testimonial-carousel/preview.html"
@@ -914,6 +934,8 @@
       "index.html"
     ],
     "usage": "Wrap your section in a .scs-mesh element. The mesh fills the container; give the container a height (or use it full-screen) and place your content inside.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
     "path": "components/css/animated-gradient-mesh",
     "kind": "component",
     "preview": "components/css/animated-gradient-mesh/preview.html"
@@ -988,6 +1010,8 @@
       "index.html"
     ],
     "usage": "Wrap content in .scs-aurora and include the .scs-aurora__lights layer with its four spans. Give the wrapper a height; content sits above the aurora automatically.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
     "path": "components/css/aurora-background",
     "kind": "component",
     "preview": "components/css/aurora-background/preview.html"
@@ -1115,6 +1139,8 @@
       "index.html"
     ],
     "usage": "Copy the markup from index.html and styles.css. Place the card over a photo or gradient background so the backdrop-blur has something to frost.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
     "path": "components/css/glassmorphism-card",
     "kind": "component",
     "preview": "components/css/glassmorphism-card/preview.html"
@@ -1138,6 +1164,8 @@
       "index.html"
     ],
     "usage": "Option A: drop a .scs-blob div for a self-morphing blob (no SVG). Option B: paste the hidden SVG goo filter once, then use .scs-goo with child spans for circles that gooily merge.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
     "path": "components/css/gooey-blob",
     "kind": "component",
     "preview": "components/css/gooey-blob/preview.html"
@@ -1161,6 +1189,8 @@
       "index.html"
     ],
     "usage": "Add class .scs-gradient-border to any container and put content inside. Tune --scs-border-width and --scs-radius; recolor via the conic-gradient stops. Uses @property to animate the angle.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
     "path": "components/css/gradient-border-glow",
     "kind": "component",
     "preview": "components/css/gradient-border-glow/preview.html"
@@ -1184,6 +1214,8 @@
       "index.html"
     ],
     "usage": "Add class .scs-grain to any positioned section. Optional modifiers: .scs-grain--film (heavier) and .scs-grain--animated (flicker).",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
     "path": "components/css/grain-noise-overlay",
     "kind": "component",
     "preview": "components/css/grain-noise-overlay/preview.html"
@@ -1259,6 +1291,8 @@
       "index.html"
     ],
     "usage": "Duplicate the content group twice inside the track (mark the copy aria-hidden). Tune speed/spacing with the --scs-marquee-duration and --scs-marquee-gap variables; add .scs-marquee--reverse to flip direction.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
     "path": "components/css/marquee",
     "kind": "component",
     "preview": "components/css/marquee/preview.html"
@@ -1282,6 +1316,8 @@
       "index.html"
     ],
     "usage": "Add class .scs-neon-btn to a <button> or <a>. Change glow color via the --scs-neon variable or the --sand / --violet modifier classes.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
     "path": "components/css/neon-glow-button",
     "kind": "component",
     "preview": "components/css/neon-glow-button/preview.html"
@@ -1358,6 +1394,8 @@
       "index.html"
     ],
     "usage": "Use .scs-skeleton with a shape helper (--text, --title, --avatar, --thumb, --btn) and optional width helper (--w90/--w75/--w60/--w40). Compose blocks to mirror your real content, then swap in content when loaded.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
     "path": "components/css/shimmer-skeleton",
     "kind": "component",
     "preview": "components/css/shimmer-skeleton/preview.html"
@@ -1381,6 +1419,8 @@
       "index.html"
     ],
     "usage": "Wrap the card in .scs-tilt (sets perspective). Inner content gets .scs-tilt__layer plus a depth class; tune the rotateX/rotateY and translateZ values to taste.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
     "path": "components/css/tilt-card-3d",
     "kind": "component",
     "preview": "components/css/tilt-card-3d/preview.html"
@@ -1403,6 +1443,8 @@
       "script.js"
     ],
     "usage": "Add a button with data-copy=\"text\" or data-copy-target=\"#selector\". script.js handles copying and the confirmation state automatically.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
     "path": "components/vanilla/copy-to-clipboard",
     "kind": "component",
     "preview": "components/vanilla/copy-to-clipboard/preview.html"
@@ -1426,6 +1468,8 @@
       "script.js"
     ],
     "usage": "Link styles.css and script.js, add <div class=\"cursor-dot\"></div><div class=\"cursor-ring\"></div> to the page. Mark interactive elements with [data-cursor] or rely on a/button auto-detection.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
     "path": "components/vanilla/custom-cursor",
     "kind": "component",
     "preview": "components/vanilla/custom-cursor/preview.html"
@@ -1476,6 +1520,8 @@
       "script.js"
     ],
     "usage": "Add the modal markup, give triggers data-modal-open=\"<id>\". script.js wires open/close, focus trapping and scroll lock automatically.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
     "path": "components/vanilla/modal",
     "kind": "component",
     "preview": "components/vanilla/modal/preview.html"
@@ -1499,6 +1545,8 @@
       "script.js"
     ],
     "usage": "Paste the preloader markup as the first child of <body>, link styles.css and script.js. It removes itself on window load; reveals page content via a body class.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
     "path": "components/vanilla/preloader",
     "kind": "component",
     "preview": "components/vanilla/preloader/preview.html"
@@ -1522,6 +1570,8 @@
       "script.js"
     ],
     "usage": "Give nav links href=\"#section-id\" and a data-scrollspy attribute on the nav. Sections need matching ids. script.js observes them and toggles .is-active.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
     "path": "components/vanilla/scrollspy-nav",
     "kind": "component",
     "preview": "components/vanilla/scrollspy-nav/preview.html"
@@ -1545,6 +1595,8 @@
       "script.js"
     ],
     "usage": "Link styles.css and script.js. Wrap page content in <div id=\"scroll-content\">...</div>. Disable by removing the script or via prefers-reduced-motion.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
     "path": "components/vanilla/smooth-scroll",
     "kind": "component",
     "preview": "components/vanilla/smooth-scroll/preview.html"
@@ -1568,6 +1620,8 @@
       "script.js"
     ],
     "usage": "Use the tablist/tab/tabpanel markup with matching ids and aria-controls. script.js handles selection, keyboard nav and the moving indicator.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
     "path": "components/vanilla/tabs",
     "kind": "component",
     "preview": "components/vanilla/tabs/preview.html"
@@ -1591,6 +1645,8 @@
       "script.js"
     ],
     "usage": "Add the inline no-flash snippet in <head>, a button with id=\"theme-toggle\", then link styles.css and script.js. Build your UI with the provided CSS variables.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
     "path": "components/vanilla/theme-switcher",
     "kind": "component",
     "preview": "components/vanilla/theme-switcher/preview.html"
@@ -1647,6 +1703,8 @@
       "styles.css"
     ],
     "usage": "Wrap panels in .hscroll > .hscroll-track > .hscroll-panel and call initHorizontalGallery().",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
     "path": "components/motion/horizontal-scroll-gallery",
     "kind": "component",
     "preview": "components/motion/horizontal-scroll-gallery/preview.html"
@@ -1675,6 +1733,8 @@
       "styles.css"
     ],
     "usage": "Provide a tall .scrub-section wrapping a pinned <canvas class=\"scrub-canvas\">, then call initScrubSequence().",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
     "path": "components/motion/image-scrub-sequence",
     "kind": "component",
     "preview": "components/motion/image-scrub-sequence/preview.html"
@@ -1764,6 +1824,8 @@
       "styles.css"
     ],
     "usage": "Add class .magnetic with an inner .magnetic-label, then call initMagneticButtons().",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
     "path": "components/motion/magnetic-button",
     "kind": "component",
     "preview": "components/motion/magnetic-button/preview.html"
@@ -1791,6 +1853,8 @@
       "styles.css"
     ],
     "usage": "Give layer elements data-parallax-speed (e.g. -0.3 to 0.6) inside a .parallax-scene and call initParallaxLayers().",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
     "path": "components/motion/parallax-layers",
     "kind": "component",
     "preview": "components/motion/parallax-layers/preview.html"
@@ -1818,6 +1882,8 @@
       "styles.css"
     ],
     "usage": "Wrap your section in .pin-section with a .pin-inner and stage elements; call initPinnedSection() after GSAP + ScrollTrigger load.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
     "path": "components/motion/pinned-scroll-section",
     "kind": "component",
     "preview": "components/motion/pinned-scroll-section/preview.html"
@@ -1845,6 +1911,8 @@
       "styles.css"
     ],
     "usage": "Add a <div class=\"scroll-progress\"><span class=\"scroll-progress-fill\"></span></div> at the top of body and call initScrollProgress().",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
     "path": "components/motion/scroll-progress-bar",
     "kind": "component",
     "preview": "components/motion/scroll-progress-bar/preview.html"
@@ -1904,6 +1972,8 @@
       "styles.css"
     ],
     "usage": "Add data-reveal (optionally data-reveal=\"words\") to text elements and call initScrollReveal().",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
     "path": "components/motion/scroll-text-reveal",
     "kind": "component",
     "preview": "components/motion/scroll-text-reveal/preview.html"
@@ -1961,6 +2031,8 @@
       "styles.css"
     ],
     "usage": "Add data-split (\"chars\" or \"words\") to a heading and call initSplitStagger(); fires on scroll into view.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
     "path": "components/motion/split-text-stagger",
     "kind": "component",
     "preview": "components/motion/split-text-stagger/preview.html"
@@ -2020,6 +2092,8 @@
       "styles.css"
     ],
     "usage": "Wrap .stack-card items in a .stack-cards container and call initStackingCards().",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
     "path": "components/motion/sticky-stacking-cards",
     "kind": "component",
     "preview": "components/motion/sticky-stacking-cards/preview.html"

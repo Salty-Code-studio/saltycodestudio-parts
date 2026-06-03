@@ -3,9 +3,20 @@
   "slug": "gradient-border-glow",
   "category": "css",
   "tier": "practical",
-  "tags": ["border", "gradient", "glow", "conic", "animated"],
+  "tags": [
+    "border",
+    "gradient",
+    "glow",
+    "conic",
+    "animated"
+  ],
   "description": "An element wrapped in an animated rotating conic-gradient border with a soft blurred glow that brightens on hover.",
   "deps": [],
-  "files": ["styles.css", "index.html"],
-  "usage": "Add class .scs-gradient-border to any container and put content inside. Tune --scs-border-width and --scs-radius; recolor via the conic-gradient stops. Uses @property to animate the angle."
+  "files": [
+    "styles.css",
+    "index.html"
+  ],
+  "usage": "Add class .scs-gradient-border to any container and put content inside. Tune --scs-border-width and --scs-radius; recolor via the conic-gradient stops. Uses @property to animate the angle.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
 }

@@ -3,9 +3,24 @@
   "slug": "horizontal-scroll-gallery",
   "category": "motion",
   "tier": "showcase",
-  "tags": ["scroll", "horizontal", "gsap", "gallery", "pin", "scrolltrigger"],
+  "tags": [
+    "scroll",
+    "horizontal",
+    "gsap",
+    "gallery",
+    "pin",
+    "scrolltrigger"
+  ],
   "description": "Pins a track and translates it horizontally so vertical scrolling sweeps a row of panels sideways across the viewport.",
-  "deps": ["gsap", "gsap/ScrollTrigger"],
-  "files": ["animation.js", "styles.css"],
-  "usage": "Wrap panels in .hscroll > .hscroll-track > .hscroll-panel and call initHorizontalGallery()."
+  "deps": [
+    "gsap",
+    "gsap/ScrollTrigger"
+  ],
+  "files": [
+    "animation.js",
+    "styles.css"
+  ],
+  "usage": "Wrap panels in .hscroll > .hscroll-track > .hscroll-panel and call initHorizontalGallery().",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
 }

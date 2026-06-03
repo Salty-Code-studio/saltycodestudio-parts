@@ -3,9 +3,22 @@
   "slug": "feature-accordion",
   "category": "react",
   "tier": "practical",
-  "tags": ["accordion", "features", "faq", "disclosure", "animation"],
+  "tags": [
+    "accordion",
+    "features",
+    "faq",
+    "disclosure",
+    "animation"
+  ],
   "description": "A single-open accordion of features with smooth grid-based height animation and accessible disclosure semantics.",
-  "deps": ["react", "tailwindcss"],
-  "files": ["FeatureAccordion.tsx"],
-  "usage": "Render <FeatureAccordion items={[...]} /> or use the built-in sample features."
+  "deps": [
+    "react",
+    "tailwindcss"
+  ],
+  "files": [
+    "FeatureAccordion.tsx"
+  ],
+  "usage": "Render <FeatureAccordion items={[...]} /> or use the built-in sample features.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
 }

@@ -27,6 +27,14 @@ export function initScrollProgress(options = {}) {
     ? document.querySelector(options.target)
     : document.body;
 
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Reduced motion: this bar is a decorative indicator. Skip the scrubbed fill
+  // and leave it collapsed so it never animates or distracts.
+  if (prefersReduced) {
+    gsap.set(fill, { scaleX: 0, transformOrigin: 'left center' });
+    return;
+  }
+
   gsap.set(fill, { scaleX: 0, transformOrigin: 'left center' });
 
   ScrollTrigger.create({

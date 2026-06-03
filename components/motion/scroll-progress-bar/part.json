@@ -3,9 +3,24 @@
   "slug": "scroll-progress-bar",
   "category": "motion",
   "tier": "practical",
-  "tags": ["scroll", "progress", "gsap", "bar", "indicator", "scrolltrigger"],
+  "tags": [
+    "scroll",
+    "progress",
+    "gsap",
+    "bar",
+    "indicator",
+    "scrolltrigger"
+  ],
   "description": "A slim fixed bar at the top of the page that fills from 0 to 100% as the user scrolls through the document.",
-  "deps": ["gsap", "gsap/ScrollTrigger"],
-  "files": ["animation.js", "styles.css"],
-  "usage": "Add a <div class=\"scroll-progress\"><span class=\"scroll-progress-fill\"></span></div> at the top of body and call initScrollProgress()."
+  "deps": [
+    "gsap",
+    "gsap/ScrollTrigger"
+  ],
+  "files": [
+    "animation.js",
+    "styles.css"
+  ],
+  "usage": "Add a <div class=\"scroll-progress\"><span class=\"scroll-progress-fill\"></span></div> at the top of body and call initScrollProgress().",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
 }

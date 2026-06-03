@@ -3,9 +3,20 @@
   "slug": "shimmer-skeleton",
   "category": "css",
   "tier": "practical",
-  "tags": ["skeleton", "loading", "shimmer", "placeholder", "loader"],
+  "tags": [
+    "skeleton",
+    "loading",
+    "shimmer",
+    "placeholder",
+    "loader"
+  ],
   "description": "Loading placeholder blocks with an animated shimmer sweep, plus shape and width helper classes.",
   "deps": [],
-  "files": ["styles.css", "index.html"],
-  "usage": "Use .scs-skeleton with a shape helper (--text, --title, --avatar, --thumb, --btn) and optional width helper (--w90/--w75/--w60/--w40). Compose blocks to mirror your real content, then swap in content when loaded."
+  "files": [
+    "styles.css",
+    "index.html"
+  ],
+  "usage": "Use .scs-skeleton with a shape helper (--text, --title, --avatar, --thumb, --btn) and optional width helper (--w90/--w75/--w60/--w40). Compose blocks to mirror your real content, then swap in content when loaded.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
 }

@@ -20,6 +20,10 @@ export function initParallaxLayers(root = document) {
   }
   gsap.registerPlugin(ScrollTrigger);
 
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Reduced motion: leave layers in their natural positions, no parallax drift.
+  if (prefersReduced) return;
+
   root.querySelectorAll('.parallax-scene').forEach((scene) => {
     const layers = scene.querySelectorAll('[data-parallax-speed]');
     if (!layers.length) return;

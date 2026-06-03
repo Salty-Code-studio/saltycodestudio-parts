@@ -73,7 +73,7 @@ export default function FeatureAccordion({
             const headerId = `${baseId}-h-${i}`;
             const panelId = `${baseId}-p-${i}`;
             return (
-              <div key={i}>
+              <div key={item.title}>
                 <h3>
                   <button
                     id={headerId}

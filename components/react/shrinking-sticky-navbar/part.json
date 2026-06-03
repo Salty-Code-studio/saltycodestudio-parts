@@ -3,9 +3,22 @@
   "slug": "shrinking-sticky-navbar",
   "category": "react",
   "tier": "practical",
-  "tags": ["navbar", "sticky", "scroll", "header", "blur"],
+  "tags": [
+    "navbar",
+    "sticky",
+    "scroll",
+    "header",
+    "blur"
+  ],
   "description": "A sticky navbar that condenses its height and gains a backdrop blur once the page is scrolled.",
-  "deps": ["react", "tailwindcss"],
-  "files": ["ShrinkingStickyNavbar.tsx"],
-  "usage": "Render <ShrinkingStickyNavbar /> at the top of your layout; it manages its own scroll listener."
+  "deps": [
+    "react",
+    "tailwindcss"
+  ],
+  "files": [
+    "ShrinkingStickyNavbar.tsx"
+  ],
+  "usage": "Render <ShrinkingStickyNavbar /> at the top of your layout; it manages its own scroll listener.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
 }

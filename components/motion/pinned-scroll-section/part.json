@@ -3,9 +3,24 @@
   "slug": "pinned-scroll-section",
   "category": "motion",
   "tier": "showcase",
-  "tags": ["scroll", "pin", "gsap", "hero", "scrolltrigger", "stages"],
+  "tags": [
+    "scroll",
+    "pin",
+    "gsap",
+    "hero",
+    "scrolltrigger",
+    "stages"
+  ],
   "description": "Pins a full-height section in place while its inner content animates through distinct stages as the user scrolls past it.",
-  "deps": ["gsap", "gsap/ScrollTrigger"],
-  "files": ["animation.js", "styles.css"],
-  "usage": "Wrap your section in .pin-section with a .pin-inner and stage elements; call initPinnedSection() after GSAP + ScrollTrigger load."
+  "deps": [
+    "gsap",
+    "gsap/ScrollTrigger"
+  ],
+  "files": [
+    "animation.js",
+    "styles.css"
+  ],
+  "usage": "Wrap your section in .pin-section with a .pin-inner and stage elements; call initPinnedSection() after GSAP + ScrollTrigger load.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
 }

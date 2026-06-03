@@ -16,6 +16,8 @@ The motion layer lives in two files — read them, don't reinvent them:
 - `components/motion/*` — the heavyweight, GSAP/ScrollTrigger scroll effects
   (split text, pinned sections, parallax, scrubbed sequences, marquees).
 
+> Note: the `.anim-*` utilities read motion.css's `--scs-duration-*` scale, which is distinct from tokens.css's `--duration-*` used for plain transitions.
+
 ---
 
 ## 1. Five principles (memorize these)

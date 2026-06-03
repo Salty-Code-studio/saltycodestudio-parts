@@ -3,9 +3,25 @@
   "slug": "image-scrub-sequence",
   "category": "motion",
   "tier": "showcase",
-  "tags": ["scroll", "scrub", "canvas", "gsap", "sequence", "frames", "scrolltrigger"],
+  "tags": [
+    "scroll",
+    "scrub",
+    "canvas",
+    "gsap",
+    "sequence",
+    "frames",
+    "scrolltrigger"
+  ],
   "description": "Scrubbing the scroll plays through a frame sequence rendered to canvas (procedurally generated, no external image assets required).",
-  "deps": ["gsap", "gsap/ScrollTrigger"],
-  "files": ["animation.js", "styles.css"],
-  "usage": "Provide a tall .scrub-section wrapping a pinned <canvas class=\"scrub-canvas\">, then call initScrubSequence()."
+  "deps": [
+    "gsap",
+    "gsap/ScrollTrigger"
+  ],
+  "files": [
+    "animation.js",
+    "styles.css"
+  ],
+  "usage": "Provide a tall .scrub-section wrapping a pinned <canvas class=\"scrub-canvas\">, then call initScrubSequence().",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
 }

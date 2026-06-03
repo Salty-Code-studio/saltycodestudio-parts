@@ -18,6 +18,11 @@ export function initHorizontalGallery(root = document) {
   }
   gsap.registerPlugin(ScrollTrigger);
 
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Reduced motion: no pin or horizontal sweep — panels stay in their natural,
+  // fully readable flow and the user scrolls them however the layout allows.
+  if (prefersReduced) return;
+
   root.querySelectorAll('.hscroll').forEach((section) => {
     const track = section.querySelector('.hscroll-track');
     const panels = gsap.utils.toArray(section.querySelectorAll('.hscroll-panel'));

@@ -3,9 +3,20 @@
   "slug": "neon-glow-button",
   "category": "css",
   "tier": "practical",
-  "tags": ["button", "neon", "glow", "hover", "cta"],
+  "tags": [
+    "button",
+    "neon",
+    "glow",
+    "hover",
+    "cta"
+  ],
   "description": "A pill button with a layered neon glow (outer halo, ring, inner fill, text glow) that intensifies on hover and focus.",
   "deps": [],
-  "files": ["styles.css", "index.html"],
-  "usage": "Add class .scs-neon-btn to a <button> or <a>. Change glow color via the --scs-neon variable or the --sand / --violet modifier classes."
+  "files": [
+    "styles.css",
+    "index.html"
+  ],
+  "usage": "Add class .scs-neon-btn to a <button> or <a>. Change glow color via the --scs-neon variable or the --sand / --violet modifier classes.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
 }

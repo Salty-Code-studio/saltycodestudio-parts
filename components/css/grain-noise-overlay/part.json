@@ -3,9 +3,20 @@
   "slug": "grain-noise-overlay",
   "category": "css",
   "tier": "practical",
-  "tags": ["grain", "noise", "texture", "film", "overlay"],
+  "tags": [
+    "grain",
+    "noise",
+    "texture",
+    "film",
+    "overlay"
+  ],
   "description": "A fine film-grain texture overlay built from an inline SVG noise data-uri, addable to any section via one class.",
   "deps": [],
-  "files": ["styles.css", "index.html"],
-  "usage": "Add class .scs-grain to any positioned section. Optional modifiers: .scs-grain--film (heavier) and .scs-grain--animated (flicker)."
+  "files": [
+    "styles.css",
+    "index.html"
+  ],
+  "usage": "Add class .scs-grain to any positioned section. Optional modifiers: .scs-grain--film (heavier) and .scs-grain--animated (flicker).",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
 }

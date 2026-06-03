@@ -3,9 +3,20 @@
   "slug": "custom-cursor",
   "category": "vanilla",
   "tier": "showcase",
-  "tags": ["cursor", "pointer", "interaction", "lerp", "trailing"],
+  "tags": [
+    "cursor",
+    "pointer",
+    "interaction",
+    "lerp",
+    "trailing"
+  ],
   "description": "A custom cursor with a precise dot and a lerp-trailing ring that grows and changes over links and buttons; hides the native cursor and disables itself on touch devices.",
   "deps": [],
-  "files": ["styles.css", "script.js"],
-  "usage": "Link styles.css and script.js, add <div class=\"cursor-dot\"></div><div class=\"cursor-ring\"></div> to the page. Mark interactive elements with [data-cursor] or rely on a/button auto-detection."
+  "files": [
+    "styles.css",
+    "script.js"
+  ],
+  "usage": "Link styles.css and script.js, add <div class=\"cursor-dot\"></div><div class=\"cursor-ring\"></div> to the page. Mark interactive elements with [data-cursor] or rely on a/button auto-detection.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
 }

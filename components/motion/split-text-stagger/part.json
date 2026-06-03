@@ -3,9 +3,25 @@
   "slug": "split-text-stagger",
   "category": "motion",
   "tier": "practical",
-  "tags": ["text", "split", "gsap", "stagger", "heading", "chars", "words"],
+  "tags": [
+    "text",
+    "split",
+    "gsap",
+    "stagger",
+    "heading",
+    "chars",
+    "words"
+  ],
   "description": "Splits a heading into characters or words in plain JS and staggers them into view (no paid SplitText plugin required).",
-  "deps": ["gsap", "gsap/ScrollTrigger"],
-  "files": ["animation.js", "styles.css"],
-  "usage": "Add data-split (\"chars\" or \"words\") to a heading and call initSplitStagger(); fires on scroll into view."
+  "deps": [
+    "gsap",
+    "gsap/ScrollTrigger"
+  ],
+  "files": [
+    "animation.js",
+    "styles.css"
+  ],
+  "usage": "Add data-split (\"chars\" or \"words\") to a heading and call initSplitStagger(); fires on scroll into view.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
 }

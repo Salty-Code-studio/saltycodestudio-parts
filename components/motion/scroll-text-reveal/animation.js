@@ -41,6 +41,8 @@ export function initScrollReveal(root = document) {
   }
   gsap.registerPlugin(ScrollTrigger);
 
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   const els = root.querySelectorAll('[data-reveal]');
 
   els.forEach((el) => {
@@ -53,6 +55,12 @@ export function initScrollReveal(root = document) {
       targets = el.querySelectorAll('.reveal-line');
     } else {
       targets = [el];
+    }
+
+    // Reduced motion: render the final, visible state immediately, no scroll reveal.
+    if (prefersReduced) {
+      gsap.set(targets, { yPercent: 0, autoAlpha: 1 });
+      return;
     }
 
     gsap.set(targets, { yPercent: 110, autoAlpha: 0 });

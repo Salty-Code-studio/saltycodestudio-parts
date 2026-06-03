@@ -16,6 +16,10 @@ export function initMagneticButtons(root = document) {
     return;
   }
 
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Reduced motion: this pull is purely decorative — leave buttons static.
+  if (prefersReduced) return;
+
   root.querySelectorAll('.magnetic').forEach((btn) => {
     const label = btn.querySelector('.magnetic-label') || btn;
     const strength = parseFloat(btn.getAttribute('data-magnetic-strength')) || 0.4;

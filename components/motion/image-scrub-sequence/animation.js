@@ -98,11 +98,21 @@ export function initScrubSequence(root = document) {
   }
   gsap.registerPlugin(ScrollTrigger);
 
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   root.querySelectorAll('.scrub-section').forEach((section) => {
     const canvas = section.querySelector('.scrub-canvas');
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    // playhead state we scrub via ScrollTrigger
+    const state = { frame: prefersReduced ? FRAME_COUNT - 1 : 0 };
+
+    function render() {
+      const rect = canvas.getBoundingClientRect();
+      drawFrame(ctx, rect.width, rect.height, state.frame / (FRAME_COUNT - 1));
+    }
 
     function resize() {
       const rect = canvas.getBoundingClientRect();
@@ -112,12 +122,11 @@ export function initScrubSequence(root = document) {
       render();
     }
 
-    // playhead state we scrub via ScrollTrigger
-    const state = { frame: 0 };
-
-    function render() {
-      const rect = canvas.getBoundingClientRect();
-      drawFrame(ctx, rect.width, rect.height, state.frame / (FRAME_COUNT - 1));
+    // Reduced motion: paint the final frame once, keep it responsive, no scrub.
+    if (prefersReduced) {
+      window.addEventListener('resize', resize);
+      resize();
+      return;
     }
 
     ScrollTrigger.create({

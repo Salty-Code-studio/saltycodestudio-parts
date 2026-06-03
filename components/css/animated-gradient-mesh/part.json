@@ -3,9 +3,20 @@
   "slug": "animated-gradient-mesh",
   "category": "css",
   "tier": "showcase",
-  "tags": ["gradient", "mesh", "background", "animation", "blobs"],
+  "tags": [
+    "gradient",
+    "mesh",
+    "background",
+    "animation",
+    "blobs"
+  ],
   "description": "A living, slowly-shifting multi-color radial-gradient mesh background driven entirely by CSS keyframes.",
   "deps": [],
-  "files": ["styles.css", "index.html"],
-  "usage": "Wrap your section in a .scs-mesh element. The mesh fills the container; give the container a height (or use it full-screen) and place your content inside."
+  "files": [
+    "styles.css",
+    "index.html"
+  ],
+  "usage": "Wrap your section in a .scs-mesh element. The mesh fills the container; give the container a height (or use it full-screen) and place your content inside.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
 }

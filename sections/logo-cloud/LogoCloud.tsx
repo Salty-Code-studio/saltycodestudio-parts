@@ -16,7 +16,16 @@ export type Logo = {
   name: string;
   /** Logo image source (SVG strongly recommended). Optional if `svg` is provided. */
   src?: string;
-  /** Inline SVG markup as a string, used when you'd rather not host a file. */
+  /**
+   * Inline SVG markup as a string, used when you'd rather not host a file.
+   *
+   * ⚠️ SECURITY — TRUSTED MARKUP ONLY. This string is injected verbatim via
+   * `dangerouslySetInnerHTML`. ONLY pass static, hardcoded markup that YOU
+   * authored. NEVER pass SVG that originates from a user, an API, a CMS, or any
+   * other untrusted source — raw SVG can carry `<script>` / event handlers and
+   * is a direct XSS vector. If the markup is not 100% under your control,
+   * sanitize it first (e.g. DOMPurify) before passing it here.
+   */
   svg?: string;
   /** Optional outbound link to the brand. */
   href?: string;
@@ -98,7 +107,11 @@ function LogoMark({ logo }: { logo: Logo }) {
     return (
       <span
         className="block text-[#1c2b33]"
-        // Inline SVG inherits currentColor; safe because it is your own controlled markup.
+        // ⚠️ XSS WARNING: `logo.svg` is injected as raw HTML. This is ONLY safe
+        // because the defaults above are static, hardcoded markup you control
+        // (and inline SVG inherits currentColor). NEVER feed user/API/CMS-supplied
+        // SVG into this prop without sanitizing it first (e.g. DOMPurify) — raw
+        // SVG can carry <script>/event handlers and execute as an XSS payload.
         dangerouslySetInnerHTML={{ __html: logo.svg }}
       />
     );

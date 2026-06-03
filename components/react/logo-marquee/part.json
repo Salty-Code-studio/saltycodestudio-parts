@@ -3,9 +3,22 @@
   "slug": "logo-marquee",
   "category": "react",
   "tier": "practical",
-  "tags": ["marquee", "logos", "infinite-scroll", "social-proof", "ticker"],
+  "tags": [
+    "marquee",
+    "logos",
+    "infinite-scroll",
+    "social-proof",
+    "ticker"
+  ],
   "description": "An infinite horizontal marquee of client/partner logos with edge fade and pause-on-hover.",
-  "deps": ["react", "tailwindcss"],
-  "files": ["LogoMarquee.tsx"],
-  "usage": "Render <LogoMarquee logos={[...]} /> with text or node logos; defaults to sample wordmarks."
+  "deps": [
+    "react",
+    "tailwindcss"
+  ],
+  "files": [
+    "LogoMarquee.tsx"
+  ],
+  "usage": "Render <LogoMarquee logos={[...]} /> with text or node logos; defaults to sample wordmarks.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
 }

@@ -3,9 +3,20 @@
   "slug": "modal",
   "category": "vanilla",
   "tier": "practical",
-  "tags": ["modal", "dialog", "focus-trap", "accessible", "overlay"],
+  "tags": [
+    "modal",
+    "dialog",
+    "focus-trap",
+    "accessible",
+    "overlay"
+  ],
   "description": "An accessible modal dialog with focus trap, Esc-to-close, backdrop-click close, body scroll lock, and a fade/scale-in animation.",
   "deps": [],
-  "files": ["styles.css", "script.js"],
-  "usage": "Add the modal markup, give triggers data-modal-open=\"<id>\". script.js wires open/close, focus trapping and scroll lock automatically."
+  "files": [
+    "styles.css",
+    "script.js"
+  ],
+  "usage": "Add the modal markup, give triggers data-modal-open=\"<id>\". script.js wires open/close, focus trapping and scroll lock automatically.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
 }

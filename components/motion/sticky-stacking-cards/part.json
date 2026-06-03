@@ -3,9 +3,24 @@
   "slug": "sticky-stacking-cards",
   "category": "motion",
   "tier": "showcase",
-  "tags": ["scroll", "pin", "cards", "gsap", "stack", "scrolltrigger"],
+  "tags": [
+    "scroll",
+    "pin",
+    "cards",
+    "gsap",
+    "stack",
+    "scrolltrigger"
+  ],
   "description": "A stack of cards where each pins in place and slightly scales back as the next card slides up and covers it on scroll.",
-  "deps": ["gsap", "gsap/ScrollTrigger"],
-  "files": ["animation.js", "styles.css"],
-  "usage": "Wrap .stack-card items in a .stack-cards container and call initStackingCards()."
+  "deps": [
+    "gsap",
+    "gsap/ScrollTrigger"
+  ],
+  "files": [
+    "animation.js",
+    "styles.css"
+  ],
+  "usage": "Wrap .stack-card items in a .stack-cards container and call initStackingCards().",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
 }

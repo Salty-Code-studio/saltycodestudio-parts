@@ -3,9 +3,25 @@
   "slug": "scroll-text-reveal",
   "category": "motion",
   "tier": "practical",
-  "tags": ["scroll", "text", "reveal", "gsap", "fade", "stagger", "scrolltrigger"],
+  "tags": [
+    "scroll",
+    "text",
+    "reveal",
+    "gsap",
+    "fade",
+    "stagger",
+    "scrolltrigger"
+  ],
   "description": "Lines or words rise up and fade in with a stagger as each block enters the viewport.",
-  "deps": ["gsap", "gsap/ScrollTrigger"],
-  "files": ["animation.js", "styles.css"],
-  "usage": "Add data-reveal (optionally data-reveal=\"words\") to text elements and call initScrollReveal()."
+  "deps": [
+    "gsap",
+    "gsap/ScrollTrigger"
+  ],
+  "files": [
+    "animation.js",
+    "styles.css"
+  ],
+  "usage": "Add data-reveal (optionally data-reveal=\"words\") to text elements and call initScrollReveal().",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
 }

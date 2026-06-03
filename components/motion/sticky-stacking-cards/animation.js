@@ -20,6 +20,11 @@ export function initStackingCards(root = document) {
   }
   gsap.registerPlugin(ScrollTrigger);
 
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Reduced motion: skip the scale/dim scrub. Cards remain at full scale and
+  // brightness; the CSS position:sticky stacking still reads as plain content.
+  if (prefersReduced) return;
+
   root.querySelectorAll('.stack-cards').forEach((container) => {
     const cards = gsap.utils.toArray(container.querySelectorAll('.stack-card'));
     if (cards.length < 2) return;
