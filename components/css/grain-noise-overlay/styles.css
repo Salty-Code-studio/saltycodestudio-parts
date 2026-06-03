@@ -26,18 +26,21 @@
   mix-blend-mode: soft-light;
 }
 
-/* Optional: animated flicker for moving-film feel */
+/* Optional: animated flicker for moving-film feel.
+   Animate background-position (not transform) so the overlay box stays pinned at
+   inset:0 and never overflows its container — otherwise the translation spawns a
+   flickering scrollbar. The noise tile shifts within the fixed box for the same effect. */
 .scs-grain--animated::after {
   animation: scs-grain-shift 0.6s steps(6) infinite;
 }
 
 @keyframes scs-grain-shift {
-  0%   { transform: translate(0, 0); }
-  20%  { transform: translate(-4%, 3%); }
-  40%  { transform: translate(3%, -5%); }
-  60%  { transform: translate(-3%, 4%); }
-  80%  { transform: translate(5%, -2%); }
-  100% { transform: translate(0, 0); }
+  0%   { background-position: 0 0; }
+  20%  { background-position: -6% 4%; }
+  40%  { background-position: 4% -7%; }
+  60%  { background-position: -5% 6%; }
+  80%  { background-position: 7% -3%; }
+  100% { background-position: 0 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
