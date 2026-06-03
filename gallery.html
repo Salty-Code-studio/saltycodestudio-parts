@@ -1,0 +1,685 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>saltycodestudio-parts — gallery</title>
+<style>
+  :root{
+    --sand:#f4ece0; --sand-2:#ece0cd; --cream:#fbf7f0;
+    --ink:#1c2b33; --ink-soft:#4a5d66;
+    --teal:#1f8a8a; --teal-deep:#0f5c5c; --surf:#2ec3c3;
+    --line:rgba(28,43,51,.10); --shadow:0 10px 40px -12px rgba(28,43,51,.22);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font:15px/1.5 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    color:var(--ink);background:radial-gradient(120% 120% at 0% 0%,var(--cream),var(--sand) 60%,var(--sand-2));min-height:100vh}
+  header{padding:48px clamp(20px,5vw,64px) 28px;max-width:1400px;margin:0 auto}
+  .kicker{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--teal-deep);font-weight:700}
+  h1{font-size:clamp(28px,5vw,46px);margin:.25em 0 .15em;letter-spacing:-.02em}
+  .sub{color:var(--ink-soft);max-width:60ch;margin:0}
+  .stats{margin-top:18px;color:var(--ink-soft);font-size:13px}
+  .stats b{color:var(--ink)}
+  .controls{position:sticky;top:0;z-index:20;backdrop-filter:blur(12px);
+    background:linear-gradient(var(--cream),rgba(251,247,240,.7));border-bottom:1px solid var(--line)}
+  .controls-inner{max-width:1400px;margin:0 auto;padding:14px clamp(20px,5vw,64px);
+    display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+  .filters{display:flex;gap:8px;flex-wrap:wrap}
+  .filters button{font:inherit;font-size:13px;font-weight:600;cursor:pointer;border:1px solid var(--line);
+    background:#fff;color:var(--ink-soft);padding:7px 14px;border-radius:999px;transition:.18s}
+  .filters button:hover{border-color:var(--teal);color:var(--teal-deep)}
+  .filters button.active{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+  .search{margin-left:auto;flex:1;min-width:180px;max-width:280px}
+  .search input{width:100%;font:inherit;font-size:13px;padding:8px 14px;border-radius:999px;
+    border:1px solid var(--line);background:#fff;color:var(--ink)}
+  .search input:focus{outline:none;border-color:var(--teal)}
+  main{max-width:1400px;margin:0 auto;padding:28px clamp(20px,5vw,64px) 80px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:24px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:18px;overflow:hidden;
+    box-shadow:var(--shadow);display:flex;flex-direction:column;transition:.2s}
+  .card:hover{transform:translateY(-3px);box-shadow:0 18px 50px -14px rgba(28,43,51,.3)}
+  .card-head{display:flex;gap:12px;align-items:flex-start;padding:16px 18px 10px}
+  .card-titles{flex:1;min-width:0}
+  .card-head h3{margin:0;font-size:16px;letter-spacing:-.01em}
+  .desc{margin:3px 0 0;font-size:12.5px;color:var(--ink-soft);line-height:1.45}
+  .badge{font-size:11px;font-weight:700;white-space:nowrap;padding:4px 9px;border-radius:999px}
+  .badge-show{background:linear-gradient(135deg,#fde7c8,#f7d49b);color:#7a4a12}
+  .badge-prac{background:#e2f3f0;color:var(--teal-deep)}
+  .frame-wrap{position:relative;height:300px;background:
+    repeating-conic-gradient(var(--sand) 0% 25%,var(--cream) 0% 50%) 50%/22px 22px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .frame{width:100%;height:100%;border:0;display:block;background:#fff}
+  .frame-missing{display:grid;place-items:center;color:var(--ink-soft);font-size:13px;height:100%}
+  .card-foot{display:flex;gap:10px;align-items:center;padding:12px 18px;flex-wrap:wrap}
+  .cat{font-size:11px;font-weight:700;letter-spacing:.04em;color:var(--teal-deep);text-transform:uppercase}
+  .tags{display:flex;gap:6px;flex-wrap:wrap;flex:1}
+  .tag{font-size:11px;color:var(--ink-soft);background:var(--sand);padding:3px 8px;border-radius:6px}
+  .open{font-size:12.5px;font-weight:700;color:var(--teal-deep);text-decoration:none;white-space:nowrap}
+  .open:hover{text-decoration:underline}
+  .empty{display:none;text-align:center;color:var(--ink-soft);padding:60px 0}
+  footer{max-width:1400px;margin:0 auto;padding:0 clamp(20px,5vw,64px) 60px;color:var(--ink-soft);font-size:12.5px}
+  code{background:var(--sand);padding:2px 6px;border-radius:5px;font-size:12px}
+</style>
+</head>
+<body>
+  <header>
+    <div class="kicker">saltycodestudio · parts bin</div>
+    <h1>Component &amp; animation gallery</h1>
+    <p class="sub">Every part rendered live below. Filter by stack or tier, search by name/tag,
+      and click <b>open ↗</b> for the full-screen preview. Source lives in each part's folder.</p>
+    <p class="stats"><b>37</b> parts · 🏆 <b>11</b> showcase · ✅ <b>26</b> practical
+      &nbsp;·&nbsp; CSS-only <b>10</b> · GSAP / Motion <b>9</b> · React + Tailwind <b>10</b> · Vanilla JS <b>8</b></p>
+  </header>
+
+  <div class="controls">
+    <div class="controls-inner">
+      <div class="filters" id="filters">
+        <button class="active" data-filter="all">All</button>
+        <button data-filter="cat:react">React</button>
+        <button data-filter="cat:css">CSS</button>
+        <button data-filter="cat:vanilla">Vanilla</button>
+        <button data-filter="cat:motion">Motion</button>
+        <button data-filter="tier:showcase">🏆 Showcase</button>
+        <button data-filter="tier:practical">✅ Practical</button>
+      </div>
+      <div class="search"><input id="search" type="search" placeholder="Search name or tag…" /></div>
+    </div>
+  </div>
+
+  <main>
+    <div class="grid" id="grid">
+      <article class="card" data-cat="css" data-tier="practical" data-text="3d tilt card card 3d tilt hover parallax">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>3D Tilt Card</h3>
+            <p class="desc">A card that lifts and tilts in 3D perspective on hover, with inner layers floating at different depths and a sheen sweep.</p>
+          </div>
+          <span class="badge badge-prac">✅ practical</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/css/tilt-card-3d/preview.html" title="3D Tilt Card preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">CSS-only</span>
+          <div class="tags"><span class="tag">card</span><span class="tag">3d</span><span class="tag">tilt</span><span class="tag">hover</span><span class="tag">parallax</span></div>
+          <a class="open" href="components/css/tilt-card-3d/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="css" data-tier="showcase" data-text="animated gradient mesh gradient mesh background animation blobs">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Animated Gradient Mesh</h3>
+            <p class="desc">A living, slowly-shifting multi-color radial-gradient mesh background driven entirely by CSS keyframes.</p>
+          </div>
+          <span class="badge badge-show">🏆 showcase</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/css/animated-gradient-mesh/preview.html" title="Animated Gradient Mesh preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">CSS-only</span>
+          <div class="tags"><span class="tag">gradient</span><span class="tag">mesh</span><span class="tag">background</span><span class="tag">animation</span><span class="tag">blobs</span></div>
+          <a class="open" href="components/css/animated-gradient-mesh/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="css" data-tier="showcase" data-text="aurora background aurora glow background blobs animation">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Aurora Background</h3>
+            <p class="desc">Soft northern-lights glow blobs that slowly drift, scale, and fade behind your content.</p>
+          </div>
+          <span class="badge badge-show">🏆 showcase</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/css/aurora-background/preview.html" title="Aurora Background preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">CSS-only</span>
+          <div class="tags"><span class="tag">aurora</span><span class="tag">glow</span><span class="tag">background</span><span class="tag">blobs</span><span class="tag">animation</span></div>
+          <a class="open" href="components/css/aurora-background/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="css" data-tier="practical" data-text="glassmorphism card glass card blur frosted backdrop">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Glassmorphism Card</h3>
+            <p class="desc">A frosted glass card using backdrop-blur with a subtle light border and an inner top-left highlight.</p>
+          </div>
+          <span class="badge badge-prac">✅ practical</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/css/glassmorphism-card/preview.html" title="Glassmorphism Card preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">CSS-only</span>
+          <div class="tags"><span class="tag">glass</span><span class="tag">card</span><span class="tag">blur</span><span class="tag">frosted</span><span class="tag">backdrop</span></div>
+          <a class="open" href="components/css/glassmorphism-card/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="css" data-tier="showcase" data-text="gooey blob blob gooey morph organic svg-filter">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Gooey Blob</h3>
+            <p class="desc">An organic morphing gooey blob — a border-radius morph variant plus an SVG goo-filter variant that melts moving circles together.</p>
+          </div>
+          <span class="badge badge-show">🏆 showcase</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/css/gooey-blob/preview.html" title="Gooey Blob preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">CSS-only</span>
+          <div class="tags"><span class="tag">blob</span><span class="tag">gooey</span><span class="tag">morph</span><span class="tag">organic</span><span class="tag">svg-filter</span></div>
+          <a class="open" href="components/css/gooey-blob/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="css" data-tier="practical" data-text="gradient border glow border gradient glow conic animated">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Gradient Border Glow</h3>
+            <p class="desc">An element wrapped in an animated rotating conic-gradient border with a soft blurred glow that brightens on hover.</p>
+          </div>
+          <span class="badge badge-prac">✅ practical</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/css/gradient-border-glow/preview.html" title="Gradient Border Glow preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">CSS-only</span>
+          <div class="tags"><span class="tag">border</span><span class="tag">gradient</span><span class="tag">glow</span><span class="tag">conic</span><span class="tag">animated</span></div>
+          <a class="open" href="components/css/gradient-border-glow/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="css" data-tier="practical" data-text="grain / noise overlay grain noise texture film overlay">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Grain / Noise Overlay</h3>
+            <p class="desc">A fine film-grain texture overlay built from an inline SVG noise data-uri, addable to any section via one class.</p>
+          </div>
+          <span class="badge badge-prac">✅ practical</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/css/grain-noise-overlay/preview.html" title="Grain / Noise Overlay preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">CSS-only</span>
+          <div class="tags"><span class="tag">grain</span><span class="tag">noise</span><span class="tag">texture</span><span class="tag">film</span><span class="tag">overlay</span></div>
+          <a class="open" href="components/css/grain-noise-overlay/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="css" data-tier="practical" data-text="infinite marquee marquee scroll ticker infinite loop">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Infinite Marquee</h3>
+            <p class="desc">A smooth, seamless infinite horizontal marquee that loops without a jump and pauses on hover.</p>
+          </div>
+          <span class="badge badge-prac">✅ practical</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/css/marquee/preview.html" title="Infinite Marquee preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">CSS-only</span>
+          <div class="tags"><span class="tag">marquee</span><span class="tag">scroll</span><span class="tag">ticker</span><span class="tag">infinite</span><span class="tag">loop</span></div>
+          <a class="open" href="components/css/marquee/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="css" data-tier="practical" data-text="neon glow button button neon glow hover cta">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Neon Glow Button</h3>
+            <p class="desc">A pill button with a layered neon glow (outer halo, ring, inner fill, text glow) that intensifies on hover and focus.</p>
+          </div>
+          <span class="badge badge-prac">✅ practical</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/css/neon-glow-button/preview.html" title="Neon Glow Button preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">CSS-only</span>
+          <div class="tags"><span class="tag">button</span><span class="tag">neon</span><span class="tag">glow</span><span class="tag">hover</span><span class="tag">cta</span></div>
+          <a class="open" href="components/css/neon-glow-button/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="css" data-tier="practical" data-text="shimmer skeleton skeleton loading shimmer placeholder loader">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Shimmer Skeleton</h3>
+            <p class="desc">Loading placeholder blocks with an animated shimmer sweep, plus shape and width helper classes.</p>
+          </div>
+          <span class="badge badge-prac">✅ practical</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/css/shimmer-skeleton/preview.html" title="Shimmer Skeleton preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">CSS-only</span>
+          <div class="tags"><span class="tag">skeleton</span><span class="tag">loading</span><span class="tag">shimmer</span><span class="tag">placeholder</span><span class="tag">loader</span></div>
+          <a class="open" href="components/css/shimmer-skeleton/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="motion" data-tier="showcase" data-text="horizontal scroll gallery scroll horizontal gsap gallery pin scrolltrigger">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Horizontal Scroll Gallery</h3>
+            <p class="desc">Pins a track and translates it horizontally so vertical scrolling sweeps a row of panels sideways across the viewport.</p>
+          </div>
+          <span class="badge badge-show">🏆 showcase</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/motion/horizontal-scroll-gallery/preview.html" title="Horizontal Scroll Gallery preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">GSAP / Motion</span>
+          <div class="tags"><span class="tag">scroll</span><span class="tag">horizontal</span><span class="tag">gsap</span><span class="tag">gallery</span><span class="tag">pin</span><span class="tag">scrolltrigger</span></div>
+          <a class="open" href="components/motion/horizontal-scroll-gallery/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="motion" data-tier="showcase" data-text="image scrub sequence scroll scrub canvas gsap sequence frames scrolltrigger">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Image Scrub Sequence</h3>
+            <p class="desc">Scrubbing the scroll plays through a frame sequence rendered to canvas (procedurally generated, no external image assets required).</p>
+          </div>
+          <span class="badge badge-show">🏆 showcase</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/motion/image-scrub-sequence/preview.html" title="Image Scrub Sequence preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">GSAP / Motion</span>
+          <div class="tags"><span class="tag">scroll</span><span class="tag">scrub</span><span class="tag">canvas</span><span class="tag">gsap</span><span class="tag">sequence</span><span class="tag">frames</span><span class="tag">scrolltrigger</span></div>
+          <a class="open" href="components/motion/image-scrub-sequence/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="motion" data-tier="practical" data-text="magnetic button hover gsap button magnetic cursor micro-interaction">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Magnetic Button</h3>
+            <p class="desc">A button (and its label) is magnetically pulled toward the cursor while hovered and springs back on leave.</p>
+          </div>
+          <span class="badge badge-prac">✅ practical</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/motion/magnetic-button/preview.html" title="Magnetic Button preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">GSAP / Motion</span>
+          <div class="tags"><span class="tag">hover</span><span class="tag">gsap</span><span class="tag">button</span><span class="tag">magnetic</span><span class="tag">cursor</span><span class="tag">micro-interaction</span></div>
+          <a class="open" href="components/motion/magnetic-button/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="motion" data-tier="practical" data-text="parallax layers scroll parallax gsap depth layers scrolltrigger">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Parallax Layers</h3>
+            <p class="desc">Multiple depth layers translate at different speeds on scroll to create a sense of dimensional depth.</p>
+          </div>
+          <span class="badge badge-prac">✅ practical</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/motion/parallax-layers/preview.html" title="Parallax Layers preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">GSAP / Motion</span>
+          <div class="tags"><span class="tag">scroll</span><span class="tag">parallax</span><span class="tag">gsap</span><span class="tag">depth</span><span class="tag">layers</span><span class="tag">scrolltrigger</span></div>
+          <a class="open" href="components/motion/parallax-layers/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="motion" data-tier="showcase" data-text="pinned scroll section scroll pin gsap hero scrolltrigger stages">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Pinned Scroll Section</h3>
+            <p class="desc">Pins a full-height section in place while its inner content animates through distinct stages as the user scrolls past it.</p>
+          </div>
+          <span class="badge badge-show">🏆 showcase</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/motion/pinned-scroll-section/preview.html" title="Pinned Scroll Section preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">GSAP / Motion</span>
+          <div class="tags"><span class="tag">scroll</span><span class="tag">pin</span><span class="tag">gsap</span><span class="tag">hero</span><span class="tag">scrolltrigger</span><span class="tag">stages</span></div>
+          <a class="open" href="components/motion/pinned-scroll-section/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="motion" data-tier="practical" data-text="scroll progress bar scroll progress gsap bar indicator scrolltrigger">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Scroll Progress Bar</h3>
+            <p class="desc">A slim fixed bar at the top of the page that fills from 0 to 100% as the user scrolls through the document.</p>
+          </div>
+          <span class="badge badge-prac">✅ practical</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/motion/scroll-progress-bar/preview.html" title="Scroll Progress Bar preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">GSAP / Motion</span>
+          <div class="tags"><span class="tag">scroll</span><span class="tag">progress</span><span class="tag">gsap</span><span class="tag">bar</span><span class="tag">indicator</span><span class="tag">scrolltrigger</span></div>
+          <a class="open" href="components/motion/scroll-progress-bar/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="motion" data-tier="practical" data-text="scroll text reveal scroll text reveal gsap fade stagger scrolltrigger">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Scroll Text Reveal</h3>
+            <p class="desc">Lines or words rise up and fade in with a stagger as each block enters the viewport.</p>
+          </div>
+          <span class="badge badge-prac">✅ practical</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/motion/scroll-text-reveal/preview.html" title="Scroll Text Reveal preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">GSAP / Motion</span>
+          <div class="tags"><span class="tag">scroll</span><span class="tag">text</span><span class="tag">reveal</span><span class="tag">gsap</span><span class="tag">fade</span><span class="tag">stagger</span><span class="tag">scrolltrigger</span></div>
+          <a class="open" href="components/motion/scroll-text-reveal/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="motion" data-tier="practical" data-text="split text stagger text split gsap stagger heading chars words">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Split Text Stagger</h3>
+            <p class="desc">Splits a heading into characters or words in plain JS and staggers them into view (no paid SplitText plugin required).</p>
+          </div>
+          <span class="badge badge-prac">✅ practical</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/motion/split-text-stagger/preview.html" title="Split Text Stagger preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">GSAP / Motion</span>
+          <div class="tags"><span class="tag">text</span><span class="tag">split</span><span class="tag">gsap</span><span class="tag">stagger</span><span class="tag">heading</span><span class="tag">chars</span><span class="tag">words</span></div>
+          <a class="open" href="components/motion/split-text-stagger/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="motion" data-tier="showcase" data-text="sticky stacking cards scroll pin cards gsap stack scrolltrigger">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Sticky Stacking Cards</h3>
+            <p class="desc">A stack of cards where each pins in place and slightly scales back as the next card slides up and covers it on scroll.</p>
+          </div>
+          <span class="badge badge-show">🏆 showcase</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/motion/sticky-stacking-cards/preview.html" title="Sticky Stacking Cards preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">GSAP / Motion</span>
+          <div class="tags"><span class="tag">scroll</span><span class="tag">pin</span><span class="tag">cards</span><span class="tag">gsap</span><span class="tag">stack</span><span class="tag">scrolltrigger</span></div>
+          <a class="open" href="components/motion/sticky-stacking-cards/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="react" data-tier="practical" data-text="animated counter counter count-up stats scroll intersection-observer">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Animated Counter</h3>
+            <p class="desc">A number that eases up to a target value when it scrolls into view, with prefix/suffix and locale formatting.</p>
+          </div>
+          <span class="badge badge-prac">✅ practical</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/react/animated-counter/preview.html" title="Animated Counter preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">React + Tailwind</span>
+          <div class="tags"><span class="tag">counter</span><span class="tag">count-up</span><span class="tag">stats</span><span class="tag">scroll</span><span class="tag">intersection-observer</span></div>
+          <a class="open" href="components/react/animated-counter/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="react" data-tier="practical" data-text="bento grid bento grid layout cards features">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Bento Grid</h3>
+            <p class="desc">A responsive asymmetric bento grid of feature cards with a subtle hover-lift and glow.</p>
+          </div>
+          <span class="badge badge-prac">✅ practical</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/react/bento-grid/preview.html" title="Bento Grid preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">React + Tailwind</span>
+          <div class="tags"><span class="tag">bento</span><span class="tag">grid</span><span class="tag">layout</span><span class="tag">cards</span><span class="tag">features</span></div>
+          <a class="open" href="components/react/bento-grid/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="react" data-tier="showcase" data-text="command palette command-palette cmdk search modal keyboard">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Command Palette</h3>
+            <p class="desc">A ⌘K-style command palette modal with fuzzy filtering, keyboard navigation, and grouped commands.</p>
+          </div>
+          <span class="badge badge-show">🏆 showcase</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/react/command-palette/preview.html" title="Command Palette preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">React + Tailwind</span>
+          <div class="tags"><span class="tag">command-palette</span><span class="tag">cmdk</span><span class="tag">search</span><span class="tag">modal</span><span class="tag">keyboard</span></div>
+          <a class="open" href="components/react/command-palette/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="react" data-tier="practical" data-text="dark mode toggle dark-mode theme toggle accessibility sun-moon">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Dark Mode Toggle</h3>
+            <p class="desc">An accessible animated theme toggle that morphs a sun into a moon and persists the choice to localStorage.</p>
+          </div>
+          <span class="badge badge-prac">✅ practical</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/react/dark-mode-toggle/preview.html" title="Dark Mode Toggle preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">React + Tailwind</span>
+          <div class="tags"><span class="tag">dark-mode</span><span class="tag">theme</span><span class="tag">toggle</span><span class="tag">accessibility</span><span class="tag">sun-moon</span></div>
+          <a class="open" href="components/react/dark-mode-toggle/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="react" data-tier="practical" data-text="feature accordion accordion features faq disclosure animation">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Feature Accordion</h3>
+            <p class="desc">A single-open accordion of features with smooth grid-based height animation and accessible disclosure semantics.</p>
+          </div>
+          <span class="badge badge-prac">✅ practical</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/react/feature-accordion/preview.html" title="Feature Accordion preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">React + Tailwind</span>
+          <div class="tags"><span class="tag">accordion</span><span class="tag">features</span><span class="tag">faq</span><span class="tag">disclosure</span><span class="tag">animation</span></div>
+          <a class="open" href="components/react/feature-accordion/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="react" data-tier="showcase" data-text="gradient mesh hero hero gradient mesh blob animation framer-motion">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Gradient Mesh Hero</h3>
+            <p class="desc">A hero section with an animated gradient-mesh blob background, grain overlay, and a bold headline.</p>
+          </div>
+          <span class="badge badge-show">🏆 showcase</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/react/gradient-mesh-hero/preview.html" title="Gradient Mesh Hero preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">React + Tailwind</span>
+          <div class="tags"><span class="tag">hero</span><span class="tag">gradient</span><span class="tag">mesh</span><span class="tag">blob</span><span class="tag">animation</span><span class="tag">framer-motion</span></div>
+          <a class="open" href="components/react/gradient-mesh-hero/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="react" data-tier="practical" data-text="logo marquee marquee logos infinite-scroll social-proof ticker">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Logo Marquee</h3>
+            <p class="desc">An infinite horizontal marquee of client/partner logos with edge fade and pause-on-hover.</p>
+          </div>
+          <span class="badge badge-prac">✅ practical</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/react/logo-marquee/preview.html" title="Logo Marquee preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">React + Tailwind</span>
+          <div class="tags"><span class="tag">marquee</span><span class="tag">logos</span><span class="tag">infinite-scroll</span><span class="tag">social-proof</span><span class="tag">ticker</span></div>
+          <a class="open" href="components/react/logo-marquee/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="react" data-tier="practical" data-text="pricing toggle pricing toggle plans billing cards">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Pricing Toggle</h3>
+            <p class="desc">Pricing cards with a monthly/annual switch that animates the displayed price and shows annual savings.</p>
+          </div>
+          <span class="badge badge-prac">✅ practical</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/react/pricing-toggle/preview.html" title="Pricing Toggle preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">React + Tailwind</span>
+          <div class="tags"><span class="tag">pricing</span><span class="tag">toggle</span><span class="tag">plans</span><span class="tag">billing</span><span class="tag">cards</span></div>
+          <a class="open" href="components/react/pricing-toggle/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="react" data-tier="practical" data-text="shrinking sticky navbar navbar sticky scroll header blur">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Shrinking Sticky Navbar</h3>
+            <p class="desc">A sticky navbar that condenses its height and gains a backdrop blur once the page is scrolled.</p>
+          </div>
+          <span class="badge badge-prac">✅ practical</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/react/shrinking-sticky-navbar/preview.html" title="Shrinking Sticky Navbar preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">React + Tailwind</span>
+          <div class="tags"><span class="tag">navbar</span><span class="tag">sticky</span><span class="tag">scroll</span><span class="tag">header</span><span class="tag">blur</span></div>
+          <a class="open" href="components/react/shrinking-sticky-navbar/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="react" data-tier="practical" data-text="testimonial carousel testimonial carousel slider reviews social-proof">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Testimonial Carousel</h3>
+            <p class="desc">An auto-advancing testimonial slider with dot navigation, pause-on-hover, and smooth fade/slide transitions.</p>
+          </div>
+          <span class="badge badge-prac">✅ practical</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/react/testimonial-carousel/preview.html" title="Testimonial Carousel preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">React + Tailwind</span>
+          <div class="tags"><span class="tag">testimonial</span><span class="tag">carousel</span><span class="tag">slider</span><span class="tag">reviews</span><span class="tag">social-proof</span></div>
+          <a class="open" href="components/react/testimonial-carousel/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="vanilla" data-tier="practical" data-text="copy to clipboard clipboard copy button feedback">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Copy to Clipboard</h3>
+            <p class="desc">A copy button that uses the async Clipboard API (with a legacy fallback) and shows an animated &quot;Copied!&quot; confirmation state.</p>
+          </div>
+          <span class="badge badge-prac">✅ practical</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/vanilla/copy-to-clipboard/preview.html" title="Copy to Clipboard preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">Vanilla JS</span>
+          <div class="tags"><span class="tag">clipboard</span><span class="tag">copy</span><span class="tag">button</span><span class="tag">feedback</span></div>
+          <a class="open" href="components/vanilla/copy-to-clipboard/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="vanilla" data-tier="showcase" data-text="custom cursor cursor pointer interaction lerp trailing">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Custom Cursor</h3>
+            <p class="desc">A custom cursor with a precise dot and a lerp-trailing ring that grows and changes over links and buttons; hides the native cursor and disables itself on touch devices.</p>
+          </div>
+          <span class="badge badge-show">🏆 showcase</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/vanilla/custom-cursor/preview.html" title="Custom Cursor preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">Vanilla JS</span>
+          <div class="tags"><span class="tag">cursor</span><span class="tag">pointer</span><span class="tag">interaction</span><span class="tag">lerp</span><span class="tag">trailing</span></div>
+          <a class="open" href="components/vanilla/custom-cursor/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="vanilla" data-tier="practical" data-text="modal dialog modal dialog focus-trap accessible overlay">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Modal Dialog</h3>
+            <p class="desc">An accessible modal dialog with focus trap, Esc-to-close, backdrop-click close, body scroll lock, and a fade/scale-in animation.</p>
+          </div>
+          <span class="badge badge-prac">✅ practical</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/vanilla/modal/preview.html" title="Modal Dialog preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">Vanilla JS</span>
+          <div class="tags"><span class="tag">modal</span><span class="tag">dialog</span><span class="tag">focus-trap</span><span class="tag">accessible</span><span class="tag">overlay</span></div>
+          <a class="open" href="components/vanilla/modal/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="vanilla" data-tier="showcase" data-text="preloader preloader loader intro counter page-load">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Preloader</h3>
+            <p class="desc">A polished full-screen preloader with an animated count-up and progress sweep that slides away once the page has finished loading.</p>
+          </div>
+          <span class="badge badge-show">🏆 showcase</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/vanilla/preloader/preview.html" title="Preloader preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">Vanilla JS</span>
+          <div class="tags"><span class="tag">preloader</span><span class="tag">loader</span><span class="tag">intro</span><span class="tag">counter</span><span class="tag">page-load</span></div>
+          <a class="open" href="components/vanilla/preloader/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="vanilla" data-tier="practical" data-text="scrollspy nav scrollspy navigation intersection-observer anchor smooth-scroll">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Scrollspy Nav</h3>
+            <p class="desc">A navigation that highlights the current section using IntersectionObserver and smooth-scrolls to anchors on click.</p>
+          </div>
+          <span class="badge badge-prac">✅ practical</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/vanilla/scrollspy-nav/preview.html" title="Scrollspy Nav preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">Vanilla JS</span>
+          <div class="tags"><span class="tag">scrollspy</span><span class="tag">navigation</span><span class="tag">intersection-observer</span><span class="tag">anchor</span><span class="tag">smooth-scroll</span></div>
+          <a class="open" href="components/vanilla/scrollspy-nav/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="vanilla" data-tier="practical" data-text="smooth scroll scroll smooth-scroll lerp raf inertia">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Smooth Scroll</h3>
+            <p class="desc">Lerp-based smooth (inertia) page scrolling driven by requestAnimationFrame, with automatic opt-out for prefers-reduced-motion and touch devices.</p>
+          </div>
+          <span class="badge badge-prac">✅ practical</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/vanilla/smooth-scroll/preview.html" title="Smooth Scroll preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">Vanilla JS</span>
+          <div class="tags"><span class="tag">scroll</span><span class="tag">smooth-scroll</span><span class="tag">lerp</span><span class="tag">raf</span><span class="tag">inertia</span></div>
+          <a class="open" href="components/vanilla/smooth-scroll/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="vanilla" data-tier="practical" data-text="tabs tabs accessible aria keyboard indicator">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Tabs</h3>
+            <p class="desc">Accessible tabs with full ARIA roles and arrow-key navigation, plus a sliding active indicator that animates between tabs.</p>
+          </div>
+          <span class="badge badge-prac">✅ practical</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/vanilla/tabs/preview.html" title="Tabs preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">Vanilla JS</span>
+          <div class="tags"><span class="tag">tabs</span><span class="tag">accessible</span><span class="tag">aria</span><span class="tag">keyboard</span><span class="tag">indicator</span></div>
+          <a class="open" href="components/vanilla/tabs/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+      <article class="card" data-cat="vanilla" data-tier="practical" data-text="theme switcher theme dark-mode css-variables localstorage prefers-color-scheme">
+        <div class="card-head">
+          <div class="card-titles">
+            <h3>Theme Switcher</h3>
+            <p class="desc">A light/dark theme toggle built on CSS variables and a data-theme attribute that persists to localStorage and respects the OS prefers-color-scheme.</p>
+          </div>
+          <span class="badge badge-prac">✅ practical</span>
+        </div>
+        <div class="frame-wrap"><iframe class="frame" loading="lazy" src="components/vanilla/theme-switcher/preview.html" title="Theme Switcher preview"></iframe></div>
+        <div class="card-foot">
+          <span class="cat">Vanilla JS</span>
+          <div class="tags"><span class="tag">theme</span><span class="tag">dark-mode</span><span class="tag">css-variables</span><span class="tag">localstorage</span><span class="tag">prefers-color-scheme</span></div>
+          <a class="open" href="components/vanilla/theme-switcher/preview.html" target="_blank" rel="noopener">open ↗</a>
+        </div>
+      </article>
+    </div>
+    <p class="empty" id="empty">No parts match that filter.</p>
+  </main>
+
+  <footer>
+    Regenerate this page with <code>node scripts/build-gallery.mjs</code> (run after <code>build-index.mjs</code>).
+  </footer>
+
+<script>
+  const grid = document.getElementById('grid');
+  const cards = [...grid.querySelectorAll('.card')];
+  const empty = document.getElementById('empty');
+  const search = document.getElementById('search');
+  let active = 'all';
+
+  function apply(){
+    const q = search.value.trim().toLowerCase();
+    let shown = 0;
+    for (const c of cards){
+      let ok = true;
+      if (active.startsWith('cat:')) ok = c.dataset.cat === active.slice(4);
+      else if (active.startsWith('tier:')) ok = c.dataset.tier === active.slice(5);
+      if (ok && q) ok = c.dataset.text.includes(q);
+      c.style.display = ok ? '' : 'none';
+      if (ok) shown++;
+    }
+    empty.style.display = shown ? 'none' : 'block';
+  }
+
+  document.getElementById('filters').addEventListener('click', (e) => {
+    const btn = e.target.closest('button'); if (!btn) return;
+    document.querySelectorAll('#filters button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    active = btn.dataset.filter;
+    apply();
+  });
+  search.addEventListener('input', apply);
+</script>
+</body>
+</html>
