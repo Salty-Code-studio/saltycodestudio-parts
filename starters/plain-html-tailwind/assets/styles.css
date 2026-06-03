@@ -1,0 +1,103 @@
+/* ============================================================================
+   saltycodestudio · plain-html-tailwind starter — PROJECT STYLES
+   ----------------------------------------------------------------------------
+   This file is your project's own layer. It does two things:
+
+     1. @imports the brand foundations (the canonical, single source of truth
+        for tokens, type, palettes, shadows, gradients, motion).
+     2. Holds your project-specific overrides BELOW those imports, so anything
+        you write here wins the cascade over both the foundations and Tailwind.
+
+   ── ABOUT THE DUPLICATE LINKS IN index.html ────────────────────────────────
+   index.html ALSO <link>s the foundations directly in <head>. That is on
+   purpose for the no-build path: the <link> tags guarantee the foundations
+   load and apply in the right order even before this file's @imports resolve
+   (native @import can be slightly deferred). Keeping the @imports here too
+   means this stylesheet is self-sufficient — if you ever stop linking the
+   foundations in HTML and rely only on styles.css, it still works.
+
+   When you move to a real build (see README.md → "The build step later"),
+   delete the <link> tags from index.html and let these @imports — inlined by
+   postcss-import at build time — be the single entry point.
+
+   NOTE — base.css is intentionally OMITTED. Tailwind's Preflight already
+   resets the page; two resets fight each other. (foundations/README.md.)
+
+   Import order is load-bearing: tokens FIRST (everything reads its vars),
+   then type + palettes, then the cascade-winning layers last.
+   ============================================================================ */
+
+/* Path is relative to THIS file: assets/styles.css → ../../../foundations/ */
+@import url("../../../foundations/tokens.css");      /* 1 · palette + scales (first!)  */
+@import url("../../../foundations/typography.css");  /* 2 · fluid type scale           */
+@import url("../../../foundations/palettes.css");    /* 3 · semantic theme tokens      */
+@import url("../../../foundations/shadows.css");     /* 4 · elevation tokens + helpers */
+@import url("../../../foundations/gradients.css");   /* 5 · gradient backgrounds       */
+@import url("../../../foundations/motion.css");      /* 6 · animation utilities (last) */
+
+/* ────────────────────────────────────────────────────────────────────────
+   PROJECT OVERRIDES
+   Everything below is yours. Reach for the brand tokens (var(--color-*),
+   var(--space-*), var(--radius-*)) so edits stay on-palette automatically.
+   ──────────────────────────────────────────────────────────────────────── */
+
+/* Smooth in-page scrolling for the nav anchors (respecting reduced motion). */
+html {
+  scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Offset anchor targets so they don't hide under the sticky header. */
+:where(section[id], [id="top"]) {
+  scroll-margin-top: 5rem;
+}
+
+/* Selection in the brand coral, with legible on-coral text. */
+::selection {
+  background: var(--color-surf-coral, #ff6f59);
+  color: var(--color-white, #fff);
+}
+
+/* Reveal-on-scroll start state, added by assets/main.js as the `is-revealed`
+   companion. Elements tagged [data-reveal] begin slightly down + transparent;
+   main.js adds .is-revealed when they enter the viewport. If JS never runs
+   (or the visitor prefers reduced motion), the fallback below keeps them
+   fully visible — content is never stranded at opacity:0. */
+[data-reveal] {
+  opacity: 1; /* visible by default — JS lowers it only when it takes over */
+}
+
+/* main.js sets data-js on <html> once it loads; only THEN do we hide-then-
+   reveal. This guarantees no-JS users always see content. */
+html[data-js] [data-reveal] {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+html[data-js] [data-reveal].is-revealed {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-js] [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Example project override: a brand focus ring on interactive elements that
+   reads well on both the sand canvas and the dark footer. Customize freely. */
+:where(a, button):focus-visible {
+  outline: 2px solid var(--color-sky-blue, #4fa8c9);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm, 6px);
+}

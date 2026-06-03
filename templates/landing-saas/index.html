@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tidewell — Ship product analytics your whole team trusts</title>
+  <meta name="description" content="Tidewell is the calm analytics platform for product teams. Track activation, retention, and revenue in one place — no SQL, no spreadsheets, no surprises." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind Play CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            sand:  { DEFAULT: "#fbf7f0", 100: "#f4ece0", 200: "#ece0cd" },
+            ink:   { DEFAULT: "#1c2b33", soft: "#4a5d66" },
+            ocean: { DEFAULT: "#1f8a8a", deep: "#0f5c5c", surf: "#2ec3c3" },
+            coral: "#ff6f59",
+          },
+          fontFamily: {
+            display: ['"Space Grotesk"', "system-ui", "sans-serif"],
+            mono: ['"JetBrains Mono"', "ui-monospace", "monospace"],
+            body: ['"Inter"', "system-ui", "sans-serif"],
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    body { font-family: "Inter", system-ui, sans-serif; }
+    .font-display { font-family: "Space Grotesk", system-ui, sans-serif; }
+    .font-mono { font-family: "JetBrains Mono", ui-monospace, monospace; }
+
+    /* Entrance reveal — progressively enhanced; content is visible without JS too. */
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
+    .reveal.in { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+      .marquee-track { animation: none !important; }
+    }
+
+    /* Logo cloud marquee */
+    .marquee { -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); }
+    .marquee-track { animation: marquee 32s linear infinite; }
+    .marquee:hover .marquee-track { animation-play-state: paused; }
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* Soft grid backdrop for the hero */
+    .grid-bg {
+      background-image:
+        linear-gradient(to right, rgba(28,43,51,.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(28,43,51,.05) 1px, transparent 1px);
+      background-size: 44px 44px;
+      -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
+      mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
+    }
+
+    details > summary { list-style: none; }
+    details > summary::-webkit-details-marker { display: none; }
+    details[open] .faq-chevron { transform: rotate(45deg); }
+  </style>
+</head>
+
+<body id="top" class="bg-sand text-ink antialiased selection:bg-ocean/20">
+
+  <!-- Skip link -->
+  <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:rounded-lg focus:bg-ocean-deep focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-sand">Skip to content</a>
+
+  <!-- ============================ NAV ============================ -->
+  <header id="nav" class="sticky top-0 z-50 border-b border-transparent transition-colors duration-300">
+    <nav aria-label="Primary" class="mx-auto flex h-16 max-w-7xl items-center justify-between gap-6 px-5 sm:px-8">
+      <a href="#top" class="group flex shrink-0 items-center gap-2.5 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-ocean focus-visible:ring-offset-2 focus-visible:ring-offset-sand">
+        <span aria-hidden="true" class="grid h-9 w-9 place-items-center rounded-xl bg-ocean-deep font-mono text-base font-bold leading-none text-sand transition-transform duration-300 group-hover:-rotate-6">~&lt;</span>
+        <span class="font-display text-lg font-bold tracking-tight text-ink">Tidewell</span>
+      </a>
+
+      <ul class="hidden items-center gap-1 md:flex">
+        <li><a href="#features" class="relative rounded-lg px-3 py-2 text-sm font-medium text-ink-soft transition-colors hover:text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-ocean after:absolute after:inset-x-3 after:-bottom-0.5 after:h-0.5 after:origin-left after:scale-x-0 after:rounded-full after:bg-ocean after:transition-transform after:duration-300 hover:after:scale-x-100">Features</a></li>
+        <li><a href="#how" class="relative rounded-lg px-3 py-2 text-sm font-medium text-ink-soft transition-colors hover:text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-ocean after:absolute after:inset-x-3 after:-bottom-0.5 after:h-0.5 after:origin-left after:scale-x-0 after:rounded-full after:bg-ocean after:transition-transform after:duration-300 hover:after:scale-x-100">How it works</a></li>
+        <li><a href="#pricing" class="relative rounded-lg px-3 py-2 text-sm font-medium text-ink-soft transition-colors hover:text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-ocean after:absolute after:inset-x-3 after:-bottom-0.5 after:h-0.5 after:origin-left after:scale-x-0 after:rounded-full after:bg-ocean after:transition-transform after:duration-300 hover:after:scale-x-100">Pricing</a></li>
+        <li><a href="#faq" class="relative rounded-lg px-3 py-2 text-sm font-medium text-ink-soft transition-colors hover:text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-ocean after:absolute after:inset-x-3 after:-bottom-0.5 after:h-0.5 after:origin-left after:scale-x-0 after:rounded-full after:bg-ocean after:transition-transform after:duration-300 hover:after:scale-x-100">FAQ</a></li>
+      </ul>
+
+      <div class="hidden items-center gap-2 md:flex">
+        <a href="#" class="rounded-lg px-3 py-2 text-sm font-medium text-ink-soft transition-colors hover:text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-ocean">Sign in</a>
+        <a href="#cta" class="rounded-xl bg-ocean px-4 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:bg-ocean-deep hover:shadow-md hover:shadow-ocean/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-ocean focus-visible:ring-offset-2 focus-visible:ring-offset-sand">Start free</a>
+      </div>
+
+      <button type="button" id="nav-toggle" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu" class="relative grid h-10 w-10 place-items-center rounded-xl text-ink-soft transition-colors hover:bg-ink/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-ocean md:hidden">
+        <span class="sr-only">Open menu</span>
+        <span aria-hidden="true" class="block h-4 w-5">
+          <span data-bar="top" class="absolute left-1/2 top-1/2 h-0.5 w-5 -translate-x-1/2 -translate-y-1.5 rounded-full bg-current transition-transform duration-300"></span>
+          <span data-bar="mid" class="absolute left-1/2 top-1/2 h-0.5 w-5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-current transition-opacity duration-200"></span>
+          <span data-bar="bot" class="absolute left-1/2 top-1/2 h-0.5 w-5 -translate-x-1/2 translate-y-1.5 rounded-full bg-current transition-transform duration-300"></span>
+        </span>
+      </button>
+    </nav>
+
+    <!-- Mobile sheet -->
+    <div id="mobile-menu" class="hidden md:hidden">
+      <button type="button" data-nav-backdrop aria-label="Close menu" class="fixed inset-0 top-16 z-40 cursor-default bg-ink/20 backdrop-blur-sm"></button>
+      <div class="relative z-50 border-t border-ink/10 bg-sand px-5 pb-6 pt-2 shadow-lg shadow-ink/5">
+        <ul class="flex flex-col">
+          <li><a href="#features" data-nav-link class="block border-b border-ink/10 py-3 text-base font-medium text-ink transition-colors hover:text-ocean">Features</a></li>
+          <li><a href="#how" data-nav-link class="block border-b border-ink/10 py-3 text-base font-medium text-ink transition-colors hover:text-ocean">How it works</a></li>
+          <li><a href="#pricing" data-nav-link class="block border-b border-ink/10 py-3 text-base font-medium text-ink transition-colors hover:text-ocean">Pricing</a></li>
+          <li><a href="#faq" data-nav-link class="block border-b border-ink/10 py-3 text-base font-medium text-ink transition-colors hover:text-ocean">FAQ</a></li>
+        </ul>
+        <div class="mt-5 flex flex-col gap-3">
+          <a href="#" data-nav-link class="rounded-xl border border-ink/15 px-4 py-3 text-center text-sm font-semibold text-ink transition-colors hover:bg-ink/5">Sign in</a>
+          <a href="#cta" data-nav-link class="rounded-xl bg-ocean px-4 py-3 text-center text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:bg-ocean-deep">Start free</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- ============================ HERO ============================ -->
+    <section class="relative overflow-hidden">
+      <div aria-hidden="true" class="grid-bg pointer-events-none absolute inset-0"></div>
+      <div aria-hidden="true" class="pointer-events-none absolute -left-32 top-10 h-80 w-80 rounded-full bg-ocean-surf/15 blur-3xl"></div>
+      <div aria-hidden="true" class="pointer-events-none absolute -right-32 top-40 h-96 w-96 rounded-full bg-coral/10 blur-3xl"></div>
+
+      <div class="relative mx-auto max-w-7xl px-5 pb-20 pt-16 sm:px-8 sm:pt-24 lg:pb-28">
+        <div class="mx-auto max-w-3xl text-center">
+          <a href="#cta" class="reveal inline-flex items-center gap-2 rounded-full border border-ocean/20 bg-white/70 px-3.5 py-1.5 text-xs font-medium text-ocean-deep shadow-sm backdrop-blur transition-colors hover:border-ocean/40">
+            <span class="relative flex h-2 w-2">
+              <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-ocean-surf opacity-75"></span>
+              <span class="relative inline-flex h-2 w-2 rounded-full bg-ocean"></span>
+            </span>
+            New — Cohort retention curves, now in real time
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3.5 w-3.5" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+          </a>
+
+          <h1 class="reveal mt-7 font-display text-4xl font-bold leading-[1.05] tracking-tight text-ink sm:text-6xl lg:text-7xl">
+            Product analytics<br class="hidden sm:block" /> your whole team actually <span class="text-ocean-deep">trusts</span>.
+          </h1>
+
+          <p class="reveal mx-auto mt-6 max-w-xl text-base leading-relaxed text-ink-soft sm:text-lg">
+            Tidewell turns raw events into the three numbers that matter — activation, retention, and revenue — without SQL, spreadsheets, or a data team to babysit it.
+          </p>
+
+          <div class="reveal mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <a href="#cta" class="group inline-flex w-full items-center justify-center gap-2 rounded-xl bg-ocean px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-ocean/25 transition-all hover:-translate-y-0.5 hover:bg-ocean-deep focus:outline-none focus-visible:ring-2 focus-visible:ring-ocean focus-visible:ring-offset-2 focus-visible:ring-offset-sand sm:w-auto">
+              Start free — no card needed
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+            </a>
+            <a href="#how" class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-ink/15 bg-white/60 px-6 py-3.5 text-sm font-semibold text-ink backdrop-blur transition-all hover:-translate-y-0.5 hover:border-ink/25 hover:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-ocean sm:w-auto">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" aria-hidden="true"><path d="M8 5v14l11-7z" /></svg>
+              Watch the 2-min tour
+            </a>
+          </div>
+
+          <p class="reveal mt-5 font-mono text-xs uppercase tracking-[0.18em] text-ink-soft/70">14-day trial · SOC 2 Type II · Cancel anytime</p>
+        </div>
+
+        <!-- App preview / dashboard mock -->
+        <div class="reveal mx-auto mt-14 max-w-5xl">
+          <div class="overflow-hidden rounded-2xl border border-ink/10 bg-white shadow-2xl shadow-ink/10 ring-1 ring-black/5">
+            <!-- window chrome -->
+            <div class="flex items-center gap-2 border-b border-ink/10 bg-sand-100 px-4 py-3">
+              <span class="h-3 w-3 rounded-full bg-coral/70"></span>
+              <span class="h-3 w-3 rounded-full bg-ocean-surf/70"></span>
+              <span class="h-3 w-3 rounded-full bg-ocean/70"></span>
+              <span class="ml-3 font-mono text-xs text-ink-soft/70">app.tidewell.io / dashboard</span>
+            </div>
+            <div class="grid gap-4 p-5 sm:grid-cols-3 sm:p-6">
+              <!-- KPI cards -->
+              <div class="rounded-xl border border-ink/10 bg-sand p-4">
+                <p class="font-mono text-[0.65rem] uppercase tracking-[0.18em] text-ink-soft/70">Activation</p>
+                <p class="mt-2 font-display text-3xl font-bold text-ink">62.4%</p>
+                <p class="mt-1 inline-flex items-center gap-1 text-xs font-medium text-ocean-deep">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" class="h-3.5 w-3.5"><path d="M7 17L17 7M9 7h8v8" /></svg>
+                  +8.1 pts vs last month
+                </p>
+              </div>
+              <div class="rounded-xl border border-ink/10 bg-sand p-4">
+                <p class="font-mono text-[0.65rem] uppercase tracking-[0.18em] text-ink-soft/70">D30 retention</p>
+                <p class="mt-2 font-display text-3xl font-bold text-ink">41.8%</p>
+                <p class="mt-1 inline-flex items-center gap-1 text-xs font-medium text-ocean-deep">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" class="h-3.5 w-3.5"><path d="M7 17L17 7M9 7h8v8" /></svg>
+                  +3.2 pts vs cohort avg
+                </p>
+              </div>
+              <div class="rounded-xl border border-ink/10 bg-sand p-4">
+                <p class="font-mono text-[0.65rem] uppercase tracking-[0.18em] text-ink-soft/70">Net MRR</p>
+                <p class="mt-2 font-display text-3xl font-bold text-ink">$184k</p>
+                <p class="mt-1 inline-flex items-center gap-1 text-xs font-medium text-ocean-deep">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" class="h-3.5 w-3.5"><path d="M7 17L17 7M9 7h8v8" /></svg>
+                  +11.6% MoM
+                </p>
+              </div>
+              <!-- chart -->
+              <div class="sm:col-span-3 rounded-xl border border-ink/10 bg-white p-5">
+                <div class="flex items-center justify-between">
+                  <p class="font-display text-sm font-semibold text-ink">Weekly active accounts</p>
+                  <span class="rounded-full bg-ocean/10 px-2.5 py-1 font-mono text-[0.65rem] text-ocean-deep">Last 12 weeks</span>
+                </div>
+                <svg viewBox="0 0 600 160" class="mt-4 h-32 w-full" role="img" aria-label="Line chart showing weekly active accounts trending upward over twelve weeks">
+                  <defs>
+                    <linearGradient id="fillg" x1="0" x2="0" y1="0" y2="1">
+                      <stop offset="0%" stop-color="#2ec3c3" stop-opacity="0.35" />
+                      <stop offset="100%" stop-color="#2ec3c3" stop-opacity="0" />
+                    </linearGradient>
+                  </defs>
+                  <path d="M0,130 L55,120 L110,124 L165,104 L220,108 L275,86 L330,92 L385,66 L440,72 L495,48 L550,40 L600,26 L600,160 L0,160 Z" fill="url(#fillg)" />
+                  <path d="M0,130 L55,120 L110,124 L165,104 L220,108 L275,86 L330,92 L385,66 L440,72 L495,48 L550,40 L600,26" fill="none" stroke="#1f8a8a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                  <circle cx="600" cy="26" r="5" fill="#0f5c5c" />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ LOGO CLOUD ============================ -->
+    <section aria-label="Trusted by" class="border-y border-ink/10 bg-sand-100 py-10">
+      <div class="mx-auto max-w-7xl px-5 sm:px-8">
+        <p class="text-center font-mono text-xs uppercase tracking-[0.22em] text-ink-soft/70">Trusted by product teams shipping fast</p>
+        <div class="marquee mt-7 overflow-hidden">
+          <div class="marquee-track flex w-max items-center gap-14 sm:gap-20">
+            <!-- group A -->
+            <span class="font-display text-xl font-bold tracking-tight text-ink/45">Northwind</span>
+            <span class="font-display text-xl font-semibold italic text-ink/45">Lumen</span>
+            <span class="font-mono text-lg font-medium uppercase tracking-[0.2em] text-ink/45">PIER&middot;9</span>
+            <span class="font-display text-xl font-bold tracking-tight text-ink/45">Kelpwork</span>
+            <span class="font-display text-xl font-semibold text-ink/45">Driftly</span>
+            <span class="font-mono text-lg font-medium tracking-tight text-ink/45">harbor.dev</span>
+            <span class="font-display text-xl font-bold tracking-tight text-ink/45">Saltmark</span>
+            <!-- duplicate for seamless loop -->
+            <span class="font-display text-xl font-bold tracking-tight text-ink/45" aria-hidden="true">Northwind</span>
+            <span class="font-display text-xl font-semibold italic text-ink/45" aria-hidden="true">Lumen</span>
+            <span class="font-mono text-lg font-medium uppercase tracking-[0.2em] text-ink/45" aria-hidden="true">PIER&middot;9</span>
+            <span class="font-display text-xl font-bold tracking-tight text-ink/45" aria-hidden="true">Kelpwork</span>
+            <span class="font-display text-xl font-semibold text-ink/45" aria-hidden="true">Driftly</span>
+            <span class="font-mono text-lg font-medium tracking-tight text-ink/45" aria-hidden="true">harbor.dev</span>
+            <span class="font-display text-xl font-bold tracking-tight text-ink/45" aria-hidden="true">Saltmark</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ FEATURES BENTO ============================ -->
+    <section id="features" class="relative overflow-hidden py-20 sm:py-28">
+      <div aria-hidden="true" class="pointer-events-none absolute -right-24 top-24 h-72 w-72 rounded-full bg-ocean-surf/10 blur-3xl"></div>
+      <div class="relative mx-auto max-w-7xl px-5 sm:px-8">
+        <header class="reveal max-w-2xl">
+          <p class="font-mono text-xs uppercase tracking-[0.22em] text-ocean">What's inside</p>
+          <h2 class="mt-4 font-display text-3xl font-bold leading-[1.1] tracking-tight text-ink sm:text-4xl lg:text-5xl">
+            One source of truth, built for the whole product loop
+          </h2>
+          <p class="mt-5 text-base leading-relaxed text-ink-soft sm:text-lg">
+            Stop stitching together five dashboards. Tidewell connects your events, sessions, and billing so every team is reading the same numbers — in plain language.
+          </p>
+        </header>
+
+        <div class="mt-12 grid auto-rows-[minmax(11rem,auto)] grid-cols-1 gap-4 sm:gap-5 md:grid-cols-3">
+          <!-- 01 big ink tile -->
+          <article class="reveal group flex flex-col justify-between overflow-hidden rounded-2xl bg-ocean-deep p-6 text-sand ring-1 ring-ocean-deep transition-all duration-300 hover:ring-ocean-surf/60 sm:p-7 md:col-span-2">
+            <div>
+              <span class="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-white/10 ring-1 ring-white/15" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6"><path d="M3 3v18h18" /><path d="M7 14l4-4 3 3 5-6" /></svg>
+              </span>
+              <p class="mt-5 font-mono text-[0.7rem] uppercase tracking-[0.2em] text-ocean-surf">01 / Funnels</p>
+              <h3 class="mt-2 font-display text-lg font-semibold leading-snug tracking-tight sm:text-xl">See exactly where users drop off</h3>
+              <p class="mt-2 text-sm leading-relaxed opacity-80">Drag steps onto a canvas and Tidewell builds the funnel in seconds. Click any stage to replay the sessions behind the number — no SQL, no waiting on the data team.</p>
+            </div>
+            <p class="mt-6 font-mono text-xs tracking-wide text-sand/70">Avg. query time: 0.4s</p>
+          </article>
+
+          <!-- 02 sand tile -->
+          <article class="reveal group flex flex-col justify-between overflow-hidden rounded-2xl bg-white p-6 text-ink ring-1 ring-ink/10 transition-all duration-300 hover:ring-ink/20 sm:p-7">
+            <div>
+              <span class="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-ocean/5 text-ocean-deep ring-1 ring-ocean/10" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6"><path d="M21 12a9 9 0 11-9-9" /><path d="M21 3v6h-6" /></svg>
+              </span>
+              <p class="mt-5 font-mono text-[0.7rem] uppercase tracking-[0.2em] text-ocean">02 / Retention</p>
+              <h3 class="mt-2 font-display text-lg font-semibold leading-snug tracking-tight sm:text-xl">Live cohort curves</h3>
+              <p class="mt-2 text-sm leading-relaxed text-ink-soft">Watch each weekly cohort hold or fade, in real time. Set an alert when a curve dips below your floor.</p>
+            </div>
+          </article>
+
+          <!-- 03 tall coral tile -->
+          <article class="reveal group flex flex-col justify-between overflow-hidden rounded-2xl bg-coral p-6 text-ink ring-1 ring-coral transition-all duration-300 hover:ring-ink/30 sm:p-7 md:row-span-2">
+            <div>
+              <span class="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-ink/10 ring-1 ring-ink/15" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6"><path d="M13 2L3 14h7l-1 8 10-12h-7z" /></svg>
+              </span>
+              <p class="mt-5 font-mono text-[0.7rem] uppercase tracking-[0.2em] text-ink/70">03 / Signals</p>
+              <h3 class="mt-2 font-display text-lg font-semibold leading-snug tracking-tight sm:text-xl">Alerts that find you first</h3>
+              <p class="mt-2 text-sm leading-relaxed text-ink/80">Anomaly detection watches every metric and pings Slack the moment something moves — a sign-up spike, a checkout stall, a churning account worth saving.</p>
+            </div>
+            <ul class="mt-6 space-y-2 text-xs text-ink/80">
+              <li class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-ink"></span> Slack &amp; email destinations</li>
+              <li class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-ink"></span> Smart thresholds, no spam</li>
+              <li class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-ink"></span> Snooze &amp; assign to a teammate</li>
+            </ul>
+          </article>
+
+          <!-- 04 sand tile -->
+          <article class="reveal group flex flex-col justify-between overflow-hidden rounded-2xl bg-white p-6 text-ink ring-1 ring-ink/10 transition-all duration-300 hover:ring-ink/20 sm:p-7">
+            <div>
+              <span class="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-ocean/5 text-ocean-deep ring-1 ring-ocean/10" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z" /><path d="M9 12l2 2 4-4" /></svg>
+              </span>
+              <p class="mt-5 font-mono text-[0.7rem] uppercase tracking-[0.2em] text-ocean">04 / Privacy</p>
+              <h3 class="mt-2 font-display text-lg font-semibold leading-snug tracking-tight sm:text-xl">SOC 2 &amp; GDPR ready</h3>
+              <p class="mt-2 text-sm leading-relaxed text-ink-soft">EU data residency, PII controls, and a signed DPA on every paid plan. Audited, not promised.</p>
+            </div>
+          </article>
+
+          <!-- 05 wide sand tile -->
+          <article class="reveal group flex flex-col justify-between overflow-hidden rounded-2xl bg-white p-6 text-ink ring-1 ring-ink/10 transition-all duration-300 hover:ring-ink/20 sm:p-7 md:col-span-2">
+            <div>
+              <span class="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-ocean/5 text-ocean-deep ring-1 ring-ocean/10" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6"><rect x="3" y="3" width="7" height="7" rx="1.5" /><rect x="14" y="3" width="7" height="7" rx="1.5" /><rect x="3" y="14" width="7" height="7" rx="1.5" /><path d="M17.5 14v7M14 17.5h7" /></svg>
+              </span>
+              <p class="mt-5 font-mono text-[0.7rem] uppercase tracking-[0.2em] text-ocean">05 / Connect</p>
+              <h3 class="mt-2 font-display text-lg font-semibold leading-snug tracking-tight sm:text-xl">Plugs into the stack you already run</h3>
+              <p class="mt-2 text-sm leading-relaxed text-ink-soft">Stream from Segment, RudderStack, or our typed SDK. Sync revenue from Stripe, push cohorts to your warehouse. Set up takes an afternoon, not a quarter.</p>
+            </div>
+            <div class="mt-6 flex flex-wrap gap-2">
+              <span class="rounded-lg bg-sand-100 px-3 py-1.5 font-mono text-xs text-ink-soft">Segment</span>
+              <span class="rounded-lg bg-sand-100 px-3 py-1.5 font-mono text-xs text-ink-soft">Stripe</span>
+              <span class="rounded-lg bg-sand-100 px-3 py-1.5 font-mono text-xs text-ink-soft">Snowflake</span>
+              <span class="rounded-lg bg-sand-100 px-3 py-1.5 font-mono text-xs text-ink-soft">BigQuery</span>
+              <span class="rounded-lg bg-sand-100 px-3 py-1.5 font-mono text-xs text-ink-soft">Webhooks</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ HOW IT WORKS ============================ -->
+    <section id="how" class="relative bg-ocean-deep py-20 text-sand sm:py-28">
+      <div aria-hidden="true" class="pointer-events-none absolute inset-0 opacity-[0.06]" style="background-image: radial-gradient(circle at 1px 1px, #fff 1px, transparent 0); background-size: 24px 24px;"></div>
+      <div class="relative mx-auto max-w-7xl px-5 sm:px-8">
+        <header class="reveal mx-auto max-w-2xl text-center">
+          <p class="font-mono text-xs uppercase tracking-[0.22em] text-ocean-surf">How it works</p>
+          <h2 class="mt-4 font-display text-3xl font-bold leading-[1.1] tracking-tight sm:text-4xl lg:text-5xl">From install to insight before lunch</h2>
+          <p class="mt-5 text-base leading-relaxed text-sand/75 sm:text-lg">Three steps. No data engineer required, no migration weekend.</p>
+        </header>
+
+        <ol class="mt-14 grid gap-6 md:grid-cols-3">
+          <li class="reveal relative rounded-2xl border border-white/10 bg-white/5 p-7 backdrop-blur-sm">
+            <span class="font-mono text-sm text-ocean-surf">Step 01</span>
+            <span class="absolute right-6 top-6 font-display text-5xl font-bold text-white/10" aria-hidden="true">01</span>
+            <h3 class="mt-3 font-display text-xl font-semibold tracking-tight">Drop in the snippet</h3>
+            <p class="mt-2 text-sm leading-relaxed text-sand/75">Paste one line, or point your existing Segment stream at Tidewell. Events start landing in seconds.</p>
+          </li>
+          <li class="reveal relative rounded-2xl border border-white/10 bg-white/5 p-7 backdrop-blur-sm">
+            <span class="font-mono text-sm text-ocean-surf">Step 02</span>
+            <span class="absolute right-6 top-6 font-display text-5xl font-bold text-white/10" aria-hidden="true">02</span>
+            <h3 class="mt-3 font-display text-xl font-semibold tracking-tight">Name your moments</h3>
+            <p class="mt-2 text-sm leading-relaxed text-sand/75">Mark what "activated" means for your product. Tidewell auto-builds funnels and cohorts around it.</p>
+          </li>
+          <li class="reveal relative rounded-2xl border border-white/10 bg-white/5 p-7 backdrop-blur-sm">
+            <span class="font-mono text-sm text-ocean-surf">Step 03</span>
+            <span class="absolute right-6 top-6 font-display text-5xl font-bold text-white/10" aria-hidden="true">03</span>
+            <h3 class="mt-3 font-display text-xl font-semibold tracking-tight">Share the dashboard</h3>
+            <p class="mt-2 text-sm leading-relaxed text-sand/75">Invite the team, drop a live tile in Slack, and let the alerts do the watching for you.</p>
+          </li>
+        </ol>
+
+        <!-- stats band -->
+        <div class="reveal mt-14 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/10 text-center md:grid-cols-4">
+          <div class="bg-ocean-deep p-7"><p class="font-display text-3xl font-bold sm:text-4xl">9 min</p><p class="mt-1 text-xs uppercase tracking-[0.16em] text-sand/60">Median time to first chart</p></div>
+          <div class="bg-ocean-deep p-7"><p class="font-display text-3xl font-bold sm:text-4xl">2.6B</p><p class="mt-1 text-xs uppercase tracking-[0.16em] text-sand/60">Events ingested daily</p></div>
+          <div class="bg-ocean-deep p-7"><p class="font-display text-3xl font-bold sm:text-4xl">99.98%</p><p class="mt-1 text-xs uppercase tracking-[0.16em] text-sand/60">Uptime, last 12 months</p></div>
+          <div class="bg-ocean-deep p-7"><p class="font-display text-3xl font-bold sm:text-4xl">4,100+</p><p class="mt-1 text-xs uppercase tracking-[0.16em] text-sand/60">Teams onboarded</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ PRICING ============================ -->
+    <section id="pricing" class="relative overflow-hidden py-20 sm:py-28">
+      <div aria-hidden="true" class="pointer-events-none absolute -left-24 bottom-0 h-80 w-80 rounded-full bg-coral/10 blur-3xl"></div>
+      <div class="relative mx-auto max-w-7xl px-5 sm:px-8">
+        <header class="reveal mx-auto max-w-2xl text-center">
+          <p class="font-mono text-xs uppercase tracking-[0.22em] text-ocean">Pricing</p>
+          <h2 class="mt-4 font-display text-3xl font-bold leading-[1.1] tracking-tight text-ink sm:text-4xl lg:text-5xl">Priced per seat, not per surprise</h2>
+          <p class="mt-5 text-base leading-relaxed text-ink-soft sm:text-lg">Every plan includes unlimited dashboards and the full event history. Switch the toggle to see annual savings.</p>
+        </header>
+
+        <!-- billing toggle -->
+        <div class="reveal mt-8 flex items-center justify-center gap-3">
+          <span id="label-monthly" class="text-sm font-medium text-ink">Monthly</span>
+          <button type="button" id="billing-toggle" role="switch" aria-checked="false" aria-label="Toggle annual billing" class="relative inline-flex h-7 w-12 items-center rounded-full bg-ink/15 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ocean focus-visible:ring-offset-2 focus-visible:ring-offset-sand">
+            <span id="billing-knob" class="inline-block h-5 w-5 translate-x-1 transform rounded-full bg-white shadow transition-transform"></span>
+          </button>
+          <span id="label-annual" class="text-sm font-medium text-ink-soft">Annual <span class="ml-1 rounded-full bg-ocean/10 px-2 py-0.5 font-mono text-[0.65rem] text-ocean-deep">Save 20%</span></span>
+        </div>
+
+        <div class="mt-12 grid items-stretch gap-6 lg:grid-cols-3">
+          <!-- Starter -->
+          <div class="reveal flex flex-col rounded-2xl border border-ink/10 bg-white p-7 shadow-sm">
+            <h3 class="font-display text-lg font-semibold text-ink">Starter</h3>
+            <p class="mt-1 text-sm text-ink-soft">For solo builders and side projects.</p>
+            <div class="mt-6 flex items-end gap-1">
+              <span class="font-display text-4xl font-bold text-ink" data-price data-monthly="$0" data-annual="$0">$0</span>
+              <span class="pb-1 text-sm text-ink-soft">/mo</span>
+            </div>
+            <p class="mt-1 font-mono text-xs text-ink-soft/70">Up to 10k events / month</p>
+            <a href="#cta" class="mt-6 inline-flex items-center justify-center rounded-xl border border-ink/15 px-5 py-3 text-sm font-semibold text-ink transition-colors hover:bg-ink/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-ocean">Start free</a>
+            <ul class="mt-7 space-y-3 text-sm text-ink-soft">
+              <li class="flex gap-2.5"><svg viewBox="0 0 24 24" fill="none" stroke="#1f8a8a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" class="mt-0.5 h-4 w-4 shrink-0"><path d="M5 13l4 4L19 7" /></svg>1 project, 2 seats</li>
+              <li class="flex gap-2.5"><svg viewBox="0 0 24 24" fill="none" stroke="#1f8a8a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" class="mt-0.5 h-4 w-4 shrink-0"><path d="M5 13l4 4L19 7" /></svg>Funnels &amp; retention</li>
+              <li class="flex gap-2.5"><svg viewBox="0 0 24 24" fill="none" stroke="#1f8a8a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" class="mt-0.5 h-4 w-4 shrink-0"><path d="M5 13l4 4L19 7" /></svg>30-day history</li>
+              <li class="flex gap-2.5"><svg viewBox="0 0 24 24" fill="none" stroke="#1f8a8a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" class="mt-0.5 h-4 w-4 shrink-0"><path d="M5 13l4 4L19 7" /></svg>Community support</li>
+            </ul>
+          </div>
+
+          <!-- Growth (featured) -->
+          <div class="reveal relative flex flex-col rounded-2xl border-2 border-ocean bg-white p-7 shadow-xl shadow-ocean/10 lg:-translate-y-3">
+            <span class="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-ocean px-3 py-1 font-mono text-[0.65rem] uppercase tracking-[0.16em] text-white">Most popular</span>
+            <h3 class="font-display text-lg font-semibold text-ink">Growth</h3>
+            <p class="mt-1 text-sm text-ink-soft">For teams scaling past product-market fit.</p>
+            <div class="mt-6 flex items-end gap-1">
+              <span class="font-display text-4xl font-bold text-ink" data-price data-monthly="$79" data-annual="$63">$79</span>
+              <span class="pb-1 text-sm text-ink-soft">/mo per seat</span>
+            </div>
+            <p class="mt-1 font-mono text-xs text-ink-soft/70">Up to 5M events / month</p>
+            <a href="#cta" class="mt-6 inline-flex items-center justify-center rounded-xl bg-ocean px-5 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:bg-ocean-deep focus:outline-none focus-visible:ring-2 focus-visible:ring-ocean focus-visible:ring-offset-2 focus-visible:ring-offset-white">Start 14-day trial</a>
+            <ul class="mt-7 space-y-3 text-sm text-ink-soft">
+              <li class="flex gap-2.5"><svg viewBox="0 0 24 24" fill="none" stroke="#1f8a8a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" class="mt-0.5 h-4 w-4 shrink-0"><path d="M5 13l4 4L19 7" /></svg>Unlimited projects</li>
+              <li class="flex gap-2.5"><svg viewBox="0 0 24 24" fill="none" stroke="#1f8a8a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" class="mt-0.5 h-4 w-4 shrink-0"><path d="M5 13l4 4L19 7" /></svg>Anomaly alerts + Slack</li>
+              <li class="flex gap-2.5"><svg viewBox="0 0 24 24" fill="none" stroke="#1f8a8a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" class="mt-0.5 h-4 w-4 shrink-0"><path d="M5 13l4 4L19 7" /></svg>Unlimited history</li>
+              <li class="flex gap-2.5"><svg viewBox="0 0 24 24" fill="none" stroke="#1f8a8a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" class="mt-0.5 h-4 w-4 shrink-0"><path d="M5 13l4 4L19 7" /></svg>Stripe revenue sync</li>
+              <li class="flex gap-2.5"><svg viewBox="0 0 24 24" fill="none" stroke="#1f8a8a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" class="mt-0.5 h-4 w-4 shrink-0"><path d="M5 13l4 4L19 7" /></svg>Priority email support</li>
+            </ul>
+          </div>
+
+          <!-- Scale -->
+          <div class="reveal flex flex-col rounded-2xl border border-ink/10 bg-white p-7 shadow-sm">
+            <h3 class="font-display text-lg font-semibold text-ink">Scale</h3>
+            <p class="mt-1 text-sm text-ink-soft">For orgs with compliance and volume needs.</p>
+            <div class="mt-6 flex items-end gap-1">
+              <span class="font-display text-4xl font-bold text-ink">Custom</span>
+            </div>
+            <p class="mt-1 font-mono text-xs text-ink-soft/70">Unlimited events + warehouse sync</p>
+            <a href="#cta" class="mt-6 inline-flex items-center justify-center rounded-xl border border-ink/15 px-5 py-3 text-sm font-semibold text-ink transition-colors hover:bg-ink/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-ocean">Talk to sales</a>
+            <ul class="mt-7 space-y-3 text-sm text-ink-soft">
+              <li class="flex gap-2.5"><svg viewBox="0 0 24 24" fill="none" stroke="#1f8a8a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" class="mt-0.5 h-4 w-4 shrink-0"><path d="M5 13l4 4L19 7" /></svg>Everything in Growth</li>
+              <li class="flex gap-2.5"><svg viewBox="0 0 24 24" fill="none" stroke="#1f8a8a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" class="mt-0.5 h-4 w-4 shrink-0"><path d="M5 13l4 4L19 7" /></svg>SSO &amp; SCIM</li>
+              <li class="flex gap-2.5"><svg viewBox="0 0 24 24" fill="none" stroke="#1f8a8a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" class="mt-0.5 h-4 w-4 shrink-0"><path d="M5 13l4 4L19 7" /></svg>EU data residency + DPA</li>
+              <li class="flex gap-2.5"><svg viewBox="0 0 24 24" fill="none" stroke="#1f8a8a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" class="mt-0.5 h-4 w-4 shrink-0"><path d="M5 13l4 4L19 7" /></svg>Dedicated success manager</li>
+              <li class="flex gap-2.5"><svg viewBox="0 0 24 24" fill="none" stroke="#1f8a8a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" class="mt-0.5 h-4 w-4 shrink-0"><path d="M5 13l4 4L19 7" /></svg>99.99% uptime SLA</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ TESTIMONIALS ============================ -->
+    <section aria-labelledby="testimonials-title" class="bg-sand-100 py-20 sm:py-28">
+      <div class="mx-auto max-w-7xl px-5 sm:px-8">
+        <header class="reveal max-w-2xl">
+          <p class="font-mono text-xs uppercase tracking-[0.22em] text-ocean">Loved by operators</p>
+          <h2 id="testimonials-title" class="mt-4 font-display text-3xl font-bold leading-[1.1] tracking-tight text-ink sm:text-4xl lg:text-5xl">The dashboard people actually open</h2>
+        </header>
+
+        <div class="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <!-- featured wide -->
+          <figure class="reveal flex flex-col justify-between rounded-2xl bg-ocean-deep p-8 text-sand md:col-span-2 lg:col-span-2">
+            <blockquote class="font-display text-xl font-medium leading-snug tracking-tight sm:text-2xl">
+              "We killed three internal dashboards the week we switched. Now activation lives on one screen the whole team reads the same way — and it caught a checkout regression before our on-call did."
+            </blockquote>
+            <figcaption class="mt-8 flex items-center gap-4">
+              <span class="grid h-11 w-11 place-items-center rounded-full bg-ocean-surf/30 font-display text-sm font-bold text-sand">MR</span>
+              <div>
+                <p class="font-semibold">Marisol Reyes</p>
+                <p class="text-sm text-sand/70">VP Product, Kelpwork</p>
+              </div>
+            </figcaption>
+          </figure>
+
+          <figure class="reveal flex flex-col justify-between rounded-2xl border border-ink/10 bg-white p-8">
+            <blockquote class="text-base leading-relaxed text-ink">"Set up before standup, shared a live retention tile by lunch. It genuinely takes an afternoon."</blockquote>
+            <figcaption class="mt-7 flex items-center gap-4">
+              <span class="grid h-11 w-11 place-items-center rounded-full bg-ocean/10 font-display text-sm font-bold text-ocean-deep">DT</span>
+              <div>
+                <p class="font-semibold text-ink">Daniel Tan</p>
+                <p class="text-sm text-ink-soft">Founder, Driftly</p>
+              </div>
+            </figcaption>
+          </figure>
+
+          <figure class="reveal flex flex-col justify-between rounded-2xl border border-ink/10 bg-white p-8">
+            <blockquote class="text-base leading-relaxed text-ink">"The anomaly alerts paid for the plan in the first month — we caught a churn pattern in one enterprise account in time to save it."</blockquote>
+            <figcaption class="mt-7 flex items-center gap-4">
+              <span class="grid h-11 w-11 place-items-center rounded-full bg-ocean/10 font-display text-sm font-bold text-ocean-deep">PK</span>
+              <div>
+                <p class="font-semibold text-ink">Priya Kulkarni</p>
+                <p class="text-sm text-ink-soft">Head of Growth, Lumen</p>
+              </div>
+            </figcaption>
+          </figure>
+
+          <figure class="reveal flex flex-col justify-between rounded-2xl border border-ink/10 bg-white p-8">
+            <blockquote class="text-base leading-relaxed text-ink">"Our analysts stopped being a ticket queue. PMs answer their own funnel questions now, and the numbers agree across teams."</blockquote>
+            <figcaption class="mt-7 flex items-center gap-4">
+              <span class="grid h-11 w-11 place-items-center rounded-full bg-ocean/10 font-display text-sm font-bold text-ocean-deep">JF</span>
+              <div>
+                <p class="font-semibold text-ink">Jonas Feld</p>
+                <p class="text-sm text-ink-soft">Data Lead, Saltmark</p>
+              </div>
+            </figcaption>
+          </figure>
+
+          <figure class="reveal flex flex-col justify-between rounded-2xl border border-ink/10 bg-white p-8">
+            <blockquote class="text-base leading-relaxed text-ink">"Clean, fast, and it doesn't try to be a CRM. It answers the three questions I actually care about."</blockquote>
+            <figcaption class="mt-7 flex items-center gap-4">
+              <span class="grid h-11 w-11 place-items-center rounded-full bg-ocean/10 font-display text-sm font-bold text-ocean-deep">AO</span>
+              <div>
+                <p class="font-semibold text-ink">Amara Okafor</p>
+                <p class="text-sm text-ink-soft">CPO, Northwind</p>
+              </div>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ FAQ ============================ -->
+    <section id="faq" class="py-20 sm:py-28">
+      <div class="mx-auto max-w-3xl px-5 sm:px-8">
+        <header class="reveal text-center">
+          <p class="font-mono text-xs uppercase tracking-[0.22em] text-ocean">FAQ</p>
+          <h2 class="mt-4 font-display text-3xl font-bold leading-[1.1] tracking-tight text-ink sm:text-4xl">Questions, answered</h2>
+        </header>
+
+        <div class="reveal mt-10 divide-y divide-ink/10 rounded-2xl border border-ink/10 bg-white">
+          <details class="group p-6 open:bg-sand-100/40" open>
+            <summary class="flex cursor-pointer items-center justify-between gap-4 text-left font-display text-base font-semibold text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-ocean focus-visible:ring-offset-2 focus-visible:ring-offset-white sm:text-lg">
+              Do I need a data team or SQL to use Tidewell?
+              <span class="faq-chevron grid h-7 w-7 shrink-0 place-items-center rounded-full bg-ocean/10 text-ocean-deep transition-transform duration-300" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" class="h-3.5 w-3.5"><path d="M12 5v14M5 12h14" /></svg></span>
+            </summary>
+            <p class="mt-3 text-sm leading-relaxed text-ink-soft">No. Funnels, cohorts, and breakdowns are point-and-click. Power users can drop into SQL when they want, but it's never a requirement to get an answer.</p>
+          </details>
+          <details class="group p-6 open:bg-sand-100/40">
+            <summary class="flex cursor-pointer items-center justify-between gap-4 text-left font-display text-base font-semibold text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-ocean focus-visible:ring-offset-2 focus-visible:ring-offset-white sm:text-lg">
+              How long does setup actually take?
+              <span class="faq-chevron grid h-7 w-7 shrink-0 place-items-center rounded-full bg-ocean/10 text-ocean-deep transition-transform duration-300" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" class="h-3.5 w-3.5"><path d="M12 5v14M5 12h14" /></svg></span>
+            </summary>
+            <p class="mt-3 text-sm leading-relaxed text-ink-soft">Most teams see their first chart in under ten minutes. If you already stream through Segment or RudderStack, you just point it at Tidewell and your historical events backfill automatically.</p>
+          </details>
+          <details class="group p-6 open:bg-sand-100/40">
+            <summary class="flex cursor-pointer items-center justify-between gap-4 text-left font-display text-base font-semibold text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-ocean focus-visible:ring-offset-2 focus-visible:ring-offset-white sm:text-lg">
+              Is my data secure and compliant?
+              <span class="faq-chevron grid h-7 w-7 shrink-0 place-items-center rounded-full bg-ocean/10 text-ocean-deep transition-transform duration-300" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" class="h-3.5 w-3.5"><path d="M12 5v14M5 12h14" /></svg></span>
+            </summary>
+            <p class="mt-3 text-sm leading-relaxed text-ink-soft">Yes. Tidewell is SOC 2 Type II certified and GDPR compliant. Paid plans include a signed DPA, configurable PII redaction, and optional EU data residency.</p>
+          </details>
+          <details class="group p-6 open:bg-sand-100/40">
+            <summary class="flex cursor-pointer items-center justify-between gap-4 text-left font-display text-base font-semibold text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-ocean focus-visible:ring-offset-2 focus-visible:ring-offset-white sm:text-lg">
+              What happens when I outgrow a plan's event limit?
+              <span class="faq-chevron grid h-7 w-7 shrink-0 place-items-center rounded-full bg-ocean/10 text-ocean-deep transition-transform duration-300" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" class="h-3.5 w-3.5"><path d="M12 5v14M5 12h14" /></svg></span>
+            </summary>
+            <p class="mt-3 text-sm leading-relaxed text-ink-soft">We never stop collecting your data or hit you with surprise overages. You'll get a heads-up well before the threshold and can upgrade in one click — or stay put and we'll sample gracefully.</p>
+          </details>
+          <details class="group p-6 open:bg-sand-100/40">
+            <summary class="flex cursor-pointer items-center justify-between gap-4 text-left font-display text-base font-semibold text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-ocean focus-visible:ring-offset-2 focus-visible:ring-offset-white sm:text-lg">
+              Can I cancel or export my data anytime?
+              <span class="faq-chevron grid h-7 w-7 shrink-0 place-items-center rounded-full bg-ocean/10 text-ocean-deep transition-transform duration-300" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" class="h-3.5 w-3.5"><path d="M12 5v14M5 12h14" /></svg></span>
+            </summary>
+            <p class="mt-3 text-sm leading-relaxed text-ink-soft">Always. There's no lock-in. Export raw events to CSV or your warehouse whenever you like, and cancel from settings with no phone call required.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ CTA BAND ============================ -->
+    <section id="cta" class="px-5 pb-20 sm:px-8 sm:pb-28">
+      <div class="reveal relative mx-auto max-w-6xl overflow-hidden rounded-3xl bg-ocean-deep px-6 py-16 text-center text-sand sm:px-12 sm:py-20">
+        <div aria-hidden="true" class="pointer-events-none absolute -left-20 -top-20 h-72 w-72 rounded-full bg-ocean-surf/20 blur-3xl"></div>
+        <div aria-hidden="true" class="pointer-events-none absolute -bottom-24 -right-16 h-80 w-80 rounded-full bg-coral/20 blur-3xl"></div>
+        <div class="relative mx-auto max-w-2xl">
+          <h2 class="font-display text-3xl font-bold leading-[1.1] tracking-tight sm:text-4xl lg:text-5xl">Know your numbers by the end of the day</h2>
+          <p class="mx-auto mt-5 max-w-lg text-base leading-relaxed text-sand/80 sm:text-lg">Start free, invite the team, and watch activation, retention, and revenue line up on one calm dashboard.</p>
+          <form class="mx-auto mt-9 flex max-w-md flex-col gap-3 sm:flex-row" onsubmit="return false;">
+            <label for="cta-email" class="sr-only">Work email</label>
+            <input id="cta-email" name="email" type="email" required placeholder="you@company.com" class="w-full rounded-xl border border-white/15 bg-white/10 px-4 py-3.5 text-sm text-sand placeholder:text-sand/50 backdrop-blur focus:border-ocean-surf focus:outline-none focus:ring-2 focus:ring-ocean-surf/50" />
+            <button type="submit" class="shrink-0 rounded-xl bg-coral px-6 py-3.5 text-sm font-semibold text-ink shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-coral focus-visible:ring-offset-2 focus-visible:ring-offset-ocean-deep">Start free</button>
+          </form>
+          <p class="mt-4 font-mono text-xs text-sand/60">No credit card · 14-day trial of Growth · Cancel anytime</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================ FOOTER ============================ -->
+  <footer class="border-t border-ink/10 bg-sand-100">
+    <div class="mx-auto max-w-7xl px-5 py-14 sm:px-8">
+      <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-5">
+        <div class="lg:col-span-2">
+          <a href="#top" class="flex items-center gap-2.5">
+            <span aria-hidden="true" class="grid h-9 w-9 place-items-center rounded-xl bg-ocean-deep font-mono text-base font-bold leading-none text-sand">~&lt;</span>
+            <span class="font-display text-lg font-bold tracking-tight text-ink">Tidewell</span>
+          </a>
+          <p class="mt-4 max-w-xs text-sm leading-relaxed text-ink-soft">The calm analytics platform for product teams. Activation, retention, and revenue — one source of truth.</p>
+          <div class="mt-5 flex items-center gap-3">
+            <a href="#" aria-label="Tidewell on X" class="grid h-9 w-9 place-items-center rounded-lg border border-ink/10 text-ink-soft transition-colors hover:border-ocean/30 hover:text-ocean-deep focus:outline-none focus-visible:ring-2 focus-visible:ring-ocean"><svg viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77Z" /></svg></a>
+            <a href="#" aria-label="Tidewell on GitHub" class="grid h-9 w-9 place-items-center rounded-lg border border-ink/10 text-ink-soft transition-colors hover:border-ocean/30 hover:text-ocean-deep focus:outline-none focus-visible:ring-2 focus-visible:ring-ocean"><svg viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4"><path d="M12 .5C5.73.5.5 5.74.5 12.04c0 5.1 3.29 9.42 7.86 10.95.58.11.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.35-1.3-1.71-1.3-1.71-1.06-.73.08-.71.08-.71 1.17.08 1.79 1.21 1.79 1.21 1.04 1.79 2.73 1.27 3.4.97.1-.76.41-1.27.74-1.56-2.55-.29-5.23-1.28-5.23-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.39-5.25 5.68.42.36.79 1.08.79 2.18v3.23c0 .31.21.68.8.56A11.53 11.53 0 0 0 23.5 12.04C23.5 5.74 18.27.5 12 .5Z" /></svg></a>
+            <a href="#" aria-label="Tidewell on LinkedIn" class="grid h-9 w-9 place-items-center rounded-lg border border-ink/10 text-ink-soft transition-colors hover:border-ocean/30 hover:text-ocean-deep focus:outline-none focus-visible:ring-2 focus-visible:ring-ocean"><svg viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14ZM7.12 20.45H3.55V9h3.57v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.22.79 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z" /></svg></a>
+          </div>
+        </div>
+
+        <nav aria-label="Product" class="text-sm">
+          <p class="font-mono text-xs uppercase tracking-[0.18em] text-ink-soft/70">Product</p>
+          <ul class="mt-4 space-y-2.5">
+            <li><a href="#features" class="text-ink-soft transition-colors hover:text-ink">Features</a></li>
+            <li><a href="#how" class="text-ink-soft transition-colors hover:text-ink">How it works</a></li>
+            <li><a href="#pricing" class="text-ink-soft transition-colors hover:text-ink">Pricing</a></li>
+            <li><a href="#" class="text-ink-soft transition-colors hover:text-ink">Changelog</a></li>
+          </ul>
+        </nav>
+
+        <nav aria-label="Company" class="text-sm">
+          <p class="font-mono text-xs uppercase tracking-[0.18em] text-ink-soft/70">Company</p>
+          <ul class="mt-4 space-y-2.5">
+            <li><a href="#" class="text-ink-soft transition-colors hover:text-ink">About</a></li>
+            <li><a href="#" class="text-ink-soft transition-colors hover:text-ink">Careers</a></li>
+            <li><a href="#" class="text-ink-soft transition-colors hover:text-ink">Blog</a></li>
+            <li><a href="#" class="text-ink-soft transition-colors hover:text-ink">Contact</a></li>
+          </ul>
+        </nav>
+
+        <nav aria-label="Resources" class="text-sm">
+          <p class="font-mono text-xs uppercase tracking-[0.18em] text-ink-soft/70">Resources</p>
+          <ul class="mt-4 space-y-2.5">
+            <li><a href="#" class="text-ink-soft transition-colors hover:text-ink">Docs</a></li>
+            <li><a href="#" class="text-ink-soft transition-colors hover:text-ink">API reference</a></li>
+            <li><a href="#" class="text-ink-soft transition-colors hover:text-ink">Status</a></li>
+            <li><a href="#" class="text-ink-soft transition-colors hover:text-ink">Security</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <div class="mt-12 flex flex-col items-start justify-between gap-4 border-t border-ink/10 pt-6 sm:flex-row sm:items-center">
+        <p class="text-xs text-ink-soft">&copy; <span id="year">2026</span> Tidewell, Inc. All rights reserved.</p>
+        <div class="flex items-center gap-5 text-xs text-ink-soft">
+          <a href="#" class="transition-colors hover:text-ink">Privacy</a>
+          <a href="#" class="transition-colors hover:text-ink">Terms</a>
+          <a href="#" class="transition-colors hover:text-ink">DPA</a>
+          <span class="font-mono text-ink-soft/60">Built by saltycodestudio</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============================ BEHAVIOR ============================ -->
+  <script>
+    (function () {
+      "use strict";
+
+      /* ---- Mobile nav ---- */
+      var toggle = document.getElementById("nav-toggle");
+      var menu = document.getElementById("mobile-menu");
+      if (toggle && menu) {
+        var bars = {
+          top: document.querySelector('[data-bar="top"]'),
+          mid: document.querySelector('[data-bar="mid"]'),
+          bot: document.querySelector('[data-bar="bot"]'),
+        };
+        function setOpen(open) {
+          menu.classList.toggle("hidden", !open);
+          toggle.setAttribute("aria-expanded", String(open));
+          toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+          document.body.style.overflow = open ? "hidden" : "";
+          if (bars.top) { bars.top.classList.toggle("-translate-y-1.5", !open); bars.top.classList.toggle("rotate-45", open); bars.top.classList.toggle("-translate-y-1/2", open); }
+          if (bars.mid) bars.mid.classList.toggle("opacity-0", open);
+          if (bars.bot) { bars.bot.classList.toggle("translate-y-1.5", !open); bars.bot.classList.toggle("-rotate-45", open); bars.bot.classList.toggle("-translate-y-1/2", open); }
+        }
+        toggle.addEventListener("click", function () { setOpen(menu.classList.contains("hidden")); });
+        menu.querySelectorAll("[data-nav-link]").forEach(function (a) { a.addEventListener("click", function () { setOpen(false); }); });
+        var backdrop = menu.querySelector("[data-nav-backdrop]");
+        if (backdrop) backdrop.addEventListener("click", function () { setOpen(false); });
+        document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !menu.classList.contains("hidden")) setOpen(false); });
+      }
+
+      /* ---- Sticky nav elevation on scroll ---- */
+      var nav = document.getElementById("nav");
+      if (nav) {
+        function onScroll() {
+          var s = window.scrollY > 8;
+          nav.classList.toggle("bg-sand/85", s);
+          nav.classList.toggle("backdrop-blur-md", s);
+          nav.classList.toggle("border-ink/10", s);
+          nav.classList.toggle("shadow-sm", s);
+          nav.classList.toggle("border-transparent", !s);
+        }
+        window.addEventListener("scroll", onScroll, { passive: true });
+        onScroll();
+      }
+
+      /* ---- Billing toggle ---- */
+      var billing = document.getElementById("billing-toggle");
+      if (billing) {
+        var knob = document.getElementById("billing-knob");
+        var lblM = document.getElementById("label-monthly");
+        var lblA = document.getElementById("label-annual");
+        var prices = document.querySelectorAll("[data-price]");
+        billing.addEventListener("click", function () {
+          var annual = billing.getAttribute("aria-checked") !== "true";
+          billing.setAttribute("aria-checked", String(annual));
+          billing.classList.toggle("bg-ocean", annual);
+          billing.classList.toggle("bg-ink/15", !annual);
+          if (knob) knob.classList.toggle("translate-x-6", annual);
+          if (knob) knob.classList.toggle("translate-x-1", !annual);
+          if (lblM) { lblM.classList.toggle("text-ink", !annual); lblM.classList.toggle("text-ink-soft", annual); }
+          if (lblA) { lblA.classList.toggle("text-ink", annual); lblA.classList.toggle("text-ink-soft", !annual); }
+          prices.forEach(function (p) {
+            var v = annual ? p.getAttribute("data-annual") : p.getAttribute("data-monthly");
+            if (v) p.textContent = v;
+          });
+        });
+      }
+
+      /* ---- Scroll reveal (progressive enhancement) ---- */
+      var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      var revealEls = document.querySelectorAll(".reveal");
+      if (reduce || !("IntersectionObserver" in window)) {
+        revealEls.forEach(function (el) { el.classList.add("in"); });
+      } else {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) { entry.target.classList.add("in"); io.unobserve(entry.target); }
+          });
+        }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
+        revealEls.forEach(function (el) { io.observe(el); });
+      }
+
+      /* ---- Footer year ---- */
+      var y = document.getElementById("year");
+      if (y) y.textContent = new Date().getFullYear();
+    })();
+  </script>
+</body>
+</html>

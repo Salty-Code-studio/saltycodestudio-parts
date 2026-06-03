@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StatsBand — saltycodestudio-parts preview</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+            display: ['Space Grotesk', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+          colors: {
+            sand: '#F2EBDD',
+            teal: '#0E3A40',
+            coral: '#FF6F59',
+            sky: '#4FA8C9',
+            driftwood: '#1C2B2E',
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    h1, h2, h3 { font-family: 'Space Grotesk', system-ui, sans-serif; }
+    .font-mono { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+  </style>
+</head>
+<body class="bg-[#F2EBDD] text-[#1C2B2E] antialiased">
+
+  <!-- Minimal nav for context -->
+  <header class="sticky top-0 z-30 border-b border-[#0E3A40]/10 bg-[#F2EBDD]/85 backdrop-blur">
+    <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4 lg:px-8">
+      <a href="#" class="flex items-center gap-2 font-display text-lg font-semibold text-[#0E3A40]">
+        <span class="font-mono text-[#FF6F59]">~&lt;</span>
+        saltycodestudio
+      </a>
+      <nav class="hidden items-center gap-8 text-sm font-medium text-[#1C2B2E]/80 sm:flex">
+        <a href="#work" class="transition-colors hover:text-[#0E3A40]">Work</a>
+        <a href="#stats" class="transition-colors hover:text-[#0E3A40]">Results</a>
+        <a href="#journal" class="transition-colors hover:text-[#0E3A40]">Journal</a>
+      </nav>
+      <a href="#" class="rounded-full bg-[#FF6F59] px-4 py-2 text-sm font-semibold text-[#F2EBDD] transition-transform hover:-translate-y-0.5">
+        Start a project
+      </a>
+    </div>
+  </header>
+
+  <!-- Context band above -->
+  <section class="mx-auto max-w-6xl px-6 py-16 text-center lg:px-8">
+    <p class="font-mono text-xs uppercase tracking-[0.2em] text-[#FF6F59]">Clean code, warm coast</p>
+    <h1 class="mt-3 text-4xl font-semibold tracking-tight text-[#0E3A40] sm:text-5xl">A studio that ships.</h1>
+    <p class="mx-auto mt-4 max-w-xl text-base leading-relaxed text-[#1C2B2E]/70">
+      Scroll to the band below to see the stats section in its native habitat.
+    </p>
+  </section>
+
+  <!-- ===== START stats-band section.html ===== -->
+  <section id="stats" aria-labelledby="stats-band-heading" class="relative overflow-hidden bg-[#0E3A40] text-[#F2EBDD]">
+    <div aria-hidden="true" class="pointer-events-none absolute -top-24 -right-24 h-72 w-72 rounded-full bg-[#4FA8C9]/20 blur-3xl"></div>
+    <div aria-hidden="true" class="pointer-events-none absolute -bottom-28 -left-20 h-72 w-72 rounded-full bg-[#FF6F59]/15 blur-3xl"></div>
+
+    <div class="relative mx-auto max-w-6xl px-6 py-16 sm:py-20 lg:px-8 lg:py-24">
+      <div class="mx-auto max-w-2xl text-center">
+        <p class="font-mono text-xs uppercase tracking-[0.2em] text-[#4FA8C9]">By the numbers</p>
+        <h2 id="stats-band-heading" class="mt-3 text-3xl font-semibold tracking-tight text-[#F2EBDD] sm:text-4xl">
+          Proof in the shipping log
+        </h2>
+        <p class="mt-4 text-base leading-relaxed text-[#F2EBDD]/70">
+          Clean code, warm coast — and a track record we are happy to put in writing.
+        </p>
+      </div>
+
+      <dl class="mt-12 grid grid-cols-1 gap-px overflow-hidden rounded-2xl bg-[#F2EBDD]/10 ring-1 ring-[#F2EBDD]/10 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="group flex flex-col items-center bg-[#0E3A40] px-6 py-10 text-center transition-colors duration-300 hover:bg-[#0E3A40]/60">
+          <dt class="sr-only">Sites shipped</dt>
+          <dd class="order-1 text-4xl font-semibold tracking-tight text-[#F2EBDD] sm:text-5xl">
+            <span class="bg-gradient-to-br from-[#F2EBDD] to-[#4FA8C9] bg-clip-text text-transparent">120+</span>
+          </dd>
+          <p aria-hidden="true" class="order-2 mt-3 font-mono text-xs uppercase tracking-[0.18em] text-[#4FA8C9]">Sites shipped</p>
+          <p class="order-3 mt-2 max-w-[16rem] text-sm leading-relaxed text-[#F2EBDD]/65">From landing pages to full builds</p>
+        </div>
+
+        <div class="group flex flex-col items-center bg-[#0E3A40] px-6 py-10 text-center transition-colors duration-300 hover:bg-[#0E3A40]/60">
+          <dt class="sr-only">Uptime delivered</dt>
+          <dd class="order-1 text-4xl font-semibold tracking-tight text-[#F2EBDD] sm:text-5xl">
+            <span class="bg-gradient-to-br from-[#F2EBDD] to-[#4FA8C9] bg-clip-text text-transparent">99.9%</span>
+          </dd>
+          <p aria-hidden="true" class="order-2 mt-3 font-mono text-xs uppercase tracking-[0.18em] text-[#4FA8C9]">Uptime delivered</p>
+          <p class="order-3 mt-2 max-w-[16rem] text-sm leading-relaxed text-[#F2EBDD]/65">Across hosted client projects</p>
+        </div>
+
+        <div class="group flex flex-col items-center bg-[#0E3A40] px-6 py-10 text-center transition-colors duration-300 hover:bg-[#0E3A40]/60">
+          <dt class="sr-only">Median load time</dt>
+          <dd class="order-1 text-4xl font-semibold tracking-tight text-[#F2EBDD] sm:text-5xl">
+            <span class="bg-gradient-to-br from-[#F2EBDD] to-[#4FA8C9] bg-clip-text text-transparent">0.9s</span>
+          </dd>
+          <p aria-hidden="true" class="order-2 mt-3 font-mono text-xs uppercase tracking-[0.18em] text-[#4FA8C9]">Median load time</p>
+          <p class="order-3 mt-2 max-w-[16rem] text-sm leading-relaxed text-[#F2EBDD]/65">Measured on real-world 4G</p>
+        </div>
+
+        <div class="group flex flex-col items-center bg-[#0E3A40] px-6 py-10 text-center transition-colors duration-300 hover:bg-[#0E3A40]/60">
+          <dt class="sr-only">Client rating</dt>
+          <dd class="order-1 text-4xl font-semibold tracking-tight text-[#F2EBDD] sm:text-5xl">
+            <span class="bg-gradient-to-br from-[#F2EBDD] to-[#4FA8C9] bg-clip-text text-transparent">4.9/5</span>
+          </dd>
+          <p aria-hidden="true" class="order-2 mt-3 font-mono text-xs uppercase tracking-[0.18em] text-[#4FA8C9]">Client rating</p>
+          <p class="order-3 mt-2 max-w-[16rem] text-sm leading-relaxed text-[#F2EBDD]/65">Based on 60+ engagements</p>
+        </div>
+      </dl>
+    </div>
+  </section>
+  <!-- ===== END stats-band section.html ===== -->
+
+  <!-- Context band below -->
+  <footer class="border-t border-[#0E3A40]/10 bg-[#F2EBDD] py-12 text-center">
+    <p class="font-mono text-xs uppercase tracking-[0.2em] text-[#1C2B2E]/50">
+      saltycodestudio-parts &middot; stats-band preview
+    </p>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "name": "Portfolio",
+  "slug": "portfolio",
+  "kind": "template",
+  "category": "template",
+  "tier": "showcase",
+  "tags": ["portfolio", "personal", "creative", "designer", "developer", "case-study", "showcase", "about", "skills", "contact-form", "responsive", "accessible", "single-page", "tailwind", "saltycodestudio"],
+  "description": "A polished single-page personal/creative portfolio with hero intro, about, case-study project grid, skills, contact form, and footer.",
+  "deps": [],
+  "files": ["index.html"],
+  "usage": "Open index.html in a browser to preview, or deploy it as-is to any static host. Swap the placeholder name (Maya Solano), copy, projects, and contact details for your own; recolor by editing the inline tailwind.config palette. No build step — it runs on the Tailwind Play CDN with vanilla JS for the mobile nav, scroll reveals, skill bars, scroll-spy, and demo contact form.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
+}

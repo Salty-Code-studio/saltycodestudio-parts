@@ -1,0 +1,14 @@
+{
+  "name": "Contact Form",
+  "slug": "contact-form",
+  "kind": "section",
+  "category": "contact",
+  "tier": "practical",
+  "tags": ["contact", "form", "validation", "lead", "accessible", "aria", "map", "sand-and-surf"],
+  "description": "A validated contact section pairing a name/email/message form with studio contact details and a stylized map placeholder, with inline error feedback and a thank-you state.",
+  "deps": ["react", "tailwindcss"],
+  "files": ["ContactForm.tsx", "section.html"],
+  "usage": "React: import ContactForm from './ContactForm' and render <ContactForm /> (pass headline/details/onSubmit props, or omit onSubmit to get a simulated send). HTML: paste the <section> from section.html plus its scoped inline <script>, which wires client-side validation, the sending state, and the thank-you toggle. Both variants validate name/email/message on submit and clear each error as the visitor fixes it.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
+}

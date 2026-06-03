@@ -1,0 +1,170 @@
+<!-- blog-grid — Sand & Surf. Tailwind utility classes, no React. -->
+<section aria-label="Latest blog posts" class="bg-[#fbf7f0] py-20 text-[#1c2b33] sm:py-28">
+  <div class="mx-auto max-w-6xl px-6">
+    <!-- Header -->
+    <div class="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+      <div class="max-w-2xl">
+        <p class="text-sm font-semibold uppercase tracking-[0.18em] text-[#1f8a8a]">From the journal</p>
+        <h2 class="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">Notes from the studio</h2>
+        <p class="mt-4 text-lg leading-relaxed text-[#4a5d66]">Field notes on shipping fast, building accessible interfaces, and handing off work clients can actually run.</p>
+      </div>
+      <a href="#blog" class="group inline-flex shrink-0 items-center gap-2 rounded-lg border border-[#0f5c5c]/30 px-4 py-2.5 text-sm font-semibold text-[#0f5c5c] transition hover:border-[#0f5c5c] hover:bg-[#0f5c5c] hover:text-[#f4ece0] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1f8a8a] focus-visible:ring-offset-2 focus-visible:ring-offset-[#fbf7f0]">
+        View all posts
+        <svg class="h-4 w-4 transition group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+      </a>
+    </div>
+
+    <!-- Grid -->
+    <ul role="list" class="mt-14 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+      <!-- Post -->
+      <li class="h-full">
+        <article class="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-[#ece0cd] bg-[#f4ece0]/50 transition duration-200 hover:-translate-y-1 hover:border-[#2ec3c3]/50 hover:bg-white hover:shadow-[0_20px_44px_-24px_rgba(15,92,92,0.5)] focus-within:-translate-y-1 focus-within:border-[#2ec3c3]/50">
+          <div class="relative aspect-[16/10] overflow-hidden bg-[#0f5c5c]">
+            <div class="h-full w-full transition duration-300 group-hover:scale-[1.03]">
+              <svg class="h-full w-full" viewBox="0 0 480 300" preserveAspectRatio="xMidYMid slice" role="img" aria-hidden="true"><defs><linearGradient id="bgc-0" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1f8a8a"/><stop offset="100%" stop-color="#0f5c5c"/></linearGradient></defs><rect width="480" height="300" fill="url(#bgc-0)"/><g fill="none" stroke="rgba(244,236,224,0.30)" stroke-width="1.5"><circle cx="380" cy="70" r="120"/><circle cx="380" cy="70" r="76"/><circle cx="380" cy="70" r="34"/></g><text x="36" y="250" fill="rgba(244,236,224,0.92)" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="34" font-weight="700" letter-spacing="-1">~&lt;</text></svg>
+            </div>
+            <span class="absolute left-4 top-4 inline-flex items-center rounded-full bg-[#fbf7f0]/95 px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-[#0f5c5c] shadow-sm backdrop-blur">Process</span>
+          </div>
+          <div class="flex flex-1 flex-col p-6">
+            <h3 class="text-lg font-semibold leading-snug tracking-tight text-[#1c2b33]">
+              <a href="#article-ship-without-rewrite" class="transition before:absolute before:inset-0 hover:text-[#0f5c5c] focus:outline-none focus-visible:underline focus-visible:decoration-[#1f8a8a] focus-visible:underline-offset-4">How we ship a marketing site without a six-month rewrite</a>
+            </h3>
+            <p class="mt-2 text-[15px] leading-relaxed text-[#4a5d66]">A look at the tight, visible sprint cadence we use to get clients a live staging link in week one — and why owning your own code matters.</p>
+            <div class="mt-5 flex items-center gap-3 border-t border-[#ece0cd] pt-4 text-sm text-[#4a5d66]">
+              <span aria-hidden="true" class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#0f5c5c] text-xs font-bold uppercase text-[#f4ece0]">MC</span>
+              <div class="min-w-0">
+                <p class="truncate font-medium text-[#1c2b33]">Mona Chayo</p>
+                <p class="truncate text-[13px]"><time datetime="2026-05-28">May 28, 2026</time><span aria-hidden="true"> &middot; </span>6 min read</p>
+              </div>
+            </div>
+          </div>
+        </article>
+      </li>
+
+      <!-- Post -->
+      <li class="h-full">
+        <article class="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-[#ece0cd] bg-[#f4ece0]/50 transition duration-200 hover:-translate-y-1 hover:border-[#2ec3c3]/50 hover:bg-white hover:shadow-[0_20px_44px_-24px_rgba(15,92,92,0.5)] focus-within:-translate-y-1 focus-within:border-[#2ec3c3]/50">
+          <div class="relative aspect-[16/10] overflow-hidden bg-[#0f5c5c]">
+            <div class="h-full w-full transition duration-300 group-hover:scale-[1.03]">
+              <svg class="h-full w-full" viewBox="0 0 480 300" preserveAspectRatio="xMidYMid slice" role="img" aria-hidden="true"><defs><linearGradient id="bgc-1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#2ec3c3"/><stop offset="100%" stop-color="#1f8a8a"/></linearGradient></defs><rect width="480" height="300" fill="url(#bgc-1)"/><g fill="none" stroke="rgba(244,236,224,0.30)" stroke-width="1.5"><circle cx="380" cy="70" r="120"/><circle cx="380" cy="70" r="76"/><circle cx="380" cy="70" r="34"/></g><text x="36" y="250" fill="rgba(244,236,224,0.92)" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="34" font-weight="700" letter-spacing="-1">~&lt;</text></svg>
+            </div>
+            <span class="absolute left-4 top-4 inline-flex items-center rounded-full bg-[#fbf7f0]/95 px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-[#0f5c5c] shadow-sm backdrop-blur">Engineering</span>
+          </div>
+          <div class="flex flex-1 flex-col p-6">
+            <h3 class="text-lg font-semibold leading-snug tracking-tight text-[#1c2b33]">
+              <a href="#article-tailwind-tokens" class="transition before:absolute before:inset-0 hover:text-[#0f5c5c] focus:outline-none focus-visible:underline focus-visible:decoration-[#1f8a8a] focus-visible:underline-offset-4">Design tokens in Tailwind that survive a rebrand</a>
+            </h3>
+            <p class="mt-2 text-[15px] leading-relaxed text-[#4a5d66]">When a brand renames itself mid-build, hard-coded hex values become a liability. Here is the token layer we wish every project started with.</p>
+            <div class="mt-5 flex items-center gap-3 border-t border-[#ece0cd] pt-4 text-sm text-[#4a5d66]">
+              <span aria-hidden="true" class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#0f5c5c] text-xs font-bold uppercase text-[#f4ece0]">MC</span>
+              <div class="min-w-0">
+                <p class="truncate font-medium text-[#1c2b33]">Mona Chayo</p>
+                <p class="truncate text-[13px]"><time datetime="2026-05-14">May 14, 2026</time><span aria-hidden="true"> &middot; </span>9 min read</p>
+              </div>
+            </div>
+          </div>
+        </article>
+      </li>
+
+      <!-- Post -->
+      <li class="h-full">
+        <article class="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-[#ece0cd] bg-[#f4ece0]/50 transition duration-200 hover:-translate-y-1 hover:border-[#2ec3c3]/50 hover:bg-white hover:shadow-[0_20px_44px_-24px_rgba(15,92,92,0.5)] focus-within:-translate-y-1 focus-within:border-[#2ec3c3]/50">
+          <div class="relative aspect-[16/10] overflow-hidden bg-[#0f5c5c]">
+            <div class="h-full w-full transition duration-300 group-hover:scale-[1.03]">
+              <svg class="h-full w-full" viewBox="0 0 480 300" preserveAspectRatio="xMidYMid slice" role="img" aria-hidden="true"><defs><linearGradient id="bgc-2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0f5c5c"/><stop offset="100%" stop-color="#1c2b33"/></linearGradient></defs><rect width="480" height="300" fill="url(#bgc-2)"/><g fill="none" stroke="rgba(244,236,224,0.30)" stroke-width="1.5"><circle cx="380" cy="70" r="120"/><circle cx="380" cy="70" r="76"/><circle cx="380" cy="70" r="34"/></g><text x="36" y="250" fill="rgba(244,236,224,0.92)" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="34" font-weight="700" letter-spacing="-1">~&lt;</text></svg>
+            </div>
+            <span class="absolute left-4 top-4 inline-flex items-center rounded-full bg-[#fbf7f0]/95 px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-[#0f5c5c] shadow-sm backdrop-blur">Accessibility</span>
+          </div>
+          <div class="flex flex-1 flex-col p-6">
+            <h3 class="text-lg font-semibold leading-snug tracking-tight text-[#1c2b33]">
+              <a href="#article-accessible-by-default" class="transition before:absolute before:inset-0 hover:text-[#0f5c5c] focus:outline-none focus-visible:underline focus-visible:decoration-[#1f8a8a] focus-visible:underline-offset-4">Accessible by default: the checklist we run before launch</a>
+            </h3>
+            <p class="mt-2 text-[15px] leading-relaxed text-[#4a5d66]">Focus states, contrast ratios, and real keyboard paths are not extras. This is the pre-flight list that keeps every visitor in the door.</p>
+            <div class="mt-5 flex items-center gap-3 border-t border-[#ece0cd] pt-4 text-sm text-[#4a5d66]">
+              <span aria-hidden="true" class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#0f5c5c] text-xs font-bold uppercase text-[#f4ece0]">SD</span>
+              <div class="min-w-0">
+                <p class="truncate font-medium text-[#1c2b33]">Sterre de Wit</p>
+                <p class="truncate text-[13px]"><time datetime="2026-04-30">April 30, 2026</time><span aria-hidden="true"> &middot; </span>5 min read</p>
+              </div>
+            </div>
+          </div>
+        </article>
+      </li>
+
+      <!-- Post -->
+      <li class="h-full">
+        <article class="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-[#ece0cd] bg-[#f4ece0]/50 transition duration-200 hover:-translate-y-1 hover:border-[#2ec3c3]/50 hover:bg-white hover:shadow-[0_20px_44px_-24px_rgba(15,92,92,0.5)] focus-within:-translate-y-1 focus-within:border-[#2ec3c3]/50">
+          <div class="relative aspect-[16/10] overflow-hidden bg-[#0f5c5c]">
+            <div class="h-full w-full transition duration-300 group-hover:scale-[1.03]">
+              <svg class="h-full w-full" viewBox="0 0 480 300" preserveAspectRatio="xMidYMid slice" role="img" aria-hidden="true"><defs><linearGradient id="bgc-3" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1f8a8a"/><stop offset="100%" stop-color="#2ec3c3"/></linearGradient></defs><rect width="480" height="300" fill="url(#bgc-3)"/><g fill="none" stroke="rgba(244,236,224,0.30)" stroke-width="1.5"><circle cx="380" cy="70" r="120"/><circle cx="380" cy="70" r="76"/><circle cx="380" cy="70" r="34"/></g><text x="36" y="250" fill="rgba(244,236,224,0.92)" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="34" font-weight="700" letter-spacing="-1">~&lt;</text></svg>
+            </div>
+            <span class="absolute left-4 top-4 inline-flex items-center rounded-full bg-[#fbf7f0]/95 px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-[#0f5c5c] shadow-sm backdrop-blur">Product</span>
+          </div>
+          <div class="flex flex-1 flex-col p-6">
+            <h3 class="text-lg font-semibold leading-snug tracking-tight text-[#1c2b33]">
+              <a href="#article-cms-clients-can-run" class="transition before:absolute before:inset-0 hover:text-[#0f5c5c] focus:outline-none focus-visible:underline focus-visible:decoration-[#1f8a8a] focus-visible:underline-offset-4">Building a CMS your client's team can actually run</a>
+            </h3>
+            <p class="mt-2 text-[15px] leading-relaxed text-[#4a5d66]">Hand-off is where most projects quietly fail. We share the content model and editor guardrails that keep non-technical teams confident.</p>
+            <div class="mt-5 flex items-center gap-3 border-t border-[#ece0cd] pt-4 text-sm text-[#4a5d66]">
+              <span aria-hidden="true" class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#0f5c5c] text-xs font-bold uppercase text-[#f4ece0]">MC</span>
+              <div class="min-w-0">
+                <p class="truncate font-medium text-[#1c2b33]">Mona Chayo</p>
+                <p class="truncate text-[13px]"><time datetime="2026-04-18">April 18, 2026</time><span aria-hidden="true"> &middot; </span>7 min read</p>
+              </div>
+            </div>
+          </div>
+        </article>
+      </li>
+
+      <!-- Post -->
+      <li class="h-full">
+        <article class="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-[#ece0cd] bg-[#f4ece0]/50 transition duration-200 hover:-translate-y-1 hover:border-[#2ec3c3]/50 hover:bg-white hover:shadow-[0_20px_44px_-24px_rgba(15,92,92,0.5)] focus-within:-translate-y-1 focus-within:border-[#2ec3c3]/50">
+          <div class="relative aspect-[16/10] overflow-hidden bg-[#0f5c5c]">
+            <div class="h-full w-full transition duration-300 group-hover:scale-[1.03]">
+              <svg class="h-full w-full" viewBox="0 0 480 300" preserveAspectRatio="xMidYMid slice" role="img" aria-hidden="true"><defs><linearGradient id="bgc-4" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0f5c5c"/><stop offset="100%" stop-color="#1f8a8a"/></linearGradient></defs><rect width="480" height="300" fill="url(#bgc-4)"/><g fill="none" stroke="rgba(244,236,224,0.30)" stroke-width="1.5"><circle cx="380" cy="70" r="120"/><circle cx="380" cy="70" r="76"/><circle cx="380" cy="70" r="34"/></g><text x="36" y="250" fill="rgba(244,236,224,0.92)" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="34" font-weight="700" letter-spacing="-1">~&lt;</text></svg>
+            </div>
+            <span class="absolute left-4 top-4 inline-flex items-center rounded-full bg-[#fbf7f0]/95 px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-[#0f5c5c] shadow-sm backdrop-blur">Performance</span>
+          </div>
+          <div class="flex flex-1 flex-col p-6">
+            <h3 class="text-lg font-semibold leading-snug tracking-tight text-[#1c2b33]">
+              <a href="#article-core-web-vitals" class="transition before:absolute before:inset-0 hover:text-[#0f5c5c] focus:outline-none focus-visible:underline focus-visible:decoration-[#1f8a8a] focus-visible:underline-offset-4">Chasing Core Web Vitals without chasing your tail</a>
+            </h3>
+            <p class="mt-2 text-[15px] leading-relaxed text-[#4a5d66]">A pragmatic guide to LCP, CLS, and INP for small teams — what to measure, what to ignore, and the three fixes that move the needle most.</p>
+            <div class="mt-5 flex items-center gap-3 border-t border-[#ece0cd] pt-4 text-sm text-[#4a5d66]">
+              <span aria-hidden="true" class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#0f5c5c] text-xs font-bold uppercase text-[#f4ece0]">SD</span>
+              <div class="min-w-0">
+                <p class="truncate font-medium text-[#1c2b33]">Sterre de Wit</p>
+                <p class="truncate text-[13px]"><time datetime="2026-04-02">April 2, 2026</time><span aria-hidden="true"> &middot; </span>8 min read</p>
+              </div>
+            </div>
+          </div>
+        </article>
+      </li>
+
+      <!-- Post -->
+      <li class="h-full">
+        <article class="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-[#ece0cd] bg-[#f4ece0]/50 transition duration-200 hover:-translate-y-1 hover:border-[#2ec3c3]/50 hover:bg-white hover:shadow-[0_20px_44px_-24px_rgba(15,92,92,0.5)] focus-within:-translate-y-1 focus-within:border-[#2ec3c3]/50">
+          <div class="relative aspect-[16/10] overflow-hidden bg-[#0f5c5c]">
+            <div class="h-full w-full transition duration-300 group-hover:scale-[1.03]">
+              <svg class="h-full w-full" viewBox="0 0 480 300" preserveAspectRatio="xMidYMid slice" role="img" aria-hidden="true"><defs><linearGradient id="bgc-5" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1c2b33"/><stop offset="100%" stop-color="#0f5c5c"/></linearGradient></defs><rect width="480" height="300" fill="url(#bgc-5)"/><g fill="none" stroke="rgba(244,236,224,0.30)" stroke-width="1.5"><circle cx="380" cy="70" r="120"/><circle cx="380" cy="70" r="76"/><circle cx="380" cy="70" r="34"/></g><text x="36" y="250" fill="rgba(244,236,224,0.92)" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="34" font-weight="700" letter-spacing="-1">~&lt;</text></svg>
+            </div>
+            <span class="absolute left-4 top-4 inline-flex items-center rounded-full bg-[#fbf7f0]/95 px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-[#0f5c5c] shadow-sm backdrop-blur">Studio</span>
+          </div>
+          <div class="flex flex-1 flex-col p-6">
+            <h3 class="text-lg font-semibold leading-snug tracking-tight text-[#1c2b33]">
+              <a href="#article-scope-without-friction" class="transition before:absolute before:inset-0 hover:text-[#0f5c5c] focus:outline-none focus-visible:underline focus-visible:decoration-[#1f8a8a] focus-visible:underline-offset-4">Pricing a build so scope changes don't end the relationship</a>
+            </h3>
+            <p class="mt-2 text-[15px] leading-relaxed text-[#4a5d66]">Fixed bids fight the work; pure hourly scares clients. Here is the milestone-based model we use to keep trust and momentum intact.</p>
+            <div class="mt-5 flex items-center gap-3 border-t border-[#ece0cd] pt-4 text-sm text-[#4a5d66]">
+              <span aria-hidden="true" class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#0f5c5c] text-xs font-bold uppercase text-[#f4ece0]">MC</span>
+              <div class="min-w-0">
+                <p class="truncate font-medium text-[#1c2b33]">Mona Chayo</p>
+                <p class="truncate text-[13px]"><time datetime="2026-03-21">March 21, 2026</time><span aria-hidden="true"> &middot; </span>6 min read</p>
+              </div>
+            </div>
+          </div>
+        </article>
+      </li>
+    </ul>
+  </div>
+</section>

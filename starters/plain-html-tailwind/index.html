@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en" data-palette="sand-surf" data-mode="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>saltycodestudio — plain HTML + Tailwind starter</title>
+  <meta name="description" content="A no-build starter skeleton for saltycodestudio. Tailwind via Play CDN, brand tokens, foundations CSS — just open index.html." />
+
+  <!--
+    ════════════════════════════════════════════════════════════════════════
+    saltycodestudio · NO-BUILD STARTER  ("Sand & Surf")
+    ────────────────────────────────────────────────────────────────────────
+    This page works by *double-clicking* it — no npm, no bundler, no server.
+    It loads Tailwind from the Play CDN and the brand foundations as plain
+    <link> stylesheets. See README.md for how to drop in parts and how to
+    graduate to a real build when the CDN warning starts to matter.
+    ════════════════════════════════════════════════════════════════════════
+  -->
+
+  <!-- ─────────────────────────────────────────────────────────────────────
+       1 · FONTS — brand pairing #2 "Modern-tech": Space Grotesk (display)
+            + Inter (body) + JetBrains Mono (labels / code / eyebrows).
+            Matches foundations/font-pairings.md and tokens.css.
+       ───────────────────────────────────────────────────────────────────── -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- ─────────────────────────────────────────────────────────────────────
+       2 · FOUNDATIONS — the shared design layer for saltycodestudio-parts.
+            Path is relative: this file lives at
+              starters/plain-html-tailwind/index.html
+            so foundations live two levels up.
+
+            NOTE — Tailwind pairing: we deliberately SKIP base.css here,
+            because Tailwind's Play-CDN Preflight already resets the page;
+            stacking two resets fights itself (see foundations/README.md).
+            Order matters: tokens first (everything reads its vars), then
+            typography + palettes; the "win the cascade" layers (shadows,
+            gradients, motion) load AFTER Tailwind below.
+       ───────────────────────────────────────────────────────────────────── -->
+  <link rel="stylesheet" href="../../foundations/tokens.css" />
+  <link rel="stylesheet" href="../../foundations/typography.css" />
+  <link rel="stylesheet" href="../../foundations/palettes.css" />
+
+  <!-- ─────────────────────────────────────────────────────────────────────
+       3 · TAILWIND — Play CDN (prototyping only; not for production).
+            https://cdn.tailwindcss.com
+            Pinned to v3 so the inline `tailwind.config` syntax below is
+            guaranteed to be valid (v4 dropped the JS-config + CDN config
+            object). The ?plugins= param is how the Play CDN enables
+            first-party plugins.
+       ───────────────────────────────────────────────────────────────────── -->
+  <script src="https://cdn.tailwindcss.com/3.4.16?plugins=forms,typography"></script>
+
+  <!-- ─────────────────────────────────────────────────────────────────────
+       4 · INLINE TAILWIND CONFIG — brand colors + fonts mirrored from
+            foundations/tokens.css and foundations/tailwind.preset.js.
+
+            Why hard-coded hex (not rgb(var(--…))) here?  The Play CDN parses
+            this object once at load, before it can rely on our CSS vars, so
+            literal hex is the robust, self-contained choice for a no-build
+            file. The values are kept 1:1 with tokens.css — if you change a
+            brand color, change it in BOTH places (or move to the build step,
+            which reads tailwind.preset.js directly and stays in sync).
+
+            Color names match the preset so components copied from
+            ../../components keep working: sand, sand-2, surface, teal, ink,
+            coral, sky, white, plus the brand.* aliases.
+       ───────────────────────────────────────────────────────────────────── -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            // Canvas / surfaces
+            sand: {
+              DEFAULT: '#F2EBDD', // warm sand — page canvas
+              2: '#EAE1CF',       // second sand — raised / inset surface
+            },
+            surface: '#F2EBDD',          // alias for the sand canvas
+            'surface-raised': '#EAE1CF',
+
+            // Ink / primary
+            teal: '#0E3A40',  // headings, body on sand, logomark
+            ink: '#1C2B2E',   // deep text, dark surface, borders
+
+            // Accents
+            coral: '#FF6F59', // CTA — exactly ONE accent per view
+            sky: '#4FA8C9',   // supporting accent, tags
+
+            white: '#FFFFFF', // on-coral / on-teal text
+
+            // Semantic aliases (handy, readable in markup)
+            brand: {
+              canvas: '#F2EBDD',
+              ink: '#0E3A40',
+              accent: '#FF6F59',
+              'accent-2': '#4FA8C9',
+              dark: '#1C2B2E',
+            },
+          },
+          fontFamily: {
+            display: ['"Space Grotesk"', 'system-ui', 'sans-serif'],
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            body: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'monospace'],
+          },
+          // Mirrors the brand shadow + the CTA coral glow from tokens.css.
+          boxShadow: {
+            coral: '0 8px 24px -6px rgb(255 111 89 / 0.45)',
+          },
+          borderRadius: {
+            pill: '999px',
+          },
+          // Reveal animation used by the IntersectionObserver in main.js.
+          keyframes: {
+            'fade-up': {
+              '0%': { opacity: '0', transform: 'translateY(16px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            },
+          },
+          animation: {
+            'fade-up': 'fade-up 0.5s cubic-bezier(0.22,1,0.36,1) both',
+          },
+        },
+      },
+    };
+  </script>
+
+  <!-- ─────────────────────────────────────────────────────────────────────
+       5 · FOUNDATIONS THAT WIN THE CASCADE — loaded after Tailwind so their
+            utility classes (.surface-card, .text-gradient, gradient bgs,
+            .anim-* motion) override Preflight where intended.
+            Then YOUR overrides last so the project always wins.
+       ───────────────────────────────────────────────────────────────────── -->
+  <link rel="stylesheet" href="../../foundations/shadows.css" />
+  <link rel="stylesheet" href="../../foundations/gradients.css" />
+  <link rel="stylesheet" href="../../foundations/motion.css" />
+
+  <!-- 6 · PROJECT STYLES — your overrides + foundations re-import (see file). -->
+  <link rel="stylesheet" href="./assets/styles.css" />
+</head>
+
+<!--
+  Body uses Tailwind brand utilities (from the inline config above) for the
+  canvas + ink, and the brand display/body fonts. `antialiased` smooths type.
+-->
+<body class="bg-sand text-teal font-body antialiased min-h-screen flex flex-col">
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       NAV — sticky, translucent, blurred. The mobile menu is wired up
+       progressively in assets/main.js (it stays a plain anchor list if JS
+       is off). The ~< logomark is the brand wave-meets-bracket mark.
+       ══════════════════════════════════════════════════════════════════════ -->
+  <header
+    class="sticky top-0 z-40 border-b border-teal/10 bg-sand/80 backdrop-blur-md"
+    data-nav
+  >
+    <nav class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+      <!-- Logomark + wordmark -->
+      <a href="#top" class="group flex items-center gap-2" aria-label="saltycodestudio home">
+        <span
+          class="font-mono text-2xl font-medium leading-none text-coral transition-transform duration-300 group-hover:-translate-y-0.5"
+          aria-hidden="true"
+        >~&lt;</span>
+        <span class="font-display text-lg font-semibold tracking-tight text-teal">
+          saltycodestudio
+        </span>
+      </a>
+
+      <!-- Desktop links -->
+      <ul class="hidden items-center gap-8 md:flex">
+        <li><a href="#work" class="text-sm font-medium text-teal/80 transition-colors hover:text-teal">Work</a></li>
+        <li><a href="#approach" class="text-sm font-medium text-teal/80 transition-colors hover:text-teal">Approach</a></li>
+        <li><a href="#about" class="text-sm font-medium text-teal/80 transition-colors hover:text-teal">About</a></li>
+        <li>
+          <a
+            href="#contact"
+            class="inline-flex items-center rounded-pill bg-coral px-4 py-2 text-sm font-semibold text-white shadow-coral transition-transform hover:-translate-y-0.5"
+          >Start a project</a>
+        </li>
+      </ul>
+
+      <!-- Mobile toggle — enhanced by main.js; hidden on desktop -->
+      <button
+        type="button"
+        class="inline-flex items-center justify-center rounded-md p-2 text-teal md:hidden"
+        data-nav-toggle
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        aria-label="Toggle navigation menu"
+      >
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+    </nav>
+
+    <!-- Mobile menu — open/close toggled by main.js via [hidden] -->
+    <div id="mobile-menu" class="border-t border-teal/10 md:hidden" data-nav-menu hidden>
+      <ul class="space-y-1 px-6 py-4">
+        <li><a href="#work" class="block rounded-md px-2 py-2 text-teal/80 hover:bg-sand-2 hover:text-teal">Work</a></li>
+        <li><a href="#approach" class="block rounded-md px-2 py-2 text-teal/80 hover:bg-sand-2 hover:text-teal">Approach</a></li>
+        <li><a href="#about" class="block rounded-md px-2 py-2 text-teal/80 hover:bg-sand-2 hover:text-teal">About</a></li>
+        <li><a href="#contact" class="block rounded-md px-2 py-2 font-semibold text-coral">Start a project</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main id="top" class="flex-1">
+
+    <!-- ════════════════════════════════════════════════════════════════════
+         HERO — clean, generous whitespace, one coral accent (the CTA).
+         The [data-reveal] elements fade up via IntersectionObserver in
+         main.js; without JS they're simply visible (no content stranded).
+         ════════════════════════════════════════════════════════════════════ -->
+    <section class="relative overflow-hidden">
+      <!-- Soft ambient wash from foundations/gradients.css, kept subtle. -->
+      <div class="pointer-events-none absolute inset-0 -z-10 opacity-60 mesh-gradient" aria-hidden="true"></div>
+
+      <div class="mx-auto max-w-6xl px-6 py-24 sm:py-32">
+        <p class="mb-5 font-mono text-xs uppercase tracking-[0.2em] text-sky" data-reveal>
+          Coastal × tech web studio
+        </p>
+
+        <h1
+          class="max-w-3xl font-display text-4xl font-semibold leading-tight tracking-tight text-teal sm:text-5xl lg:text-6xl"
+          data-reveal
+        >
+          Clean code,<br /> warm coast.
+        </h1>
+
+        <p class="mt-6 max-w-xl text-lg leading-relaxed text-teal/80" data-reveal>
+          We design and build calm, fast websites for brands that want to feel
+          considered — not templated. Strategy, design, and engineering under one tide.
+        </p>
+
+        <div class="mt-10 flex flex-wrap items-center gap-4" data-reveal>
+          <a
+            href="#contact"
+            class="inline-flex items-center gap-2 rounded-pill bg-coral px-6 py-3 font-semibold text-white shadow-coral transition-transform hover:-translate-y-0.5"
+          >
+            Start a project
+            <span aria-hidden="true">→</span>
+          </a>
+          <a
+            href="#work"
+            class="inline-flex items-center gap-2 rounded-pill border border-teal/20 px-6 py-3 font-semibold text-teal transition-colors hover:bg-sand-2"
+          >
+            See our work
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════════════════
+         CONTENT PLACEHOLDER — drop sections from ../../sections here, and
+         components from ../../components inline. Three teaser cards stand in
+         until you replace them. (See README.md → "Dropping in parts".)
+         ════════════════════════════════════════════════════════════════════ -->
+    <section id="work" class="mx-auto max-w-6xl px-6 py-20">
+      <h2 class="font-display text-2xl font-semibold tracking-tight text-teal sm:text-3xl" data-reveal>
+        Selected work
+      </h2>
+      <p class="mt-3 max-w-lg text-teal/70" data-reveal>
+        Replace these placeholders with a section from <code class="font-mono text-sm text-ink">../../sections</code>.
+      </p>
+
+      <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <!-- surface-card + elevation-* come from foundations/shadows.css -->
+        <article class="surface-card rounded-xl p-6" data-reveal>
+          <span class="font-mono text-xs uppercase tracking-widest text-sky">01</span>
+          <h3 class="mt-2 font-display text-lg font-semibold text-teal">Brand site</h3>
+          <p class="mt-2 text-sm leading-relaxed text-teal/70">A placeholder card — swap for a real case study or a parts-bin section.</p>
+        </article>
+        <article class="surface-card rounded-xl p-6" data-reveal>
+          <span class="font-mono text-xs uppercase tracking-widest text-sky">02</span>
+          <h3 class="mt-2 font-display text-lg font-semibold text-teal">Web app</h3>
+          <p class="mt-2 text-sm leading-relaxed text-teal/70">A placeholder card — swap for a real case study or a parts-bin section.</p>
+        </article>
+        <article class="surface-card rounded-xl p-6" data-reveal>
+          <span class="font-mono text-xs uppercase tracking-widest text-sky">03</span>
+          <h3 class="mt-2 font-display text-lg font-semibold text-teal">Design system</h3>
+          <p class="mt-2 text-sm leading-relaxed text-teal/70">A placeholder card — swap for a real case study or a parts-bin section.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- A second anchor target so the nav links resolve cleanly. -->
+    <section id="approach" class="bg-sand-2/60">
+      <div class="mx-auto max-w-6xl px-6 py-20">
+        <h2 class="font-display text-2xl font-semibold tracking-tight text-teal sm:text-3xl" data-reveal>Our approach</h2>
+        <p class="mt-3 max-w-2xl text-lg leading-relaxed text-teal/80" data-reveal>
+          Drop another <code class="font-mono text-sm text-ink">../../sections</code> block here — an
+          about strip, a process timeline, pricing, testimonials. Everything you
+          paste inherits the brand tokens automatically.
+        </p>
+      </div>
+    </section>
+
+    <!-- Contact anchor for the CTAs above. -->
+    <section id="contact" class="mx-auto max-w-6xl px-6 py-20" aria-labelledby="contact-h">
+      <div class="surface-card rounded-2xl px-8 py-12 text-center" data-reveal>
+        <h2 id="contact-h" class="font-display text-2xl font-semibold tracking-tight text-teal sm:text-3xl">
+          Let's build something that lasts.
+        </h2>
+        <p class="mx-auto mt-3 max-w-md text-teal/70">Tell us about the project and we'll reply within a day.</p>
+        <a
+          href="mailto:hello@saltycodestudio.com"
+          class="mt-8 inline-flex items-center gap-2 rounded-pill bg-coral px-6 py-3 font-semibold text-white shadow-coral transition-transform hover:-translate-y-0.5"
+        >
+          hello@saltycodestudio.com
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       FOOTER — dark driftwood-ink surface for contrast against the sand page.
+       ══════════════════════════════════════════════════════════════════════ -->
+  <footer id="about" class="bg-ink text-sand">
+    <div class="mx-auto flex max-w-6xl flex-col gap-8 px-6 py-14 sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <a href="#top" class="flex items-center gap-2" aria-label="saltycodestudio home">
+          <span class="font-mono text-xl font-medium leading-none text-coral" aria-hidden="true">~&lt;</span>
+          <span class="font-display text-base font-semibold tracking-tight">saltycodestudio</span>
+        </a>
+        <p class="mt-3 max-w-xs text-sm text-sand/60">Clean code, warm coast. A coastal × tech web design and development studio.</p>
+      </div>
+
+      <ul class="flex flex-wrap gap-x-8 gap-y-2 text-sm text-sand/70">
+        <li><a href="#work" class="transition-colors hover:text-sand">Work</a></li>
+        <li><a href="#approach" class="transition-colors hover:text-sand">Approach</a></li>
+        <li><a href="#contact" class="transition-colors hover:text-sand">Contact</a></li>
+      </ul>
+    </div>
+
+    <div class="border-t border-sand/10">
+      <p class="mx-auto max-w-6xl px-6 py-5 text-xs text-sand/50">
+        © <span data-year>2026</span> saltycodestudio. Built no-build.
+      </p>
+    </div>
+  </footer>
+
+  <!-- Progressive-enhancement JS. `defer` so it never blocks first paint. -->
+  <script src="./assets/main.js" defer></script>
+</body>
+</html>

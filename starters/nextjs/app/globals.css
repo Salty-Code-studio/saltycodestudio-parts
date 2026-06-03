@@ -1,0 +1,54 @@
+/* ============================================================================
+ * saltycodestudio — global stylesheet (Next.js App Router)
+ * ----------------------------------------------------------------------------
+ * Brings the shared brand foundations (../../foundations) together with
+ * Tailwind's layers, in the exact order the foundations README prescribes:
+ *
+ *   1. tokens / typography / palettes  -> BEFORE @tailwind, so the preset can
+ *      resolve its --rgb-* color channels and the type scale exists.
+ *   2. @tailwind base / components / utilities.
+ *   3. shadows / gradients / motion    -> AFTER, so their utility classes win
+ *      the cascade over Tailwind's.
+ *
+ * We intentionally DO NOT import foundations/base.css: Tailwind's Preflight
+ * (pulled in by `@tailwind base`) already resets the page, and stacking two
+ * resets fights itself.
+ *
+ * The `@import` paths are relative to THIS file (app/globals.css):
+ *   app/  -> ../  = project root  -> ../../foundations  = repo foundations.
+ * postcss-import (see postcss.config.mjs) inlines these at build time.
+ * ========================================================================== */
+
+/* 1 ── tokens & type, before Tailwind ───────────────────────────────────── */
+@import "../../../foundations/tokens.css"; /* palette + scales (must be first) */
+@import "../../../foundations/typography.css"; /* fluid type scale */
+@import "../../../foundations/palettes.css"; /* semantic data-palette themes */
+
+/* 2 ── Tailwind layers ──────────────────────────────────────────────────── */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 3 ── elevation, gradients & motion, after Tailwind ────────────────────── */
+@import "../../../foundations/shadows.css";
+@import "../../../foundations/gradients.css";
+@import "../../../foundations/motion.css";
+
+/* ──────────────────────────────────────────────────────────────────────────
+ * Project-local base styles. Keep this tiny — the foundations do the heavy
+ * lifting. We just paint the brand canvas/ink onto the document so the page
+ * has the Sand & Surf look before any component mounts.
+ * ────────────────────────────────────────────────────────────────────────── */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    /* tokens.css defines these channels; the preset exposes them as utilities */
+    background-color: rgb(var(--rgb-warm-sand));
+    color: rgb(var(--rgb-deep-teal));
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+}

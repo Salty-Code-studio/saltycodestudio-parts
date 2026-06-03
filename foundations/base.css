@@ -1,0 +1,269 @@
+/* ==========================================================================
+   base.css — saltycodestudio foundations
+   --------------------------------------------------------------------------
+   A modern, opinionated CSS reset + sensible global defaults.
+
+   Design notes
+   - Pairs with a design-token layer (e.g. tokens.css). Every token reference
+     uses var(--ss-*, fallback) so this file is also safe to drop in on its
+     own: the "Sand & Surf" brand fallbacks below kick in when no tokens are
+     loaded, and any tokens you do define win automatically.
+   - Brand palette (Sand & Surf):
+       --ss-cream #faf6f0   page background
+       --ss-ink   #14202a   primary text
+       --ss-sand  #f4ebe0   warm neutral surface
+       --ss-teal  #2a7f80   accent / focus / selection
+       --ss-deep  #0f2c3a   deep teal for emphasis
+       --ss-soft  #4a5d66   muted / secondary text
+   - Load order: tokens.css  →  base.css  →  components.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Box sizing
+   Inherit border-box everywhere so padding and borders never blow out
+   declared widths. The ::before/::after rules let components opt their
+   pseudo-elements out individually without touching this file.
+   -------------------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* --------------------------------------------------------------------------
+   2. Margin / padding reset
+   Strip the user-agent margins that cause inconsistent vertical rhythm.
+   Spacing should be applied deliberately, not inherited from the browser.
+   -------------------------------------------------------------------------- */
+* {
+  margin: 0;
+}
+
+/* Remove default list indentation/markers only when authoring a custom list
+   (signalled with role="list"); semantic bullet lists keep their markers. */
+ul[role="list"],
+ol[role="list"] {
+  padding: 0;
+  list-style: none;
+}
+
+/* --------------------------------------------------------------------------
+   3. Root + document defaults
+   - Respect the user's smooth-scroll preference (the reduced-motion guard in
+     section 11 turns this off when requested).
+   - Stable scrollbar gutter prevents horizontal layout shift when content
+     grows past a single viewport.
+   - tab-size keeps preformatted code readable.
+   -------------------------------------------------------------------------- */
+:root {
+  -moz-tab-size: 4;
+  tab-size: 4;
+  scroll-behavior: smooth;
+  scrollbar-gutter: stable;
+
+  /* Sand & Surf fallbacks — only used if a token layer hasn't defined them. */
+  color-scheme: light;
+}
+
+/* --------------------------------------------------------------------------
+   4. Body
+   - min-height: 100svh keeps short pages filling the viewport (svh accounts
+     for mobile browser chrome; 100vh is the legacy fallback).
+   - Base color + background + font are pulled from tokens with brand
+     fallbacks so typography and palette are consistent from the first paint.
+   - Antialiasing smooths text rendering on WebKit / Firefox (macOS).
+   - text-rendering optimizes ligatures and kerning for body copy.
+   -------------------------------------------------------------------------- */
+body {
+  min-height: 100vh;
+  min-height: 100svh;
+
+  color: var(--ss-ink, #14202a);
+  background-color: var(--ss-cream, #faf6f0);
+
+  font-family: var(
+    --ss-font-sans,
+    ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif
+  );
+  font-size: var(--ss-font-size-base, 1rem);
+  line-height: var(--ss-line-height-base, 1.6);
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* --------------------------------------------------------------------------
+   5. Headings & text balance
+   - Tighter line-height on headings; long headings stay readable.
+   - text-wrap: balance evens out ragged heading lines (progressive
+     enhancement — ignored by browsers that don't support it).
+   - Paragraphs prefer text-wrap: pretty to avoid orphans/widows.
+   -------------------------------------------------------------------------- */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  line-height: var(--ss-line-height-heading, 1.15);
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+/* Prevent very long, unbreakable strings (URLs, tokens) from overflowing. */
+p,
+li,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+
+/* --------------------------------------------------------------------------
+   6. Media defaults
+   Replaced elements become block-level and never exceed their container.
+   max-width: 100% + height: auto preserves aspect ratio on fluid layouts;
+   vertical-align: middle removes the descender gap under inline images.
+   -------------------------------------------------------------------------- */
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+img,
+video {
+  vertical-align: middle; /* used when an author flips these back to inline */
+}
+
+/* Honour intrinsic dimensions: if both width/height attributes are set,
+   reserve space to reduce layout shift while the asset loads. */
+img[width][height] {
+  height: auto;
+}
+
+/* --------------------------------------------------------------------------
+   7. Forms
+   Form controls don't inherit typography by default — fix that so inputs,
+   buttons, and textareas match surrounding text. Buttons get a sane cursor.
+   -------------------------------------------------------------------------- */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+}
+
+button {
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+/* Allow vertical-only resize on textareas to prevent layout-breaking drags. */
+textarea {
+  resize: vertical;
+}
+
+/* Remove the default inner spinner padding quirks and keep placeholders soft. */
+::placeholder {
+  color: var(--ss-soft, #4a5d66);
+  opacity: 0.7;
+}
+
+/* --------------------------------------------------------------------------
+   8. Lists & anchors
+   - Sensible link color from the accent token with smooth state changes.
+   - Links without an href (placeholders) get no special styling.
+   - Default underline kept for accessibility; offset for legibility.
+   -------------------------------------------------------------------------- */
+a {
+  color: var(--ss-teal, #2a7f80);
+  text-decoration-thickness: max(0.06em, 1px);
+  text-underline-offset: 0.15em;
+  transition: color 0.18s ease;
+}
+
+a:hover {
+  color: var(--ss-deep, #0f2c3a);
+}
+
+a:not([href]) {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Keep nested-list rhythm tidy without forcing a global indentation reset. */
+li > ul,
+li > ol {
+  margin-block: 0.25em;
+}
+
+/* --------------------------------------------------------------------------
+   9. :focus-visible ring
+   Only show a focus ring for keyboard / programmatic focus, never on mouse
+   clicks. A ring (outline + offset) keeps the indicator clear of the element
+   and works on any background. We remove the default outline only where a
+   :focus-visible style replaces it, so non-supporting browsers stay safe.
+   -------------------------------------------------------------------------- */
+:focus-visible {
+  outline: 2px solid var(--ss-teal, #2a7f80);
+  outline-offset: 2px;
+  border-radius: var(--ss-radius-focus, 2px);
+}
+
+/* Drop the legacy outline only when focus-visible is also matched, so we
+   never strip focus styling from browsers lacking :focus-visible support. */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* --------------------------------------------------------------------------
+   10. ::selection
+   Branded highlight. Defined for both ::selection and the legacy
+   ::-moz-selection (older Firefox required a separate rule).
+   -------------------------------------------------------------------------- */
+::selection {
+  background-color: var(--ss-teal, #2a7f80);
+  color: var(--ss-cream, #faf6f0);
+  text-shadow: none;
+}
+
+/* --------------------------------------------------------------------------
+   11. prefers-reduced-motion guard
+   Global escape hatch: when the user asks for reduced motion, near-eliminate
+   animations, transitions, and smooth scrolling. We keep a 0.01ms duration
+   (rather than 0) so animation/transition end events still fire and JS that
+   waits on them doesn't hang.
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>saltycodestudio — A coastal-calm web & product studio</title>
+  <meta name="description" content="saltycodestudio is a small, senior studio that designs and ships fast, accessible websites and products. Clean code, warm coast." />
+
+  <!-- Tailwind Play CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            // Sand & Surf
+            sand:  { DEFAULT: "#fbf7f0", 100: "#fbf7f0", 200: "#f4ece0", 300: "#ece0cd" },
+            ink:   { DEFAULT: "#1c2b33", soft: "#4a5d66" },
+            ocean: { DEFAULT: "#1f8a8a", deep: "#0f5c5c", surf: "#2ec3c3" },
+            coral: { DEFAULT: "#ff6f59", deep: "#f25c45" }
+          },
+          fontFamily: {
+            display: ["'Space Grotesk'", "system-ui", "sans-serif"],
+            sans: ["'Inter'", "system-ui", "sans-serif"],
+            mono: ["'IBM Plex Mono'", "ui-monospace", "monospace"]
+          },
+          maxWidth: { "8xl": "88rem" },
+          keyframes: {
+            marquee: { "0%": { transform: "translateX(0)" }, "100%": { transform: "translateX(-50%)" } },
+            float: { "0%,100%": { transform: "translateY(0)" }, "50%": { transform: "translateY(-10px)" } }
+          },
+          animation: {
+            marquee: "marquee 32s linear infinite",
+            float: "float 7s ease-in-out infinite"
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    /* Scroll-reveal base state; .is-in is added by IntersectionObserver. */
+    .reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
+    .reveal.is-in { opacity: 1; transform: none; }
+    /* Respect users who prefer reduced motion. */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .reveal { opacity: 1 !important; transform: none !important; transition: none; }
+      .animate-marquee, .animate-float { animation: none !important; }
+    }
+    .grain { background-image: radial-gradient(rgba(28,43,51,.045) 1px, transparent 1px); background-size: 4px 4px; }
+    ::selection { background: #2ec3c3; color: #06262a; }
+  </style>
+</head>
+
+<body id="top" class="bg-sand font-sans text-ink antialiased selection:bg-ocean-surf">
+
+  <!-- Skip link -->
+  <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-ink focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-sand">Skip to content</a>
+
+  <!-- ============ NAV ============ -->
+  <header id="nav" class="sticky top-0 z-50 border-b border-transparent transition-colors duration-300">
+    <nav aria-label="Primary" class="mx-auto flex h-16 max-w-8xl items-center justify-between gap-6 px-5 sm:px-8">
+      <a href="#top" class="group flex shrink-0 items-center gap-2.5 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-coral focus-visible:ring-offset-2 focus-visible:ring-offset-sand">
+        <span aria-hidden="true" class="grid h-9 w-9 place-items-center rounded-xl bg-ink font-mono text-lg font-bold leading-none text-sand transition-transform duration-300 group-hover:-rotate-6">~&lt;</span>
+        <span class="font-display text-lg font-bold tracking-tight text-ink">saltycodestudio</span>
+      </a>
+
+      <ul class="hidden items-center gap-1 lg:flex">
+        <li><a href="#services" class="relative rounded-lg px-3 py-2 text-sm font-medium text-ink-soft transition-colors hover:text-ink after:absolute after:inset-x-3 after:-bottom-0.5 after:h-0.5 after:origin-left after:scale-x-0 after:rounded-full after:bg-coral after:transition-transform after:duration-300 hover:after:scale-x-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-coral">Services</a></li>
+        <li><a href="#work" class="relative rounded-lg px-3 py-2 text-sm font-medium text-ink-soft transition-colors hover:text-ink after:absolute after:inset-x-3 after:-bottom-0.5 after:h-0.5 after:origin-left after:scale-x-0 after:rounded-full after:bg-coral after:transition-transform after:duration-300 hover:after:scale-x-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-coral">Work</a></li>
+        <li><a href="#process" class="relative rounded-lg px-3 py-2 text-sm font-medium text-ink-soft transition-colors hover:text-ink after:absolute after:inset-x-3 after:-bottom-0.5 after:h-0.5 after:origin-left after:scale-x-0 after:rounded-full after:bg-coral after:transition-transform after:duration-300 hover:after:scale-x-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-coral">Process</a></li>
+        <li><a href="#voices" class="relative rounded-lg px-3 py-2 text-sm font-medium text-ink-soft transition-colors hover:text-ink after:absolute after:inset-x-3 after:-bottom-0.5 after:h-0.5 after:origin-left after:scale-x-0 after:rounded-full after:bg-coral after:transition-transform after:duration-300 hover:after:scale-x-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-coral">Voices</a></li>
+      </ul>
+
+      <div class="hidden items-center gap-2 lg:flex">
+        <a href="mailto:hello@saltycode.studio" class="rounded-lg px-3 py-2 text-sm font-medium text-ink-soft transition-colors hover:text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-coral">hello@saltycode.studio</a>
+        <a href="#contact" class="rounded-xl bg-coral px-4 py-2 text-sm font-semibold text-ink shadow-sm transition-all hover:-translate-y-0.5 hover:bg-coral-deep hover:text-white hover:shadow-md hover:shadow-coral/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-coral focus-visible:ring-offset-2 focus-visible:ring-offset-sand">Start a project</a>
+      </div>
+
+      <!-- Hamburger -->
+      <button type="button" id="nav-toggle" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu" class="relative grid h-10 w-10 place-items-center rounded-xl text-ink transition-colors hover:bg-ink/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-coral lg:hidden">
+        <span class="sr-only">Open menu</span>
+        <span aria-hidden="true" class="block h-4 w-5">
+          <span data-bar="top" class="absolute left-1/2 top-1/2 h-0.5 w-5 -translate-x-1/2 -translate-y-1.5 rounded-full bg-current transition-transform duration-300"></span>
+          <span data-bar="mid" class="absolute left-1/2 top-1/2 h-0.5 w-5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-current transition-opacity duration-200"></span>
+          <span data-bar="bot" class="absolute left-1/2 top-1/2 h-0.5 w-5 -translate-x-1/2 translate-y-1.5 rounded-full bg-current transition-transform duration-300"></span>
+        </span>
+      </button>
+    </nav>
+
+    <!-- Mobile sheet -->
+    <div id="mobile-menu" class="hidden lg:hidden">
+      <button type="button" data-nav-backdrop aria-label="Close menu" class="fixed inset-0 top-16 z-40 cursor-default bg-ink/20 backdrop-blur-sm"></button>
+      <div class="relative z-50 border-t border-ink/10 bg-sand px-5 pb-6 pt-2 shadow-lg shadow-ink/5">
+        <ul class="flex flex-col">
+          <li><a href="#services" data-nav-link class="block border-b border-ink/10 py-3 text-base font-medium text-ink transition-colors hover:text-coral">Services</a></li>
+          <li><a href="#work" data-nav-link class="block border-b border-ink/10 py-3 text-base font-medium text-ink transition-colors hover:text-coral">Work</a></li>
+          <li><a href="#process" data-nav-link class="block border-b border-ink/10 py-3 text-base font-medium text-ink transition-colors hover:text-coral">Process</a></li>
+          <li><a href="#voices" data-nav-link class="block border-b border-ink/10 py-3 text-base font-medium text-ink transition-colors hover:text-coral">Voices</a></li>
+        </ul>
+        <div class="mt-5 flex flex-col gap-3">
+          <a href="mailto:hello@saltycode.studio" data-nav-link class="rounded-xl border border-ink/15 px-4 py-3 text-center text-sm font-semibold text-ink transition-colors hover:bg-ink/5">hello@saltycode.studio</a>
+          <a href="#contact" data-nav-link class="rounded-xl bg-coral px-4 py-3 text-center text-sm font-semibold text-ink shadow-sm transition-all hover:-translate-y-0.5 hover:bg-coral-deep hover:text-white hover:shadow-md hover:shadow-coral/30">Start a project</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- ============ HERO ============ -->
+    <section class="relative overflow-hidden">
+      <!-- Soft surf glows -->
+      <div aria-hidden="true" class="pointer-events-none absolute -top-40 right-[-10%] h-[34rem] w-[34rem] rounded-full bg-ocean-surf/20 blur-3xl"></div>
+      <div aria-hidden="true" class="pointer-events-none absolute -bottom-48 left-[-12%] h-[34rem] w-[34rem] rounded-full bg-coral/15 blur-3xl"></div>
+      <div aria-hidden="true" class="grain pointer-events-none absolute inset-0 opacity-60"></div>
+
+      <div class="relative mx-auto max-w-8xl px-5 pb-20 pt-16 sm:px-8 sm:pt-20 lg:pb-28 lg:pt-24">
+        <div class="reveal max-w-5xl">
+          <p class="inline-flex items-center gap-2 rounded-full border border-ink/15 bg-white/50 px-4 py-1.5 font-mono text-xs uppercase tracking-[0.18em] text-ink-soft backdrop-blur">
+            <span class="h-1.5 w-1.5 rounded-full bg-ocean"></span>
+            A small, senior web &amp; product studio
+          </p>
+
+          <h1 class="mt-7 font-display text-[2.65rem] font-bold leading-[1.02] tracking-tight text-ink sm:text-6xl lg:text-[5.5rem]">
+            We design the calm.<br class="hidden sm:block" />
+            We ship the <span class="relative inline-block text-coral">
+              code
+              <svg aria-hidden="true" viewBox="0 0 240 18" class="absolute -bottom-2 left-0 h-3 w-full text-ocean-surf" preserveAspectRatio="none"><path d="M2 13 C 60 4, 180 4, 238 13" stroke="currentColor" stroke-width="5" fill="none" stroke-linecap="round"/></svg>
+            </span>.
+          </h1>
+
+          <p class="mt-8 max-w-2xl text-lg leading-relaxed text-ink-soft sm:text-xl">
+            saltycodestudio is a tight team of designers and engineers building fast,
+            accessible websites and digital products. The pace of island time, the rigor
+            of real engineering — no bloat, no buzzwords, just work that ships and holds up.
+          </p>
+
+          <div class="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <a href="#contact" class="group inline-flex items-center justify-center gap-2 rounded-xl bg-ink px-7 py-4 text-base font-semibold text-sand shadow-sm transition-all hover:-translate-y-0.5 hover:bg-ocean-deep hover:shadow-lg hover:shadow-ocean/25 focus:outline-none focus-visible:ring-2 focus-visible:ring-ocean focus-visible:ring-offset-2 focus-visible:ring-offset-sand">
+              Start a project
+              <svg aria-hidden="true" viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4 transition-transform group-hover:translate-x-1"><path fill-rule="evenodd" d="M3 10a.75.75 0 0 1 .75-.75h9.69L9.97 5.78a.75.75 0 1 1 1.06-1.06l4.5 4.5a.75.75 0 0 1 0 1.06l-4.5 4.5a.75.75 0 1 1-1.06-1.06l3.47-3.47H3.75A.75.75 0 0 1 3 10Z" clip-rule="evenodd"/></svg>
+            </a>
+            <a href="#work" class="inline-flex items-center justify-center gap-2 rounded-xl border border-ink/20 bg-white/40 px-7 py-4 text-base font-semibold text-ink backdrop-blur transition hover:border-ink/40 hover:bg-white/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-sand">
+              See selected work
+            </a>
+          </div>
+
+          <!-- Stat band -->
+          <dl class="mt-14 grid max-w-3xl grid-cols-2 gap-x-8 gap-y-8 border-t border-ink/10 pt-10 sm:grid-cols-4">
+            <div>
+              <dd class="font-display text-4xl font-bold tracking-tight text-ink"><span data-count-to="98" data-suffix="">0</span></dd>
+              <dt class="mt-1 text-sm text-ink-soft">Median Lighthouse</dt>
+            </div>
+            <div>
+              <dd class="font-display text-4xl font-bold tracking-tight text-ink"><span data-count-to="11" data-suffix="d">0</span></dd>
+              <dt class="mt-1 text-sm text-ink-soft">Idea to launch</dt>
+            </div>
+            <div>
+              <dd class="font-display text-4xl font-bold tracking-tight text-ink"><span data-count-to="42" data-suffix="+">0</span></dd>
+              <dt class="mt-1 text-sm text-ink-soft">Products shipped</dt>
+            </div>
+            <div>
+              <dd class="font-display text-4xl font-bold tracking-tight text-ink"><span data-count-to="9" data-suffix="yr">0</span></dd>
+              <dt class="mt-1 text-sm text-ink-soft">Years in the water</dt>
+            </div>
+          </dl>
+        </div>
+      </div>
+
+      <!-- Logo marquee -->
+      <div class="relative border-y border-ink/10 bg-sand-200/60 py-6">
+        <p class="sr-only">Studios and founders we have built for</p>
+        <div class="flex w-max animate-marquee items-center gap-14 px-7 text-ink-soft/70" aria-hidden="true">
+          <!-- duplicated set for seamless loop -->
+          <span class="font-display text-lg font-semibold tracking-tight">Harborlight</span>
+          <span class="font-display text-lg font-semibold tracking-tight">Driftwood Co.</span>
+          <span class="font-display text-lg font-semibold tracking-tight">Northpoint</span>
+          <span class="font-display text-lg font-semibold tracking-tight">Saltwater Labs</span>
+          <span class="font-display text-lg font-semibold tracking-tight">Meridian Tide</span>
+          <span class="font-display text-lg font-semibold tracking-tight">Cove &amp; Co.</span>
+          <span class="font-display text-lg font-semibold tracking-tight">Anchor Health</span>
+          <span class="font-display text-lg font-semibold tracking-tight">Harborlight</span>
+          <span class="font-display text-lg font-semibold tracking-tight">Driftwood Co.</span>
+          <span class="font-display text-lg font-semibold tracking-tight">Northpoint</span>
+          <span class="font-display text-lg font-semibold tracking-tight">Saltwater Labs</span>
+          <span class="font-display text-lg font-semibold tracking-tight">Meridian Tide</span>
+          <span class="font-display text-lg font-semibold tracking-tight">Cove &amp; Co.</span>
+          <span class="font-display text-lg font-semibold tracking-tight">Anchor Health</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SERVICES ============ -->
+    <section id="services" class="mx-auto max-w-8xl scroll-mt-20 px-5 py-20 sm:px-8 lg:py-28">
+      <div class="reveal max-w-3xl">
+        <p class="font-mono text-xs uppercase tracking-[0.2em] text-ocean">What we do</p>
+        <h2 class="mt-4 font-display text-3xl font-bold tracking-tight text-ink sm:text-4xl lg:text-5xl">
+          One studio, the whole build — from first sketch to live and fast.
+        </h2>
+        <p class="mt-5 text-lg leading-relaxed text-ink-soft">
+          We keep the team small on purpose. The people who plan your project are the
+          people who design and ship it, so nothing gets lost between hand-offs.
+        </p>
+      </div>
+
+      <div class="mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <!-- card 1 (wide accent) -->
+        <article class="reveal group relative overflow-hidden rounded-3xl bg-ink p-8 text-sand md:col-span-2 lg:col-span-1 lg:row-span-2">
+          <div aria-hidden="true" class="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-ocean-surf/25 blur-2xl transition-transform duration-500 group-hover:scale-125"></div>
+          <span class="relative grid h-12 w-12 place-items-center rounded-2xl bg-ocean-surf/15 text-ocean-surf">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-6 w-6"><path d="m8 3-6 9 6 9M16 3l6 9-6 9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <h3 class="relative mt-6 font-display text-2xl font-bold tracking-tight">Web engineering</h3>
+          <p class="relative mt-3 text-sand-200/85 leading-relaxed">
+            Production front-ends in React, Astro, and edge-rendered frameworks. Type-safe,
+            test-covered, and tuned until the Lighthouse needle pins green.
+          </p>
+          <ul class="relative mt-6 space-y-2 text-sm text-sand-200/80">
+            <li class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-coral"></span> Design systems &amp; component libraries</li>
+            <li class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-coral"></span> Headless CMS &amp; commerce</li>
+            <li class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-coral"></span> Performance &amp; Core Web Vitals</li>
+          </ul>
+        </article>
+
+        <!-- card 2 -->
+        <article class="reveal group rounded-3xl border border-ink/10 bg-white/60 p-8 backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-ocean/30 hover:shadow-xl hover:shadow-ink/5">
+          <span class="grid h-12 w-12 place-items-center rounded-2xl bg-ocean/10 text-ocean transition-transform duration-300 group-hover:-rotate-6">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-6 w-6"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 21V9" stroke-linecap="round"/></svg>
+          </span>
+          <h3 class="mt-6 font-display text-xl font-bold tracking-tight text-ink">Product &amp; UX design</h3>
+          <p class="mt-3 text-ink-soft leading-relaxed">
+            Interface design rooted in real flows — wireframes, prototypes, and a living
+            design system your team can keep building on.
+          </p>
+        </article>
+
+        <!-- card 3 -->
+        <article class="reveal group rounded-3xl border border-ink/10 bg-white/60 p-8 backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-ocean/30 hover:shadow-xl hover:shadow-ink/5">
+          <span class="grid h-12 w-12 place-items-center rounded-2xl bg-coral/15 text-coral transition-transform duration-300 group-hover:-rotate-6">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-6 w-6"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M18 6l-2.5 2.5M8.5 15.5 6 18" stroke-linecap="round"/><circle cx="12" cy="12" r="3"/></svg>
+          </span>
+          <h3 class="mt-6 font-display text-xl font-bold tracking-tight text-ink">Brand &amp; identity</h3>
+          <p class="mt-3 text-ink-soft leading-relaxed">
+            Logomarks, palettes, type systems, and the small voice details that make a
+            young company feel like it has been around for years.
+          </p>
+        </article>
+
+        <!-- card 4 -->
+        <article class="reveal group rounded-3xl border border-ink/10 bg-white/60 p-8 backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-ocean/30 hover:shadow-xl hover:shadow-ink/5">
+          <span class="grid h-12 w-12 place-items-center rounded-2xl bg-ocean/10 text-ocean transition-transform duration-300 group-hover:-rotate-6">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-6 w-6"><path d="M4 19V5l8 5 8-5v14" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <h3 class="mt-6 font-display text-xl font-bold tracking-tight text-ink">Motion &amp; prototype</h3>
+          <p class="mt-3 text-ink-soft leading-relaxed">
+            Tasteful interaction design and interactive prototypes that let stakeholders
+            feel the product before a line of production code is written.
+          </p>
+        </article>
+
+        <!-- card 5 -->
+        <article class="reveal group rounded-3xl border border-ink/10 bg-white/60 p-8 backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-ocean/30 hover:shadow-xl hover:shadow-ink/5">
+          <span class="grid h-12 w-12 place-items-center rounded-2xl bg-coral/15 text-coral transition-transform duration-300 group-hover:-rotate-6">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-6 w-6"><path d="M12 2v6M12 16v6M2 12h6M16 12h6" stroke-linecap="round"/><circle cx="12" cy="12" r="4"/></svg>
+          </span>
+          <h3 class="mt-6 font-display text-xl font-bold tracking-tight text-ink">Launch &amp; care</h3>
+          <p class="mt-3 text-ink-soft leading-relaxed">
+            Deploys, analytics, accessibility audits, and a retainer for the steady stream
+            of improvements every live product earns.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ SELECTED WORK ============ -->
+    <section id="work" class="scroll-mt-20 bg-ink py-20 text-sand lg:py-28">
+      <div class="mx-auto max-w-8xl px-5 sm:px-8">
+        <div class="reveal flex flex-col justify-between gap-6 md:flex-row md:items-end">
+          <div class="max-w-2xl">
+            <p class="font-mono text-xs uppercase tracking-[0.2em] text-ocean-surf">Selected work</p>
+            <h2 class="mt-4 font-display text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
+              A handful of builds we are proud to put our name on.
+            </h2>
+          </div>
+          <a href="#contact" class="group inline-flex shrink-0 items-center gap-2 self-start rounded-xl border border-sand/25 px-5 py-3 text-sm font-semibold text-sand transition hover:border-sand/50 hover:bg-white/5 md:self-auto">
+            Want yours here?
+            <svg aria-hidden="true" viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4 transition-transform group-hover:translate-x-1"><path fill-rule="evenodd" d="M3 10a.75.75 0 0 1 .75-.75h9.69L9.97 5.78a.75.75 0 1 1 1.06-1.06l4.5 4.5a.75.75 0 0 1 0 1.06l-4.5 4.5a.75.75 0 1 1-1.06-1.06l3.47-3.47H3.75A.75.75 0 0 1 3 10Z" clip-rule="evenodd"/></svg>
+          </a>
+        </div>
+
+        <div class="mt-14 grid gap-6 md:grid-cols-2">
+          <!-- project 1 (large) -->
+          <a href="#contact" class="reveal group relative col-span-full overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-ocean-deep to-ink p-8 transition-all duration-500 hover:border-ocean-surf/40 sm:p-10">
+            <div aria-hidden="true" class="pointer-events-none absolute inset-0 opacity-30 transition-transform duration-700 group-hover:scale-105">
+              <div class="absolute -right-10 top-10 h-64 w-64 rounded-full bg-ocean-surf/40 blur-3xl"></div>
+              <div class="absolute bottom-0 left-1/3 h-48 w-48 rounded-full bg-coral/30 blur-3xl"></div>
+            </div>
+            <div class="relative flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+              <div class="max-w-xl">
+                <div class="flex flex-wrap items-center gap-2 text-xs">
+                  <span class="rounded-full bg-white/10 px-3 py-1 font-mono uppercase tracking-wider text-sand-200/80">Fintech</span>
+                  <span class="rounded-full bg-white/10 px-3 py-1 font-mono uppercase tracking-wider text-sand-200/80">Web app</span>
+                  <span class="rounded-full bg-white/10 px-3 py-1 font-mono uppercase tracking-wider text-sand-200/80">2025</span>
+                </div>
+                <h3 class="mt-5 font-display text-3xl font-bold tracking-tight sm:text-4xl">Harborlight — banking, calmly</h3>
+                <p class="mt-3 text-sand-200/85 leading-relaxed">
+                  A full rebuild of a neobank's onboarding and dashboard. We cut sign-up time
+                  in half and lifted activation by 38% with a design system that scales.
+                </p>
+              </div>
+              <div class="flex shrink-0 items-center gap-8">
+                <div><p class="font-display text-3xl font-bold">-51%</p><p class="text-sm text-sand-200/70">sign-up time</p></div>
+                <div><p class="font-display text-3xl font-bold">+38%</p><p class="text-sm text-sand-200/70">activation</p></div>
+              </div>
+            </div>
+            <span class="relative mt-7 inline-flex items-center gap-2 text-sm font-semibold text-ocean-surf">
+              Read the case study
+              <svg aria-hidden="true" viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4 transition-transform group-hover:translate-x-1"><path fill-rule="evenodd" d="M3 10a.75.75 0 0 1 .75-.75h9.69L9.97 5.78a.75.75 0 1 1 1.06-1.06l4.5 4.5a.75.75 0 0 1 0 1.06l-4.5 4.5a.75.75 0 1 1-1.06-1.06l3.47-3.47H3.75A.75.75 0 0 1 3 10Z" clip-rule="evenodd"/></svg>
+            </span>
+          </a>
+
+          <!-- project 2 -->
+          <a href="#contact" class="reveal group relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.04] p-8 transition-all duration-300 hover:-translate-y-1 hover:border-coral/40 hover:bg-white/[0.07]">
+            <div aria-hidden="true" class="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-coral/20 blur-2xl transition-transform duration-500 group-hover:scale-125"></div>
+            <div class="relative flex items-center gap-2 text-xs">
+              <span class="rounded-full bg-white/10 px-3 py-1 font-mono uppercase tracking-wider text-sand-200/80">E-commerce</span>
+              <span class="rounded-full bg-white/10 px-3 py-1 font-mono uppercase tracking-wider text-sand-200/80">2024</span>
+            </div>
+            <h3 class="relative mt-5 font-display text-2xl font-bold tracking-tight">Driftwood Co.</h3>
+            <p class="relative mt-3 text-sand-200/80 leading-relaxed">
+              A headless storefront for a coastal homeware label. Sub-second pages and a
+              checkout that converts on first visit.
+            </p>
+            <p class="relative mt-6 font-display text-2xl font-bold text-coral">+27% <span class="font-sans text-sm font-medium text-sand-200/70">revenue / visit</span></p>
+          </a>
+
+          <!-- project 3 -->
+          <a href="#contact" class="reveal group relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.04] p-8 transition-all duration-300 hover:-translate-y-1 hover:border-ocean-surf/40 hover:bg-white/[0.07]">
+            <div aria-hidden="true" class="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-ocean-surf/20 blur-2xl transition-transform duration-500 group-hover:scale-125"></div>
+            <div class="relative flex items-center gap-2 text-xs">
+              <span class="rounded-full bg-white/10 px-3 py-1 font-mono uppercase tracking-wider text-sand-200/80">Healthcare</span>
+              <span class="rounded-full bg-white/10 px-3 py-1 font-mono uppercase tracking-wider text-sand-200/80">2024</span>
+            </div>
+            <h3 class="relative mt-5 font-display text-2xl font-bold tracking-tight">Anchor Health</h3>
+            <p class="relative mt-3 text-sand-200/80 leading-relaxed">
+              A patient portal rebuilt for accessibility-first. WCAG AA across the board and
+              a 4.8/5 satisfaction score at launch.
+            </p>
+            <p class="relative mt-6 font-display text-2xl font-bold text-ocean-surf">AA <span class="font-sans text-sm font-medium text-sand-200/70">accessibility, every page</span></p>
+          </a>
+
+          <!-- project 4 -->
+          <a href="#contact" class="reveal group relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.04] p-8 transition-all duration-300 hover:-translate-y-1 hover:border-ocean-surf/40 hover:bg-white/[0.07] md:col-span-2">
+            <div aria-hidden="true" class="absolute -left-10 -bottom-10 h-48 w-48 rounded-full bg-ocean/25 blur-2xl transition-transform duration-500 group-hover:scale-125"></div>
+            <div class="relative flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+              <div class="max-w-xl">
+                <div class="flex items-center gap-2 text-xs">
+                  <span class="rounded-full bg-white/10 px-3 py-1 font-mono uppercase tracking-wider text-sand-200/80">SaaS</span>
+                  <span class="rounded-full bg-white/10 px-3 py-1 font-mono uppercase tracking-wider text-sand-200/80">Brand + web</span>
+                  <span class="rounded-full bg-white/10 px-3 py-1 font-mono uppercase tracking-wider text-sand-200/80">2023</span>
+                </div>
+                <h3 class="mt-5 font-display text-2xl font-bold tracking-tight">Meridian Tide — a brand, a site, a launch</h3>
+                <p class="mt-3 text-sand-200/80 leading-relaxed">
+                  Identity, marketing site, and docs portal for an analytics startup, taken
+                  from blank page to public launch in eleven days.
+                </p>
+              </div>
+              <p class="shrink-0 font-display text-4xl font-bold text-coral">11<span class="text-2xl">d</span><span class="block font-sans text-sm font-medium text-sand-200/70">end to end</span></p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PROCESS ============ -->
+    <section id="process" class="mx-auto max-w-8xl scroll-mt-20 px-5 py-20 sm:px-8 lg:py-28">
+      <div class="reveal max-w-3xl">
+        <p class="font-mono text-xs uppercase tracking-[0.2em] text-ocean">How we work</p>
+        <h2 class="mt-4 font-display text-3xl font-bold tracking-tight text-ink sm:text-4xl lg:text-5xl">
+          Four tides, one launch.
+        </h2>
+        <p class="mt-5 text-lg leading-relaxed text-ink-soft">
+          A rhythm we have refined over nine years. Short cycles, plenty of daylight between
+          you and the work, and a clear shore in sight from day one.
+        </p>
+      </div>
+
+      <ol class="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <li class="reveal group relative rounded-3xl border border-ink/10 bg-white/60 p-7 backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-ink/5">
+          <span class="font-mono text-sm font-semibold text-coral">01</span>
+          <span aria-hidden="true" class="absolute right-6 top-6 font-display text-5xl font-bold text-ink/5 transition-colors group-hover:text-ocean/10">01</span>
+          <h3 class="mt-3 font-display text-xl font-bold tracking-tight text-ink">Chart</h3>
+          <p class="mt-2 text-sm leading-relaxed text-ink-soft">
+            We map goals, audience, and constraints in a focused kickoff, then write the brief together.
+          </p>
+        </li>
+        <li class="reveal group relative rounded-3xl border border-ink/10 bg-white/60 p-7 backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-ink/5">
+          <span class="font-mono text-sm font-semibold text-coral">02</span>
+          <span aria-hidden="true" class="absolute right-6 top-6 font-display text-5xl font-bold text-ink/5 transition-colors group-hover:text-ocean/10">02</span>
+          <h3 class="mt-3 font-display text-xl font-bold tracking-tight text-ink">Design</h3>
+          <p class="mt-2 text-sm leading-relaxed text-ink-soft">
+            Directions, prototypes, and a design system — reviewed live, never over the wall.
+          </p>
+        </li>
+        <li class="reveal group relative rounded-3xl border border-ink/10 bg-white/60 p-7 backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-ink/5">
+          <span class="font-mono text-sm font-semibold text-coral">03</span>
+          <span aria-hidden="true" class="absolute right-6 top-6 font-display text-5xl font-bold text-ink/5 transition-colors group-hover:text-ocean/10">03</span>
+          <h3 class="mt-3 font-display text-xl font-bold tracking-tight text-ink">Build</h3>
+          <p class="mt-2 text-sm leading-relaxed text-ink-soft">
+            Production code in weekly increments, each one deployed to a preview you can click.
+          </p>
+        </li>
+        <li class="reveal group relative rounded-3xl border border-ink/10 bg-white/60 p-7 backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-ink/5">
+          <span class="font-mono text-sm font-semibold text-coral">04</span>
+          <span aria-hidden="true" class="absolute right-6 top-6 font-display text-5xl font-bold text-ink/5 transition-colors group-hover:text-ocean/10">04</span>
+          <h3 class="mt-3 font-display text-xl font-bold tracking-tight text-ink">Launch</h3>
+          <p class="mt-2 text-sm leading-relaxed text-ink-soft">
+            We ship, watch the numbers, fix the edges, and hand over a codebase you own outright.
+          </p>
+        </li>
+      </ol>
+    </section>
+
+    <!-- ============ TESTIMONIALS ============ -->
+    <section id="voices" class="scroll-mt-20 border-y border-ink/10 bg-sand-200/50 py-20 lg:py-28">
+      <div class="mx-auto max-w-8xl px-5 sm:px-8">
+        <div class="reveal max-w-3xl">
+          <p class="font-mono text-xs uppercase tracking-[0.2em] text-ocean">Voices</p>
+          <h2 class="mt-4 font-display text-3xl font-bold tracking-tight text-ink sm:text-4xl lg:text-5xl">
+            Founders who would put us in the next round.
+          </h2>
+        </div>
+
+        <div class="mt-14 grid gap-6 lg:grid-cols-3">
+          <figure class="reveal flex flex-col rounded-3xl bg-ink p-8 text-sand lg:row-span-2">
+            <svg aria-hidden="true" viewBox="0 0 24 24" class="h-9 w-9 text-ocean-surf" fill="currentColor"><path d="M9.5 6C6.5 7.5 5 10 5 13.5V18h5v-5H7.8c.2-2.3 1-3.6 2.7-4.4L9.5 6Zm9 0c-3 1.5-4.5 4-4.5 7.5V18h5v-5h-2.2c.2-2.3 1-3.6 2.7-4.4L18.5 6Z"/></svg>
+            <blockquote class="mt-6 font-display text-xl font-medium leading-relaxed tracking-tight">
+              "They felt less like an agency and more like the founding team we couldn't
+              afford to hire. The site is fast, the brand finally fits us, and they shipped
+              when they said they would."
+            </blockquote>
+            <figcaption class="mt-8 flex items-center gap-4 border-t border-white/10 pt-6">
+              <span aria-hidden="true" class="grid h-11 w-11 place-items-center rounded-full bg-ocean-surf/20 font-display font-bold text-ocean-surf">RV</span>
+              <span>
+                <span class="block font-semibold">Renske Vermeer</span>
+                <span class="block text-sm text-sand-200/70">CEO, Harborlight</span>
+              </span>
+            </figcaption>
+          </figure>
+
+          <figure class="reveal flex flex-col rounded-3xl border border-ink/10 bg-white/70 p-8 backdrop-blur">
+            <div class="flex gap-0.5 text-coral" aria-label="Five out of five stars">
+              <svg viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5"><path d="m10 1 2.6 5.3 5.9.9-4.3 4.1 1 5.8L10 14.8 4.8 17l1-5.8L1.5 7.2l5.9-.9Z"/></svg>
+              <svg viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5"><path d="m10 1 2.6 5.3 5.9.9-4.3 4.1 1 5.8L10 14.8 4.8 17l1-5.8L1.5 7.2l5.9-.9Z"/></svg>
+              <svg viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5"><path d="m10 1 2.6 5.3 5.9.9-4.3 4.1 1 5.8L10 14.8 4.8 17l1-5.8L1.5 7.2l5.9-.9Z"/></svg>
+              <svg viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5"><path d="m10 1 2.6 5.3 5.9.9-4.3 4.1 1 5.8L10 14.8 4.8 17l1-5.8L1.5 7.2l5.9-.9Z"/></svg>
+              <svg viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5"><path d="m10 1 2.6 5.3 5.9.9-4.3 4.1 1 5.8L10 14.8 4.8 17l1-5.8L1.5 7.2l5.9-.9Z"/></svg>
+            </div>
+            <blockquote class="mt-5 leading-relaxed text-ink">
+              "Eleven days from a Notion doc to a launched brand and site. I still don't fully
+              believe it, but the analytics don't lie."
+            </blockquote>
+            <figcaption class="mt-6 flex items-center gap-4">
+              <span aria-hidden="true" class="grid h-11 w-11 place-items-center rounded-full bg-ocean/15 font-display font-bold text-ocean">JT</span>
+              <span>
+                <span class="block font-semibold text-ink">Julian Tan</span>
+                <span class="block text-sm text-ink-soft">Founder, Meridian Tide</span>
+              </span>
+            </figcaption>
+          </figure>
+
+          <figure class="reveal flex flex-col rounded-3xl border border-ink/10 bg-white/70 p-8 backdrop-blur">
+            <div class="flex gap-0.5 text-coral" aria-label="Five out of five stars">
+              <svg viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5"><path d="m10 1 2.6 5.3 5.9.9-4.3 4.1 1 5.8L10 14.8 4.8 17l1-5.8L1.5 7.2l5.9-.9Z"/></svg>
+              <svg viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5"><path d="m10 1 2.6 5.3 5.9.9-4.3 4.1 1 5.8L10 14.8 4.8 17l1-5.8L1.5 7.2l5.9-.9Z"/></svg>
+              <svg viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5"><path d="m10 1 2.6 5.3 5.9.9-4.3 4.1 1 5.8L10 14.8 4.8 17l1-5.8L1.5 7.2l5.9-.9Z"/></svg>
+              <svg viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5"><path d="m10 1 2.6 5.3 5.9.9-4.3 4.1 1 5.8L10 14.8 4.8 17l1-5.8L1.5 7.2l5.9-.9Z"/></svg>
+              <svg viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5"><path d="m10 1 2.6 5.3 5.9.9-4.3 4.1 1 5.8L10 14.8 4.8 17l1-5.8L1.5 7.2l5.9-.9Z"/></svg>
+            </div>
+            <blockquote class="mt-5 leading-relaxed text-ink">
+              "Accessibility was a checkbox to our old vendor. To saltycode it was the brief.
+              Our patient portal finally works for everyone."
+            </blockquote>
+            <figcaption class="mt-6 flex items-center gap-4">
+              <span aria-hidden="true" class="grid h-11 w-11 place-items-center rounded-full bg-coral/15 font-display font-bold text-coral">MA</span>
+              <span>
+                <span class="block font-semibold text-ink">Mara Aluby</span>
+                <span class="block text-sm text-ink-soft">Product Lead, Anchor Health</span>
+              </span>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CONTACT ============ -->
+    <section id="contact" class="relative scroll-mt-20 overflow-hidden bg-ocean-deep py-20 text-sand lg:py-28">
+      <div aria-hidden="true" class="pointer-events-none absolute -top-32 left-1/4 h-96 w-96 rounded-full bg-ocean-surf/25 blur-3xl"></div>
+      <div aria-hidden="true" class="pointer-events-none absolute -bottom-40 right-0 h-96 w-96 rounded-full bg-coral/15 blur-3xl"></div>
+
+      <div class="relative mx-auto grid max-w-8xl gap-12 px-5 sm:px-8 lg:grid-cols-2 lg:gap-16">
+        <div class="reveal">
+          <p class="font-mono text-xs uppercase tracking-[0.2em] text-ocean-surf">Start a project</p>
+          <h2 class="mt-4 font-display text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
+            Tell us where you want to land.
+          </h2>
+          <p class="mt-5 max-w-md text-lg leading-relaxed text-sand-200/85">
+            One short note is enough to start. We reply within a day, usually with a couple
+            of honest questions and a rough sense of timing.
+          </p>
+
+          <ul class="mt-10 space-y-5">
+            <li class="flex items-center gap-4">
+              <span class="grid h-11 w-11 place-items-center rounded-2xl bg-white/10 text-ocean-surf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-5 w-5"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <a href="mailto:hello@saltycode.studio" class="text-sand hover:text-ocean-surf">hello@saltycode.studio</a>
+            </li>
+            <li class="flex items-center gap-4">
+              <span class="grid h-11 w-11 place-items-center rounded-2xl bg-white/10 text-ocean-surf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-5 w-5"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11Z" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.5"/></svg></span>
+              <span class="text-sand-200/90">Remote-first · roots in Kralendijk, Bonaire</span>
+            </li>
+            <li class="flex items-center gap-4">
+              <span class="grid h-11 w-11 place-items-center rounded-2xl bg-white/10 text-ocean-surf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-5 w-5"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <span class="text-sand-200/90">Booking projects from Q3 onward</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Form -->
+        <form id="contact-form" class="reveal rounded-3xl border border-white/10 bg-white/[0.06] p-7 backdrop-blur sm:p-9" novalidate>
+          <div class="grid gap-5 sm:grid-cols-2">
+            <div>
+              <label for="name" class="block text-sm font-medium text-sand-200/90">Name</label>
+              <input id="name" name="name" type="text" required autocomplete="name" placeholder="Your name" class="mt-2 w-full rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-sand placeholder:text-sand-200/40 transition focus:border-ocean-surf focus:bg-white/10 focus:outline-none focus:ring-2 focus:ring-ocean-surf/40" />
+            </div>
+            <div>
+              <label for="email" class="block text-sm font-medium text-sand-200/90">Email</label>
+              <input id="email" name="email" type="email" required autocomplete="email" placeholder="you@company.com" class="mt-2 w-full rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-sand placeholder:text-sand-200/40 transition focus:border-ocean-surf focus:bg-white/10 focus:outline-none focus:ring-2 focus:ring-ocean-surf/40" />
+            </div>
+          </div>
+
+          <div class="mt-5">
+            <label for="budget" class="block text-sm font-medium text-sand-200/90">Rough budget</label>
+            <select id="budget" name="budget" class="mt-2 w-full rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-sand transition focus:border-ocean-surf focus:bg-white/10 focus:outline-none focus:ring-2 focus:ring-ocean-surf/40">
+              <option class="text-ink">Under €10k</option>
+              <option class="text-ink">€10k – €25k</option>
+              <option class="text-ink">€25k – €60k</option>
+              <option class="text-ink">€60k+</option>
+              <option class="text-ink">Not sure yet</option>
+            </select>
+          </div>
+
+          <div class="mt-5">
+            <label for="message" class="block text-sm font-medium text-sand-200/90">What are you building?</label>
+            <textarea id="message" name="message" rows="4" required placeholder="A sentence or two about the project, the timeline, and where it hurts today." class="mt-2 w-full resize-none rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-sand placeholder:text-sand-200/40 transition focus:border-ocean-surf focus:bg-white/10 focus:outline-none focus:ring-2 focus:ring-ocean-surf/40"></textarea>
+          </div>
+
+          <button type="submit" class="group mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-coral px-6 py-4 text-base font-semibold text-ink shadow-sm transition-all hover:-translate-y-0.5 hover:bg-coral-deep hover:text-white hover:shadow-lg hover:shadow-coral/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-coral focus-visible:ring-offset-2 focus-visible:ring-offset-ocean-deep">
+            Send the brief
+            <svg aria-hidden="true" viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4 transition-transform group-hover:translate-x-1"><path fill-rule="evenodd" d="M3 10a.75.75 0 0 1 .75-.75h9.69L9.97 5.78a.75.75 0 1 1 1.06-1.06l4.5 4.5a.75.75 0 0 1 0 1.06l-4.5 4.5a.75.75 0 1 1-1.06-1.06l3.47-3.47H3.75A.75.75 0 0 1 3 10Z" clip-rule="evenodd"/></svg>
+          </button>
+
+          <p id="form-status" role="status" aria-live="polite" class="mt-4 hidden rounded-xl bg-ocean-surf/15 px-4 py-3 text-center text-sm font-medium text-ocean-surf"></p>
+          <p class="mt-4 text-center text-xs text-sand-200/50">No newsletters, no sales calls you didn't ask for.</p>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="bg-ink text-sand">
+    <div class="mx-auto max-w-8xl px-5 py-16 sm:px-8">
+      <div class="grid gap-10 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
+        <div>
+          <a href="#top" class="group inline-flex items-center gap-2.5">
+            <span aria-hidden="true" class="grid h-9 w-9 place-items-center rounded-xl bg-sand font-mono text-lg font-bold leading-none text-ink transition-transform duration-300 group-hover:-rotate-6">~&lt;</span>
+            <span class="font-display text-lg font-bold tracking-tight">saltycodestudio</span>
+          </a>
+          <p class="mt-4 max-w-xs text-sm leading-relaxed text-sand-200/70">
+            Clean code, warm coast. A small, senior studio building fast, accessible web and
+            product experiences.
+          </p>
+          <div class="mt-6 flex items-center gap-3">
+            <a href="#" aria-label="saltycodestudio on X" class="grid h-10 w-10 place-items-center rounded-xl border border-white/10 text-sand-200/70 transition hover:border-ocean-surf/40 hover:text-ocean-surf"><svg viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117Z"/></svg></a>
+            <a href="#" aria-label="saltycodestudio on GitHub" class="grid h-10 w-10 place-items-center rounded-xl border border-white/10 text-sand-200/70 transition hover:border-ocean-surf/40 hover:text-ocean-surf"><svg viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.48l-.01-1.7c-2.78.62-3.37-1.37-3.37-1.37-.46-1.18-1.11-1.5-1.11-1.5-.91-.64.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.56-1.14-4.56-5.06 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.27 2.75 1.05a9.36 9.36 0 0 1 5 0c1.91-1.32 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.93-2.35 4.8-4.58 5.05.36.32.68.94.68 1.9l-.01 2.82c0 .27.18.59.69.48A10.01 10.01 0 0 0 22 12.25C22 6.58 17.52 2 12 2Z"/></svg></a>
+            <a href="#" aria-label="saltycodestudio on Dribbble" class="grid h-10 w-10 place-items-center rounded-xl border border-white/10 text-sand-200/70 transition hover:border-ocean-surf/40 hover:text-ocean-surf"><svg viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm6.6 4.6a8.4 8.4 0 0 1 1.9 5.2c-.3-.06-3.2-.65-6.1-.28-.07-.16-.13-.33-.2-.5-.18-.42-.38-.85-.59-1.26 3.2-1.3 4.66-3.18 4.99-3.16Zm-1.36-.92c-.28.4-1.6 2.14-4.66 3.31a43 43 0 0 0-3.02-4.7 8.36 8.36 0 0 1 7.68 1.39ZM7.9 5.05a50 50 0 0 1 3.06 4.65c-3.86 1.03-7.27 1-7.64 1a8.42 8.42 0 0 1 4.58-5.65ZM3.27 12.02v-.26c.36.01 4.37.06 8.49-1.18.24.46.46.93.67 1.4l-.32.1c-4.26 1.37-6.52 5.12-6.71 5.44a8.37 8.37 0 0 1-2.13-5.5Zm3.5 6.62c.13-.27 1.5-2.9 5.18-4.18l.05-.02c.92 2.39 1.3 4.4 1.4 4.97a8.36 8.36 0 0 1-6.63-.77Zm8.16-.04c-.07-.4-.42-2.32-1.27-4.68 2.74-.44 5.13.28 5.43.38a8.4 8.4 0 0 1-4.16 4.3Z"/></svg></a>
+          </div>
+        </div>
+
+        <nav aria-label="Studio">
+          <h3 class="font-display text-sm font-semibold uppercase tracking-wider text-sand-200/60">Studio</h3>
+          <ul class="mt-4 space-y-3 text-sm">
+            <li><a href="#services" class="text-sand-200/80 transition hover:text-coral">Services</a></li>
+            <li><a href="#work" class="text-sand-200/80 transition hover:text-coral">Selected work</a></li>
+            <li><a href="#process" class="text-sand-200/80 transition hover:text-coral">Process</a></li>
+            <li><a href="#voices" class="text-sand-200/80 transition hover:text-coral">Voices</a></li>
+          </ul>
+        </nav>
+
+        <nav aria-label="Company">
+          <h3 class="font-display text-sm font-semibold uppercase tracking-wider text-sand-200/60">Company</h3>
+          <ul class="mt-4 space-y-3 text-sm">
+            <li><a href="#" class="text-sand-200/80 transition hover:text-coral">About</a></li>
+            <li><a href="#" class="text-sand-200/80 transition hover:text-coral">Careers</a></li>
+            <li><a href="#" class="text-sand-200/80 transition hover:text-coral">Journal</a></li>
+            <li><a href="#contact" class="text-sand-200/80 transition hover:text-coral">Contact</a></li>
+          </ul>
+        </nav>
+
+        <div>
+          <h3 class="font-display text-sm font-semibold uppercase tracking-wider text-sand-200/60">Get in touch</h3>
+          <p class="mt-4 text-sm text-sand-200/80">Have a brief ready?</p>
+          <a href="#contact" class="mt-3 inline-flex items-center gap-2 rounded-xl bg-coral px-4 py-2.5 text-sm font-semibold text-ink transition-all hover:-translate-y-0.5 hover:bg-coral-deep hover:text-white">Start a project</a>
+        </div>
+      </div>
+
+      <div class="mt-14 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-8 text-sm text-sand-200/60 sm:flex-row">
+        <p>&copy; <span id="year">2026</span> saltycodestudio. All rights reserved.</p>
+        <div class="flex items-center gap-6">
+          <a href="#" class="transition hover:text-sand">Privacy</a>
+          <a href="#" class="transition hover:text-sand">Terms</a>
+          <a href="#top" class="inline-flex items-center gap-1.5 transition hover:text-sand">Back to top
+            <svg aria-hidden="true" viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4"><path fill-rule="evenodd" d="M10 17a.75.75 0 0 1-.75-.75V6.56L6.28 9.53a.75.75 0 0 1-1.06-1.06l4.25-4.25a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 1 1-1.06 1.06l-2.97-2.97v9.69A.75.75 0 0 1 10 17Z" clip-rule="evenodd"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============ BEHAVIOR (vanilla) ============ -->
+  <script>
+    (function () {
+      "use strict";
+      var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      /* ---- Mobile nav ---- */
+      var header = document.getElementById("nav");
+      var toggle = document.getElementById("nav-toggle");
+      var menu = document.getElementById("mobile-menu");
+      if (header && toggle && menu) {
+        var bars = {
+          top: header.querySelector('[data-bar="top"]'),
+          mid: header.querySelector('[data-bar="mid"]'),
+          bot: header.querySelector('[data-bar="bot"]')
+        };
+        function setOpen(open) {
+          menu.classList.toggle("hidden", !open);
+          toggle.setAttribute("aria-expanded", String(open));
+          toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+          document.body.style.overflow = open ? "hidden" : "";
+          if (bars.top) { bars.top.classList.toggle("-translate-y-1.5", !open); bars.top.classList.toggle("rotate-45", open); bars.top.classList.toggle("-translate-y-1/2", open); }
+          if (bars.mid) bars.mid.classList.toggle("opacity-0", open);
+          if (bars.bot) { bars.bot.classList.toggle("translate-y-1.5", !open); bars.bot.classList.toggle("-rotate-45", open); bars.bot.classList.toggle("-translate-y-1/2", open); }
+        }
+        toggle.addEventListener("click", function () { setOpen(menu.classList.contains("hidden")); });
+        menu.querySelectorAll("[data-nav-link]").forEach(function (a) { a.addEventListener("click", function () { setOpen(false); }); });
+        var backdrop = menu.querySelector("[data-nav-backdrop]");
+        if (backdrop) backdrop.addEventListener("click", function () { setOpen(false); });
+        document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !menu.classList.contains("hidden")) setOpen(false); });
+      }
+
+      /* ---- Nav elevation on scroll ---- */
+      function onScroll() {
+        if (!header) return;
+        var s = window.scrollY > 8;
+        header.classList.toggle("bg-sand/85", s);
+        header.classList.toggle("backdrop-blur-md", s);
+        header.classList.toggle("border-ink/10", s);
+        header.classList.toggle("shadow-sm", s);
+      }
+      window.addEventListener("scroll", onScroll, { passive: true });
+      onScroll();
+
+      /* ---- Scroll reveal ---- */
+      var reveals = document.querySelectorAll(".reveal");
+      if (reduceMotion || !("IntersectionObserver" in window)) {
+        reveals.forEach(function (el) { el.classList.add("is-in"); });
+      } else {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) { entry.target.classList.add("is-in"); io.unobserve(entry.target); }
+          });
+        }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
+        reveals.forEach(function (el) { io.observe(el); });
+      }
+
+      /* ---- Count-up stats ---- */
+      var counters = document.querySelectorAll("[data-count-to]");
+      function runCount(el) {
+        var target = parseInt(el.getAttribute("data-count-to"), 10) || 0;
+        var suffix = el.getAttribute("data-suffix") || "";
+        if (reduceMotion) { el.textContent = target + suffix; return; }
+        var start = null, dur = 1400;
+        function step(ts) {
+          if (start === null) start = ts;
+          var p = Math.min((ts - start) / dur, 1);
+          var eased = 1 - Math.pow(1 - p, 3);
+          el.textContent = Math.round(target * eased) + suffix;
+          if (p < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+      }
+      if (counters.length) {
+        if (!("IntersectionObserver" in window)) {
+          counters.forEach(runCount);
+        } else {
+          var co = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) { runCount(entry.target); co.unobserve(entry.target); }
+            });
+          }, { threshold: 0.6 });
+          counters.forEach(function (el) { co.observe(el); });
+        }
+      }
+
+      /* ---- Contact form (demo handler) ---- */
+      var form = document.getElementById("contact-form");
+      var status = document.getElementById("form-status");
+      if (form && status) {
+        form.addEventListener("submit", function (e) {
+          e.preventDefault();
+          if (!form.checkValidity()) {
+            status.textContent = "Please fill in your name, a valid email, and a short message.";
+            status.classList.remove("hidden", "bg-ocean-surf/15", "text-ocean-surf");
+            status.classList.add("bg-coral/20", "text-coral");
+            var firstInvalid = form.querySelector(":invalid");
+            if (firstInvalid) firstInvalid.focus();
+            return;
+          }
+          var name = (form.querySelector("#name").value || "there").trim().split(" ")[0];
+          status.textContent = "Thanks, " + name + " — your brief is on its way. We'll reply within a day.";
+          status.classList.remove("hidden", "bg-coral/20", "text-coral");
+          status.classList.add("bg-ocean-surf/15", "text-ocean-surf");
+          form.reset();
+        });
+      }
+
+      /* ---- Footer year ---- */
+      var yr = document.getElementById("year");
+      if (yr) yr.textContent = new Date().getFullYear();
+    })();
+  </script>
+</body>
+</html>

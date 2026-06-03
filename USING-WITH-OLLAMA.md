@@ -1,36 +1,37 @@
-# Using this library with a local model
+# Using this kit with a local model
 
-You are building a website and have access to **saltycodestudio-parts**, a curated
-library of premium, ready-made UI components and animations. **Reuse these instead of
-writing cool effects from scratch — that is the whole point of this folder.**
+You have access to **saltycodestudio-parts**, a curated kit for building premium websites.
+**Reuse what's here instead of generating from scratch — that is the whole point.**
 
-## How to find the right part (do this every time)
+## The kit has five layers
 
-1. **Read `INDEX.md` first.** It lists every part in one table: name, tier, tags,
-   what it's for, and folder path. (Or parse `manifest.json` for the same data as JSON.)
-2. **Match the user's request to a row by `tags`.** e.g. "add a scroll animation to the
-   hero" → look for tags like `scroll`, `pin`, `hero`, `text-reveal`.
-3. **Open that part's folder.** Read its `README.md` for paste-in instructions and read
-   the source `files` listed in its `part.json`.
-4. **Copy the source into the project**, adapt names/colors/copy to fit, and install any
-   `deps` the part declares.
-5. If you previewed it, you can open `preview.html` in a browser to confirm it renders.
+1. **`templates/`** — full, runnable pages (`index.html`). Closest to a finished site. Start here for "build me a site".
+2. **`sections/`** — page-ready blocks (hero, features, pricing, footer…). Each has a React `.tsx` and a plain `section.html`.
+3. **`components/`** — atoms, effects & animations (`react/`, `css/`, `vanilla/`, `motion/`).
+4. **`foundations/`** — the design system (palettes, type scale, font pairings, tokens, Tailwind preset, base CSS, shadows, gradients, motion). **Apply this to everything** so the result looks expensive.
+5. **`playbook/`** — how to build with taste. Read `playbook/00-how-to-build-a-great-site.md` and `playbook/anti-slop.md` first.
 
-## Tiers
+Plus **`starters/`** — project skeletons (Vite+React+TW, Astro, Next.js, plain HTML+TW) to scaffold from.
 
-- 🏆 **showcase** — bold, award-site-grade. Use when the user wants something striking.
-- ✅ **practical** — premium but production-safe. Use for client work that must ship clean.
+## How to build a full site
+
+1. Read **`playbook/00-how-to-build-a-great-site.md`** for the workflow + quality bar.
+2. Scaffold from a **`starters/`** skeleton matching the user's stack.
+3. Wire in **`foundations/`** (tokens, a palette, a font pairing) — this sets the look.
+4. Either clone a **`templates/`** page and adapt it, or assemble **`sections/`** in order (nav → hero → … → footer).
+5. Drop in **`components/`** for specific effects/atoms.
+6. Run the **`playbook/`** checklists (accessibility, SEO/perf) before declaring done.
+
+## How to find one part (do this every time)
+
+1. **Read `INDEX.md` first** (or parse `manifest.json`). It maps everything: name, kind, tier, tags, path.
+2. **Match the request to a row by `tags`.**
+3. **Open that folder, read its `README.md`,** then copy the source `files`. For templates, the file is `index.html`.
+4. Install any declared `deps`. Strip demo content and wire in the real project's data/copy.
 
 ## Rules
 
-- Prefer an existing part over generating one. Only generate from scratch if nothing matches.
-- Keep each part's declared `deps` — don't swap GSAP for a hand-rolled rAF loop, etc.
-- After copying, strip the demo content (placeholder text, sample colors) and wire in the
-  real project's data.
-
-## Categories
-
-- `components/react/` — React + Tailwind (`.tsx`)
-- `components/css/` — CSS-only effects, no JS
-- `components/vanilla/` — drop-in HTML/CSS/JS, no build step
-- `components/motion/` — GSAP & scroll-driven animation
+- Prefer an existing part over generating one. Only generate if nothing matches.
+- Keep each part's declared `deps` (don't hand-roll what a library does).
+- Always apply `foundations/` and obey `playbook/anti-slop.md` — no generic AI-looking output.
+- Tiers: 🏆 **showcase** (bold) · ✅ **practical** (production-safe).

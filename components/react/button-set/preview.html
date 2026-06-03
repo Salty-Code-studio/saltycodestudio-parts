@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Button Set — saltycodestudio parts</title>
+
+    <!-- React 18 UMD + ReactDOM + Babel Standalone -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Tailwind Play CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+      body {
+        font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      }
+      /* lg height token used by ButtonSet (h-13 / w-13 are custom) */
+      .h-13 { height: 3.25rem; }
+      .w-13 { width: 3.25rem; }
+    </style>
+  </head>
+  <body class="min-h-screen bg-[#fbf7f0] text-[#1c2b33]">
+    <div id="root"></div>
+
+    <script type="text/babel" data-presets="env,react,typescript">
+      const { useState, forwardRef } = React;
+
+      /* =================================================================
+         ButtonSet — mirrors ButtonSet.tsx (Tailwind, accessible, typed)
+         ================================================================= */
+
+      const BASE =
+        "relative inline-flex select-none items-center justify-center gap-2 " +
+        "rounded-xl font-semibold tracking-tight whitespace-nowrap " +
+        "transition-[background-color,border-color,color,box-shadow,transform] duration-150 ease-out " +
+        "outline-none focus-visible:ring-2 focus-visible:ring-offset-2 " +
+        "focus-visible:ring-[#1f8a8a] focus-visible:ring-offset-[#fbf7f0] " +
+        "active:translate-y-px " +
+        "disabled:cursor-not-allowed disabled:opacity-55 disabled:active:translate-y-0 " +
+        "disabled:shadow-none";
+
+      const VARIANTS = {
+        primary:
+          "bg-[#1f8a8a] text-[#fbf7f0] shadow-sm shadow-[#0f5c5c]/20 " +
+          "hover:bg-[#0f5c5c] hover:shadow-md hover:shadow-[#0f5c5c]/25 active:bg-[#0f5c5c]",
+        secondary:
+          "bg-[#ece0cd] text-[#1c2b33] shadow-sm shadow-[#1c2b33]/5 " +
+          "hover:bg-[#e2d3b9] active:bg-[#d8c6a6]",
+        ghost:
+          "bg-transparent text-[#0f5c5c] hover:bg-[#1f8a8a]/12 active:bg-[#1f8a8a]/20",
+        outline:
+          "bg-[#fbf7f0]/40 text-[#0f5c5c] border border-[#1f8a8a]/45 " +
+          "hover:bg-[#2ec3c3]/12 hover:border-[#1f8a8a] active:bg-[#2ec3c3]/20",
+        destructive:
+          "bg-[#b23a2e] text-[#fbf7f0] shadow-sm shadow-[#b23a2e]/25 " +
+          "hover:bg-[#8f2c22] active:bg-[#8f2c22] focus-visible:ring-[#b23a2e]",
+      };
+
+      const SIZES = {
+        sm: "h-9 px-3.5 text-sm",
+        md: "h-11 px-5 text-[0.95rem]",
+        lg: "h-13 px-7 text-base",
+      };
+      const ICON_ONLY_SIZES = {
+        sm: "h-9 w-9 p-0",
+        md: "h-11 w-11 p-0",
+        lg: "h-13 w-13 p-0",
+      };
+      const SPINNER_SIZES = {
+        sm: "h-3.5 w-3.5",
+        md: "h-4 w-4",
+        lg: "h-[1.15rem] w-[1.15rem]",
+      };
+
+      const cx = (...p) => p.filter(Boolean).join(" ");
+
+      function Spinner({ size }) {
+        return (
+          <svg
+            className={cx("animate-spin", SPINNER_SIZES[size])}
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <circle className="opacity-25" cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="3" />
+            <path className="opacity-90" fill="currentColor" d="M21 12a9 9 0 0 0-9-9v3a6 6 0 0 1 6 6h3Z" />
+          </svg>
+        );
+      }
+
+      const ButtonSet = forwardRef(function ButtonSet(
+        {
+          variant = "primary",
+          size = "md",
+          loading = false,
+          loadingText,
+          leftIcon,
+          rightIcon,
+          iconOnly = false,
+          fullWidth = false,
+          className,
+          children,
+          disabled,
+          type = "button",
+          ...rest
+        },
+        ref,
+      ) {
+        const isDisabled = disabled || loading;
+        const classes = cx(
+          BASE,
+          VARIANTS[variant],
+          iconOnly ? ICON_ONLY_SIZES[size] : SIZES[size],
+          fullWidth && !iconOnly && "w-full",
+          className,
+        );
+
+        return (
+          <button
+            ref={ref}
+            type={type}
+            className={classes}
+            disabled={isDisabled}
+            aria-busy={loading || undefined}
+            data-variant={variant}
+            data-size={size}
+            data-loading={loading || undefined}
+            {...rest}
+          >
+            {loading && (
+              <span className="inline-flex items-center gap-2">
+                <Spinner size={size} />
+                {!iconOnly && (loadingText ?? children) ? <span>{loadingText ?? children}</span> : null}
+              </span>
+            )}
+
+            {!loading && (
+              <React.Fragment>
+                {leftIcon ? <span className="inline-flex shrink-0" aria-hidden="true">{leftIcon}</span> : null}
+                {iconOnly ? null : children}
+                {rightIcon ? <span className="inline-flex shrink-0" aria-hidden="true">{rightIcon}</span> : null}
+                {iconOnly && !leftIcon && !rightIcon ? (
+                  <span className="inline-flex shrink-0" aria-hidden="true">{children}</span>
+                ) : null}
+              </React.Fragment>
+            )}
+          </button>
+        );
+      });
+
+      /* =================================================================
+         Inline SVG icons (decorative)
+         ================================================================= */
+
+      const ArrowIcon = (
+        <svg viewBox="0 0 20 20" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M4 10h12M11 5l5 5-5 5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      );
+      const PlusIcon = (
+        <svg viewBox="0 0 20 20" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M10 4v12M4 10h12" strokeLinecap="round" />
+        </svg>
+      );
+      const TrashIcon = (
+        <svg viewBox="0 0 20 20" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M3 6h14M8 6V4h4v2M5 6l1 11h8l1-11" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      );
+      const DotsIcon = (
+        <svg viewBox="0 0 20 20" className="h-5 w-5" fill="currentColor">
+          <circle cx="4" cy="10" r="1.6" />
+          <circle cx="10" cy="10" r="1.6" />
+          <circle cx="16" cy="10" r="1.6" />
+        </svg>
+      );
+      const HeartIcon = (
+        <svg viewBox="0 0 20 20" className="h-5 w-5" fill="currentColor">
+          <path d="M10 17s-6-3.7-6-8a3.3 3.3 0 0 1 6-1.9A3.3 3.3 0 0 1 16 9c0 4.3-6 8-6 8Z" />
+        </svg>
+      );
+
+      /* =================================================================
+         Demo harness
+         ================================================================= */
+
+      const VARIANT_LIST = ["primary", "secondary", "ghost", "outline", "destructive"];
+      const VARIANT_LABEL = {
+        primary: "Primary",
+        secondary: "Secondary",
+        ghost: "Ghost",
+        outline: "Outline",
+        destructive: "Destructive",
+      };
+
+      function Section({ title, hint, children }) {
+        return (
+          <section className="rounded-2xl border border-[#ece0cd] bg-[#f4ece0]/60 p-6 sm:p-7">
+            <div className="mb-5">
+              <h2 className="text-lg font-bold tracking-tight text-[#1c2b33]">{title}</h2>
+              {hint ? <p className="mt-1 text-sm text-[#4a5d66]">{hint}</p> : null}
+            </div>
+            {children}
+          </section>
+        );
+      }
+
+      function App() {
+        const [pending, setPending] = useState(false);
+
+        function simulate() {
+          setPending(true);
+          setTimeout(() => setPending(false), 2200);
+        }
+
+        return (
+          <main className="mx-auto max-w-5xl px-5 py-12 sm:px-8">
+            {/* Header */}
+            <header className="mb-10">
+              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#1f8a8a]">
+                saltycodestudio · parts
+              </p>
+              <h1 className="mt-2 text-4xl font-extrabold tracking-tight text-[#1c2b33]">
+                Button Set
+              </h1>
+              <p className="mt-3 max-w-2xl text-[#4a5d66]">
+                Five variants, three sizes, loading &amp; disabled states and icon support —
+                one accessible component on the “Sand &amp; Surf” palette.
+              </p>
+            </header>
+
+            <div className="space-y-8">
+              {/* Variants × sizes grid */}
+              <Section title="Variants & sizes" hint="Every variant rendered at sm, md and lg.">
+                <div className="space-y-5">
+                  {VARIANT_LIST.map((v) => (
+                    <div key={v} className="flex flex-col gap-3 border-b border-[#ece0cd] pb-5 last:border-0 last:pb-0 sm:flex-row sm:items-center">
+                      <div className="w-28 shrink-0 text-sm font-semibold text-[#4a5d66]">
+                        {VARIANT_LABEL[v]}
+                      </div>
+                      <div className="flex flex-wrap items-center gap-3">
+                        <ButtonSet variant={v} size="sm">Small</ButtonSet>
+                        <ButtonSet variant={v} size="md">Medium</ButtonSet>
+                        <ButtonSet variant={v} size="lg">Large</ButtonSet>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </Section>
+
+              {/* With icons */}
+              <Section title="With icons" hint="leftIcon, rightIcon and iconOnly (with aria-label).">
+                <div className="flex flex-wrap items-center gap-3">
+                  <ButtonSet variant="primary" rightIcon={ArrowIcon}>Get started</ButtonSet>
+                  <ButtonSet variant="secondary" leftIcon={PlusIcon}>Add item</ButtonSet>
+                  <ButtonSet variant="outline" leftIcon={HeartIcon}>Favourite</ButtonSet>
+                  <ButtonSet variant="destructive" leftIcon={TrashIcon}>Delete</ButtonSet>
+                  <ButtonSet variant="ghost" iconOnly aria-label="More options">{DotsIcon}</ButtonSet>
+                  <ButtonSet variant="primary" iconOnly aria-label="Add">{PlusIcon}</ButtonSet>
+                  <ButtonSet variant="outline" iconOnly aria-label="Like">{HeartIcon}</ButtonSet>
+                </div>
+              </Section>
+
+              {/* Loading */}
+              <Section title="Loading state" hint="Spinner + aria-busy; clicks are blocked while loading.">
+                <div className="flex flex-wrap items-center gap-3">
+                  <ButtonSet variant="primary" loading loadingText="Saving…">Save</ButtonSet>
+                  <ButtonSet variant="secondary" loading>Loading</ButtonSet>
+                  <ButtonSet variant="outline" loading loadingText="Syncing…">Sync</ButtonSet>
+                  <ButtonSet variant="destructive" loading loadingText="Deleting…">Delete</ButtonSet>
+                  <ButtonSet variant="primary" loading iconOnly aria-label="Loading" />
+                </div>
+
+                <div className="mt-5 flex flex-wrap items-center gap-3">
+                  <ButtonSet variant="primary" loading={pending} loadingText="Submitting…" onClick={simulate}>
+                    Click to submit
+                  </ButtonSet>
+                  <span className="text-sm text-[#4a5d66]">
+                    {pending ? "Working… resets in ~2s" : "Idle — try it"}
+                  </span>
+                </div>
+              </Section>
+
+              {/* Disabled */}
+              <Section title="Disabled state" hint="Reduced opacity, no pointer, removed from active styling.">
+                <div className="flex flex-wrap items-center gap-3">
+                  <ButtonSet variant="primary" disabled>Primary</ButtonSet>
+                  <ButtonSet variant="secondary" disabled>Secondary</ButtonSet>
+                  <ButtonSet variant="ghost" disabled>Ghost</ButtonSet>
+                  <ButtonSet variant="outline" disabled>Outline</ButtonSet>
+                  <ButtonSet variant="destructive" disabled>Destructive</ButtonSet>
+                  <ButtonSet variant="primary" disabled iconOnly aria-label="Disabled add">{PlusIcon}</ButtonSet>
+                </div>
+              </Section>
+
+              {/* Full width */}
+              <Section title="Full width" hint="fullWidth stretches the button to its container.">
+                <div className="max-w-md space-y-3">
+                  <ButtonSet variant="primary" fullWidth rightIcon={ArrowIcon}>Continue</ButtonSet>
+                  <ButtonSet variant="outline" fullWidth>Maybe later</ButtonSet>
+                </div>
+              </Section>
+            </div>
+
+            <footer className="mt-12 text-center text-xs text-[#4a5d66]">
+              saltycodestudio-parts · Button Set · MIT
+            </footer>
+          </main>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+    </script>
+  </body>
+</html>

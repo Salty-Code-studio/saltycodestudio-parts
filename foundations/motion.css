@@ -1,0 +1,327 @@
+/* ============================================================
+   saltycodestudio — foundations / motion.css
+   ------------------------------------------------------------
+   A small, framework-agnostic motion layer:
+
+     1. EASING       — named cubic-bezier curves as custom props
+     2. DURATION     — a t-shirt-sized timing scale
+     3. DISTANCE     — shared travel distances for enter animations
+     4. KEYFRAMES    — the raw @keyframes definitions
+     5. UTILITIES    — reusable `.anim-*` classes that play them
+     6. MODIFIERS    — duration / delay / easing / fill helpers
+     7. REDUCED MOTION — one media query that disables it all
+
+   Everything is namespaced with `--scs-` (vars) and `scs`/`anim`
+   prefixes (classes) so it can be dropped into any project,
+   Tailwind or vanilla, without clashing.
+
+   Brand: "Sand & Surf" · "Clean code, warm coast."
+   ============================================================ */
+
+/* ============================================================
+   1 · EASING CURVES
+   ------------------------------------------------------------
+   Named curves so animations read intentionally — say what the
+   motion should *feel* like, not magic numbers. `expo`/`quart`
+   are decelerating (fast in, soft landing); `spring`/`back`
+   slightly overshoot for a lively, physical pop.
+   ============================================================ */
+:root {
+  /* Decelerating "settle" curves — great for elements entering. */
+  --scs-ease-out-expo:    cubic-bezier(0.16, 1, 0.3, 1);
+  --scs-ease-out-quart:   cubic-bezier(0.25, 1, 0.5, 1);
+  --scs-ease-out-cubic:   cubic-bezier(0.33, 1, 0.68, 1);
+
+  /* Accelerating "exit" curves — for elements leaving the screen. */
+  --scs-ease-in-quart:    cubic-bezier(0.5, 0, 0.75, 0);
+  --scs-ease-in-cubic:    cubic-bezier(0.32, 0, 0.67, 0);
+
+  /* Symmetric ease for loops / state changes that return home. */
+  --scs-ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+  --scs-ease-in-out-cubic: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* Playful overshoot — pops, "back" easing, springy micro-feedback. */
+  --scs-ease-spring:      cubic-bezier(0.34, 1.56, 0.64, 1);
+  --scs-ease-back:        cubic-bezier(0.68, -0.6, 0.32, 1.6);
+
+  /* Sensible default + linear (linear is right for marquees/spins). */
+  --scs-ease-default:     var(--scs-ease-out-quart);
+  --scs-ease-linear:      linear;
+}
+
+/* ============================================================
+   2 · DURATION SCALE
+   ------------------------------------------------------------
+   A compact, predictable timing scale. Most UI motion should
+   live in 150–400ms; the longer steps are for big hero reveals.
+   ============================================================ */
+:root {
+  --scs-duration-instant: 80ms;
+  --scs-duration-fast:    150ms;
+  --scs-duration-base:    260ms;   /* default for most enters / hovers */
+  --scs-duration-slow:    400ms;
+  --scs-duration-slower:  600ms;
+  --scs-duration-slowest: 900ms;   /* hero / showpiece reveals         */
+
+  /* Long-running ambient loops (float / shimmer / marquee). */
+  --scs-duration-loop-shimmer: 1.8s;
+  --scs-duration-loop-float:   6s;
+  --scs-duration-loop-marquee: 28s;
+
+  /* Stagger step — multiply by an index for sequenced reveals. */
+  --scs-stagger: 70ms;
+}
+
+/* ============================================================
+   3 · TRAVEL DISTANCES
+   ------------------------------------------------------------
+   Shared offsets so every "fade-up" in the project rises by the
+   same amount. Override per-element by setting the var inline.
+   ============================================================ */
+:root {
+  --scs-travel-sm: 12px;
+  --scs-travel-md: 24px;   /* default fade-up / slide distance */
+  --scs-travel-lg: 48px;
+  --scs-blur-amount: 12px; /* starting blur for `.anim-blur-in` */
+}
+
+/* ============================================================
+   4 · KEYFRAMES
+   ------------------------------------------------------------
+   Raw definitions only — kept separate from the utility classes
+   so they can be reused by your own animation rules too.
+   Distances/blur are read from custom props so a single element
+   can retune them without redefining the keyframes.
+   ============================================================ */
+
+/* Enter: fade while rising from below. */
+@keyframes scs-fade-up {
+  from { opacity: 0; transform: translate3d(0, var(--scs-travel-md), 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+/* Enter: fade only, no movement. */
+@keyframes scs-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Enter: fade while scaling up from slightly small. */
+@keyframes scs-scale-in {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* Enter: fade while a blur sharpens into focus (frosted reveal). */
+@keyframes scs-blur-in {
+  from { opacity: 0; filter: blur(var(--scs-blur-amount)); }
+  to   { opacity: 1; filter: blur(0); }
+}
+
+/* Enter: fade while sliding in from a direction.
+   Direction is controlled by the `--scs-slide-x/y` vars set by
+   the `.anim-slide-*` modifier classes below. */
+@keyframes scs-slide-in {
+  from {
+    opacity: 0;
+    transform: translate3d(var(--scs-slide-x, 0), var(--scs-slide-y, 0), 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Loop: a light sheen sweeping across a masked element.
+   Pair with a 200%+ background-size gradient (see `.anim-shimmer`). */
+@keyframes scs-shimmer {
+  from { background-position: -150% 0; }
+  to   { background-position:  250% 0; }
+}
+
+/* Loop: a gentle vertical bob for ambient, "alive" elements. */
+@keyframes scs-float {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50%      { transform: translate3d(0, -10px, 0); }
+}
+
+/* Loop: seamless horizontal scroll. The track must hold TWO
+   identical groups; translating -50% lands the second where the
+   first began, so the loop is invisible. */
+@keyframes scs-marquee {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+
+/* ============================================================
+   5 · ANIMATION UTILITIES  (.anim-*)
+   ------------------------------------------------------------
+   Each class wires a keyframe to a sensible default duration and
+   easing, all overridable via the modifier classes / vars below.
+
+   ENTER animations start at `opacity: 0` and use `both` fill so
+   they hold their starting frame before play and their end frame
+   after — no flash of unstyled content, no snap-back.
+   ============================================================ */
+
+/* Shared knobs every .anim-* class reads. Set these inline or via
+   modifier classes to retune a single element. */
+[class*="anim-"] {
+  --scs-anim-duration: var(--scs-duration-base);
+  --scs-anim-delay:    0ms;
+  --scs-anim-ease:     var(--scs-ease-default);
+}
+
+.anim-fade-up {
+  animation: scs-fade-up var(--scs-anim-duration) var(--scs-anim-ease)
+             var(--scs-anim-delay) both;
+}
+
+.anim-fade-in {
+  animation: scs-fade-in var(--scs-anim-duration) var(--scs-anim-ease)
+             var(--scs-anim-delay) both;
+}
+
+.anim-scale-in {
+  /* spring easing suits a scale pop better than a flat decel */
+  --scs-anim-ease: var(--scs-ease-spring);
+  animation: scs-scale-in var(--scs-anim-duration) var(--scs-anim-ease)
+             var(--scs-anim-delay) both;
+}
+
+.anim-blur-in {
+  --scs-anim-duration: var(--scs-duration-slow);
+  animation: scs-blur-in var(--scs-anim-duration) var(--scs-anim-ease)
+             var(--scs-anim-delay) both;
+  will-change: filter, opacity;
+}
+
+.anim-slide-in {
+  /* default slide is from the left; override with the modifiers */
+  --scs-slide-x: calc(-1 * var(--scs-travel-lg));
+  --scs-slide-y: 0;
+  animation: scs-slide-in var(--scs-anim-duration) var(--scs-anim-ease)
+             var(--scs-anim-delay) both;
+}
+.anim-slide-in.from-right  { --scs-slide-x: var(--scs-travel-lg);        --scs-slide-y: 0; }
+.anim-slide-in.from-left   { --scs-slide-x: calc(-1 * var(--scs-travel-lg)); --scs-slide-y: 0; }
+.anim-slide-in.from-bottom { --scs-slide-x: 0; --scs-slide-y: var(--scs-travel-lg); }
+.anim-slide-in.from-top    { --scs-slide-x: 0; --scs-slide-y: calc(-1 * var(--scs-travel-lg)); }
+
+/* ---- Looping / ambient utilities -------------------------- */
+
+.anim-shimmer {
+  /* The sheen itself — assumes a light element on a darker base.
+     Tune the sheen color via --scs-shimmer-sheen. */
+  --scs-shimmer-sheen: rgba(251, 246, 238, 0.85); /* warm cream highlight */
+  background-image: linear-gradient(
+    100deg,
+    transparent 20%,
+    var(--scs-shimmer-sheen) 40%,
+    var(--scs-shimmer-sheen) 50%,
+    transparent 70%
+  );
+  background-size: 220% 100%;
+  background-repeat: no-repeat;
+  background-position: -150% 0;
+  animation: scs-shimmer var(--scs-duration-loop-shimmer)
+             var(--scs-ease-in-out-quart) infinite;
+}
+
+.anim-float {
+  animation: scs-float var(--scs-duration-loop-float)
+             var(--scs-ease-in-out-cubic) infinite;
+  will-change: transform;
+}
+
+.anim-marquee {
+  /* Apply to the TRACK element (the flex row holding two groups).
+     Linear easing keeps the scroll perfectly steady. */
+  display: flex;
+  width: max-content;
+  animation: scs-marquee var(--scs-duration-loop-marquee)
+             var(--scs-ease-linear) infinite;
+  will-change: transform;
+}
+.anim-marquee.reverse { animation-direction: reverse; }
+/* Pause ambient loops on hover of the marquee/float element. */
+.anim-marquee:hover,
+.anim-float.pause-on-hover:hover { animation-play-state: paused; }
+
+/* ============================================================
+   6 · MODIFIERS  (compose with any .anim-* class)
+   ------------------------------------------------------------
+   <h1 class="anim-fade-up dur-slow delay-2 ease-spring"> … </h1>
+   ============================================================ */
+
+/* Duration overrides */
+.dur-instant { --scs-anim-duration: var(--scs-duration-instant); }
+.dur-fast    { --scs-anim-duration: var(--scs-duration-fast); }
+.dur-base    { --scs-anim-duration: var(--scs-duration-base); }
+.dur-slow    { --scs-anim-duration: var(--scs-duration-slow); }
+.dur-slower  { --scs-anim-duration: var(--scs-duration-slower); }
+.dur-slowest { --scs-anim-duration: var(--scs-duration-slowest); }
+
+/* Easing overrides */
+.ease-expo    { --scs-anim-ease: var(--scs-ease-out-expo); }
+.ease-quart   { --scs-anim-ease: var(--scs-ease-out-quart); }
+.ease-spring  { --scs-anim-ease: var(--scs-ease-spring); }
+.ease-back    { --scs-anim-ease: var(--scs-ease-back); }
+.ease-linear  { --scs-anim-ease: var(--scs-ease-linear); }
+.ease-in-out  { --scs-anim-ease: var(--scs-ease-in-out-quart); }
+
+/* Stagger delays — multiples of --scs-stagger for sequenced lists. */
+.delay-1 { --scs-anim-delay: calc(var(--scs-stagger) * 1); }
+.delay-2 { --scs-anim-delay: calc(var(--scs-stagger) * 2); }
+.delay-3 { --scs-anim-delay: calc(var(--scs-stagger) * 3); }
+.delay-4 { --scs-anim-delay: calc(var(--scs-stagger) * 4); }
+.delay-5 { --scs-anim-delay: calc(var(--scs-stagger) * 5); }
+.delay-6 { --scs-anim-delay: calc(var(--scs-stagger) * 6); }
+
+/* Auto-stagger: put `.stagger-children` on a parent and its direct
+   children animate in sequence (up to 8). Each child still needs an
+   `.anim-*` class. */
+.stagger-children > *:nth-child(1) { --scs-anim-delay: calc(var(--scs-stagger) * 0); }
+.stagger-children > *:nth-child(2) { --scs-anim-delay: calc(var(--scs-stagger) * 1); }
+.stagger-children > *:nth-child(3) { --scs-anim-delay: calc(var(--scs-stagger) * 2); }
+.stagger-children > *:nth-child(4) { --scs-anim-delay: calc(var(--scs-stagger) * 3); }
+.stagger-children > *:nth-child(5) { --scs-anim-delay: calc(var(--scs-stagger) * 4); }
+.stagger-children > *:nth-child(6) { --scs-anim-delay: calc(var(--scs-stagger) * 5); }
+.stagger-children > *:nth-child(7) { --scs-anim-delay: calc(var(--scs-stagger) * 6); }
+.stagger-children > *:nth-child(8) { --scs-anim-delay: calc(var(--scs-stagger) * 7); }
+
+/* Fill / iteration helpers */
+.anim-fill-forwards  { animation-fill-mode: forwards; }
+.anim-loop           { animation-iteration-count: infinite; }
+.anim-paused         { animation-play-state: paused; }
+
+/* ============================================================
+   7 · REDUCED MOTION
+   ------------------------------------------------------------
+   Respect the OS "reduce motion" setting. We don't just stop the
+   animation — for ENTER animations we also force the visible end
+   state, so content that animated `from opacity:0` never gets
+   stranded invisible. Ambient loops simply stop.
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  /* Kill every utility animation. */
+  [class*="anim-"] {
+    animation: none !important;
+  }
+
+  /* Guarantee enter-animations land in their finished state. */
+  .anim-fade-up,
+  .anim-fade-in,
+  .anim-scale-in,
+  .anim-blur-in,
+  .anim-slide-in {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+
+  /* Marquee: leave the track static rather than mid-translate. */
+  .anim-marquee {
+    transform: none !important;
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "name": "Ecommerce Product",
+  "slug": "ecommerce-product",
+  "kind": "template",
+  "category": "template",
+  "tier": "showcase",
+  "tags": [
+    "ecommerce",
+    "product",
+    "pdp",
+    "landing",
+    "shop",
+    "store",
+    "cart",
+    "cart-drawer",
+    "gallery",
+    "buy-box",
+    "variants",
+    "reviews",
+    "specs",
+    "related-products",
+    "responsive",
+    "accessible",
+    "tailwind",
+    "saltycodestudio"
+  ],
+  "description": "A complete single-product e-commerce/landing page with a sticky cart-drawer nav, product gallery and buy box with live variant/quantity pricing, features, specs, reviews, related products, and footer.",
+  "deps": [],
+  "files": ["index.html"],
+  "usage": "Open index.html in any browser — no build step (Tailwind Play CDN + brand fonts). It is both the page and its own preview. Replace the product name, copy, prices, swatches, sizes and review content; the buy box recalculates the live price from the selected size and quantity, and the cart drawer, toast, gallery, mobile nav and newsletter are wired in vanilla JS. To productionize, swap the Play CDN for a compiled Tailwind build and wire the Add-to-cart / Checkout buttons to your commerce backend.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
+}

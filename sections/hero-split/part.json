@@ -1,0 +1,14 @@
+{
+  "name": "Hero Split",
+  "slug": "hero-split",
+  "kind": "section",
+  "category": "hero",
+  "tier": "showcase",
+  "tags": ["hero", "split", "two-column", "cta", "code-mockup", "stats", "responsive", "saltycodestudio"],
+  "description": "Split hero with a bold headline, subcopy, dual CTAs and stats on one side and a code-window mockup on the other.",
+  "deps": ["react", "tailwindcss"],
+  "files": ["HeroSplit.tsx", "section.html"],
+  "usage": "Import HeroSplit and drop it at the top of a landing page: <HeroSplit headline=\"Clean code, warm coast.\" accentWord=\"warm coast.\" primaryCta={{ label: 'Start a project', href: '#contact' }} />. Or paste section.html into any Tailwind page. Both default to realistic saltycodestudio content.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
+}

@@ -1,0 +1,14 @@
+{
+  "name": "Testimonials",
+  "slug": "testimonials",
+  "kind": "section",
+  "category": "testimonials",
+  "tier": "practical",
+  "tags": ["testimonials", "reviews", "social-proof", "cards", "quotes", "avatars", "ratings", "grid"],
+  "description": "A responsive grid of testimonial cards with avatar, quote, star rating, name, and role.",
+  "deps": ["react", "tailwindcss"],
+  "files": ["Testimonials.tsx", "section.html"],
+  "usage": "import Testimonials from './Testimonials';\n\n<Testimonials\n  eyebrow=\"Kind words\"\n  heading=\"Teams that ship with us\"\n  testimonials={[{ quote: '...', name: 'Marisol Ferreira', role: 'Founder, Tidepool Labs', avatar: '/marisol.jpg', rating: 5 }]}\n/>",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
+}

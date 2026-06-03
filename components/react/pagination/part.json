@@ -1,0 +1,13 @@
+{
+  "name": "Pagination",
+  "slug": "pagination",
+  "category": "react",
+  "tier": "practical",
+  "tags": ["pagination", "navigation", "pager", "ellipsis", "accessible"],
+  "description": "Accessible pagination control with prev/next, numbered pages, smart ellipsis truncation, and disabled edges.",
+  "deps": [],
+  "files": ["Pagination.tsx"],
+  "usage": "Render <Pagination page={page} totalPages={20} onPageChange={setPage} /> and store the active page in state.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
+}

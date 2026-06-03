@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Litoral 24h Flask — Sereia Goods</title>
+  <meta name="description" content="The Litoral 24h Flask keeps drinks cold for 24 hours and hot for 12. Double-wall titanium, leakproof, and built for the coast. Free shipping over $60." />
+
+  <!-- Tailwind Play CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Brand fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            sand:  { DEFAULT: "#fbf7f0", 100: "#f4ece0", 200: "#ece0cd" },
+            ink:   { DEFAULT: "#1c2b33", soft: "#4a5d66" },
+            ocean: { DEFAULT: "#1f8a8a", deep: "#0f5c5c", surf: "#2ec3c3" },
+            coral: { DEFAULT: "#ff6f59", deep: "#f25c45" },
+          },
+          fontFamily: {
+            display: ['"Space Grotesk"', "system-ui", "sans-serif"],
+            body: ['"Inter"', "system-ui", "sans-serif"],
+            mono: ['"JetBrains Mono"', "ui-monospace", "monospace"],
+          },
+          boxShadow: {
+            soft: "0 1px 2px rgba(28,43,51,.04), 0 12px 32px -12px rgba(28,43,51,.18)",
+            lift: "0 24px 60px -24px rgba(15,92,92,.45)",
+          },
+          keyframes: {
+            "fade-up": { "0%": { opacity: "0", transform: "translateY(14px)" }, "100%": { opacity: "1", transform: "translateY(0)" } },
+            marquee: { "0%": { transform: "translateX(0)" }, "100%": { transform: "translateX(-50%)" } },
+          },
+          animation: {
+            "fade-up": "fade-up .6s cubic-bezier(.2,.7,.2,1) both",
+            marquee: "marquee 28s linear infinite",
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    body { font-family: "Inter", system-ui, sans-serif; }
+    .font-display { font-family: "Space Grotesk", system-ui, sans-serif; }
+    .font-mono { font-family: "JetBrains Mono", ui-monospace, monospace; }
+
+    /* Scroll-reveal */
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
+    .reveal.in { opacity: 1; transform: none; }
+
+    /* Hide scrollbar on thumbnail rail */
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+      .animate-marquee { animation: none !important; }
+      html { scroll-behavior: auto; }
+    }
+  </style>
+</head>
+<body class="bg-sand text-ink antialiased selection:bg-ocean-surf/30">
+
+  <!-- Skip link -->
+  <a href="#hero" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:rounded-lg focus:bg-ink focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-sand">Skip to product</a>
+
+  <!-- ============ ANNOUNCEMENT BAR ============ -->
+  <div class="bg-ocean-deep text-sand">
+    <div class="mx-auto flex max-w-7xl items-center justify-center gap-2 px-6 py-2 text-center text-xs font-medium tracking-wide lg:px-8">
+      <svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4 text-ocean-surf" aria-hidden="true"><path d="M3.5 3A1.5 1.5 0 0 0 2 4.5v11A1.5 1.5 0 0 0 3.5 17h13a1.5 1.5 0 0 0 1.5-1.5v-11A1.5 1.5 0 0 0 16.5 3h-13Zm.5 3 6 3.75L16 6v8H4V6Z"/></svg>
+      Free carbon-neutral shipping over $60 · 100-day trial · Lifetime warranty
+    </div>
+  </div>
+
+  <!-- ============ NAVBAR ============ -->
+  <header id="nav" class="sticky top-0 z-50 border-b border-ink/10 bg-sand/85 backdrop-blur transition-shadow duration-300">
+    <nav class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8" aria-label="Primary">
+      <a href="#hero" class="flex items-center gap-2.5">
+        <span class="grid h-9 w-9 place-items-center rounded-lg bg-ocean text-sand shadow-soft font-mono text-lg font-bold leading-none">~&lt;</span>
+        <span class="font-display text-lg font-semibold tracking-tight">Sereia<span class="text-ocean">Goods</span></span>
+      </a>
+
+      <div class="hidden items-center gap-8 md:flex">
+        <a href="#features" class="text-sm font-medium text-ink-soft transition hover:text-ink">Features</a>
+        <a href="#specs" class="text-sm font-medium text-ink-soft transition hover:text-ink">Specs</a>
+        <a href="#reviews" class="text-sm font-medium text-ink-soft transition hover:text-ink">Reviews</a>
+        <a href="#related" class="text-sm font-medium text-ink-soft transition hover:text-ink">The collection</a>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button type="button" aria-label="Search" class="hidden h-10 w-10 place-items-center rounded-lg text-ink-soft transition hover:bg-sand-100 hover:text-ink sm:grid">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" class="h-5 w-5"><circle cx="9" cy="9" r="6"/><path stroke-linecap="round" d="m14 14 3 3"/></svg>
+        </button>
+        <button type="button" aria-label="Account" class="hidden h-10 w-10 place-items-center rounded-lg text-ink-soft transition hover:bg-sand-100 hover:text-ink sm:grid">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" class="h-5 w-5"><circle cx="10" cy="6.5" r="3"/><path stroke-linecap="round" d="M4 16c.8-3 3-4.5 6-4.5S15.2 13 16 16"/></svg>
+        </button>
+
+        <!-- Cart trigger -->
+        <button id="cartBtn" type="button" aria-label="Open cart" aria-haspopup="dialog" class="relative grid h-10 w-10 place-items-center rounded-lg text-ink transition hover:bg-sand-100">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" class="h-5 w-5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 6h11l-1 8H6L5 6Zm0 0-.7-2.5H2.5M7 17.5h.01M13.5 17.5h.01"/></svg>
+          <span id="cartCount" class="absolute -right-1 -top-1 grid h-5 min-w-[20px] place-items-center rounded-full bg-coral px-1 text-[11px] font-bold leading-none text-white">1</span>
+        </button>
+
+        <button id="menuBtn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu" class="grid h-10 w-10 place-items-center rounded-lg text-ink transition hover:bg-sand-100 md:hidden">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-6 w-6"><path stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Mobile menu -->
+    <div id="mobileMenu" class="hidden border-t border-ink/10 bg-sand md:hidden">
+      <div class="mx-auto flex max-w-7xl flex-col gap-1 px-6 py-4">
+        <a href="#features" class="rounded-lg px-3 py-2.5 text-sm font-medium text-ink-soft hover:bg-sand-100">Features</a>
+        <a href="#specs" class="rounded-lg px-3 py-2.5 text-sm font-medium text-ink-soft hover:bg-sand-100">Specs</a>
+        <a href="#reviews" class="rounded-lg px-3 py-2.5 text-sm font-medium text-ink-soft hover:bg-sand-100">Reviews</a>
+        <a href="#related" class="rounded-lg px-3 py-2.5 text-sm font-medium text-ink-soft hover:bg-sand-100">The collection</a>
+        <a href="#buybox" class="mt-1 rounded-lg bg-ocean px-3 py-2.5 text-center text-sm font-semibold text-sand">Add to cart — $48</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ============ PRODUCT HERO ============ -->
+    <section id="hero" class="relative overflow-hidden">
+      <div aria-hidden="true" class="pointer-events-none absolute -right-32 -top-24 h-96 w-96 rounded-full bg-ocean-surf/15 blur-3xl"></div>
+      <div aria-hidden="true" class="pointer-events-none absolute -bottom-40 -left-24 h-96 w-96 rounded-full bg-coral/10 blur-3xl"></div>
+
+      <div class="relative mx-auto grid max-w-7xl gap-10 px-6 py-10 lg:grid-cols-2 lg:gap-16 lg:py-16 lg:px-8">
+        <!-- Breadcrumb (spans) -->
+        <nav aria-label="Breadcrumb" class="lg:col-span-2">
+          <ol class="flex flex-wrap items-center gap-2 font-mono text-xs uppercase tracking-[0.14em] text-ink-soft/70">
+            <li><a href="#" class="transition hover:text-ocean">Shop</a></li>
+            <li aria-hidden="true">/</li>
+            <li><a href="#" class="transition hover:text-ocean">Drinkware</a></li>
+            <li aria-hidden="true">/</li>
+            <li aria-current="page" class="text-ink">Litoral 24h Flask</li>
+          </ol>
+        </nav>
+
+        <!-- ===== GALLERY ===== -->
+        <div class="lg:sticky lg:top-28 lg:self-start">
+          <figure class="group relative aspect-[4/5] overflow-hidden rounded-3xl border border-ink/10 bg-gradient-to-br from-ocean-deep to-ink shadow-lift">
+            <!-- Active "image" (CSS-rendered product visual) -->
+            <div id="galleryStage" class="absolute inset-0 grid place-items-center transition-colors duration-500">
+              <!-- Flask illustration -->
+              <div class="relative">
+                <div id="flaskBody" class="h-72 w-28 rounded-[2.5rem] bg-gradient-to-b from-white/95 via-ocean-surf/80 to-ocean shadow-2xl ring-1 ring-white/40 transition-colors duration-500"></div>
+                <div class="absolute left-1/2 top-3 h-10 w-16 -translate-x-1/2 rounded-t-2xl rounded-b-md bg-ink/85"></div>
+                <div class="absolute left-1/2 top-1.5 h-3 w-10 -translate-x-1/2 rounded-full bg-ink"></div>
+                <div class="absolute left-1/2 top-28 -translate-x-1/2 font-display text-xs font-bold tracking-[0.2em] text-ink/70">LITORAL</div>
+                <div aria-hidden="true" class="absolute left-6 top-16 h-40 w-3 rounded-full bg-white/55 blur-[1px]"></div>
+              </div>
+            </div>
+            <figcaption class="absolute bottom-4 left-4 rounded-full bg-sand/90 px-3 py-1 font-mono text-[11px] uppercase tracking-[0.14em] text-ink shadow-soft">
+              <span id="swatchLabel">Tide Teal</span> · 600&nbsp;ml
+            </figcaption>
+            <span class="absolute right-4 top-4 rounded-full bg-coral px-3 py-1 text-xs font-bold text-white shadow-soft">New</span>
+          </figure>
+
+          <!-- Thumbnail rail -->
+          <div class="mt-4 flex gap-3 overflow-x-auto no-scrollbar" role="tablist" aria-label="Product images">
+            <button data-stage="from-ocean-deep to-ink" data-flask="from-white/95 via-ocean-surf/80 to-ocean" class="thumb is-active aspect-square h-20 w-20 shrink-0 overflow-hidden rounded-xl border-2 border-ocean bg-gradient-to-br from-ocean-deep to-ink ring-offset-2 transition" role="tab" aria-selected="true" aria-label="Front view"></button>
+            <button data-stage="from-ink to-ocean-deep" data-flask="from-white/90 via-sand-200 to-ocean-surf/70" class="thumb aspect-square h-20 w-20 shrink-0 overflow-hidden rounded-xl border-2 border-transparent bg-gradient-to-tr from-ink to-ocean-deep transition hover:border-ink/30" role="tab" aria-selected="false" aria-label="Angle view"></button>
+            <button data-stage="from-sand-200 to-ocean-surf/40" data-flask="from-white to-ocean-surf/60" class="thumb aspect-square h-20 w-20 shrink-0 overflow-hidden rounded-xl border-2 border-transparent bg-gradient-to-br from-sand-200 to-ocean-surf/40 transition hover:border-ink/30" role="tab" aria-selected="false" aria-label="Lid detail"></button>
+            <button data-stage="from-coral/30 to-ink" data-flask="from-white/95 via-coral/40 to-ink/80" class="thumb aspect-square h-20 w-20 shrink-0 overflow-hidden rounded-xl border-2 border-transparent bg-gradient-to-br from-coral/30 to-ink transition hover:border-ink/30" role="tab" aria-selected="false" aria-label="In the wild"></button>
+          </div>
+        </div>
+
+        <!-- ===== BUY BOX ===== -->
+        <div id="buybox" class="lg:py-2">
+          <div class="flex items-center gap-3">
+            <div class="flex items-center gap-0.5 text-coral" aria-hidden="true">
+              <svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4"><path d="m10 1.5 2.6 5.3 5.9.9-4.2 4.1 1 5.9L10 14.9 4.7 17.7l1-5.9L1.5 7.7l5.9-.9L10 1.5Z"/></svg>
+              <svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4"><path d="m10 1.5 2.6 5.3 5.9.9-4.2 4.1 1 5.9L10 14.9 4.7 17.7l1-5.9L1.5 7.7l5.9-.9L10 1.5Z"/></svg>
+              <svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4"><path d="m10 1.5 2.6 5.3 5.9.9-4.2 4.1 1 5.9L10 14.9 4.7 17.7l1-5.9L1.5 7.7l5.9-.9L10 1.5Z"/></svg>
+              <svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4"><path d="m10 1.5 2.6 5.3 5.9.9-4.2 4.1 1 5.9L10 14.9 4.7 17.7l1-5.9L1.5 7.7l5.9-.9L10 1.5Z"/></svg>
+              <svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4"><defs><linearGradient id="half"><stop offset="70%" stop-color="currentColor"/><stop offset="70%" stop-color="currentColor" stop-opacity=".25"/></linearGradient></defs><path fill="url(#half)" d="m10 1.5 2.6 5.3 5.9.9-4.2 4.1 1 5.9L10 14.9 4.7 17.7l1-5.9L1.5 7.7l5.9-.9L10 1.5Z"/></svg>
+            </div>
+            <a href="#reviews" class="text-sm font-medium text-ink-soft transition hover:text-ink">4.8 · 2,184 reviews</a>
+          </div>
+
+          <h1 class="mt-3 font-display text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl">
+            Litoral 24h Flask
+          </h1>
+          <p class="mt-4 max-w-lg text-lg leading-relaxed text-ink-soft">
+            Double-wall titanium that keeps your drink ice-cold for 24 hours or piping hot for 12. Leakproof one-hand lid, sweat-free grip, and a finish inspired by Bonaire tide pools.
+          </p>
+
+          <div class="mt-6 flex items-center gap-3">
+            <span class="font-display text-3xl font-bold tracking-tight">$48</span>
+            <span class="text-lg text-ink-soft/60 line-through">$62</span>
+            <span class="rounded-full bg-coral/10 px-3 py-1 text-xs font-semibold text-coral-deep">Save 22%</span>
+          </div>
+
+          <!-- Color swatches -->
+          <fieldset class="mt-8">
+            <legend class="font-mono text-xs uppercase tracking-[0.14em] text-ink-soft">Colour — <span id="swatchName" class="text-ink">Tide Teal</span></legend>
+            <div class="mt-3 flex flex-wrap gap-3" role="radiogroup" aria-label="Choose colour">
+              <button data-name="Tide Teal" class="swatch is-active grid h-11 w-11 place-items-center rounded-full ring-2 ring-ocean ring-offset-2 transition" style="background:#1f8a8a" role="radio" aria-checked="true" aria-label="Tide Teal"></button>
+              <button data-name="Deep Reef" class="swatch grid h-11 w-11 place-items-center rounded-full ring-2 ring-transparent ring-offset-2 transition hover:ring-ink/30" style="background:#0f5c5c" role="radio" aria-checked="false" aria-label="Deep Reef"></button>
+              <button data-name="Driftwood" class="swatch grid h-11 w-11 place-items-center rounded-full ring-2 ring-transparent ring-offset-2 transition hover:ring-ink/30" style="background:#ece0cd" role="radio" aria-checked="false" aria-label="Driftwood"></button>
+              <button data-name="Sunset Coral" class="swatch grid h-11 w-11 place-items-center rounded-full ring-2 ring-transparent ring-offset-2 transition hover:ring-ink/30" style="background:#ff6f59" role="radio" aria-checked="false" aria-label="Sunset Coral"></button>
+              <button data-name="Ink Black" class="swatch grid h-11 w-11 place-items-center rounded-full ring-2 ring-transparent ring-offset-2 transition hover:ring-ink/30" style="background:#1c2b33" role="radio" aria-checked="false" aria-label="Ink Black"></button>
+            </div>
+          </fieldset>
+
+          <!-- Size -->
+          <fieldset class="mt-7">
+            <legend class="font-mono text-xs uppercase tracking-[0.14em] text-ink-soft">Size</legend>
+            <div class="mt-3 grid grid-cols-3 gap-3" role="radiogroup" aria-label="Choose size">
+              <button data-size="350 ml" data-price="42" class="size rounded-xl border border-ink/15 bg-white/50 px-3 py-3 text-center transition hover:border-ink/40">
+                <span class="block font-display text-base font-semibold">350 ml</span>
+                <span class="text-xs text-ink-soft">Cortado</span>
+              </button>
+              <button data-size="600 ml" data-price="48" class="size is-active rounded-xl border-2 border-ocean bg-ocean/5 px-3 py-3 text-center transition" aria-checked="true">
+                <span class="block font-display text-base font-semibold">600 ml</span>
+                <span class="text-xs text-ocean">Everyday</span>
+              </button>
+              <button data-size="950 ml" data-price="56" class="size rounded-xl border border-ink/15 bg-white/50 px-3 py-3 text-center transition hover:border-ink/40">
+                <span class="block font-display text-base font-semibold">950 ml</span>
+                <span class="text-xs text-ink-soft">All-day</span>
+              </button>
+            </div>
+          </fieldset>
+
+          <!-- Quantity + Add to cart -->
+          <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:items-stretch">
+            <div class="flex items-center justify-between rounded-xl border border-ink/15 bg-white/50 px-2 sm:w-36" aria-label="Quantity">
+              <button id="qtyMinus" type="button" aria-label="Decrease quantity" class="grid h-11 w-11 place-items-center rounded-lg text-ink-soft transition hover:bg-sand-100 hover:text-ink">
+                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" class="h-4 w-4"><path stroke-linecap="round" d="M5 10h10"/></svg>
+              </button>
+              <span id="qtyVal" class="min-w-[2ch] text-center font-display font-semibold tabular-nums" aria-live="polite">1</span>
+              <button id="qtyPlus" type="button" aria-label="Increase quantity" class="grid h-11 w-11 place-items-center rounded-lg text-ink-soft transition hover:bg-sand-100 hover:text-ink">
+                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" class="h-4 w-4"><path stroke-linecap="round" d="M10 5v10M5 10h10"/></svg>
+              </button>
+            </div>
+            <button id="addToCart" type="button" class="group flex flex-1 items-center justify-center gap-2 rounded-xl bg-ocean px-7 py-3.5 text-base font-semibold text-sand shadow-soft transition hover:bg-ocean-deep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ocean active:scale-[.99]">
+              <span id="addLabel">Add to cart — <span id="priceLabel">$48</span></span>
+              <svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4 transition-transform group-hover:translate-x-0.5"><path fill-rule="evenodd" d="M3 10a.75.75 0 0 1 .75-.75h9.69L9.97 5.78a.75.75 0 1 1 1.06-1.06l4.5 4.5a.75.75 0 0 1 0 1.06l-4.5 4.5a.75.75 0 1 1-1.06-1.06l3.47-3.47H3.75A.75.75 0 0 1 3 10Z" clip-rule="evenodd"/></svg>
+            </button>
+          </div>
+          <button type="button" class="mt-3 w-full rounded-xl border border-ink/20 bg-white/40 px-7 py-3.5 text-base font-semibold text-ink transition hover:border-ink/40 hover:bg-white/70">
+            Buy now with one tap
+          </button>
+
+          <!-- Trust row -->
+          <ul class="mt-7 grid grid-cols-2 gap-x-6 gap-y-3 border-t border-ink/10 pt-6 text-sm text-ink-soft sm:grid-cols-3">
+            <li class="flex items-center gap-2"><svg viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5 text-ocean" aria-hidden="true"><path fill-rule="evenodd" d="M10 1.5 3 4v5c0 4.3 2.9 7.6 7 9 4.1-1.4 7-4.7 7-9V4l-7-2.5Zm3 6.2-3.6 4.2-2-2 1-1 1 1 2.6-3 1 .8Z" clip-rule="evenodd"/></svg> Lifetime warranty</li>
+            <li class="flex items-center gap-2"><svg viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5 text-ocean" aria-hidden="true"><path d="M2 5.5A1.5 1.5 0 0 1 3.5 4h7A1.5 1.5 0 0 1 12 5.5V6h2.4a1.5 1.5 0 0 1 1.2.6l1.6 2.1a1.5 1.5 0 0 1 .3.9v3.4a1 1 0 0 1-1 1h-.6a2 2 0 0 1-3.8 0H8.9a2 2 0 0 1-3.8 0H4a2 2 0 0 1-2-2v-7Z"/></svg> Free shipping $60+</li>
+            <li class="flex items-center gap-2"><svg viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5 text-ocean" aria-hidden="true"><path d="M10 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16Zm.75 4a.75.75 0 0 0-1.5 0v4c0 .2.08.39.22.53l2.5 2.5a.75.75 0 1 0 1.06-1.06l-2.28-2.28V6Z"/></svg> 100-day trial</li>
+            <li class="flex items-center gap-2"><svg viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5 text-ocean" aria-hidden="true"><path d="M10 2c-3 4-5 6.5-5 9a5 5 0 0 0 10 0c0-2.5-2-5-5-9Z"/></svg> BPA-free titanium</li>
+            <li class="flex items-center gap-2"><svg viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5 text-ocean" aria-hidden="true"><path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.7-9.3-4 4a1 1 0 0 1-1.4 0l-2-2 1.4-1.4 1.3 1.3 3.3-3.3 1.4 1.4Z" clip-rule="evenodd"/></svg> Carbon-neutral</li>
+            <li class="flex items-center gap-2"><svg viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5 text-ocean" aria-hidden="true"><path d="M3 4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4Zm2 12a1 1 0 1 0 0 2h10a1 1 0 1 0 0-2H5Z"/></svg> Engraving available</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ TRUST MARQUEE ============ -->
+    <section aria-label="As featured in" class="border-y border-ink/10 bg-sand-100/70 py-6">
+      <div class="relative overflow-hidden">
+        <div class="flex w-max animate-marquee items-center gap-14 px-7 font-display text-lg font-semibold tracking-tight text-ink/35">
+          <span>Outside</span><span aria-hidden="true">·</span><span>GearLab</span><span aria-hidden="true">·</span><span>The Coastal Edit</span><span aria-hidden="true">·</span><span>Wirecutter</span><span aria-hidden="true">·</span><span>SurfNomad</span><span aria-hidden="true">·</span><span>Monocle</span><span aria-hidden="true">·</span>
+          <!-- duplicate for seamless loop -->
+          <span aria-hidden="true">Outside</span><span aria-hidden="true">·</span><span aria-hidden="true">GearLab</span><span aria-hidden="true">·</span><span aria-hidden="true">The Coastal Edit</span><span aria-hidden="true">·</span><span aria-hidden="true">Wirecutter</span><span aria-hidden="true">·</span><span aria-hidden="true">SurfNomad</span><span aria-hidden="true">·</span><span aria-hidden="true">Monocle</span><span aria-hidden="true">·</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FEATURES ============ -->
+    <section id="features" class="mx-auto max-w-7xl px-6 py-20 lg:py-28 lg:px-8">
+      <div class="reveal max-w-2xl">
+        <p class="font-mono text-xs uppercase tracking-[0.18em] text-ocean">Why the Litoral</p>
+        <h2 class="mt-3 font-display text-3xl font-bold leading-tight tracking-tight sm:text-4xl">
+          Engineered for the coast, finished like jewellery
+        </h2>
+        <p class="mt-4 text-lg leading-relaxed text-ink-soft">
+          Every detail earns its place. We obsess over the things you only notice after a year of daily use — the lid that never leaks, the grip that never sweats, the finish that never chips.
+        </p>
+      </div>
+
+      <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <!-- 1 -->
+        <article class="reveal group rounded-2xl border border-ink/10 bg-white/60 p-7 shadow-soft transition hover:-translate-y-1 hover:border-ocean/30 hover:shadow-lift">
+          <div class="grid h-12 w-12 place-items-center rounded-xl bg-ocean/10 text-ocean transition group-hover:bg-ocean group-hover:text-sand">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v4m0 10v4m9-9h-4M7 12H3m13.5-5.5-2.8 2.8M9.3 14.7l-2.8 2.8m11 0-2.8-2.8M9.3 9.3 6.5 6.5"/></svg>
+          </div>
+          <h3 class="mt-5 font-display text-lg font-semibold">24 hours cold, 12 hot</h3>
+          <p class="mt-2 text-sm leading-relaxed text-ink-soft">Triple-vacuum titanium walls hold the line through a full day at the beach or a red-eye flight. Tested at 38°C ambient.</p>
+        </article>
+        <!-- 2 -->
+        <article class="reveal group rounded-2xl border border-ink/10 bg-white/60 p-7 shadow-soft transition hover:-translate-y-1 hover:border-ocean/30 hover:shadow-lift">
+          <div class="grid h-12 w-12 place-items-center rounded-xl bg-ocean/10 text-ocean transition group-hover:bg-ocean group-hover:text-sand">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3c-4 5-6 8-6 11a6 6 0 0 0 12 0c0-3-2-6-6-11Z"/></svg>
+          </div>
+          <h3 class="mt-5 font-display text-lg font-semibold">Truly leakproof lid</h3>
+          <p class="mt-2 text-sm leading-relaxed text-ink-soft">A magnetic one-hand cap with a silicone gasket. Throw it in your tote upside down — we dare you. No drips, ever.</p>
+        </article>
+        <!-- 3 -->
+        <article class="reveal group rounded-2xl border border-ink/10 bg-white/60 p-7 shadow-soft transition hover:-translate-y-1 hover:border-ocean/30 hover:shadow-lift">
+          <div class="grid h-12 w-12 place-items-center rounded-xl bg-ocean/10 text-ocean transition group-hover:bg-ocean group-hover:text-sand">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M4 7h16M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg>
+          </div>
+          <h3 class="mt-5 font-display text-lg font-semibold">Sweat-free grip</h3>
+          <p class="mt-2 text-sm leading-relaxed text-ink-soft">A soft-touch powder coat that never beads with condensation, so your desk, your bag and your hands stay dry.</p>
+        </article>
+        <!-- 4 -->
+        <article class="reveal group rounded-2xl border border-ink/10 bg-white/60 p-7 shadow-soft transition hover:-translate-y-1 hover:border-ocean/30 hover:shadow-lift">
+          <div class="grid h-12 w-12 place-items-center rounded-xl bg-ocean/10 text-ocean transition group-hover:bg-ocean group-hover:text-sand">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0-13v5l3 2"/></svg>
+          </div>
+          <h3 class="mt-5 font-display text-lg font-semibold">Dishwasher-safe</h3>
+          <p class="mt-2 text-sm leading-relaxed text-ink-soft">Top rack, every time. The coating and gasket are rated for 2,000+ cycles without dulling or warping.</p>
+        </article>
+        <!-- 5 -->
+        <article class="reveal group rounded-2xl border border-ink/10 bg-white/60 p-7 shadow-soft transition hover:-translate-y-1 hover:border-ocean/30 hover:shadow-lift">
+          <div class="grid h-12 w-12 place-items-center rounded-xl bg-ocean/10 text-ocean transition group-hover:bg-ocean group-hover:text-sand">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12a9 9 0 0 1 18 0M3 12a9 9 0 0 0 18 0M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
+          </div>
+          <h3 class="mt-5 font-display text-lg font-semibold">Made to be repaired</h3>
+          <p class="mt-2 text-sm leading-relaxed text-ink-soft">Replaceable gaskets, caps and straws — shipped free for life. One flask, decades of use, zero landfill.</p>
+        </article>
+        <!-- 6 -->
+        <article class="reveal group rounded-2xl border border-ink/10 bg-white/60 p-7 shadow-soft transition hover:-translate-y-1 hover:border-ocean/30 hover:shadow-lift">
+          <div class="grid h-12 w-12 place-items-center rounded-xl bg-ocean/10 text-ocean transition group-hover:bg-ocean group-hover:text-sand">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M4 17V7a1 1 0 0 1 1-1h6l2 2h6a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1Zm5-5 2 2 4-4"/></svg>
+          </div>
+          <h3 class="mt-5 font-display text-lg font-semibold">Free engraving</h3>
+          <p class="mt-2 text-sm leading-relaxed text-ink-soft">Add a name, a date or a tiny wave at checkout. Laser-etched, never printed, so it lasts as long as the flask.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ FEATURE SHOWCASE (split) ============ -->
+    <section class="border-y border-ink/10 bg-ocean-deep text-sand">
+      <div class="mx-auto grid max-w-7xl items-center gap-12 px-6 py-20 lg:grid-cols-2 lg:gap-16 lg:py-24 lg:px-8">
+        <div class="reveal">
+          <p class="font-mono text-xs uppercase tracking-[0.18em] text-ocean-surf">The thermal core</p>
+          <h2 class="mt-3 font-display text-3xl font-bold leading-tight tracking-tight sm:text-4xl">
+            We cut the flask in half so you don't have to
+          </h2>
+          <p class="mt-4 max-w-lg text-lg leading-relaxed text-sand/75">
+            Three vacuum-sealed chambers, a copper radiation shield and a titanium inner skin. The result: the flat temperature curve on the right, holding within 2°C across a full work day.
+          </p>
+          <dl class="mt-9 grid grid-cols-3 gap-6 border-t border-white/15 pt-8">
+            <div>
+              <dt class="sr-only">Cold retention</dt>
+              <dd><span class="block font-display text-3xl font-bold">24h</span><span class="mt-1 block text-sm text-sand/60">Ice-cold</span></dd>
+            </div>
+            <div>
+              <dt class="sr-only">Hot retention</dt>
+              <dd><span class="block font-display text-3xl font-bold">12h</span><span class="mt-1 block text-sm text-sand/60">Piping hot</span></dd>
+            </div>
+            <div>
+              <dt class="sr-only">Weight</dt>
+              <dd><span class="block font-display text-3xl font-bold">312g</span><span class="mt-1 block text-sm text-sand/60">Empty, 600 ml</span></dd>
+            </div>
+          </dl>
+        </div>
+
+        <div class="reveal">
+          <!-- Temperature chart (inline SVG) -->
+          <figure class="rounded-3xl border border-white/15 bg-ink/40 p-6 shadow-lift">
+            <figcaption class="mb-4 flex items-center justify-between font-mono text-xs uppercase tracking-[0.14em] text-sand/60">
+              <span>Cold retention · 38°C ambient</span>
+              <span class="flex items-center gap-3">
+                <span class="flex items-center gap-1.5"><span class="h-2 w-4 rounded-full bg-ocean-surf"></span> Litoral</span>
+                <span class="flex items-center gap-1.5"><span class="h-2 w-4 rounded-full bg-sand/30"></span> Typical</span>
+              </span>
+            </figcaption>
+            <svg viewBox="0 0 320 180" class="w-full" role="img" aria-label="Line chart: the Litoral holds drink temperature near constant for 24 hours while a typical flask warms after 6 hours.">
+              <defs>
+                <linearGradient id="fill" x1="0" x2="0" y1="0" y2="1">
+                  <stop offset="0%" stop-color="#2ec3c3" stop-opacity=".35"/>
+                  <stop offset="100%" stop-color="#2ec3c3" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <!-- grid -->
+              <g stroke="#fbf7f0" stroke-opacity=".12">
+                <line x1="0" y1="45" x2="320" y2="45"/><line x1="0" y1="90" x2="320" y2="90"/><line x1="0" y1="135" x2="320" y2="135"/>
+              </g>
+              <!-- typical flask: warms up -->
+              <path d="M0 140 C 70 138, 120 120, 180 80 S 280 35, 320 30" fill="none" stroke="#fbf7f0" stroke-opacity=".35" stroke-width="2.5" stroke-dasharray="5 5"/>
+              <!-- litoral: flat -->
+              <path id="coldLine" d="M0 145 C 80 144, 160 142, 240 140 S 300 139, 320 138" fill="none" stroke="#2ec3c3" stroke-width="3.5" stroke-linecap="round"/>
+              <path d="M0 145 C 80 144, 160 142, 240 140 S 300 139, 320 138 L 320 180 L 0 180 Z" fill="url(#fill)"/>
+              <!-- axis labels -->
+              <g fill="#fbf7f0" fill-opacity=".5" font-size="9" font-family="JetBrains Mono, monospace">
+                <text x="2" y="174">0h</text><text x="150" y="174">12h</text><text x="296" y="174">24h</text>
+              </g>
+            </svg>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SPECS ============ -->
+    <section id="specs" class="mx-auto max-w-7xl px-6 py-20 lg:py-28 lg:px-8">
+      <div class="grid gap-12 lg:grid-cols-[1fr_1.4fr] lg:gap-20">
+        <div class="reveal">
+          <p class="font-mono text-xs uppercase tracking-[0.18em] text-ocean">In the details</p>
+          <h2 class="mt-3 font-display text-3xl font-bold leading-tight tracking-tight sm:text-4xl">Full specifications</h2>
+          <p class="mt-4 text-lg leading-relaxed text-ink-soft">
+            No surprises. Everything you'd want to know before it lands on your doorstep — and everything we'd want to know if we were buying it.
+          </p>
+          <div class="mt-8 rounded-2xl border border-ink/10 bg-white/60 p-6 shadow-soft">
+            <p class="font-display text-sm font-semibold">What's in the box</p>
+            <ul class="mt-3 space-y-2 text-sm text-ink-soft">
+              <li class="flex items-center gap-2"><svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4 text-ocean" aria-hidden="true"><path fill-rule="evenodd" d="M16.7 5.3a1 1 0 0 1 0 1.4l-7.5 7.5a1 1 0 0 1-1.4 0L3.3 9.7a1 1 0 1 1 1.4-1.4l3.1 3.1 6.8-6.8a1 1 0 0 1 1.4 0Z" clip-rule="evenodd"/></svg> Litoral flask + magnetic lid</li>
+              <li class="flex items-center gap-2"><svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4 text-ocean" aria-hidden="true"><path fill-rule="evenodd" d="M16.7 5.3a1 1 0 0 1 0 1.4l-7.5 7.5a1 1 0 0 1-1.4 0L3.3 9.7a1 1 0 1 1 1.4-1.4l3.1 3.1 6.8-6.8a1 1 0 0 1 1.4 0Z" clip-rule="evenodd"/></svg> Straw lid + cleaning brush</li>
+              <li class="flex items-center gap-2"><svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4 text-ocean" aria-hidden="true"><path fill-rule="evenodd" d="M16.7 5.3a1 1 0 0 1 0 1.4l-7.5 7.5a1 1 0 0 1-1.4 0L3.3 9.7a1 1 0 1 1 1.4-1.4l3.1 3.1 6.8-6.8a1 1 0 0 1 1.4 0Z" clip-rule="evenodd"/></svg> Recycled-cork protective sleeve</li>
+              <li class="flex items-center gap-2"><svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4 text-ocean" aria-hidden="true"><path fill-rule="evenodd" d="M16.7 5.3a1 1 0 0 1 0 1.4l-7.5 7.5a1 1 0 0 1-1.4 0L3.3 9.7a1 1 0 1 1 1.4-1.4l3.1 3.1 6.8-6.8a1 1 0 0 1 1.4 0Z" clip-rule="evenodd"/></svg> Care card + 100-day trial pass</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="reveal">
+          <dl class="divide-y divide-ink/10 overflow-hidden rounded-2xl border border-ink/10 bg-white/40">
+            <div class="grid grid-cols-2 gap-4 px-6 py-4"><dt class="font-medium text-ink-soft">Material</dt><dd class="font-display font-semibold">Grade-2 titanium, double wall</dd></div>
+            <div class="grid grid-cols-2 gap-4 bg-white/30 px-6 py-4"><dt class="font-medium text-ink-soft">Capacity</dt><dd class="font-display font-semibold">350 / 600 / 950 ml</dd></div>
+            <div class="grid grid-cols-2 gap-4 px-6 py-4"><dt class="font-medium text-ink-soft">Cold retention</dt><dd class="font-display font-semibold">Up to 24 hours</dd></div>
+            <div class="grid grid-cols-2 gap-4 bg-white/30 px-6 py-4"><dt class="font-medium text-ink-soft">Hot retention</dt><dd class="font-display font-semibold">Up to 12 hours</dd></div>
+            <div class="grid grid-cols-2 gap-4 px-6 py-4"><dt class="font-medium text-ink-soft">Weight (600 ml)</dt><dd class="font-display font-semibold">312 g empty</dd></div>
+            <div class="grid grid-cols-2 gap-4 bg-white/30 px-6 py-4"><dt class="font-medium text-ink-soft">Mouth</dt><dd class="font-display font-semibold">Wide 54 mm, ice-cube friendly</dd></div>
+            <div class="grid grid-cols-2 gap-4 px-6 py-4"><dt class="font-medium text-ink-soft">Dishwasher</dt><dd class="font-display font-semibold">Top rack safe</dd></div>
+            <div class="grid grid-cols-2 gap-4 bg-white/30 px-6 py-4"><dt class="font-medium text-ink-soft">Lid</dt><dd class="font-display font-semibold">Magnetic, leakproof, one-hand</dd></div>
+            <div class="grid grid-cols-2 gap-4 px-6 py-4"><dt class="font-medium text-ink-soft">Fits cup holders</dt><dd class="font-display font-semibold">350 &amp; 600 ml — yes</dd></div>
+            <div class="grid grid-cols-2 gap-4 bg-white/30 px-6 py-4"><dt class="font-medium text-ink-soft">Warranty</dt><dd class="font-display font-semibold">Lifetime, parts included</dd></div>
+            <div class="grid grid-cols-2 gap-4 px-6 py-4"><dt class="font-medium text-ink-soft">Made in</dt><dd class="font-display font-semibold">Portugal, carbon-neutral</dd></div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ REVIEWS ============ -->
+    <section id="reviews" class="border-y border-ink/10 bg-sand-100/60">
+      <div class="mx-auto max-w-7xl px-6 py-20 lg:py-28 lg:px-8">
+        <div class="grid items-end gap-8 md:grid-cols-2">
+          <div class="reveal">
+            <p class="font-mono text-xs uppercase tracking-[0.18em] text-ocean">Loved by 40,000+ owners</p>
+            <h2 class="mt-3 font-display text-3xl font-bold leading-tight tracking-tight sm:text-4xl">What people are saying</h2>
+          </div>
+          <!-- Rating summary -->
+          <div class="reveal flex flex-wrap items-center gap-x-8 gap-y-4 md:justify-end">
+            <div class="text-center">
+              <div class="font-display text-5xl font-bold leading-none">4.8</div>
+              <div class="mt-1.5 flex justify-center gap-0.5 text-coral" aria-hidden="true">
+                <svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4"><path d="m10 1.5 2.6 5.3 5.9.9-4.2 4.1 1 5.9L10 14.9 4.7 17.7l1-5.9L1.5 7.7l5.9-.9L10 1.5Z"/></svg><svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4"><path d="m10 1.5 2.6 5.3 5.9.9-4.2 4.1 1 5.9L10 14.9 4.7 17.7l1-5.9L1.5 7.7l5.9-.9L10 1.5Z"/></svg><svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4"><path d="m10 1.5 2.6 5.3 5.9.9-4.2 4.1 1 5.9L10 14.9 4.7 17.7l1-5.9L1.5 7.7l5.9-.9L10 1.5Z"/></svg><svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4"><path d="m10 1.5 2.6 5.3 5.9.9-4.2 4.1 1 5.9L10 14.9 4.7 17.7l1-5.9L1.5 7.7l5.9-.9L10 1.5Z"/></svg><svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4"><path d="m10 1.5 2.6 5.3 5.9.9-4.2 4.1 1 5.9L10 14.9 4.7 17.7l1-5.9L1.5 7.7l5.9-.9L10 1.5Z"/></svg>
+              </div>
+              <div class="mt-1 text-xs text-ink-soft">2,184 reviews</div>
+            </div>
+            <!-- bars -->
+            <div class="min-w-[220px] flex-1 space-y-1.5">
+              <div class="flex items-center gap-3 text-xs text-ink-soft"><span class="w-3">5</span><span class="h-2 flex-1 overflow-hidden rounded-full bg-ink/10"><span class="block h-full w-[84%] rounded-full bg-ocean"></span></span><span class="w-9 text-right tabular-nums">84%</span></div>
+              <div class="flex items-center gap-3 text-xs text-ink-soft"><span class="w-3">4</span><span class="h-2 flex-1 overflow-hidden rounded-full bg-ink/10"><span class="block h-full w-[11%] rounded-full bg-ocean"></span></span><span class="w-9 text-right tabular-nums">11%</span></div>
+              <div class="flex items-center gap-3 text-xs text-ink-soft"><span class="w-3">3</span><span class="h-2 flex-1 overflow-hidden rounded-full bg-ink/10"><span class="block h-full w-[3%] rounded-full bg-ocean"></span></span><span class="w-9 text-right tabular-nums">3%</span></div>
+              <div class="flex items-center gap-3 text-xs text-ink-soft"><span class="w-3">2</span><span class="h-2 flex-1 overflow-hidden rounded-full bg-ink/10"><span class="block h-full w-[1%] rounded-full bg-ocean"></span></span><span class="w-9 text-right tabular-nums">1%</span></div>
+              <div class="flex items-center gap-3 text-xs text-ink-soft"><span class="w-3">1</span><span class="h-2 flex-1 overflow-hidden rounded-full bg-ink/10"><span class="block h-full w-[1%] rounded-full bg-ocean"></span></span><span class="w-9 text-right tabular-nums">1%</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Review cards -->
+        <div class="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          <!-- 1 -->
+          <figure class="reveal flex flex-col rounded-2xl border border-ink/10 bg-white/70 p-6 shadow-soft">
+            <div class="flex gap-0.5 text-coral" aria-label="5 out of 5 stars"><svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4"><path d="m10 1.5 2.6 5.3 5.9.9-4.2 4.1 1 5.9L10 14.9 4.7 17.7l1-5.9L1.5 7.7l5.9-.9L10 1.5Z"/></svg><svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4"><path d="m10 1.5 2.6 5.3 5.9.9-4.2 4.1 1 5.9L10 14.9 4.7 17.7l1-5.9L1.5 7.7l5.9-.9L10 1.5Z"/></svg><svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4"><path d="m10 1.5 2.6 5.3 5.9.9-4.2 4.1 1 5.9L10 14.9 4.7 17.7l1-5.9L1.5 7.7l5.9-.9L10 1.5Z"/></svg><svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4"><path d="m10 1.5 2.6 5.3 5.9.9-4.2 4.1 1 5.9L10 14.9 4.7 17.7l1-5.9L1.5 7.7l5.9-.9L10 1.5Z"/></svg><svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4"><path d="m10 1.5 2.6 5.3 5.9.9-4.2 4.1 1 5.9L10 14.9 4.7 17.7l1-5.9L1.5 7.7l5.9-.9L10 1.5Z"/></svg></div>
+            <blockquote class="mt-4 flex-1 text-[15px] leading-relaxed text-ink">"Filled it with ice at 7am before a dive trip. Twelve hours and a boat ride later there were still cubes floating in it. I'm a convert."</blockquote>
+            <figcaption class="mt-5 flex items-center gap-3 border-t border-ink/10 pt-4">
+              <span class="grid h-10 w-10 place-items-center rounded-full bg-ocean/15 font-display font-bold text-ocean">MR</span>
+              <span><span class="block text-sm font-semibold">Mara R.</span><span class="block text-xs text-ink-soft">Verified · Tide Teal, 600 ml</span></span>
+            </figcaption>
+          </figure>
+          <!-- 2 -->
+          <figure class="reveal flex flex-col rounded-2xl border border-ink/10 bg-white/70 p-6 shadow-soft">
+            <div class="flex gap-0.5 text-coral" aria-label="5 out of 5 stars"><svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4"><path d="m10 1.5 2.6 5.3 5.9.9-4.2 4.1 1 5.9L10 14.9 4.7 17.7l1-5.9L1.5 7.7l5.9-.9L10 1.5Z"/></svg><svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4"><path d="m10 1.5 2.6 5.3 5.9.9-4.2 4.1 1 5.9L10 14.9 4.7 17.7l1-5.9L1.5 7.7l5.9-.9L10 1.5Z"/></svg><svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4"><path d="m10 1.5 2.6 5.3 5.9.9-4.2 4.1 1 5.9L10 14.9 4.7 17.7l1-5.9L1.5 7.7l5.9-.9L10 1.5Z"/></svg><svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4"><path d="m10 1.5 2.6 5.3 5.9.9-4.2 4.1 1 5.9L10 14.9 4.7 17.7l1-5.9L1.5 7.7l5.9-.9L10 1.5Z"/></svg><svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4"><path d="m10 1.5 2.6 5.3 5.9.9-4.2 4.1 1 5.9L10 14.9 4.7 17.7l1-5.9L1.5 7.7l5.9-.9L10 1.5Z"/></svg></div>
+            <blockquote class="mt-4 flex-1 text-[15px] leading-relaxed text-ink">"The lid is the whole thing for me. I bike to work and it lives sideways in my pannier — not a single drop, ever. Worth every cent."</blockquote>
+            <figcaption class="mt-5 flex items-center gap-3 border-t border-ink/10 pt-4">
+              <span class="grid h-10 w-10 place-items-center rounded-full bg-coral/15 font-display font-bold text-coral-deep">JT</span>
+              <span><span class="block text-sm font-semibold">Jonas T.</span><span class="block text-xs text-ink-soft">Verified · Ink Black, 600 ml</span></span>
+            </figcaption>
+          </figure>
+          <!-- 3 -->
+          <figure class="reveal flex flex-col rounded-2xl border border-ink/10 bg-white/70 p-6 shadow-soft">
+            <div class="flex gap-0.5 text-coral" aria-label="4 out of 5 stars"><svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4"><path d="m10 1.5 2.6 5.3 5.9.9-4.2 4.1 1 5.9L10 14.9 4.7 17.7l1-5.9L1.5 7.7l5.9-.9L10 1.5Z"/></svg><svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4"><path d="m10 1.5 2.6 5.3 5.9.9-4.2 4.1 1 5.9L10 14.9 4.7 17.7l1-5.9L1.5 7.7l5.9-.9L10 1.5Z"/></svg><svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4"><path d="m10 1.5 2.6 5.3 5.9.9-4.2 4.1 1 5.9L10 14.9 4.7 17.7l1-5.9L1.5 7.7l5.9-.9L10 1.5Z"/></svg><svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4"><path d="m10 1.5 2.6 5.3 5.9.9-4.2 4.1 1 5.9L10 14.9 4.7 17.7l1-5.9L1.5 7.7l5.9-.9L10 1.5Z"/></svg><svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4 text-ink/20"><path d="m10 1.5 2.6 5.3 5.9.9-4.2 4.1 1 5.9L10 14.9 4.7 17.7l1-5.9L1.5 7.7l5.9-.9L10 1.5Z"/></svg></div>
+            <blockquote class="mt-4 flex-1 text-[15px] leading-relaxed text-ink">"Gorgeous object and genuinely keeps coffee hot till noon. Knocked one star because I wish the 950 ml fit my car holder — but it's a beauty."</blockquote>
+            <figcaption class="mt-5 flex items-center gap-3 border-t border-ink/10 pt-4">
+              <span class="grid h-10 w-10 place-items-center rounded-full bg-ocean/15 font-display font-bold text-ocean">PL</span>
+              <span><span class="block text-sm font-semibold">Priya L.</span><span class="block text-xs text-ink-soft">Verified · Driftwood, 950 ml</span></span>
+            </figcaption>
+          </figure>
+          <!-- 4 -->
+          <figure class="reveal flex flex-col rounded-2xl border border-ink/10 bg-white/70 p-6 shadow-soft">
+            <div class="flex gap-0.5 text-coral" aria-label="5 out of 5 stars"><svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4"><path d="m10 1.5 2.6 5.3 5.9.9-4.2 4.1 1 5.9L10 14.9 4.7 17.7l1-5.9L1.5 7.7l5.9-.9L10 1.5Z"/></svg><svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4"><path d="m10 1.5 2.6 5.3 5.9.9-4.2 4.1 1 5.9L10 14.9 4.7 17.7l1-5.9L1.5 7.7l5.9-.9L10 1.5Z"/></svg><svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4"><path d="m10 1.5 2.6 5.3 5.9.9-4.2 4.1 1 5.9L10 14.9 4.7 17.7l1-5.9L1.5 7.7l5.9-.9L10 1.5Z"/></svg><svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4"><path d="m10 1.5 2.6 5.3 5.9.9-4.2 4.1 1 5.9L10 14.9 4.7 17.7l1-5.9L1.5 7.7l5.9-.9L10 1.5Z"/></svg><svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4"><path d="m10 1.5 2.6 5.3 5.9.9-4.2 4.1 1 5.9L10 14.9 4.7 17.7l1-5.9L1.5 7.7l5.9-.9L10 1.5Z"/></svg></div>
+            <blockquote class="mt-4 flex-1 text-[15px] leading-relaxed text-ink">"Dropped mine on concrete twice. A tiny scuff, nothing more. Support shipped me a free replacement gasket when mine wore — no questions."</blockquote>
+            <figcaption class="mt-5 flex items-center gap-3 border-t border-ink/10 pt-4">
+              <span class="grid h-10 w-10 place-items-center rounded-full bg-coral/15 font-display font-bold text-coral-deep">DK</span>
+              <span><span class="block text-sm font-semibold">Devon K.</span><span class="block text-xs text-ink-soft">Verified · Deep Reef, 600 ml</span></span>
+            </figcaption>
+          </figure>
+          <!-- 5 -->
+          <figure class="reveal flex flex-col rounded-2xl border border-ink/10 bg-white/70 p-6 shadow-soft">
+            <div class="flex gap-0.5 text-coral" aria-label="5 out of 5 stars"><svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4"><path d="m10 1.5 2.6 5.3 5.9.9-4.2 4.1 1 5.9L10 14.9 4.7 17.7l1-5.9L1.5 7.7l5.9-.9L10 1.5Z"/></svg><svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4"><path d="m10 1.5 2.6 5.3 5.9.9-4.2 4.1 1 5.9L10 14.9 4.7 17.7l1-5.9L1.5 7.7l5.9-.9L10 1.5Z"/></svg><svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4"><path d="m10 1.5 2.6 5.3 5.9.9-4.2 4.1 1 5.9L10 14.9 4.7 17.7l1-5.9L1.5 7.7l5.9-.9L10 1.5Z"/></svg><svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4"><path d="m10 1.5 2.6 5.3 5.9.9-4.2 4.1 1 5.9L10 14.9 4.7 17.7l1-5.9L1.5 7.7l5.9-.9L10 1.5Z"/></svg><svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4"><path d="m10 1.5 2.6 5.3 5.9.9-4.2 4.1 1 5.9L10 14.9 4.7 17.7l1-5.9L1.5 7.7l5.9-.9L10 1.5Z"/></svg></div>
+            <blockquote class="mt-4 flex-1 text-[15px] leading-relaxed text-ink">"Bought one, then three more as gifts with engraving. The etched little wave on my partner's got an actual gasp. Packaging is plastic-free too."</blockquote>
+            <figcaption class="mt-5 flex items-center gap-3 border-t border-ink/10 pt-4">
+              <span class="grid h-10 w-10 place-items-center rounded-full bg-ocean/15 font-display font-bold text-ocean">SA</span>
+              <span><span class="block text-sm font-semibold">Sofía A.</span><span class="block text-xs text-ink-soft">Verified · Sunset Coral, 350 ml</span></span>
+            </figcaption>
+          </figure>
+          <!-- 6 -->
+          <figure class="reveal flex flex-col rounded-2xl border border-ink/10 bg-white/70 p-6 shadow-soft">
+            <div class="flex gap-0.5 text-coral" aria-label="5 out of 5 stars"><svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4"><path d="m10 1.5 2.6 5.3 5.9.9-4.2 4.1 1 5.9L10 14.9 4.7 17.7l1-5.9L1.5 7.7l5.9-.9L10 1.5Z"/></svg><svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4"><path d="m10 1.5 2.6 5.3 5.9.9-4.2 4.1 1 5.9L10 14.9 4.7 17.7l1-5.9L1.5 7.7l5.9-.9L10 1.5Z"/></svg><svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4"><path d="m10 1.5 2.6 5.3 5.9.9-4.2 4.1 1 5.9L10 14.9 4.7 17.7l1-5.9L1.5 7.7l5.9-.9L10 1.5Z"/></svg><svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4"><path d="m10 1.5 2.6 5.3 5.9.9-4.2 4.1 1 5.9L10 14.9 4.7 17.7l1-5.9L1.5 7.7l5.9-.9L10 1.5Z"/></svg><svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4"><path d="m10 1.5 2.6 5.3 5.9.9-4.2 4.1 1 5.9L10 14.9 4.7 17.7l1-5.9L1.5 7.7l5.9-.9L10 1.5Z"/></svg></div>
+            <blockquote class="mt-4 flex-1 text-[15px] leading-relaxed text-ink">"I've owned the big-name brands. This is lighter, the coating doesn't sweat, and it actually looks like something I want on my desk. Done switching."</blockquote>
+            <figcaption class="mt-5 flex items-center gap-3 border-t border-ink/10 pt-4">
+              <span class="grid h-10 w-10 place-items-center rounded-full bg-coral/15 font-display font-bold text-coral-deep">AN</span>
+              <span><span class="block text-sm font-semibold">Aiko N.</span><span class="block text-xs text-ink-soft">Verified · Tide Teal, 600 ml</span></span>
+            </figcaption>
+          </figure>
+        </div>
+
+        <div class="reveal mt-10 text-center">
+          <button type="button" class="inline-flex items-center gap-2 rounded-xl border border-ink/20 bg-white/50 px-6 py-3 text-sm font-semibold text-ink transition hover:border-ink/40 hover:bg-white/80">
+            Read all 2,184 reviews
+            <svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4"><path fill-rule="evenodd" d="M5.3 7.3a1 1 0 0 1 1.4 0L10 10.6l3.3-3.3a1 1 0 1 1 1.4 1.4l-4 4a1 1 0 0 1-1.4 0l-4-4a1 1 0 0 1 0-1.4Z" clip-rule="evenodd"/></svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ RELATED PRODUCTS ============ -->
+    <section id="related" class="mx-auto max-w-7xl px-6 py-20 lg:py-28 lg:px-8">
+      <div class="reveal flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <p class="font-mono text-xs uppercase tracking-[0.18em] text-ocean">Pairs well with</p>
+          <h2 class="mt-3 font-display text-3xl font-bold leading-tight tracking-tight sm:text-4xl">Complete the set</h2>
+        </div>
+        <a href="#" class="hidden items-center gap-1.5 text-sm font-semibold text-ocean transition hover:gap-2.5 hover:text-ocean-deep sm:inline-flex">
+          Shop all drinkware
+          <svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4"><path fill-rule="evenodd" d="M3 10a.75.75 0 0 1 .75-.75h9.69L9.97 5.78a.75.75 0 1 1 1.06-1.06l4.5 4.5a.75.75 0 0 1 0 1.06l-4.5 4.5a.75.75 0 1 1-1.06-1.06l3.47-3.47H3.75A.75.75 0 0 1 3 10Z" clip-rule="evenodd"/></svg>
+        </a>
+      </div>
+
+      <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <!-- card 1 -->
+        <article class="reveal group">
+          <div class="relative aspect-square overflow-hidden rounded-2xl border border-ink/10 bg-gradient-to-br from-ocean-surf/30 to-ocean-deep">
+            <div class="absolute inset-0 grid place-items-center"><div class="h-28 w-28 rounded-full bg-gradient-to-b from-white/90 to-ocean-surf/70 shadow-2xl ring-1 ring-white/40"></div></div>
+            <button type="button" class="absolute inset-x-3 bottom-3 translate-y-2 rounded-xl bg-ink/90 py-2.5 text-sm font-semibold text-sand opacity-0 backdrop-blur transition group-hover:translate-y-0 group-hover:opacity-100">Add — $24</button>
+          </div>
+          <div class="mt-3 flex items-start justify-between gap-3">
+            <div><h3 class="font-display text-base font-semibold">Litoral Tumbler</h3><p class="text-sm text-ink-soft">350 ml low-rider</p></div>
+            <span class="font-display font-semibold">$24</span>
+          </div>
+        </article>
+        <!-- card 2 -->
+        <article class="reveal group">
+          <div class="relative aspect-square overflow-hidden rounded-2xl border border-ink/10 bg-gradient-to-br from-sand-200 to-ocean-surf/40">
+            <div class="absolute inset-0 grid place-items-center"><div class="h-32 w-16 rounded-2xl bg-gradient-to-b from-white/90 to-coral/60 shadow-2xl ring-1 ring-white/40"></div></div>
+            <button type="button" class="absolute inset-x-3 bottom-3 translate-y-2 rounded-xl bg-ink/90 py-2.5 text-sm font-semibold text-sand opacity-0 backdrop-blur transition group-hover:translate-y-0 group-hover:opacity-100">Add — $18</button>
+          </div>
+          <div class="mt-3 flex items-start justify-between gap-3">
+            <div><h3 class="font-display text-base font-semibold">Straw Lid Kit</h3><p class="text-sm text-ink-soft">2 lids + brush</p></div>
+            <span class="font-display font-semibold">$18</span>
+          </div>
+        </article>
+        <!-- card 3 -->
+        <article class="reveal group">
+          <div class="relative aspect-square overflow-hidden rounded-2xl border border-ink/10 bg-gradient-to-br from-ink to-ocean-deep">
+            <div class="absolute inset-0 grid place-items-center"><div class="h-24 w-24 rounded-xl bg-gradient-to-br from-sand-200 to-ocean/50 shadow-2xl ring-1 ring-white/30"></div></div>
+            <button type="button" class="absolute inset-x-3 bottom-3 translate-y-2 rounded-xl bg-ink/90 py-2.5 text-sm font-semibold text-sand opacity-0 backdrop-blur transition group-hover:translate-y-0 group-hover:opacity-100">Add — $16</button>
+          </div>
+          <div class="mt-3 flex items-start justify-between gap-3">
+            <div><h3 class="font-display text-base font-semibold">Cork Sleeve</h3><p class="text-sm text-ink-soft">Recycled, fits 600 ml</p></div>
+            <span class="font-display font-semibold">$16</span>
+          </div>
+        </article>
+        <!-- card 4 -->
+        <article class="reveal group">
+          <div class="relative aspect-square overflow-hidden rounded-2xl border border-ink/10 bg-gradient-to-br from-coral/30 to-ocean-deep">
+            <div class="absolute inset-0 grid place-items-center"><div class="h-36 w-20 rounded-[2rem] bg-gradient-to-b from-white/90 via-ocean/60 to-ink/80 shadow-2xl ring-1 ring-white/40"></div></div>
+            <span class="absolute left-3 top-3 rounded-full bg-coral px-2.5 py-1 text-[11px] font-bold text-white">Bundle</span>
+            <button type="button" class="absolute inset-x-3 bottom-3 translate-y-2 rounded-xl bg-ink/90 py-2.5 text-sm font-semibold text-sand opacity-0 backdrop-blur transition group-hover:translate-y-0 group-hover:opacity-100">Add — $86</button>
+          </div>
+          <div class="mt-3 flex items-start justify-between gap-3">
+            <div><h3 class="font-display text-base font-semibold">The Coast Set</h3><p class="text-sm text-ink-soft">Flask + tumbler + sleeve</p></div>
+            <span class="font-display font-semibold">$86</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ CTA BAND ============ -->
+    <section class="mx-auto max-w-7xl px-6 pb-20 lg:px-8">
+      <div class="reveal relative overflow-hidden rounded-3xl bg-ocean px-8 py-14 text-center text-sand shadow-lift lg:px-16 lg:py-20">
+        <div aria-hidden="true" class="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-ocean-surf/30 blur-3xl"></div>
+        <div aria-hidden="true" class="pointer-events-none absolute -bottom-20 -left-10 h-64 w-64 rounded-full bg-coral/20 blur-3xl"></div>
+        <div class="relative mx-auto max-w-2xl">
+          <h2 class="font-display text-3xl font-bold leading-tight tracking-tight sm:text-4xl">Try it for 100 days, on the house</h2>
+          <p class="mt-4 text-lg leading-relaxed text-sand/85">Carry it everywhere. If the Litoral isn't the last flask you ever buy, send it back for a full refund — we'll even cover the return label.</p>
+          <div class="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <a href="#buybox" class="inline-flex items-center justify-center gap-2 rounded-xl bg-sand px-8 py-3.5 text-base font-semibold text-ink shadow-soft transition hover:bg-white active:scale-[.99]">
+              Add to cart — $48
+            </a>
+            <a href="#features" class="inline-flex items-center justify-center gap-2 rounded-xl border border-sand/40 px-8 py-3.5 text-base font-semibold text-sand transition hover:bg-sand/10">
+              See the features
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="border-t border-ink/10 bg-ink text-sand">
+    <div class="mx-auto max-w-7xl px-6 py-16 lg:px-8">
+      <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-5">
+        <!-- Brand + newsletter -->
+        <div class="lg:col-span-2">
+          <a href="#hero" class="flex items-center gap-2.5">
+            <span class="grid h-9 w-9 place-items-center rounded-lg bg-ocean text-sand font-mono text-lg font-bold leading-none">~&lt;</span>
+            <span class="font-display text-lg font-semibold tracking-tight">Sereia<span class="text-ocean-surf">Goods</span></span>
+          </a>
+          <p class="mt-4 max-w-sm text-sm leading-relaxed text-sand/65">
+            Coastal goods built to outlast trends, made carbon-neutral in Portugal. Born by the water, made for it.
+          </p>
+          <form id="newsletter" class="mt-6 max-w-sm" novalidate>
+            <label for="email" class="block text-sm font-medium text-sand/80">Get 10% off your first order</label>
+            <div class="mt-2 flex gap-2">
+              <input id="email" name="email" type="email" required placeholder="you@email.com" class="min-w-0 flex-1 rounded-lg border border-white/15 bg-white/5 px-4 py-2.5 text-sm text-sand placeholder:text-sand/40 focus:border-ocean-surf focus:outline-none focus:ring-2 focus:ring-ocean-surf/40" />
+              <button type="submit" class="shrink-0 rounded-lg bg-ocean px-5 py-2.5 text-sm font-semibold text-sand transition hover:bg-ocean-surf hover:text-ink">Join</button>
+            </div>
+            <p id="newsletterMsg" class="mt-2 hidden text-sm text-ocean-surf" role="status"></p>
+          </form>
+        </div>
+
+        <!-- Links -->
+        <div>
+          <h3 class="font-mono text-xs uppercase tracking-[0.14em] text-sand/50">Shop</h3>
+          <ul class="mt-4 space-y-2.5 text-sm text-sand/70">
+            <li><a href="#" class="transition hover:text-sand">Flasks</a></li>
+            <li><a href="#" class="transition hover:text-sand">Tumblers</a></li>
+            <li><a href="#" class="transition hover:text-sand">Lids &amp; parts</a></li>
+            <li><a href="#" class="transition hover:text-sand">Bundles</a></li>
+            <li><a href="#" class="transition hover:text-sand">Gift cards</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="font-mono text-xs uppercase tracking-[0.14em] text-sand/50">Support</h3>
+          <ul class="mt-4 space-y-2.5 text-sm text-sand/70">
+            <li><a href="#specs" class="transition hover:text-sand">Specs</a></li>
+            <li><a href="#" class="transition hover:text-sand">Shipping &amp; returns</a></li>
+            <li><a href="#" class="transition hover:text-sand">Warranty</a></li>
+            <li><a href="#" class="transition hover:text-sand">Care guide</a></li>
+            <li><a href="#" class="transition hover:text-sand">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="font-mono text-xs uppercase tracking-[0.14em] text-sand/50">Studio</h3>
+          <ul class="mt-4 space-y-2.5 text-sm text-sand/70">
+            <li><a href="#" class="transition hover:text-sand">Our story</a></li>
+            <li><a href="#" class="transition hover:text-sand">Sustainability</a></li>
+            <li><a href="#" class="transition hover:text-sand">Journal</a></li>
+            <li><a href="#" class="transition hover:text-sand">Stockists</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="mt-12 flex flex-col items-start justify-between gap-4 border-t border-white/10 pt-8 sm:flex-row sm:items-center">
+        <p class="text-xs text-sand/50">© 2026 Sereia Goods. Built with care on the coast. A saltycodestudio template.</p>
+        <div class="flex items-center gap-4 text-sand/60">
+          <a href="#" aria-label="Instagram" class="transition hover:text-sand"><svg viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5"><path d="M12 2.2c3.2 0 3.6 0 4.8.07 1.2.05 1.8.25 2.2.42.6.22 1 .48 1.4.9.43.42.7.83.92 1.42.17.4.37 1 .42 2.2.06 1.2.07 1.6.07 4.8s0 3.6-.07 4.8c-.05 1.2-.25 1.8-.42 2.2-.22.6-.48 1-.9 1.4-.42.43-.83.7-1.42.92-.4.17-1 .37-2.2.42-1.2.06-1.6.07-4.8.07s-3.6 0-4.8-.07c-1.2-.05-1.8-.25-2.2-.42-.6-.22-1-.48-1.4-.9-.43-.42-.7-.83-.92-1.42-.17-.4-.37-1-.42-2.2C2.2 15.6 2.2 15.2 2.2 12s0-3.6.07-4.8c.05-1.2.25-1.8.42-2.2.22-.6.48-1 .9-1.4.42-.43.83-.7 1.42-.92.4-.17 1-.37 2.2-.42C8.4 2.2 8.8 2.2 12 2.2Zm0 1.8c-3.1 0-3.5 0-4.7.07-.9.04-1.4.2-1.7.32-.43.17-.74.37-1.06.7-.32.32-.52.63-.7 1.06-.12.3-.28.8-.32 1.7C3.2 8.5 3.2 8.9 3.2 12s0 3.5.07 4.7c.04.9.2 1.4.32 1.7.17.43.37.74.7 1.06.32.32.63.52 1.06.7.3.12.8.28 1.7.32 1.2.07 1.6.07 4.7.07s3.5 0 4.7-.07c.9-.04 1.4-.2 1.7-.32.43-.17.74-.37 1.06-.7.32-.32.52-.63.7-1.06.12-.3.28-.8.32-1.7.07-1.2.07-1.6.07-4.7s0-3.5-.07-4.7c-.04-.9-.2-1.4-.32-1.7a2.9 2.9 0 0 0-.7-1.06 2.9 2.9 0 0 0-1.06-.7c-.3-.12-.8-.28-1.7-.32C15.5 4 15.1 4 12 4Zm0 3.06A4.94 4.94 0 1 1 7.06 12 4.94 4.94 0 0 1 12 7.06Zm0 8.14A3.2 3.2 0 1 0 8.8 12 3.2 3.2 0 0 0 12 15.2Zm5.13-8.34a1.15 1.15 0 1 1-1.15-1.15 1.15 1.15 0 0 1 1.15 1.15Z"/></svg></a>
+          <a href="#" aria-label="TikTok" class="transition hover:text-sand"><svg viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5"><path d="M16.5 3c.3 2.1 1.5 3.4 3.5 3.6V9c-1.3.1-2.5-.3-3.5-1v6.6a5.6 5.6 0 1 1-5.6-5.6c.3 0 .6 0 .9.08v2.6a3 3 0 1 0 2.1 2.86V3h2.6Z"/></svg></a>
+          <a href="#" aria-label="YouTube" class="transition hover:text-sand"><svg viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5"><path d="M22 12s0-3.2-.4-4.7a2.5 2.5 0 0 0-1.8-1.8C18.3 5 12 5 12 5s-6.3 0-7.8.5A2.5 2.5 0 0 0 2.4 7.3C2 8.8 2 12 2 12s0 3.2.4 4.7a2.5 2.5 0 0 0 1.8 1.8c1.5.5 7.8.5 7.8.5s6.3 0 7.8-.5a2.5 2.5 0 0 0 1.8-1.8c.4-1.5.4-4.7.4-4.7Zm-12 3V9l5.2 3-5.2 3Z"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============ CART DRAWER ============ -->
+  <div id="cartOverlay" class="fixed inset-0 z-[70] hidden">
+    <div id="cartBackdrop" class="absolute inset-0 bg-ink/40 opacity-0 backdrop-blur-sm transition-opacity duration-300"></div>
+    <aside id="cartPanel" role="dialog" aria-modal="true" aria-label="Shopping cart" class="absolute right-0 top-0 flex h-full w-full max-w-md translate-x-full flex-col bg-sand shadow-2xl transition-transform duration-300">
+      <div class="flex items-center justify-between border-b border-ink/10 px-6 py-5">
+        <h2 class="font-display text-lg font-semibold">Your cart</h2>
+        <button id="cartClose" type="button" aria-label="Close cart" class="grid h-9 w-9 place-items-center rounded-lg text-ink-soft transition hover:bg-sand-100 hover:text-ink">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" class="h-5 w-5"><path stroke-linecap="round" d="m5 5 10 10M15 5 5 15"/></svg>
+        </button>
+      </div>
+
+      <div id="cartItems" class="flex-1 space-y-4 overflow-y-auto px-6 py-6">
+        <!-- items injected by JS -->
+      </div>
+
+      <div class="border-t border-ink/10 px-6 py-5">
+        <div class="flex items-center justify-between text-sm text-ink-soft">
+          <span>Subtotal</span>
+          <span id="cartSubtotal" class="font-display text-lg font-semibold text-ink">$48</span>
+        </div>
+        <p class="mt-1 text-xs text-ink-soft/70">Shipping &amp; taxes calculated at checkout. Free over $60.</p>
+        <button type="button" class="mt-4 w-full rounded-xl bg-ocean px-6 py-3.5 text-base font-semibold text-sand shadow-soft transition hover:bg-ocean-deep active:scale-[.99]">
+          Checkout
+        </button>
+        <button id="cartContinue" type="button" class="mt-2 w-full rounded-xl px-6 py-2.5 text-sm font-semibold text-ink-soft transition hover:text-ink">
+          Continue shopping
+        </button>
+      </div>
+    </aside>
+  </div>
+
+  <!-- ============ TOAST ============ -->
+  <div id="toast" class="pointer-events-none fixed bottom-6 left-1/2 z-[80] -translate-x-1/2 translate-y-4 rounded-xl bg-ink px-5 py-3 text-sm font-semibold text-sand opacity-0 shadow-lift transition-all duration-300">
+    Added to cart
+  </div>
+
+  <script>
+    (function () {
+      "use strict";
+      var $ = function (s, r) { return (r || document).querySelector(s); };
+      var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+
+      /* ---------- Mobile menu ---------- */
+      var menuBtn = $("#menuBtn"), mobileMenu = $("#mobileMenu");
+      menuBtn && menuBtn.addEventListener("click", function () {
+        var open = mobileMenu.classList.toggle("hidden") === false;
+        menuBtn.setAttribute("aria-expanded", String(open));
+      });
+      $$("#mobileMenu a").forEach(function (a) {
+        a.addEventListener("click", function () {
+          mobileMenu.classList.add("hidden");
+          menuBtn.setAttribute("aria-expanded", "false");
+        });
+      });
+
+      /* ---------- Nav scroll elevation ---------- */
+      var nav = $("#nav");
+      var onScroll = function () {
+        if (window.scrollY > 8) nav.classList.add("shadow-soft");
+        else nav.classList.remove("shadow-soft");
+      };
+      window.addEventListener("scroll", onScroll, { passive: true });
+      onScroll();
+
+      /* ---------- Scroll reveal ---------- */
+      var reveals = $$(".reveal");
+      if ("IntersectionObserver" in window) {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+          });
+        }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
+        reveals.forEach(function (el, i) {
+          el.style.transitionDelay = Math.min(i % 6, 5) * 60 + "ms";
+          io.observe(el);
+        });
+      } else {
+        reveals.forEach(function (el) { el.classList.add("in"); });
+      }
+
+      /* ---------- Gallery ---------- */
+      var stage = $("#galleryStage"), flask = $("#flaskBody"), swatchLabel = $("#swatchLabel");
+      function applyStage(stageCls, flaskCls) {
+        stage.className = "absolute inset-0 grid place-items-center transition-colors duration-500 bg-gradient-to-br " + stageCls;
+        flask.className = "h-72 w-28 rounded-[2.5rem] bg-gradient-to-b shadow-2xl ring-1 ring-white/40 transition-colors duration-500 " + flaskCls;
+      }
+      $$(".thumb").forEach(function (t) {
+        t.addEventListener("click", function () {
+          $$(".thumb").forEach(function (x) {
+            x.classList.remove("is-active", "border-ocean");
+            x.classList.add("border-transparent");
+            x.setAttribute("aria-selected", "false");
+          });
+          t.classList.add("is-active", "border-ocean");
+          t.classList.remove("border-transparent");
+          t.setAttribute("aria-selected", "true");
+          applyStage(t.getAttribute("data-stage"), t.getAttribute("data-flask"));
+        });
+      });
+
+      /* ---------- Colour swatches ---------- */
+      var flaskTints = {
+        "Tide Teal":     "from-white/95 via-ocean-surf/80 to-ocean",
+        "Deep Reef":     "from-white/80 via-ocean/70 to-ocean-deep",
+        "Driftwood":     "from-white via-sand-200 to-sand-200",
+        "Sunset Coral":  "from-white/95 via-coral/60 to-coral-deep",
+        "Ink Black":     "from-white/80 via-ink-soft to-ink"
+      };
+      var swatchName = $("#swatchName");
+      $$(".swatch").forEach(function (s) {
+        s.addEventListener("click", function () {
+          $$(".swatch").forEach(function (x) {
+            x.classList.remove("is-active", "ring-ocean");
+            x.classList.add("ring-transparent");
+            x.setAttribute("aria-checked", "false");
+          });
+          s.classList.add("is-active", "ring-ocean");
+          s.classList.remove("ring-transparent");
+          s.setAttribute("aria-checked", "true");
+          var name = s.getAttribute("data-name");
+          swatchName.textContent = name;
+          swatchLabel.textContent = name;
+          state.color = name;
+          // recolor the flask in the gallery
+          flask.className = "h-72 w-28 rounded-[2.5rem] bg-gradient-to-b shadow-2xl ring-1 ring-white/40 transition-colors duration-500 " + (flaskTints[name] || flaskTints["Tide Teal"]);
+        });
+      });
+
+      /* ---------- Size + price ---------- */
+      var state = { size: "600 ml", price: 48, qty: 1, color: "Tide Teal" };
+      var priceLabel = $("#priceLabel");
+      function fmt(n) { return "$" + n; }
+      function refreshPrice() { priceLabel.textContent = fmt(state.price * state.qty); }
+      $$(".size").forEach(function (b) {
+        b.addEventListener("click", function () {
+          $$(".size").forEach(function (x) {
+            x.classList.remove("is-active", "border-2", "border-ocean", "bg-ocean/5");
+            x.classList.add("border", "border-ink/15", "bg-white/50");
+            x.setAttribute("aria-checked", "false");
+          });
+          b.classList.add("is-active", "border-2", "border-ocean", "bg-ocean/5");
+          b.classList.remove("border", "border-ink/15", "bg-white/50");
+          b.setAttribute("aria-checked", "true");
+          state.size = b.getAttribute("data-size");
+          state.price = parseInt(b.getAttribute("data-price"), 10);
+          refreshPrice();
+        });
+      });
+
+      /* ---------- Quantity ---------- */
+      var qtyVal = $("#qtyVal");
+      $("#qtyMinus").addEventListener("click", function () {
+        state.qty = Math.max(1, state.qty - 1); qtyVal.textContent = state.qty; refreshPrice();
+      });
+      $("#qtyPlus").addEventListener("click", function () {
+        state.qty = Math.min(10, state.qty + 1); qtyVal.textContent = state.qty; refreshPrice();
+      });
+
+      /* ---------- Cart ---------- */
+      var cart = [{ name: "Litoral 24h Flask", variant: "Tide Teal · 600 ml", price: 48, qty: 1 }];
+      var overlay = $("#cartOverlay"), backdrop = $("#cartBackdrop"), panel = $("#cartPanel");
+      var cartCount = $("#cartCount"), cartItems = $("#cartItems"), cartSubtotal = $("#cartSubtotal");
+      var lastFocus = null;
+
+      function renderCart() {
+        var count = cart.reduce(function (s, i) { return s + i.qty; }, 0);
+        var subtotal = cart.reduce(function (s, i) { return s + i.price * i.qty; }, 0);
+        cartCount.textContent = count;
+        cartCount.style.display = count ? "" : "none";
+        cartSubtotal.textContent = fmt(subtotal);
+        if (!cart.length) {
+          cartItems.innerHTML = '<p class="py-10 text-center text-sm text-ink-soft">Your cart is empty.</p>';
+          return;
+        }
+        cartItems.innerHTML = cart.map(function (i, idx) {
+          return '' +
+          '<div class="flex gap-4 rounded-2xl border border-ink/10 bg-white/60 p-3">' +
+            '<div class="grid h-16 w-16 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-ocean-surf/40 to-ocean-deep">' +
+              '<div class="h-10 w-5 rounded-md bg-gradient-to-b from-white/90 to-ocean"></div>' +
+            '</div>' +
+            '<div class="min-w-0 flex-1">' +
+              '<div class="flex items-start justify-between gap-2">' +
+                '<div><p class="font-display text-sm font-semibold">' + i.name + '</p>' +
+                '<p class="text-xs text-ink-soft">' + i.variant + '</p></div>' +
+                '<button data-remove="' + idx + '" aria-label="Remove item" class="text-ink-soft transition hover:text-coral-deep">' +
+                  '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" class="h-4 w-4"><path stroke-linecap="round" d="m5 5 10 10M15 5 5 15"/></svg>' +
+                '</button>' +
+              '</div>' +
+              '<div class="mt-2 flex items-center justify-between">' +
+                '<span class="text-sm font-semibold tabular-nums">' + fmt(i.price) + '</span>' +
+                '<span class="font-mono text-xs text-ink-soft">Qty ' + i.qty + '</span>' +
+              '</div>' +
+            '</div>' +
+          '</div>';
+        }).join("");
+        $$("#cartItems [data-remove]").forEach(function (b) {
+          b.addEventListener("click", function () {
+            cart.splice(parseInt(b.getAttribute("data-remove"), 10), 1);
+            renderCart();
+          });
+        });
+      }
+
+      function openCart() {
+        lastFocus = document.activeElement;
+        overlay.classList.remove("hidden");
+        document.body.style.overflow = "hidden";
+        requestAnimationFrame(function () {
+          backdrop.classList.remove("opacity-0");
+          panel.classList.remove("translate-x-full");
+        });
+        $("#cartClose").focus();
+      }
+      function closeCart() {
+        backdrop.classList.add("opacity-0");
+        panel.classList.add("translate-x-full");
+        document.body.style.overflow = "";
+        setTimeout(function () { overlay.classList.add("hidden"); }, 300);
+        lastFocus && lastFocus.focus();
+      }
+      $("#cartBtn").addEventListener("click", openCart);
+      $("#cartClose").addEventListener("click", closeCart);
+      $("#cartContinue").addEventListener("click", closeCart);
+      backdrop.addEventListener("click", closeCart);
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape" && !overlay.classList.contains("hidden")) closeCart();
+      });
+
+      /* ---------- Toast ---------- */
+      var toast = $("#toast"), toastTimer = null;
+      function showToast(msg) {
+        toast.textContent = msg;
+        toast.classList.remove("opacity-0", "translate-y-4");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(function () {
+          toast.classList.add("opacity-0", "translate-y-4");
+        }, 2200);
+      }
+
+      /* ---------- Add to cart ---------- */
+      $("#addToCart").addEventListener("click", function () {
+        var variant = state.color + " · " + state.size;
+        var existing = cart.filter(function (i) { return i.variant === variant; })[0];
+        if (existing) existing.qty += state.qty;
+        else cart.push({ name: "Litoral 24h Flask", variant: variant, price: state.price, qty: state.qty });
+        renderCart();
+        showToast("Added " + state.qty + " × " + variant);
+        openCart();
+      });
+
+      /* ---------- Newsletter ---------- */
+      var form = $("#newsletter"), msg = $("#newsletterMsg");
+      form && form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var email = $("#email").value.trim();
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          msg.textContent = "Please enter a valid email.";
+          msg.className = "mt-2 text-sm text-coral";
+          msg.classList.remove("hidden");
+          return;
+        }
+        msg.textContent = "You're in — your 10% code is on the way.";
+        msg.className = "mt-2 text-sm text-ocean-surf";
+        msg.classList.remove("hidden");
+        form.reset();
+      });
+
+      renderCart();
+    })();
+  </script>
+</body>
+</html>

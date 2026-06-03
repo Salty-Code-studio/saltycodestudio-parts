@@ -1,56 +1,49 @@
 # saltycodestudio-parts
 
-A curated parts bin of **cool website code, animations, and components** — so when I'm
-building with a local Ollama model, it can reach for a finished, premium piece instead of
+A curated kit for **building the best websites** — premium components, animations, page
+sections, full templates, a design-system foundation, and a taste playbook. Built so that
+when I build with a local Ollama model, it can assemble finished, high-end work instead of
 generating fancy effects from scratch (which smaller models are weak at).
 
 Built and maintained by [saltycodestudio](https://saltycodestudio.com) · _Sand & Surf_.
 
 ## What's in here
 
-Four stacks, every part self-contained with a live preview:
+| Layer | Folder | What |
+|-------|--------|------|
+| 🧱 Templates | `templates/` | Full, runnable pages (`index.html`) — clone & adapt |
+| 🧩 Sections | `sections/` | Page-ready blocks (hero, features, pricing, footer…), React `.tsx` + plain `section.html` |
+| ⚙️ Components | `components/` | Atoms, effects & animations — `react/`, `css/`, `vanilla/`, `motion/` |
+| 🎨 Foundations | `foundations/` | Design system: palettes, type scale, font pairings, tokens, Tailwind preset, base/shadows/gradients/motion CSS |
+| 📖 Playbook | `playbook/` | How to build with taste — workflow, anti-slop, layout, type, color, motion, a11y, SEO/perf |
+| 🚀 Starters | `starters/` | Project skeletons: Vite+React+TW, Astro, Next.js, plain HTML+TW |
 
-| Folder | What |
-|--------|------|
-| `components/react/` | React + Tailwind components (`.tsx`) |
-| `components/css/` | CSS-only effects — no JS |
-| `components/vanilla/` | Drop-in HTML/CSS/JS, no build step |
-| `components/motion/` | GSAP & scroll-driven animation |
-
-Each part lives in its own folder with:
-
-```
-<part-name>/
-├── part.json     metadata (name, tags, tier, deps, files)
-├── preview.html  open in a browser to see it render
-├── README.md     paste-in instructions
-└── <source>      the actual code
-```
+Each component/section/template lives in its own folder with a `part.json`, a live preview,
+a `README.md`, and the source.
 
 ## How to use it
 
-**With a local model:** point it at [`USING-WITH-OLLAMA.md`](./USING-WITH-OLLAMA.md) in your
-system prompt. It tells the model to read `INDEX.md` first, match by tag, and copy the part.
+**With a local model:** point it at [`USING-WITH-OLLAMA.md`](./USING-WITH-OLLAMA.md) — it
+explains the read order (playbook → starter → foundations → templates/sections/components)
+and tells the model to consult [`INDEX.md`](./INDEX.md) / `manifest.json` to find parts.
 
-**By hand:** browse [`INDEX.md`](./INDEX.md) — every part in one table — or open any
-`preview.html` to see it live, then copy the source.
+**By hand:** browse [`INDEX.md`](./INDEX.md) for the full map, or open
+[`gallery.html`](./gallery.html) to see every preview live with filters & search.
 
 ## Tiers
 
-- 🏆 **showcase** — bold, award-site-grade (WebGL touches, big motion).
-- ✅ **practical** — premium but production-safe; ships clean for client work.
+- 🏆 **showcase** — bold, award-site-grade.
+- ✅ **practical** — premium but production-safe; ships clean.
 
-## Growing the library
+## Growing the kit
 
-Add a new folder under the right `components/<category>/`, give it a `part.json` (schema is
-documented at the top of `scripts/build-index.mjs`), then regenerate the lookup table:
+Add a folder under the right layer with a `part.json` (schema documented atop
+`scripts/build-index.mjs`), then regenerate the maps:
 
 ```bash
-node scripts/build-index.mjs
+node scripts/build-index.mjs && node scripts/build-gallery.mjs
 ```
-
-That rescans every `part.json` and rewrites `INDEX.md` + `manifest.json`.
 
 ## Roadmap
 
-- [ ] Wire library lookup into the JARVIS daemon for semantic search (currently disk-only).
+- [ ] Wire kit lookup into the JARVIS daemon for semantic search (currently disk-only).

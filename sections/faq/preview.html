@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FAQ Accordion — saltycodestudio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root { font-family: "Inter", system-ui, sans-serif; }
+    h1, h2, h3, .font-display { font-family: "Space Grotesk", system-ui, sans-serif; }
+    html { scroll-behavior: smooth; }
+  </style>
+</head>
+<body class="bg-[#fbf7f0] text-[#1c2b33] antialiased">
+
+  <!-- ── minimal nav for context ────────────────────────────────── -->
+  <header class="sticky top-0 z-30 border-b border-[#ece0cd] bg-[#fbf7f0]/85 backdrop-blur">
+    <nav class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+      <a href="#" class="flex items-center gap-2 font-display text-lg font-bold tracking-tight text-[#0f5c5c]">
+        <span class="text-2xl leading-none text-[#1f8a8a]">~&lt;</span>
+        saltycodestudio
+      </a>
+      <div class="hidden items-center gap-8 text-sm font-medium text-[#4a5d66] sm:flex">
+        <a href="#" class="transition-colors hover:text-[#0f5c5c]">Work</a>
+        <a href="#" class="transition-colors hover:text-[#0f5c5c]">Services</a>
+        <a href="#faq-title" class="text-[#0f5c5c]">FAQ</a>
+        <a href="#contact" class="rounded-full bg-[#1f8a8a] px-4 py-2 text-[#fbf7f0] transition-colors hover:bg-[#0f5c5c]">Start a project</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ── small hero so the section has surrounding context ──────── -->
+  <section class="mx-auto max-w-6xl px-6 pb-4 pt-16 text-center sm:pt-24">
+    <p class="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#1f8a8a]">Clean code, warm coast</p>
+    <h1 class="font-display text-4xl font-bold tracking-tight text-[#1c2b33] sm:text-5xl">Good questions get good answers.</h1>
+    <p class="mx-auto mt-4 max-w-xl text-base leading-relaxed text-[#4a5d66]">Before we build anything together, here is how we work — the timelines, the hand-off, the part where you stay in control.</p>
+  </section>
+
+  <!-- ════════════════ SECTION START (section.html) ════════════════ -->
+  <section class="bg-[#fbf7f0] py-20 text-[#1c2b33] sm:py-28" aria-labelledby="faq-title">
+    <div class="mx-auto grid max-w-6xl gap-12 px-6 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] lg:gap-16">
+      <header class="lg:sticky lg:top-24 lg:self-start">
+        <p class="mb-4 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#1f8a8a]">
+          <span class="h-px w-6 bg-[#2ec3c3]" aria-hidden="true"></span>
+          Questions
+        </p>
+        <h2 id="faq-title" class="font-display text-3xl font-semibold leading-tight tracking-tight text-[#1c2b33] sm:text-4xl">
+          The things people ask before we start
+        </h2>
+        <p class="mt-4 max-w-sm text-base leading-relaxed text-[#4a5d66]">
+          Straight answers, no fine print. If yours is not here, the inbox is always open.
+        </p>
+      </header>
+
+      <div data-faq data-faq-mode="single" class="divide-y divide-[#ece0cd] rounded-2xl border border-[#ece0cd] bg-[#f4ece0]/40">
+        <div class="first:rounded-t-2xl last:rounded-b-2xl">
+          <h3>
+            <button type="button" id="faq-button-0" aria-expanded="true" aria-controls="faq-panel-0"
+              class="group flex w-full items-center justify-between gap-4 rounded-[inherit] px-6 py-5 text-left text-base font-semibold text-[#1c2b33] transition-colors hover:text-[#0f5c5c] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1f8a8a] focus-visible:ring-offset-2 focus-visible:ring-offset-[#fbf7f0] sm:text-lg">
+              <span>How long does a typical project take?</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="h-5 w-5 shrink-0 text-[#1f8a8a] transition-transform duration-300 ease-out group-aria-expanded:-rotate-180"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+          </h3>
+          <div id="faq-panel-0" role="region" aria-labelledby="faq-button-0"
+            class="grid transition-[grid-template-rows] duration-300 ease-out motion-reduce:transition-none [grid-template-rows:1fr]">
+            <div class="overflow-hidden">
+              <div class="px-6 pb-6 pt-0 text-[15px] leading-relaxed text-[#4a5d66]">
+                Most marketing sites land in three to five weeks, and product builds run six to twelve depending on scope. We send a tight estimate after the first call, then ship in weekly increments so you see real progress instead of a status deck.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="first:rounded-t-2xl last:rounded-b-2xl">
+          <h3>
+            <button type="button" id="faq-button-1" aria-expanded="false" aria-controls="faq-panel-1"
+              class="group flex w-full items-center justify-between gap-4 rounded-[inherit] px-6 py-5 text-left text-base font-semibold text-[#1c2b33] transition-colors hover:text-[#0f5c5c] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1f8a8a] focus-visible:ring-offset-2 focus-visible:ring-offset-[#fbf7f0] sm:text-lg">
+              <span>Do you work with my existing stack?</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="h-5 w-5 shrink-0 text-[#1f8a8a] transition-transform duration-300 ease-out group-aria-expanded:-rotate-180"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+          </h3>
+          <div id="faq-panel-1" role="region" aria-labelledby="faq-button-1"
+            class="grid transition-[grid-template-rows] duration-300 ease-out motion-reduce:transition-none [grid-template-rows:0fr]">
+            <div class="overflow-hidden" aria-hidden="true" inert>
+              <div class="px-6 pb-6 pt-0 text-[15px] leading-relaxed text-[#4a5d66]">
+                Usually, yes. We are fluent in React, Next.js, Astro and plain Tailwind, and we are comfortable dropping into an existing codebase. If your current setup is fighting you, we will say so plainly and lay out the trade-offs before anyone touches a config file.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="first:rounded-t-2xl last:rounded-b-2xl">
+          <h3>
+            <button type="button" id="faq-button-2" aria-expanded="false" aria-controls="faq-panel-2"
+              class="group flex w-full items-center justify-between gap-4 rounded-[inherit] px-6 py-5 text-left text-base font-semibold text-[#1c2b33] transition-colors hover:text-[#0f5c5c] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1f8a8a] focus-visible:ring-offset-2 focus-visible:ring-offset-[#fbf7f0] sm:text-lg">
+              <span>What do you need from me to get started?</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="h-5 w-5 shrink-0 text-[#1f8a8a] transition-transform duration-300 ease-out group-aria-expanded:-rotate-180"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+          </h3>
+          <div id="faq-panel-2" role="region" aria-labelledby="faq-button-2"
+            class="grid transition-[grid-template-rows] duration-300 ease-out motion-reduce:transition-none [grid-template-rows:0fr]">
+            <div class="overflow-hidden" aria-hidden="true" inert>
+              <div class="px-6 pb-6 pt-0 text-[15px] leading-relaxed text-[#4a5d66]">
+                A clear sense of the outcome you are after and access to your brand assets. No formal spec required. We run a short kickoff to pin down goals and constraints, and we will draft the rest with you rather than waiting on a finished brief.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="first:rounded-t-2xl last:rounded-b-2xl">
+          <h3>
+            <button type="button" id="faq-button-3" aria-expanded="false" aria-controls="faq-panel-3"
+              class="group flex w-full items-center justify-between gap-4 rounded-[inherit] px-6 py-5 text-left text-base font-semibold text-[#1c2b33] transition-colors hover:text-[#0f5c5c] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1f8a8a] focus-visible:ring-offset-2 focus-visible:ring-offset-[#fbf7f0] sm:text-lg">
+              <span>How do you handle revisions and feedback?</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="h-5 w-5 shrink-0 text-[#1f8a8a] transition-transform duration-300 ease-out group-aria-expanded:-rotate-180"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+          </h3>
+          <div id="faq-panel-3" role="region" aria-labelledby="faq-button-3"
+            class="grid transition-[grid-template-rows] duration-300 ease-out motion-reduce:transition-none [grid-template-rows:0fr]">
+            <div class="overflow-hidden" aria-hidden="true" inert>
+              <div class="px-6 pb-6 pt-0 text-[15px] leading-relaxed text-[#4a5d66]">
+                Each milestone ships to a live preview link you can click through and comment on directly. We fold rounds of feedback into the next increment, so nothing piles up at the end. Two review passes are baked into every estimate.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="first:rounded-t-2xl last:rounded-b-2xl">
+          <h3>
+            <button type="button" id="faq-button-4" aria-expanded="false" aria-controls="faq-panel-4"
+              class="group flex w-full items-center justify-between gap-4 rounded-[inherit] px-6 py-5 text-left text-base font-semibold text-[#1c2b33] transition-colors hover:text-[#0f5c5c] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1f8a8a] focus-visible:ring-offset-2 focus-visible:ring-offset-[#fbf7f0] sm:text-lg">
+              <span>Will I be able to update the site myself?</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="h-5 w-5 shrink-0 text-[#1f8a8a] transition-transform duration-300 ease-out group-aria-expanded:-rotate-180"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+          </h3>
+          <div id="faq-panel-4" role="region" aria-labelledby="faq-button-4"
+            class="grid transition-[grid-template-rows] duration-300 ease-out motion-reduce:transition-none [grid-template-rows:0fr]">
+            <div class="overflow-hidden" aria-hidden="true" inert>
+              <div class="px-6 pb-6 pt-0 text-[15px] leading-relaxed text-[#4a5d66]">
+                That is the goal. We hand over clean, documented code and, where it helps, wire content into a CMS your team can edit without us. Every project closes with a walkthrough and a written runbook so you are never locked out of your own site.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="first:rounded-t-2xl last:rounded-b-2xl">
+          <h3>
+            <button type="button" id="faq-button-5" aria-expanded="false" aria-controls="faq-panel-5"
+              class="group flex w-full items-center justify-between gap-4 rounded-[inherit] px-6 py-5 text-left text-base font-semibold text-[#1c2b33] transition-colors hover:text-[#0f5c5c] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1f8a8a] focus-visible:ring-offset-2 focus-visible:ring-offset-[#fbf7f0] sm:text-lg">
+              <span>What happens after launch?</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="h-5 w-5 shrink-0 text-[#1f8a8a] transition-transform duration-300 ease-out group-aria-expanded:-rotate-180"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+          </h3>
+          <div id="faq-panel-5" role="region" aria-labelledby="faq-button-5"
+            class="grid transition-[grid-template-rows] duration-300 ease-out motion-reduce:transition-none [grid-template-rows:0fr]">
+            <div class="overflow-hidden" aria-hidden="true" inert>
+              <div class="px-6 pb-6 pt-0 text-[15px] leading-relaxed text-[#4a5d66]">
+                We stick around for thirty days of free support to iron out anything the real world surfaces. After that, plenty of clients keep us on a light monthly retainer for tweaks, new pages and the occasional salty opinion.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="mx-auto mt-10 max-w-6xl px-6 text-center text-sm text-[#4a5d66] lg:text-left">
+      Still curious?
+      <a href="#contact" class="font-semibold text-[#0f5c5c] underline decoration-[#2ec3c3] decoration-2 underline-offset-4 transition-colors hover:text-[#1f8a8a]">Send us a note</a>
+      and we will reply within a day.
+    </p>
+  </section>
+  <!-- ════════════════ SECTION END ════════════════ -->
+
+  <!-- ── tiny footer for context ──────────────────────────────── -->
+  <footer id="contact" class="border-t border-[#ece0cd] bg-[#f4ece0] py-12">
+    <div class="mx-auto max-w-6xl px-6 text-center text-sm text-[#4a5d66]">
+      <p class="font-display text-base font-semibold text-[#0f5c5c]">~&lt; saltycodestudio</p>
+      <p class="mt-2">Clean code, warm coast. &nbsp;·&nbsp; hello@saltycodestudio.dev</p>
+    </div>
+  </footer>
+
+  <!-- FAQ accordion behaviour -->
+  <script>
+    (function () {
+      function setPanel(button, open) {
+        var panel = document.getElementById(button.getAttribute("aria-controls"));
+        if (!panel) return;
+        button.setAttribute("aria-expanded", open ? "true" : "false");
+        panel.style.gridTemplateRows = open ? "1fr" : "0fr";
+        var inner = panel.firstElementChild;
+        if (inner) {
+          if (open) {
+            inner.removeAttribute("inert");
+            inner.removeAttribute("aria-hidden");
+          } else {
+            inner.setAttribute("inert", "");
+            inner.setAttribute("aria-hidden", "true");
+          }
+        }
+      }
+      document.querySelectorAll("[data-faq]").forEach(function (group) {
+        var single = group.getAttribute("data-faq-mode") !== "multiple";
+        group.addEventListener("click", function (e) {
+          var button = e.target.closest("button[aria-controls]");
+          if (!button || !group.contains(button)) return;
+          var willOpen = button.getAttribute("aria-expanded") !== "true";
+          if (single && willOpen) {
+            group.querySelectorAll('button[aria-expanded="true"]').forEach(function (other) {
+              if (other !== button) setPanel(other, false);
+            });
+          }
+          setPanel(button, willOpen);
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

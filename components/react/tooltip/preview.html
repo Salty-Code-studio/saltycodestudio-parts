@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tooltip — saltycodestudio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+      body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }
+      @keyframes scsTooltipIn { from { opacity: 0; transform: scale(.96); } to { opacity: 1; transform: scale(1); } }
+    </style>
+  </head>
+  <body class="bg-[#fbf7f0] text-[#1c2b33]">
+    <div id="root"></div>
+    <script type="text/babel" data-presets="react">
+      const {
+        cloneElement, isValidElement, useCallback, useEffect, useId,
+        useLayoutEffect, useRef, useState,
+      } = React;
+
+      const ARROW = 6;
+      const MARGIN = 8;
+      const OPPOSITE = { top: "bottom", bottom: "top", left: "right", right: "left" };
+
+      function Tooltip({ content, children, placement = "top", delay = 150, offset = 8, disabled = false, className = "" }) {
+        const id = useId();
+        const triggerRef = useRef(null);
+        const bubbleRef = useRef(null);
+        const timerRef = useRef(null);
+
+        const [open, setOpen] = useState(false);
+        const [resolved, setResolved] = useState(placement);
+        const [coords, setCoords] = useState({ top: 0, left: 0 });
+        const [arrow, setArrow] = useState({});
+
+        const clearTimer = useCallback(() => {
+          if (timerRef.current) { clearTimeout(timerRef.current); timerRef.current = null; }
+        }, []);
+
+        const show = useCallback((immediate) => {
+          if (disabled) return;
+          clearTimer();
+          if (immediate || delay <= 0) setOpen(true);
+          else timerRef.current = setTimeout(() => setOpen(true), delay);
+        }, [disabled, delay, clearTimer]);
+
+        const hide = useCallback(() => { clearTimer(); setOpen(false); }, [clearTimer]);
+
+        const reposition = useCallback(() => {
+          const trigger = triggerRef.current;
+          const bubble = bubbleRef.current;
+          if (!trigger || !bubble) return;
+
+          const t = trigger.getBoundingClientRect();
+          const b = bubble.getBoundingClientRect();
+          const vw = document.documentElement.clientWidth;
+          const vh = document.documentElement.clientHeight;
+          const gap = offset + ARROW;
+
+          const fits = (p) => {
+            if (p === "top") return t.top - gap - b.height >= MARGIN;
+            if (p === "bottom") return t.bottom + gap + b.height <= vh - MARGIN;
+            if (p === "left") return t.left - gap - b.width >= MARGIN;
+            return t.right + gap + b.width <= vw - MARGIN;
+          };
+
+          let side = placement;
+          if (!fits(side)) {
+            if (fits(OPPOSITE[side])) side = OPPOSITE[side];
+            else side = ["top", "bottom", "right", "left"].find(fits) || side;
+          }
+
+          let top = 0, left = 0;
+          if (side === "top" || side === "bottom") {
+            left = t.left + t.width / 2 - b.width / 2;
+            top = side === "top" ? t.top - gap - b.height : t.bottom + gap;
+          } else {
+            top = t.top + t.height / 2 - b.height / 2;
+            left = side === "left" ? t.left - gap - b.width : t.right + gap;
+          }
+
+          const clamp = (v, min, max) => Math.max(min, Math.min(v, max));
+          if (side === "top" || side === "bottom") {
+            const clamped = clamp(left, MARGIN, vw - b.width - MARGIN);
+            const arrowLeft = clamp(t.left + t.width / 2 - clamped, ARROW + 4, b.width - ARROW - 4);
+            setArrow({ left: arrowLeft });
+            left = clamped;
+          } else {
+            const clamped = clamp(top, MARGIN, vh - b.height - MARGIN);
+            const arrowTop = clamp(t.top + t.height / 2 - clamped, ARROW + 4, b.height - ARROW - 4);
+            setArrow({ top: arrowTop });
+            top = clamped;
+          }
+
+          setResolved(side);
+          setCoords({ top, left });
+        }, [placement, offset]);
+
+        useLayoutEffect(() => {
+          if (!open) return;
+          reposition();
+          window.addEventListener("scroll", reposition, true);
+          window.addEventListener("resize", reposition);
+          return () => {
+            window.removeEventListener("scroll", reposition, true);
+            window.removeEventListener("resize", reposition);
+          };
+        }, [open, content, reposition]);
+
+        useEffect(() => {
+          if (!open) return;
+          const onKey = (e) => { if (e.key === "Escape") hide(); };
+          document.addEventListener("keydown", onKey);
+          return () => document.removeEventListener("keydown", onKey);
+        }, [open, hide]);
+
+        useEffect(() => clearTimer, [clearTimer]);
+
+        if (!isValidElement(children)) throw new Error("Tooltip expects a single React element as its child.");
+
+        const childProps = children.props || {};
+        const callOriginal = (name) => (event) => {
+          const handler = childProps[name];
+          if (typeof handler === "function") handler(event);
+        };
+
+        const trigger = cloneElement(children, {
+          ref: (node) => {
+            triggerRef.current = node;
+            const ref = children.ref;
+            if (typeof ref === "function") ref(node);
+            else if (ref && typeof ref === "object") ref.current = node;
+          },
+          "aria-describedby": open && !disabled ? id : childProps["aria-describedby"],
+          onMouseEnter: (e) => { callOriginal("onMouseEnter")(e); show(false); },
+          onMouseLeave: (e) => { callOriginal("onMouseLeave")(e); hide(); },
+          onFocus: (e) => { callOriginal("onFocus")(e); show(true); },
+          onBlur: (e) => { callOriginal("onBlur")(e); hide(); },
+        });
+
+        const arrowStyle = {
+          position: "absolute", width: ARROW * 2, height: ARROW * 2,
+          transform: "rotate(45deg)", background: "inherit", border: "inherit",
+          ...(resolved === "top" && { bottom: -ARROW, left: arrow.left, marginLeft: -ARROW, borderTop: "none", borderLeft: "none" }),
+          ...(resolved === "bottom" && { top: -ARROW, left: arrow.left, marginLeft: -ARROW, borderBottom: "none", borderRight: "none" }),
+          ...(resolved === "left" && { right: -ARROW, top: arrow.top, marginTop: -ARROW, borderBottom: "none", borderLeft: "none" }),
+          ...(resolved === "right" && { left: -ARROW, top: arrow.top, marginTop: -ARROW, borderTop: "none", borderRight: "none" }),
+        };
+
+        return (
+          <React.Fragment>
+            {trigger}
+            {open && !disabled && (
+              <div
+                ref={bubbleRef}
+                id={id}
+                role="tooltip"
+                style={{ position: "fixed", top: coords.top, left: coords.left, zIndex: 50 }}
+                className={`pointer-events-none max-w-xs rounded-lg border border-[#0f5c5c] bg-[#0f5c5c] px-3 py-1.5 text-sm font-medium leading-snug text-[#f4ece0] shadow-lg shadow-[#0f5c5c]/25 ${className}`}
+              >
+                {content}
+                <span aria-hidden="true" style={arrowStyle} />
+              </div>
+            )}
+          </React.Fragment>
+        );
+      }
+
+      /* ---------- Demo ---------- */
+
+      const triggerBtn =
+        "rounded-xl border border-[#ece0cd] bg-[#f4ece0] px-4 py-2 text-sm font-semibold text-[#1c2b33] " +
+        "shadow-sm transition-colors hover:bg-[#ece0cd] focus:outline-none focus-visible:ring-2 " +
+        "focus-visible:ring-[#1f8a8a] focus-visible:ring-offset-2 focus-visible:ring-offset-[#fbf7f0]";
+
+      const iconBtn =
+        "grid h-10 w-10 place-items-center rounded-full border border-[#ece0cd] bg-[#f4ece0] text-[#0f5c5c] " +
+        "shadow-sm transition-colors hover:bg-[#ece0cd] focus:outline-none focus-visible:ring-2 " +
+        "focus-visible:ring-[#1f8a8a] focus-visible:ring-offset-2 focus-visible:ring-offset-[#fbf7f0]";
+
+      function Section({ title, children }) {
+        return (
+          <section className="rounded-3xl border border-[#ece0cd] bg-[#f4ece0]/60 p-8">
+            <h2 className="mb-6 text-xs font-bold uppercase tracking-[0.18em] text-[#4a5d66]">{title}</h2>
+            {children}
+          </section>
+        );
+      }
+
+      function App() {
+        return (
+          <main className="mx-auto max-w-4xl px-6 py-16">
+            <header className="mb-12">
+              <p className="mb-2 text-sm font-semibold tracking-wide text-[#1f8a8a]">saltycodestudio · Sand &amp; Surf</p>
+              <h1 className="text-4xl font-bold tracking-tight text-[#1c2b33]">Tooltip</h1>
+              <p className="mt-3 max-w-2xl text-base leading-relaxed text-[#4a5d66]">
+                Hover or <kbd className="rounded bg-[#ece0cd] px-1.5 py-0.5 text-xs font-semibold">Tab</kbd> to a
+                trigger to reveal its tooltip. Smart placement flips it to fit the viewport; press
+                <kbd className="ml-1 rounded bg-[#ece0cd] px-1.5 py-0.5 text-xs font-semibold">Esc</kbd> to dismiss.
+              </p>
+            </header>
+
+            <div className="grid gap-8">
+              <Section title="Placement">
+                <div className="flex flex-wrap items-center gap-5">
+                  <Tooltip content="Appears above" placement="top">
+                    <button className={triggerBtn}>Top</button>
+                  </Tooltip>
+                  <Tooltip content="Appears below" placement="bottom">
+                    <button className={triggerBtn}>Bottom</button>
+                  </Tooltip>
+                  <Tooltip content="To the left" placement="left">
+                    <button className={triggerBtn}>Left</button>
+                  </Tooltip>
+                  <Tooltip content="To the right" placement="right">
+                    <button className={triggerBtn}>Right</button>
+                  </Tooltip>
+                </div>
+              </Section>
+
+              <Section title="Smart flip — placement requested but viewport wins">
+                <div className="flex items-center justify-between">
+                  <Tooltip content="Wanted left, flips right at the edge" placement="left">
+                    <button className={triggerBtn}>Near left edge</button>
+                  </Tooltip>
+                  <Tooltip content="Wanted right, flips left at the edge" placement="right">
+                    <button className={triggerBtn}>Near right edge</button>
+                  </Tooltip>
+                </div>
+              </Section>
+
+              <Section title="Icon triggers + rich content">
+                <div className="flex flex-wrap items-center gap-5">
+                  <Tooltip content="Copy link to clipboard" placement="top">
+                    <button className={iconBtn} aria-label="Copy link">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" /></svg>
+                    </button>
+                  </Tooltip>
+                  <Tooltip content="Add to favorites" placement="bottom">
+                    <button className={iconBtn} aria-label="Add to favorites">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 21s-7-4.35-9.5-8.5C.9 9.3 2.4 5.5 6 5.5c2 0 3.2 1.2 4 2.3.8-1.1 2-2.3 4-2.3 3.6 0 5.1 3.8 3.5 7C19 16.65 12 21 12 21Z" /></svg>
+                    </button>
+                  </Tooltip>
+                  <Tooltip
+                    placement="right"
+                    content={
+                      <span className="block">
+                        <span className="block font-semibold">Deploy preview</span>
+                        <span className="mt-0.5 block text-[#bfe3e3]">Builds a temporary URL for this branch.</span>
+                      </span>
+                    }
+                  >
+                    <button className={triggerBtn}>Multi-line</button>
+                  </Tooltip>
+                </div>
+              </Section>
+
+              <Section title="Behavior">
+                <div className="flex flex-wrap items-center gap-5">
+                  <Tooltip content="Shown instantly" delay={0}>
+                    <button className={triggerBtn}>No delay</button>
+                  </Tooltip>
+                  <Tooltip content="Waits 600ms on hover" delay={600}>
+                    <button className={triggerBtn}>Long delay</button>
+                  </Tooltip>
+                  <Tooltip content="You should never see this" disabled>
+                    <button className={triggerBtn}>Disabled</button>
+                  </Tooltip>
+                  <Tooltip content="A wider gap from the trigger" offset={16}>
+                    <button className={triggerBtn}>Big offset</button>
+                  </Tooltip>
+                </div>
+              </Section>
+            </div>
+
+            <footer className="mt-12 text-center text-xs text-[#4a5d66]">
+              role=&quot;tooltip&quot; · aria-describedby · focus + hover · Esc to close · auto-flip
+            </footer>
+          </main>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+    </script>
+  </body>
+</html>

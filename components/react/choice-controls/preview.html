@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Choice Controls — saltycodestudio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+      body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }
+    </style>
+  </head>
+  <body class="bg-[#fbf7f0] text-[#1c2b33]">
+    <div id="root"></div>
+    <script type="text/babel" data-presets="react">
+      const { useId, useRef, useState, useEffect, createContext, useContext, forwardRef } = React;
+
+      const cx = (...parts) => parts.filter(Boolean).join(" ");
+
+      const LABEL_TEXT = { sm: "text-sm", md: "text-[15px]", lg: "text-base" };
+      const BOX_SIZE = {
+        sm: "h-4 w-4 rounded-[5px]",
+        md: "h-[18px] w-[18px] rounded-md",
+        lg: "h-5 w-5 rounded-md",
+      };
+
+      /* ---------------------------- Checkbox ---------------------------- */
+      const Checkbox = forwardRef(function Checkbox(
+        { label, description, indeterminate = false, size = "md", className, disabled, id, ...props },
+        forwardedRef,
+      ) {
+        const reactId = useId();
+        const inputId = id ?? `cc-checkbox-${reactId}`;
+        const descId = description ? `${inputId}-desc` : undefined;
+        const innerRef = useRef(null);
+        useEffect(() => {
+          if (innerRef.current) innerRef.current.indeterminate = indeterminate;
+        }, [indeterminate]);
+        const setRefs = (node) => {
+          innerRef.current = node;
+          if (typeof forwardedRef === "function") forwardedRef(node);
+          else if (forwardedRef) forwardedRef.current = node;
+        };
+        return (
+          <label
+            htmlFor={inputId}
+            className={cx(
+              "group inline-flex select-none items-start gap-3",
+              disabled ? "cursor-not-allowed opacity-55" : "cursor-pointer",
+              className,
+            )}
+          >
+            <span className="relative inline-flex shrink-0 items-center justify-center">
+              <input
+                ref={setRefs}
+                id={inputId}
+                type="checkbox"
+                disabled={disabled}
+                aria-describedby={descId}
+                className="peer absolute inset-0 z-10 h-full w-full cursor-[inherit] opacity-0"
+                {...props}
+              />
+              <span
+                aria-hidden="true"
+                className={cx(
+                  "flex items-center justify-center border border-[#cdbfa8] bg-[#fbf7f0] text-white",
+                  "transition-[background-color,border-color,box-shadow] duration-150 ease-out",
+                  "peer-hover:border-[#1f8a8a]",
+                  "peer-checked:border-[#1f8a8a] peer-checked:bg-[#1f8a8a]",
+                  "peer-indeterminate:border-[#1f8a8a] peer-indeterminate:bg-[#1f8a8a]",
+                  "peer-focus-visible:outline-none peer-focus-visible:ring-2 peer-focus-visible:ring-[#2ec3c3]/55 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-[#fbf7f0]",
+                  BOX_SIZE[size],
+                )}
+              >
+                <svg
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  className="h-3.5 w-3.5 scale-50 opacity-0 transition-all duration-150 ease-out peer-checked:scale-100 peer-checked:opacity-100"
+                >
+                  <path d="M3.5 8.4 6.3 11l6-6.2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                <span className="absolute h-[2px] w-2.5 scale-x-0 rounded-full bg-current opacity-0 transition-all duration-150 ease-out peer-indeterminate:scale-x-100 peer-indeterminate:opacity-100" />
+              </span>
+            </span>
+            {(label || description) && (
+              <span className="flex flex-col gap-0.5 leading-tight">
+                {label && <span className={cx("font-medium text-[#1c2b33]", LABEL_TEXT[size])}>{label}</span>}
+                {description && <span id={descId} className="text-[13px] text-[#4a5d66]">{description}</span>}
+              </span>
+            )}
+          </label>
+        );
+      });
+
+      /* --------------------------- RadioGroup --------------------------- */
+      const RadioContext = createContext(null);
+      const DOT_SIZE = { sm: "h-4 w-4", md: "h-[18px] w-[18px]", lg: "h-5 w-5" };
+
+      function RadioGroup({ label, name, value, defaultValue, onChange, size = "md", disabled, orientation = "vertical", className, children }) {
+        const reactId = useId();
+        const groupName = name ?? `cc-radio-${reactId}`;
+        const labelId = label ? `${groupName}-label` : undefined;
+        const isControlled = value !== undefined;
+        const [internal, setInternal] = useState(defaultValue);
+        const current = isControlled ? value : internal;
+        const handleChange = (next) => {
+          if (!isControlled) setInternal(next);
+          onChange?.(next);
+        };
+        return (
+          <div role="radiogroup" aria-labelledby={labelId} className={cx("flex flex-col gap-3", className)}>
+            {label && <span id={labelId} className="text-sm font-semibold text-[#1c2b33]">{label}</span>}
+            <div className={cx("flex gap-3", orientation === "horizontal" ? "flex-row flex-wrap" : "flex-col")}>
+              <RadioContext.Provider value={{ name: groupName, value: current, onChange: handleChange, size, disabled }}>
+                {children}
+              </RadioContext.Provider>
+            </div>
+          </div>
+        );
+      }
+
+      const Radio = forwardRef(function Radio({ value, label, description, disabled, className, id, ...props }, ref) {
+        const ctx = useContext(RadioContext);
+        if (!ctx) throw new Error("<Radio> must be used inside a <RadioGroup>.");
+        const reactId = useId();
+        const inputId = id ?? `${ctx.name}-${reactId}`;
+        const descId = description ? `${inputId}-desc` : undefined;
+        const isDisabled = disabled || ctx.disabled;
+        const checked = ctx.value === value;
+        return (
+          <label
+            htmlFor={inputId}
+            className={cx(
+              "group inline-flex items-start gap-3 select-none",
+              isDisabled ? "cursor-not-allowed opacity-55" : "cursor-pointer",
+              className,
+            )}
+          >
+            <span className="relative inline-flex shrink-0 items-center justify-center">
+              <input
+                ref={ref}
+                id={inputId}
+                type="radio"
+                name={ctx.name}
+                value={value}
+                checked={checked}
+                disabled={isDisabled}
+                aria-describedby={descId}
+                onChange={() => ctx.onChange?.(value)}
+                className="peer absolute inset-0 z-10 h-full w-full cursor-[inherit] opacity-0"
+                {...props}
+              />
+              <span
+                aria-hidden="true"
+                className={cx(
+                  "flex items-center justify-center rounded-full border border-[#cdbfa8] bg-[#fbf7f0]",
+                  "transition-[border-color,box-shadow] duration-150 ease-out",
+                  "peer-hover:border-[#1f8a8a]",
+                  "peer-checked:border-[#1f8a8a]",
+                  "peer-focus-visible:outline-none peer-focus-visible:ring-2 peer-focus-visible:ring-[#2ec3c3]/55 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-[#fbf7f0]",
+                  DOT_SIZE[ctx.size],
+                )}
+              >
+                <span className="h-2 w-2 scale-0 rounded-full bg-[#1f8a8a] opacity-0 transition-all duration-150 ease-out peer-checked:scale-100 peer-checked:opacity-100" />
+              </span>
+            </span>
+            {(label || description) && (
+              <span className="flex flex-col gap-0.5 leading-tight">
+                {label && <span className={cx("font-medium text-[#1c2b33]", LABEL_TEXT[ctx.size])}>{label}</span>}
+                {description && <span id={descId} className="text-[13px] text-[#4a5d66]">{description}</span>}
+              </span>
+            )}
+          </label>
+        );
+      });
+
+      /* ----------------------------- Toggle ----------------------------- */
+      const TRACK = { sm: "h-5 w-9", md: "h-6 w-11", lg: "h-7 w-[52px]" };
+      const THUMB = { sm: "h-4 w-4", md: "h-5 w-5", lg: "h-6 w-6" };
+      const THUMB_ON = { sm: "translate-x-4", md: "translate-x-5", lg: "translate-x-[22px]" };
+
+      function Toggle({ checked, defaultChecked = false, onChange, label, description, size = "md", disabled, labelLeft = false, id, className, "aria-label": ariaLabel }) {
+        const reactId = useId();
+        const switchId = id ?? `cc-toggle-${reactId}`;
+        const descId = description ? `${switchId}-desc` : undefined;
+        const labelId = label ? `${switchId}-label` : undefined;
+        const isControlled = checked !== undefined;
+        const [internal, setInternal] = useState(defaultChecked);
+        const on = isControlled ? checked : internal;
+        const toggle = () => {
+          if (disabled) return;
+          const next = !on;
+          if (!isControlled) setInternal(next);
+          onChange?.(next);
+        };
+        const text = (
+          <span className="flex flex-col gap-0.5 leading-tight">
+            {label && <span id={labelId} className={cx("font-medium text-[#1c2b33]", LABEL_TEXT[size])}>{label}</span>}
+            {description && <span id={descId} className="text-[13px] text-[#4a5d66]">{description}</span>}
+          </span>
+        );
+        const button = (
+          <button
+            type="button"
+            role="switch"
+            id={switchId}
+            aria-checked={on}
+            aria-label={!label ? ariaLabel : undefined}
+            aria-labelledby={label ? labelId : undefined}
+            aria-describedby={descId}
+            disabled={disabled}
+            onClick={toggle}
+            className={cx(
+              "relative inline-flex shrink-0 items-center rounded-full border border-transparent p-0.5",
+              "transition-colors duration-200 ease-out",
+              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2ec3c3]/55 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fbf7f0]",
+              on ? "bg-[#1f8a8a]" : "bg-[#d9cab3]",
+              disabled && "cursor-not-allowed opacity-55",
+              TRACK[size],
+            )}
+          >
+            <span
+              aria-hidden="true"
+              className={cx(
+                "pointer-events-none inline-block rounded-full bg-white shadow-sm ring-1 ring-black/5",
+                "transition-transform duration-200 ease-out",
+                THUMB[size],
+                on ? THUMB_ON[size] : "translate-x-0",
+              )}
+            />
+          </button>
+        );
+        if (!label && !description) return <span className={cx("inline-flex", className)}>{button}</span>;
+        return (
+          <span className={cx("inline-flex items-center gap-3", disabled && "opacity-55", className)}>
+            {labelLeft && text}
+            {button}
+            {!labelLeft && text}
+          </span>
+        );
+      }
+
+      /* ------------------------------ Demo ------------------------------ */
+      function Card({ title, children }) {
+        return (
+          <section className="rounded-3xl border border-[#ece0cd] bg-[#f4ece0]/60 p-6 shadow-sm backdrop-blur sm:p-8">
+            <h2 className="mb-5 text-xs font-semibold uppercase tracking-[0.18em] text-[#0f5c5c]">{title}</h2>
+            <div className="flex flex-col gap-5">{children}</div>
+          </section>
+        );
+      }
+
+      function Demo() {
+        const [news, setNews] = useState(true);
+        const [terms, setTerms] = useState(false);
+        const [plan, setPlan] = useState("studio");
+        const [dark, setDark] = useState(true);
+        const [reduce, setReduce] = useState(false);
+
+        return (
+          <main className="mx-auto max-w-5xl px-6 py-16">
+            <header className="mb-12">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#1f8a8a]">saltycodestudio · Sand &amp; Surf</p>
+              <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">Choice Controls</h1>
+              <p className="mt-3 max-w-xl text-[15px] text-[#4a5d66]">
+                A checkbox, radio group, and toggle switch sharing one accessible design language — keyboard-friendly,
+                ARIA-correct, with visible focus rings.
+              </p>
+            </header>
+
+            <div className="grid gap-6 md:grid-cols-2">
+              <Card title="Checkbox">
+                <Checkbox defaultChecked label="Subscribe to the Tide Report" description="A short monthly note on what we shipped." />
+                <Checkbox label="Send me product tips" />
+                <Checkbox indeterminate label="Select all integrations" description="Some are enabled — mixed state." />
+                <Checkbox defaultChecked disabled label="Locked option (disabled, on)" />
+                <Checkbox disabled label="Unavailable option (disabled, off)" />
+                <div className="flex items-center gap-6 pt-1">
+                  <Checkbox size="sm" defaultChecked label="Small" />
+                  <Checkbox size="md" defaultChecked label="Medium" />
+                  <Checkbox size="lg" defaultChecked label="Large" />
+                </div>
+              </Card>
+
+              <Card title="Radio group">
+                <RadioGroup label="Choose a plan" value={plan} onChange={setPlan}>
+                  <Radio value="starter" label="Starter" description="One clean landing page." />
+                  <Radio value="studio" label="Studio" description="Up to eight pages + CMS." />
+                  <Radio value="atelier" label="Atelier" description="Bespoke, end-to-end build." />
+                  <Radio value="legacy" label="Legacy (disabled)" disabled />
+                </RadioGroup>
+                <p className="text-[13px] text-[#4a5d66]">Selected: <span className="font-medium text-[#0f5c5c]">{plan}</span></p>
+                <div className="border-t border-[#ece0cd] pt-5">
+                  <RadioGroup label="Layout density" defaultValue="comfortable" orientation="horizontal" size="sm">
+                    <Radio value="cozy" label="Cozy" />
+                    <Radio value="comfortable" label="Comfortable" />
+                    <Radio value="spacious" label="Spacious" />
+                  </RadioGroup>
+                </div>
+              </Card>
+
+              <Card title="Toggle switch">
+                <Toggle checked={news} onChange={setNews} label="Newsletter" description="Receive the monthly Tide Report." />
+                <Toggle checked={terms} onChange={setTerms} label="Beta features" description="Opt into experimental builds." />
+                <Toggle defaultChecked disabled label="Always-on telemetry (disabled)" />
+                <Toggle disabled label="Premium add-on (disabled, off)" />
+                <Toggle aria-label="Standalone toggle without visible label" defaultChecked />
+                <div className="flex items-center gap-6 pt-1">
+                  <Toggle size="sm" defaultChecked label="Small" />
+                  <Toggle size="md" defaultChecked label="Medium" />
+                  <Toggle size="lg" defaultChecked label="Large" />
+                </div>
+              </Card>
+
+              <Card title="Settings panel — all three together">
+                <Toggle checked={dark} onChange={setDark} label="Dark mode" description="Switch the studio theme." labelLeft />
+                <div className="border-t border-[#ece0cd] pt-5">
+                  <RadioGroup label="Accent" defaultValue="teal" orientation="horizontal" size="sm">
+                    <Radio value="teal" label="Teal" />
+                    <Radio value="deep" label="Deep" />
+                    <Radio value="surf" label="Surf" />
+                  </RadioGroup>
+                </div>
+                <div className="border-t border-[#ece0cd] pt-5 flex flex-col gap-4">
+                  <Checkbox defaultChecked label="Autosave drafts" />
+                  <Checkbox checked={reduce} onChange={(e) => setReduce(e.target.checked)} label="Reduce motion" description="Honor system preference." />
+                </div>
+                <p className="text-[13px] text-[#4a5d66]">
+                  Theme: <span className="font-medium text-[#0f5c5c]">{dark ? "dark" : "light"}</span> ·
+                  Reduce motion: <span className="font-medium text-[#0f5c5c]">{reduce ? "on" : "off"}</span>
+                </p>
+              </Card>
+            </div>
+
+            <p className="mt-10 text-center text-[13px] text-[#4a5d66]">
+              Try it: <kbd class="rounded bg-[#ece0cd] px-1.5 py-0.5 font-mono text-xs text-[#1c2b33]">Tab</kbd> to focus,
+              <kbd class="ml-1 rounded bg-[#ece0cd] px-1.5 py-0.5 font-mono text-xs text-[#1c2b33]">Space</kbd> to toggle,
+              <kbd class="ml-1 rounded bg-[#ece0cd] px-1.5 py-0.5 font-mono text-xs text-[#1c2b33]">↑ ↓</kbd> within a radio group.
+            </p>
+          </main>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(<Demo />);
+    </script>
+  </body>
+</html>

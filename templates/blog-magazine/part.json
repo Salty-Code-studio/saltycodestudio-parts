@@ -1,0 +1,14 @@
+{
+  "name": "Blog / Magazine",
+  "slug": "blog-magazine",
+  "kind": "template",
+  "category": "template",
+  "tier": "showcase",
+  "tags": ["blog", "magazine", "editorial", "publication", "newsletter", "post-grid", "category-filter", "featured-hero", "responsive", "accessible", "sand-and-surf", "website"],
+  "description": "A clean editorial blog and magazine landing page with a featured-post masthead hero, category-filterable post grid, weekly columns, an editor's pick, a newsletter CTA, and a footer.",
+  "deps": [],
+  "files": ["index.html"],
+  "usage": "Open index.html in any browser to preview, or deploy it as-is — it is a complete static page loading Tailwind via the Play CDN. Edit the inline tailwind.config to retheme brand colors and fonts; swap the Unsplash cover images, post copy, and category data attributes to make it yours. The vanilla JS handles the mobile nav, scroll elevation, category filtering, scroll reveals, and newsletter validation with no build step.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
+}

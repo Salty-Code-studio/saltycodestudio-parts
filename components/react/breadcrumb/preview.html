@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Breadcrumb — saltycodestudio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+      body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }
+    </style>
+  </head>
+  <body class="bg-[#fbf7f0]">
+    <div id="root"></div>
+    <script type="text/babel" data-presets="react">
+      const { useId } = React;
+
+      const DEFAULT_ITEMS = [
+        { label: "Home", href: "#" },
+        { label: "Work", href: "#" },
+        { label: "Client Projects", href: "#" },
+        { label: "Slijterij United Liquors", href: "#" },
+        { label: "Bilingual Website Build" },
+      ];
+
+      function Separator({ kind }) {
+        return (
+          <li role="presentation" aria-hidden="true" className="select-none text-[#9aa9af]">
+            {kind === "slash" ? (
+              <span className="px-0.5">/</span>
+            ) : (
+              <svg className="h-4 w-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="m7.5 4 5 6-5 6" />
+              </svg>
+            )}
+          </li>
+        );
+      }
+
+      function Crumb({ item, isCurrent, truncate }) {
+        const truncateCls = truncate ? "max-w-[10rem] truncate align-bottom" : "";
+        if (isCurrent || !item.href) {
+          return (
+            <span
+              aria-current={isCurrent ? "page" : undefined}
+              title={truncate ? item.label : undefined}
+              className={`inline-block font-semibold text-[#1c2b33] ${truncateCls}`}
+            >
+              {item.label}
+            </span>
+          );
+        }
+        return (
+          <a
+            href={item.href}
+            title={truncate ? item.label : undefined}
+            className={`inline-block rounded-sm text-[#4a5d66] underline-offset-4 outline-none transition-colors hover:text-[#0f5c5c] hover:underline focus-visible:underline focus-visible:ring-2 focus-visible:ring-[#1f8a8a] focus-visible:ring-offset-2 focus-visible:ring-offset-[#fbf7f0] ${truncateCls}`}
+          >
+            {item.label}
+          </a>
+        );
+      }
+
+      function Breadcrumb({
+        items = DEFAULT_ITEMS,
+        maxItems = 0,
+        itemsAfterCollapse = 1,
+        itemsBeforeCollapse = 1,
+        separator = "chevron",
+        truncateLabels = false,
+        ariaLabel = "Breadcrumb",
+        className = "",
+      }) {
+        const baseId = useId();
+        const [expanded, setExpanded] = React.useState(false);
+        const lastIndex = items.length - 1;
+
+        const shouldCollapse =
+          maxItems > 0 &&
+          !expanded &&
+          items.length > maxItems &&
+          items.length > itemsBeforeCollapse + itemsAfterCollapse + 1;
+
+        let nodes;
+        if (shouldCollapse) {
+          const head = items
+            .slice(0, itemsBeforeCollapse)
+            .map((item, index) => ({ type: "crumb", item, index }));
+          const tailStart = items.length - itemsAfterCollapse;
+          const tail = items
+            .slice(tailStart)
+            .map((item, i) => ({ type: "crumb", item, index: tailStart + i }));
+          const hidden = items.slice(itemsBeforeCollapse, tailStart);
+          nodes = [...head, { type: "ellipsis", hidden }, ...tail];
+        } else {
+          nodes = items.map((item, index) => ({ type: "crumb", item, index }));
+        }
+
+        return (
+          <nav aria-label={ariaLabel} className={className}>
+            <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm">
+              {nodes.map((node, i) => {
+                const isLastNode = i === nodes.length - 1;
+                if (node.type === "ellipsis") {
+                  return (
+                    <React.Fragment key={`${baseId}-ellipsis`}>
+                      <li className="flex items-center">
+                        <button
+                          type="button"
+                          onClick={() => setExpanded(true)}
+                          aria-label={`Show ${node.hidden.length} hidden ${node.hidden.length === 1 ? "level" : "levels"}`}
+                          title={node.hidden.map((h) => h.label).join(" › ")}
+                          className="grid h-6 w-7 place-items-center rounded-md text-[#4a5d66] outline-none transition-colors hover:bg-[#ece0cd] hover:text-[#0f5c5c] focus-visible:bg-[#ece0cd] focus-visible:ring-2 focus-visible:ring-[#1f8a8a] focus-visible:ring-offset-2 focus-visible:ring-offset-[#fbf7f0]"
+                        >
+                          <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <circle cx="4" cy="10" r="1.5" />
+                            <circle cx="10" cy="10" r="1.5" />
+                            <circle cx="16" cy="10" r="1.5" />
+                          </svg>
+                        </button>
+                      </li>
+                      {!isLastNode && <Separator kind={separator} />}
+                    </React.Fragment>
+                  );
+                }
+                const isCurrent = node.index === lastIndex;
+                return (
+                  <React.Fragment key={`${baseId}-${node.index}`}>
+                    <li className="flex items-center">
+                      <Crumb item={node.item} isCurrent={isCurrent} truncate={truncateLabels} />
+                    </li>
+                    {!isLastNode && <Separator kind={separator} />}
+                  </React.Fragment>
+                );
+              })}
+            </ol>
+          </nav>
+        );
+      }
+
+      const LONG_TRAIL = [
+        { label: "Home", href: "#" },
+        { label: "Docs", href: "#" },
+        { label: "Components", href: "#" },
+        { label: "Navigation", href: "#" },
+        { label: "Breadcrumb", href: "#" },
+        { label: "Accessibility & Keyboard Support" },
+      ];
+
+      function Demo({ title, note, children }) {
+        return (
+          <section className="rounded-2xl border border-[#ece0cd] bg-[#f4ece0] p-5 sm:p-6">
+            <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
+              <h2 className="text-sm font-semibold uppercase tracking-wide text-[#1f8a8a]">{title}</h2>
+              {note && <p className="text-xs text-[#4a5d66]">{note}</p>}
+            </div>
+            <div className="rounded-xl border border-[#ece0cd] bg-[#fbf7f0] px-4 py-4">
+              {children}
+            </div>
+          </section>
+        );
+      }
+
+      function App() {
+        return (
+          <main className="mx-auto max-w-3xl px-6 py-16">
+            <header className="mb-10">
+              <p className="mb-2 inline-block rounded-full bg-[#0f5c5c] px-3 py-1 text-xs font-semibold tracking-wide text-[#fbf7f0]">
+                saltycodestudio · react
+              </p>
+              <h1 className="text-3xl font-semibold tracking-tight text-[#1c2b33] sm:text-4xl">Breadcrumb</h1>
+              <p className="mt-2 max-w-prose text-[#4a5d66]">
+                Accessible breadcrumb navigation with chevron or slash separators, label truncation,
+                and an expandable collapse for long paths. Tab through the crumbs to see focus rings.
+              </p>
+            </header>
+
+            <div className="space-y-6">
+              <Demo title="Default" note="chevron separators">
+                <Breadcrumb items={DEFAULT_ITEMS} />
+              </Demo>
+
+              <Demo title="Slash separator">
+                <Breadcrumb items={DEFAULT_ITEMS} separator="slash" />
+              </Demo>
+
+              <Demo title="Truncated labels" note="caps each crumb width; hover for full text">
+                <Breadcrumb items={DEFAULT_ITEMS} truncateLabels />
+              </Demo>
+
+              <Demo title="Collapsed long path" note="maxItems = 3 · click “…” to expand">
+                <Breadcrumb items={LONG_TRAIL} maxItems={3} />
+              </Demo>
+
+              <Demo title="Collapsed, slash + keep two head/tail" note="itemsBeforeCollapse = 2, itemsAfterCollapse = 2">
+                <Breadcrumb
+                  items={LONG_TRAIL}
+                  maxItems={3}
+                  itemsBeforeCollapse={2}
+                  itemsAfterCollapse={2}
+                  separator="slash"
+                />
+              </Demo>
+
+              <Demo title="Single page" note="no separators, just the current page">
+                <Breadcrumb items={[{ label: "Dashboard" }]} />
+              </Demo>
+            </div>
+          </main>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+    </script>
+  </body>
+</html>

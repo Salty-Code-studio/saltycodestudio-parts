@@ -1,0 +1,25 @@
+{
+  "name": "Navbar",
+  "slug": "navbar",
+  "kind": "section",
+  "category": "nav",
+  "tier": "practical",
+  "tags": [
+    "navbar",
+    "navigation",
+    "header",
+    "sticky",
+    "responsive",
+    "hamburger",
+    "mobile-menu",
+    "cta",
+    "accessible",
+    "tailwind"
+  ],
+  "description": "Responsive sticky navbar with logo, links, a coral CTA, and an animated mobile hamburger menu that elevates on scroll.",
+  "deps": ["react", "tailwindcss"],
+  "files": ["Navbar.tsx", "section.html"],
+  "usage": "React: import Navbar from './Navbar' and render <Navbar /> at the top of your layout; override brand, links, ctaLabel/ctaHref, and secondaryLabel/secondaryHref via props. HTML: paste section.html (including its <script>) at the top of your <body>; it needs Tailwind and handles the hamburger toggle, scroll elevation, and Escape-to-close on its own.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
+}

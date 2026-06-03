@@ -1,0 +1,13 @@
+{
+  "name": "Badge / Tag",
+  "slug": "badge-tag",
+  "category": "react",
+  "tier": "practical",
+  "tags": ["badge", "tag", "pill", "label", "status", "chip"],
+  "description": "Accessible badge/tag/pill component with semantic color variants, three sizes, status dot, outline, and removable variants.",
+  "deps": ["react", "tailwindcss"],
+  "files": ["BadgeTag.tsx"],
+  "usage": "Render <BadgeTag variant=\"ocean\" dot>Live</BadgeTag>, or pass onRemove to get a removable tag.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
+}

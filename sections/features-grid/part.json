@@ -1,0 +1,14 @@
+{
+  "name": "Features Grid",
+  "slug": "features-grid",
+  "kind": "section",
+  "category": "features",
+  "tier": "practical",
+  "tags": ["features", "grid", "icons", "cards", "responsive", "sand-and-surf"],
+  "description": "A responsive three- or four-column feature grid with icon tiles, titles, and short descriptions.",
+  "deps": ["react", "tailwindcss"],
+  "files": ["FeaturesGrid.tsx", "section.html"],
+  "usage": "Import the component: `import FeaturesGrid from './FeaturesGrid'` then render `<FeaturesGrid />` (override eyebrow, heading, subheading, features, columns, ariaLabel as needed). For non-React projects, paste the markup from section.html into any Tailwind page. Open preview.html in a browser to see it rendered.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
+}

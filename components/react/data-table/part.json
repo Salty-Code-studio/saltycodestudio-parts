@@ -1,0 +1,13 @@
+{
+  "name": "Data Table",
+  "slug": "data-table",
+  "category": "react",
+  "tier": "practical",
+  "tags": ["table", "data-table", "sortable", "sticky-header", "empty-state"],
+  "description": "A clean, accessible data table with sortable columns, zebra striping, hover rows, a sticky header, loading skeletons, and an empty state.",
+  "deps": [],
+  "files": ["DataTable.tsx"],
+  "usage": "Import DataTable and pass typed columns + data: <DataTable columns={columns} data={rows} title=\"Customers\" stickyHeader maxHeight=\"24rem\" />. Sorting is uncontrolled by default; pass sort + onSortChange to control it.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
+}

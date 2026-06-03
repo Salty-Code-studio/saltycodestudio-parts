@@ -1,0 +1,14 @@
+{
+  "name": "Pricing Tiers",
+  "slug": "pricing",
+  "kind": "section",
+  "category": "pricing",
+  "tier": "showcase",
+  "tags": ["pricing", "plans", "tiers", "recommended", "feature-list", "saas", "studio", "sand-surf"],
+  "description": "Three-tier pricing section with a highlighted recommended plan and per-plan feature lists with included and excluded states.",
+  "deps": ["react", "tailwindcss"],
+  "files": ["PricingTiers.tsx", "section.html"],
+  "usage": "import PricingTiers from './PricingTiers'; then <PricingTiers /> for the defaults, or pass plans={[...]} with PricingPlan objects to customize. For non-React projects, paste section.html into any Tailwind page; see preview.html for a self-contained rendered example.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
+}

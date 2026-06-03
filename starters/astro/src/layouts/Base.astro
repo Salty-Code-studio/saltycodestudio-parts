@@ -1,0 +1,105 @@
+---
+/**
+ * Base.astro — the HTML shell every page wraps itself in.
+ *
+ * Responsibilities:
+ *   - the <html>/<head>/<body> boilerplate + charset/viewport
+ *   - SEO + Open Graph + Twitter card meta (driven by props, with sane defaults)
+ *   - load the brand fonts (Space Grotesk / Inter / JetBrains Mono)
+ *   - import the single global stylesheet (foundations + Tailwind)
+ *   - set the brand palette via data-palette / data-mode on <html>
+ *   - expose <slot/> for page content, plus named slots for <head> extras
+ *
+ * Usage in a page:
+ *   ---
+ *   import Base from "../layouts/Base.astro";
+ *   ---
+ *   <Base title="Home" description="Clean code, warm coast.">
+ *     <h1>Hello</h1>
+ *   </Base>
+ */
+
+// Importing the CSS here (not per-page) guarantees it loads exactly once and
+// before any page markup. Astro/Vite bundles + hashes it.
+import "../styles/global.css";
+
+interface Props {
+  /** <title> + default OG/Twitter title. */
+  title: string;
+  /** Meta description + default OG/Twitter description. */
+  description?: string;
+  /** Absolute or root-relative URL to the social share image (1200x630). */
+  ogImage?: string;
+  /** "website" | "article" | etc. — Open Graph object type. */
+  ogType?: string;
+  /** Override the canonical URL; defaults to the current page URL. */
+  canonical?: string;
+  /** Set true on pages that shouldn't be indexed (e.g. previews). */
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description = "Clean code, warm coast. — saltycodestudio",
+  ogImage = "/og-default.png",
+  ogType = "website",
+  canonical,
+  noindex = false,
+} = Astro.props;
+
+// Build absolute URLs from the current request + `site` in astro.config.mjs.
+// Astro.site may be undefined in some contexts, so guard the URL construction.
+const pageUrl = canonical ?? Astro.url.href;
+const ogImageUrl = Astro.site
+  ? new URL(ogImage, Astro.site).href
+  : ogImage;
+---
+
+<!doctype html>
+<html lang="en" data-palette="sand-surf" data-mode="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Primary SEO -->
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={pageUrl} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+    <!-- Open Graph -->
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={pageUrl} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:site_name" content="saltycodestudio" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    <!-- Brand fonts: Space Grotesk (display) · Inter (body) · JetBrains Mono
+         (code/labels). These match foundations/tailwind.preset.js fontFamily.
+         Swap to a different pairing from foundations/font-pairings.md if needed. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    />
+
+    <!-- Named slot: per-page <head> extras (structured data, extra meta,
+         a page-scoped <style>, etc.). -->
+    <slot name="head" />
+  </head>
+
+  <!-- font-sans + brand canvas/ink come from the preset (Inter / sand / ink). -->
+  <body class="min-h-dvh bg-sand font-sans text-ink antialiased">
+    <slot />
+  </body>
+</html>

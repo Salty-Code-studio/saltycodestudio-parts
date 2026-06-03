@@ -1,0 +1,14 @@
+{
+  "name": "FAQ Accordion",
+  "slug": "faq",
+  "kind": "section",
+  "category": "faq",
+  "tier": "practical",
+  "tags": ["faq", "accordion", "disclosure", "accessible", "aria", "collapse", "sand-and-surf"],
+  "description": "An accessible FAQ accordion with smooth height-animated open/close, single or multiple expand modes, and full ARIA wiring.",
+  "deps": ["react", "tailwindcss"],
+  "files": ["Faq.tsx", "section.html"],
+  "usage": "React: import { Faq } from './Faq' and render <Faq /> (or pass items/heading/mode props). HTML: paste the <section> from section.html plus the one-time delegated <script> at the end; it drives every [data-faq] block on the page. Both variants animate with a CSS grid-rows 0fr->1fr transition and respect prefers-reduced-motion.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
+}

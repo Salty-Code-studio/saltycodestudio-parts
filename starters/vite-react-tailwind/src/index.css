@@ -1,0 +1,54 @@
+/* ============================================================================
+   saltycodestudio — app stylesheet entry
+   ----------------------------------------------------------------------------
+   Wires the shared "Sand & Surf" foundations around Tailwind's layers.
+
+   ORDER IS LOAD-BEARING (see foundations/README.md):
+
+   BEFORE @tailwind  → tokens must exist so the Tailwind preset can resolve its
+                       rgb(var(--rgb-*) / <alpha>) color channels at build time.
+                       typography + palettes also seed base prose + theme vars.
+
+   @tailwind base    → Preflight reset. We DELIBERATELY DO NOT import
+                       foundations/base.css here — stacking two resets fights
+                       itself. Preflight is the reset for Tailwind projects.
+
+   AFTER @tailwind   → shadows / gradients / motion ship utility classes that
+                       should win the cascade, so they load last.
+
+   Paths are relative to this file (src/), so the foundations are three levels
+   up: ../../../foundations/.  postcss-import is not required — Vite's PostCSS
+   pipeline resolves these @imports, but they must sit at the very top of the
+   file (CSS spec: @import before any other rule except @charset/@layer).
+   ============================================================================ */
+
+/* 1 · tokens — palette + scales (MUST be first; defines --rgb-* / --color-*) */
+@import '../../../foundations/tokens.css';
+/* 2 · typography — fluid modular type scale (consumes tokens) */
+@import '../../../foundations/typography.css';
+/* 3 · palettes — semantic theme tokens keyed off [data-palette]/[data-mode] */
+@import '../../../foundations/palettes.css';
+
+/* Tailwind's three layers. v3 syntax. (v4 would be a single @import "tailwindcss".) */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 4 · shadows — ink-tinted elevation helpers (.elevation-*, .surface-card) */
+@import '../../../foundations/shadows.css';
+/* 5 · gradients — .bg-gradient-sand, .mesh-gradient, .text-gradient, … */
+@import '../../../foundations/gradients.css';
+/* 6 · motion — .anim-* enter/loop classes + dur/ease/delay modifiers (LAST) */
+@import '../../../foundations/motion.css';
+
+/* --------------------------------------------------------------------------
+   Project styles go below. Prefer the brand utilities the preset/foundations
+   already give you (bg-sand, text-teal, font-display, .anim-fade-up, …).
+   Use @layer so your overrides land in the right cascade slot.
+   -------------------------------------------------------------------------- */
+@layer base {
+  html {
+    /* Smooth in-page anchor scrolling; respected unless reduced-motion. */
+    scroll-behavior: smooth;
+  }
+}

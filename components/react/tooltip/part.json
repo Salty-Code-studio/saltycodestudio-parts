@@ -1,0 +1,13 @@
+{
+  "name": "Tooltip",
+  "slug": "tooltip",
+  "category": "react",
+  "tier": "practical",
+  "tags": ["tooltip", "overlay", "accessibility", "hover", "focus", "placement"],
+  "description": "An accessible tooltip that opens on hover and keyboard focus with viewport-aware smart placement and a small pointing arrow.",
+  "deps": [],
+  "files": ["Tooltip.tsx"],
+  "usage": "Wrap any focusable element: <Tooltip content=\"Copy link\"><button>Copy</button></Tooltip>. Set placement, delay, and offset as needed.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
+}

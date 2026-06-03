@@ -1,0 +1,13 @@
+{
+  "name": "Input Field",
+  "slug": "input-field",
+  "category": "react",
+  "tier": "practical",
+  "tags": ["input", "form", "text-field", "floating-label", "validation", "accessibility"],
+  "description": "An accessible text input with floating or standard label, helper text, error state, leading/trailing icons, and a required indicator.",
+  "deps": [],
+  "files": ["InputField.tsx"],
+  "usage": "import InputField from './InputField'; <InputField label=\"Email\" type=\"email\" required leadingIcon={<MailIcon />} helperText=\"We'll never share it.\" error={errors.email} />",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
+}

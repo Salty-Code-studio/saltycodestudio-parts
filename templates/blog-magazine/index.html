@@ -1,0 +1,932 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>The Tidewater Review — Stories from the coast of code &amp; craft</title>
+    <meta
+      name="description"
+      content="The Tidewater Review is an editorial magazine on design, technology, and the slow craft of building things that last. Featured essays, weekly columns, and a Sunday letter."
+    />
+
+    <!-- Tailwind Play CDN (no build step) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Brand fonts: an editorial serif + a clean grotesque + a mono accent -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              // Sand & Surf
+              cream: "#fbf7f0",
+              sand: "#f4ece0",
+              dune: "#ece0cd",
+              ink: "#1c2b33",
+              "ink-soft": "#4a5d66",
+              teal: "#1f8a8a",
+              "teal-deep": "#0f5c5c",
+              surf: "#2ec3c3",
+            },
+            fontFamily: {
+              serif: ['Fraunces', 'Georgia', 'serif'],
+              display: ['"Space Grotesk"', 'system-ui', 'sans-serif'],
+              mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+            },
+            maxWidth: {
+              prose: '68ch',
+            },
+            keyframes: {
+              "fade-up": {
+                "0%": { opacity: "0", transform: "translateY(18px)" },
+                "100%": { opacity: "1", transform: "translateY(0)" },
+              },
+              marquee: {
+                "0%": { transform: "translateX(0)" },
+                "100%": { transform: "translateX(-50%)" },
+              },
+            },
+            animation: {
+              "fade-up": "fade-up 0.7s cubic-bezier(0.22,1,0.36,1) both",
+              marquee: "marquee 38s linear infinite",
+            },
+          },
+        },
+      };
+    </script>
+
+    <style>
+      body {
+        font-family: 'Space Grotesk', system-ui, sans-serif;
+        background-color: #fbf7f0;
+        color: #1c2b33;
+        -webkit-font-smoothing: antialiased;
+      }
+      .font-serif { font-family: 'Fraunces', Georgia, serif; }
+      .font-mono { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+
+      /* Editorial top-rule eyebrow */
+      .eyebrow {
+        font-family: 'JetBrains Mono', ui-monospace, monospace;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        font-size: 0.7rem;
+      }
+
+      /* Subtle paper grain on the page */
+      .grain::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: 60;
+        pointer-events: none;
+        opacity: 0.035;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      }
+
+      /* Reveal-on-scroll baseline */
+      .reveal {
+        opacity: 0;
+        transform: translateY(22px);
+        transition: opacity 0.7s cubic-bezier(0.22,1,0.36,1),
+          transform 0.7s cubic-bezier(0.22,1,0.36,1);
+      }
+      .reveal.in {
+        opacity: 1;
+        transform: none;
+      }
+
+      /* Animated underline for editorial links */
+      .ulink {
+        background-image: linear-gradient(currentColor, currentColor);
+        background-size: 0% 1.5px;
+        background-position: 0 100%;
+        background-repeat: no-repeat;
+        transition: background-size 0.35s cubic-bezier(0.22,1,0.36,1);
+      }
+      .ulink:hover,
+      .ulink:focus-visible { background-size: 100% 1.5px; }
+
+      .card-img { transition: transform 0.7s cubic-bezier(0.22,1,0.36,1); }
+      .group:hover .card-img { transform: scale(1.06); }
+
+      .drop-cap::first-letter {
+        font-family: 'Fraunces', Georgia, serif;
+        float: left;
+        font-size: 3.4rem;
+        line-height: 0.78;
+        padding: 0.18rem 0.6rem 0 0;
+        color: #0f5c5c;
+        font-weight: 500;
+      }
+
+      :focus-visible {
+        outline: 2px solid #1f8a8a;
+        outline-offset: 3px;
+        border-radius: 2px;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+        .reveal { opacity: 1 !important; transform: none !important; transition: none; }
+        .animate-marquee, .animate-fade-up { animation: none !important; }
+        .card-img { transition: none; }
+      }
+    </style>
+  </head>
+
+  <body id="top" class="grain bg-cream text-ink selection:bg-surf/30 selection:text-ink">
+    <!-- Skip link -->
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[70] focus:rounded-full focus:bg-ink focus:px-5 focus:py-2.5 focus:text-sm focus:font-medium focus:text-cream"
+      >Skip to content</a
+    >
+
+    <!-- ============================================================= -->
+    <!-- NAV -->
+    <!-- ============================================================= -->
+    <header id="nav" class="sticky top-0 z-50 transition-all duration-300">
+      <div
+        class="border-b border-ink/10 bg-cream/85 backdrop-blur supports-[backdrop-filter]:bg-cream/70"
+      >
+        <nav
+          class="mx-auto flex max-w-7xl items-center justify-between px-5 py-3.5 sm:px-8"
+          aria-label="Primary"
+        >
+          <!-- Wordmark -->
+          <a href="#top" class="group flex items-baseline gap-2">
+            <span class="font-serif text-xl font-semibold tracking-tight text-ink"
+              >Tidewater</span
+            >
+            <span
+              class="eyebrow mt-0.5 hidden text-teal-deep sm:inline"
+              aria-hidden="true"
+              >Review</span
+            >
+          </a>
+
+          <!-- Desktop links -->
+          <ul class="hidden items-center gap-8 md:flex">
+            <li>
+              <a href="#featured" class="ulink text-sm font-medium text-ink-soft hover:text-ink"
+                >Featured</a
+              >
+            </li>
+            <li>
+              <a href="#latest" class="ulink text-sm font-medium text-ink-soft hover:text-ink"
+                >Latest</a
+              >
+            </li>
+            <li>
+              <a href="#columns" class="ulink text-sm font-medium text-ink-soft hover:text-ink"
+                >Columns</a
+              >
+            </li>
+            <li>
+              <a href="#letter" class="ulink text-sm font-medium text-ink-soft hover:text-ink"
+                >The Letter</a
+              >
+            </li>
+          </ul>
+
+          <div class="flex items-center gap-3">
+            <button
+              type="button"
+              aria-label="Search the archive"
+              class="hidden h-9 w-9 items-center justify-center rounded-full border border-ink/15 text-ink-soft transition hover:border-teal hover:text-teal-deep sm:flex"
+            >
+              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <circle cx="11" cy="11" r="7" />
+                <path d="m20 20-3.2-3.2" />
+              </svg>
+            </button>
+            <a
+              href="#letter"
+              class="hidden rounded-full bg-ink px-5 py-2 text-sm font-medium text-cream transition hover:bg-teal-deep md:inline-block"
+              >Subscribe</a
+            >
+
+            <!-- Mobile toggle -->
+            <button
+              id="navToggle"
+              type="button"
+              class="flex h-10 w-10 items-center justify-center rounded-full border border-ink/15 text-ink md:hidden"
+              aria-label="Open menu"
+              aria-expanded="false"
+              aria-controls="mobileMenu"
+            >
+              <svg id="iconOpen" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <path d="M4 7h16M4 12h16M4 17h16" />
+              </svg>
+              <svg id="iconClose" class="hidden h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <path d="M6 6l12 12M18 6 6 18" />
+              </svg>
+            </button>
+          </div>
+        </nav>
+      </div>
+
+      <!-- Mobile menu -->
+      <div
+        id="mobileMenu"
+        class="hidden border-b border-ink/10 bg-cream md:hidden"
+      >
+        <ul class="mx-auto max-w-7xl space-y-1 px-5 py-4 sm:px-8">
+          <li><a href="#featured" class="block rounded-xl px-3 py-3 text-base font-medium text-ink hover:bg-sand">Featured</a></li>
+          <li><a href="#latest" class="block rounded-xl px-3 py-3 text-base font-medium text-ink hover:bg-sand">Latest</a></li>
+          <li><a href="#columns" class="block rounded-xl px-3 py-3 text-base font-medium text-ink hover:bg-sand">Columns</a></li>
+          <li><a href="#letter" class="block rounded-xl px-3 py-3 text-base font-medium text-ink hover:bg-sand">The Letter</a></li>
+          <li class="pt-2">
+            <a href="#letter" class="block rounded-full bg-ink px-4 py-3 text-center text-base font-medium text-cream">Subscribe to the Sunday letter</a>
+          </li>
+        </ul>
+      </div>
+    </header>
+
+    <main id="main">
+      <!-- ============================================================= -->
+      <!-- MASTHEAD / FEATURED HERO -->
+      <!-- ============================================================= -->
+      <section id="featured" class="relative overflow-hidden">
+        <!-- Masthead line -->
+        <div class="mx-auto max-w-7xl px-5 pt-10 sm:px-8 lg:pt-14">
+          <div
+            class="flex flex-col items-center gap-3 border-b border-ink/15 pb-5 text-center sm:flex-row sm:justify-between sm:text-left"
+          >
+            <p class="eyebrow text-teal-deep">Issue No. 47 · The Coast of Code</p>
+            <h1 class="sr-only">The Tidewater Review</h1>
+            <p class="eyebrow text-ink-soft">Sunday, June 1, 2026 · Free to read</p>
+          </div>
+        </div>
+
+        <!-- Lead story -->
+        <div class="mx-auto max-w-7xl px-5 py-10 sm:px-8 lg:py-14">
+          <div class="grid items-center gap-10 lg:grid-cols-12 lg:gap-14">
+            <!-- Copy -->
+            <div class="reveal lg:col-span-6 lg:pr-4">
+              <span
+                class="inline-flex items-center gap-2 rounded-full bg-teal-deep/10 px-3 py-1 text-xs font-medium text-teal-deep"
+              >
+                <span class="h-1.5 w-1.5 rounded-full bg-teal"></span>
+                Lead Essay · Craft
+              </span>
+
+              <h2
+                class="mt-6 font-serif text-4xl font-medium leading-[1.05] tracking-tight text-ink sm:text-5xl lg:text-6xl"
+              >
+                The slow web is coming back, and it&rsquo;s
+                <span class="italic text-teal-deep">better dressed</span> than before.
+              </h2>
+
+              <p class="mt-6 max-w-prose text-lg leading-relaxed text-ink-soft">
+                A decade of infinite feeds taught us to skim. Now a quiet
+                counter-movement is rebuilding the web one hand-set page at a
+                time &mdash; fewer trackers, longer reads, and interfaces that
+                respect your attention instead of mining it.
+              </p>
+
+              <div class="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3">
+                <div class="flex items-center gap-3">
+                  <span
+                    class="grid h-11 w-11 place-items-center rounded-full bg-dune font-serif text-base font-semibold text-teal-deep"
+                    aria-hidden="true"
+                    >MR</span
+                  >
+                  <div class="text-sm leading-tight">
+                    <p class="font-medium text-ink">Mara Reyes</p>
+                    <p class="text-ink-soft">Editor-at-large · 14 min read</p>
+                  </div>
+                </div>
+                <a
+                  href="#latest"
+                  class="group inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-medium text-cream transition hover:bg-teal-deep"
+                >
+                  Read the essay
+                  <svg class="h-4 w-4 transition-transform group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                    <path d="M5 12h14M13 6l6 6-6 6" />
+                  </svg>
+                </a>
+              </div>
+            </div>
+
+            <!-- Cover image -->
+            <div class="reveal lg:col-span-6">
+              <figure class="group relative overflow-hidden rounded-[1.75rem] bg-dune shadow-[0_30px_60px_-30px_rgba(28,43,51,0.45)]">
+                <div class="aspect-[4/3] w-full overflow-hidden">
+                  <img
+                    src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=1200&q=80"
+                    alt="A wooden desk by a sunlit window with an open notebook, a cup of coffee, and a laptop — the quiet workspace of slow, deliberate writing."
+                    class="card-img h-full w-full object-cover"
+                    loading="eager"
+                    width="1200"
+                    height="900"
+                  />
+                </div>
+                <figcaption
+                  class="absolute bottom-4 left-4 right-4 flex items-center justify-between rounded-2xl bg-cream/85 px-4 py-3 text-xs backdrop-blur"
+                >
+                  <span class="font-mono text-ink-soft">Photo · Tidewater Studio</span>
+                  <span class="font-medium text-teal-deep">Cover story</span>
+                </figcaption>
+              </figure>
+            </div>
+          </div>
+        </div>
+
+        <!-- Secondary featured row -->
+        <div class="mx-auto max-w-7xl px-5 sm:px-8">
+          <div class="grid gap-px overflow-hidden rounded-2xl bg-ink/10 sm:grid-cols-3">
+            <a href="#latest" class="group reveal bg-cream p-6 transition hover:bg-sand">
+              <p class="eyebrow text-teal-deep">Also today</p>
+              <h3 class="mt-3 font-serif text-xl font-medium leading-snug text-ink">
+                Why your design system needs a librarian, not a sheriff
+              </h3>
+              <p class="mt-2 text-sm text-ink-soft">8 min · Systems</p>
+            </a>
+            <a href="#latest" class="group reveal bg-cream p-6 transition hover:bg-sand">
+              <p class="eyebrow text-teal-deep">Field notes</p>
+              <h3 class="mt-3 font-serif text-xl font-medium leading-snug text-ink">
+                Notes from a month spent shipping with no analytics at all
+              </h3>
+              <p class="mt-2 text-sm text-ink-soft">6 min · Practice</p>
+            </a>
+            <a href="#latest" class="group reveal bg-cream p-6 transition hover:bg-sand">
+              <p class="eyebrow text-teal-deep">Interview</p>
+              <h3 class="mt-3 font-serif text-xl font-medium leading-snug text-ink">
+                The typographer who set an entire bank in one weekend
+              </h3>
+              <p class="mt-2 text-sm text-ink-soft">11 min · Type</p>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================= -->
+      <!-- TOPIC MARQUEE -->
+      <!-- ============================================================= -->
+      <section class="mt-14 border-y border-ink/10 bg-sand py-3" aria-hidden="true">
+        <div class="flex overflow-hidden">
+          <div class="flex shrink-0 animate-marquee items-center gap-10 pr-10 font-mono text-sm text-ink-soft">
+            <span>Design</span><span class="text-teal">◇</span>
+            <span>Engineering</span><span class="text-teal">◇</span>
+            <span>Typography</span><span class="text-teal">◇</span>
+            <span>The Slow Web</span><span class="text-teal">◇</span>
+            <span>Tools &amp; Craft</span><span class="text-teal">◇</span>
+            <span>Interviews</span><span class="text-teal">◇</span>
+            <span>Field Notes</span><span class="text-teal">◇</span>
+          </div>
+          <div class="flex shrink-0 animate-marquee items-center gap-10 pr-10 font-mono text-sm text-ink-soft">
+            <span>Design</span><span class="text-teal">◇</span>
+            <span>Engineering</span><span class="text-teal">◇</span>
+            <span>Typography</span><span class="text-teal">◇</span>
+            <span>The Slow Web</span><span class="text-teal">◇</span>
+            <span>Tools &amp; Craft</span><span class="text-teal">◇</span>
+            <span>Interviews</span><span class="text-teal">◇</span>
+            <span>Field Notes</span><span class="text-teal">◇</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================= -->
+      <!-- LATEST — filterable post grid by category -->
+      <!-- ============================================================= -->
+      <section id="latest" class="mx-auto max-w-7xl px-5 py-16 sm:px-8 lg:py-24">
+        <div class="reveal flex flex-col gap-6 border-b border-ink/15 pb-8 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p class="eyebrow text-teal-deep">The Archive</p>
+            <h2 class="mt-3 font-serif text-3xl font-medium tracking-tight text-ink sm:text-4xl">
+              Latest stories
+            </h2>
+          </div>
+
+          <!-- Category filter -->
+          <div
+            class="flex flex-wrap gap-2"
+            role="group"
+            aria-label="Filter stories by category"
+          >
+            <button
+              type="button"
+              data-filter="all"
+              class="filter-btn rounded-full border border-ink bg-ink px-4 py-2 text-sm font-medium text-cream transition"
+              aria-pressed="true"
+            >
+              All
+            </button>
+            <button type="button" data-filter="design" class="filter-btn rounded-full border border-ink/20 px-4 py-2 text-sm font-medium text-ink-soft transition hover:border-ink" aria-pressed="false">Design</button>
+            <button type="button" data-filter="engineering" class="filter-btn rounded-full border border-ink/20 px-4 py-2 text-sm font-medium text-ink-soft transition hover:border-ink" aria-pressed="false">Engineering</button>
+            <button type="button" data-filter="type" class="filter-btn rounded-full border border-ink/20 px-4 py-2 text-sm font-medium text-ink-soft transition hover:border-ink" aria-pressed="false">Type</button>
+            <button type="button" data-filter="culture" class="filter-btn rounded-full border border-ink/20 px-4 py-2 text-sm font-medium text-ink-soft transition hover:border-ink" aria-pressed="false">Culture</button>
+          </div>
+        </div>
+
+        <!-- Grid -->
+        <div id="postGrid" class="mt-10 grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+          <!-- Card -->
+          <article class="post group reveal" data-category="design">
+            <a href="#" class="block">
+              <div class="overflow-hidden rounded-2xl bg-dune">
+                <div class="aspect-[3/2] w-full overflow-hidden">
+                  <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&w=900&q=80" alt="Layered sheets of colored paper arranged in a grid, evoking a design system." class="card-img h-full w-full object-cover" loading="lazy" width="900" height="600" />
+                </div>
+              </div>
+              <p class="mt-4 eyebrow text-teal-deep">Design</p>
+              <h3 class="mt-2 font-serif text-xl font-medium leading-snug text-ink group-hover:text-teal-deep">
+                The grid is a guideline, not a cage
+              </h3>
+              <p class="mt-2 text-sm leading-relaxed text-ink-soft">
+                How the best editorial layouts break their own rules on purpose &mdash; and why the reader never notices.
+              </p>
+              <p class="mt-4 font-mono text-xs text-ink-soft">Jun 1 · 7 min · Lena Okafor</p>
+            </a>
+          </article>
+
+          <article class="post group reveal" data-category="engineering">
+            <a href="#" class="block">
+              <div class="overflow-hidden rounded-2xl bg-dune">
+                <div class="aspect-[3/2] w-full overflow-hidden">
+                  <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=900&q=80" alt="A green circuit board photographed close up." class="card-img h-full w-full object-cover" loading="lazy" width="900" height="600" />
+                </div>
+              </div>
+              <p class="mt-4 eyebrow text-teal-deep">Engineering</p>
+              <h3 class="mt-2 font-serif text-xl font-medium leading-snug text-ink group-hover:text-teal-deep">
+                Latency is a feeling, not a number
+              </h3>
+              <p class="mt-2 text-sm leading-relaxed text-ink-soft">
+                Why a 200ms response can feel instant and a 60ms one can feel broken &mdash; the psychology of perceived speed.
+              </p>
+              <p class="mt-4 font-mono text-xs text-ink-soft">May 30 · 9 min · Theo Marsh</p>
+            </a>
+          </article>
+
+          <article class="post group reveal" data-category="type">
+            <a href="#" class="block">
+              <div class="overflow-hidden rounded-2xl bg-dune">
+                <div class="aspect-[3/2] w-full overflow-hidden">
+                  <img src="https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=900&q=80" alt="Movable metal type arranged in a printer's composing stick." class="card-img h-full w-full object-cover" loading="lazy" width="900" height="600" />
+                </div>
+              </div>
+              <p class="mt-4 eyebrow text-teal-deep">Type</p>
+              <h3 class="mt-2 font-serif text-xl font-medium leading-snug text-ink group-hover:text-teal-deep">
+                In defense of the very long line
+              </h3>
+              <p class="mt-2 text-sm leading-relaxed text-ink-soft">
+                Everyone says 66 characters. Here&rsquo;s when the rule is wrong and your measure should run wide.
+              </p>
+              <p class="mt-4 font-mono text-xs text-ink-soft">May 28 · 5 min · Priya Anand</p>
+            </a>
+          </article>
+
+          <article class="post group reveal" data-category="culture">
+            <a href="#" class="block">
+              <div class="overflow-hidden rounded-2xl bg-dune">
+                <div class="aspect-[3/2] w-full overflow-hidden">
+                  <img src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=900&q=80" alt="A person reading a book in a sunlit library among tall shelves." class="card-img h-full w-full object-cover" loading="lazy" width="900" height="600" />
+                </div>
+              </div>
+              <p class="mt-4 eyebrow text-teal-deep">Culture</p>
+              <h3 class="mt-2 font-serif text-xl font-medium leading-snug text-ink group-hover:text-teal-deep">
+                We made reading a chore. Let&rsquo;s make it a place again
+              </h3>
+              <p class="mt-2 text-sm leading-relaxed text-ink-soft">
+                The internet flattened the reading room. A few stubborn publishers are rebuilding it, pixel by pixel.
+              </p>
+              <p class="mt-4 font-mono text-xs text-ink-soft">May 26 · 12 min · Sam Vinter</p>
+            </a>
+          </article>
+
+          <article class="post group reveal" data-category="design">
+            <a href="#" class="block">
+              <div class="overflow-hidden rounded-2xl bg-dune">
+                <div class="aspect-[3/2] w-full overflow-hidden">
+                  <img src="https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?auto=format&fit=crop&w=900&q=80" alt="A minimalist desk with a single lamp casting warm light." class="card-img h-full w-full object-cover" loading="lazy" width="900" height="600" />
+                </div>
+              </div>
+              <p class="mt-4 eyebrow text-teal-deep">Design</p>
+              <h3 class="mt-2 font-serif text-xl font-medium leading-snug text-ink group-hover:text-teal-deep">
+                Negative space is the most expensive thing on the page
+              </h3>
+              <p class="mt-2 text-sm leading-relaxed text-ink-soft">
+                Why the courage to leave things out is the rarest skill in the studio &mdash; and how to practice it.
+              </p>
+              <p class="mt-4 font-mono text-xs text-ink-soft">May 24 · 6 min · Lena Okafor</p>
+            </a>
+          </article>
+
+          <article class="post group reveal" data-category="engineering">
+            <a href="#" class="block">
+              <div class="overflow-hidden rounded-2xl bg-dune">
+                <div class="aspect-[3/2] w-full overflow-hidden">
+                  <img src="https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=900&q=80" alt="Abstract blue and teal light trails representing data flowing through a network." class="card-img h-full w-full object-cover" loading="lazy" width="900" height="600" />
+                </div>
+              </div>
+              <p class="mt-4 eyebrow text-teal-deep">Engineering</p>
+              <h3 class="mt-2 font-serif text-xl font-medium leading-snug text-ink group-hover:text-teal-deep">
+                The case for boring infrastructure
+              </h3>
+              <p class="mt-2 text-sm leading-relaxed text-ink-soft">
+                The teams shipping fastest in 2026 are the ones running the most unfashionable stacks. We asked them why.
+              </p>
+              <p class="mt-4 font-mono text-xs text-ink-soft">May 21 · 10 min · Theo Marsh</p>
+            </a>
+          </article>
+        </div>
+
+        <!-- Empty state for filters -->
+        <p id="emptyState" class="mt-12 hidden text-center font-serif text-lg italic text-ink-soft">
+          No stories in this category yet &mdash; check back next issue.
+        </p>
+
+        <div class="mt-14 text-center">
+          <a href="#" class="ulink inline-flex items-center gap-2 font-medium text-teal-deep">
+            Browse the full archive
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+          </a>
+        </div>
+      </section>
+
+      <!-- ============================================================= -->
+      <!-- COLUMNS — editorial split feature -->
+      <!-- ============================================================= -->
+      <section id="columns" class="bg-ink text-cream">
+        <div class="mx-auto max-w-7xl px-5 py-16 sm:px-8 lg:py-24">
+          <div class="reveal flex flex-col gap-4 border-b border-cream/15 pb-8 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p class="eyebrow text-surf">Recurring</p>
+              <h2 class="mt-3 font-serif text-3xl font-medium tracking-tight sm:text-4xl">
+                Columns we run every week
+              </h2>
+            </div>
+            <p class="max-w-sm text-sm text-cream/60">
+              Four voices, four beats. The departments that give the Review its rhythm.
+            </p>
+          </div>
+
+          <div class="mt-12 grid gap-px overflow-hidden rounded-2xl bg-cream/10 md:grid-cols-2 lg:grid-cols-4">
+            <a href="#" class="group reveal bg-ink p-7 transition hover:bg-teal-deep">
+              <span class="font-mono text-sm text-surf">01</span>
+              <h3 class="mt-6 font-serif text-2xl font-medium">The Margin</h3>
+              <p class="mt-3 text-sm leading-relaxed text-cream/65">
+                Small details, big consequences. A weekly look at the one-pixel decisions that decide a product.
+              </p>
+              <span class="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-surf">
+                Tuesdays
+                <svg class="h-4 w-4 transition-transform group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+              </span>
+            </a>
+            <a href="#" class="group reveal bg-ink p-7 transition hover:bg-teal-deep">
+              <span class="font-mono text-sm text-surf">02</span>
+              <h3 class="mt-6 font-serif text-2xl font-medium">Ship Log</h3>
+              <p class="mt-3 text-sm leading-relaxed text-cream/65">
+                One team, one release, told honestly &mdash; including the parts that broke at 2am.
+              </p>
+              <span class="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-surf">
+                Thursdays
+                <svg class="h-4 w-4 transition-transform group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+              </span>
+            </a>
+            <a href="#" class="group reveal bg-ink p-7 transition hover:bg-teal-deep">
+              <span class="font-mono text-sm text-surf">03</span>
+              <h3 class="mt-6 font-serif text-2xl font-medium">Setwidth</h3>
+              <p class="mt-3 text-sm leading-relaxed text-cream/65">
+                A typographer&rsquo;s diary. One typeface, one history, one argument for using it well.
+              </p>
+              <span class="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-surf">
+                Fridays
+                <svg class="h-4 w-4 transition-transform group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+              </span>
+            </a>
+            <a href="#" class="group reveal bg-ink p-7 transition hover:bg-teal-deep">
+              <span class="font-mono text-sm text-surf">04</span>
+              <h3 class="mt-6 font-serif text-2xl font-medium">Low Tide</h3>
+              <p class="mt-3 text-sm leading-relaxed text-cream/65">
+                The slow read. A long, unhurried essay to close the week &mdash; no takeaways, no listicles.
+              </p>
+              <span class="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-surf">
+                Sundays
+                <svg class="h-4 w-4 transition-transform group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+              </span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================= -->
+      <!-- EDITOR'S PICK — long-form teaser with drop cap -->
+      <!-- ============================================================= -->
+      <section class="mx-auto max-w-7xl px-5 py-16 sm:px-8 lg:py-24">
+        <div class="grid items-start gap-12 lg:grid-cols-12">
+          <div class="reveal lg:col-span-7">
+            <p class="eyebrow text-teal-deep">Editor&rsquo;s pick</p>
+            <h2 class="mt-3 max-w-prose font-serif text-3xl font-medium leading-tight tracking-tight text-ink sm:text-4xl">
+              How a 12-person studio rebuilt a national archive without a single dark pattern
+            </h2>
+            <p class="drop-cap mt-7 max-w-prose text-lg leading-relaxed text-ink-soft">
+              When the commission landed, the brief was deceptively simple: make
+              two centuries of public records feel like a place worth visiting.
+              No upsells, no cookie walls, no manufactured urgency. The team set
+              a single rule on day one &mdash; if a feature wouldn&rsquo;t survive
+              being read aloud to a librarian, it didn&rsquo;t ship.
+            </p>
+            <p class="mt-5 max-w-prose text-lg leading-relaxed text-ink-soft">
+              What followed was a study in restraint: a typographic scale you
+              could feel, a colour system pulled from the original ledgers, and a
+              search that answered in a single breath. Here is how they did it.
+            </p>
+            <a href="#" class="mt-8 inline-flex items-center gap-2 rounded-full border border-ink px-6 py-3 text-sm font-medium text-ink transition hover:bg-ink hover:text-cream">
+              Continue reading
+              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+            </a>
+          </div>
+
+          <!-- Most-read sidebar -->
+          <aside class="reveal lg:col-span-5 lg:pl-4">
+            <div class="rounded-2xl border border-ink/12 bg-sand p-7">
+              <h3 class="eyebrow text-teal-deep">Most read this month</h3>
+              <ol class="mt-6 space-y-6">
+                <li class="flex gap-5">
+                  <span class="font-serif text-3xl font-medium text-dune">01</span>
+                  <a href="#" class="ulink font-serif text-lg font-medium leading-snug text-ink">
+                    The end of the hamburger menu, again
+                  </a>
+                </li>
+                <li class="flex gap-5">
+                  <span class="font-serif text-3xl font-medium text-dune">02</span>
+                  <a href="#" class="ulink font-serif text-lg font-medium leading-snug text-ink">
+                    I deleted every npm dependency. Here&rsquo;s what survived
+                  </a>
+                </li>
+                <li class="flex gap-5">
+                  <span class="font-serif text-3xl font-medium text-dune">03</span>
+                  <a href="#" class="ulink font-serif text-lg font-medium leading-snug text-ink">
+                    A love letter to the humble table element
+                  </a>
+                </li>
+                <li class="flex gap-5">
+                  <span class="font-serif text-3xl font-medium text-dune">04</span>
+                  <a href="#" class="ulink font-serif text-lg font-medium leading-snug text-ink">
+                    Designing for the second read, not the first glance
+                  </a>
+                </li>
+              </ol>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- ============================================================= -->
+      <!-- NEWSLETTER CTA — The Letter -->
+      <!-- ============================================================= -->
+      <section id="letter" class="mx-auto max-w-7xl px-5 pb-20 sm:px-8 lg:pb-28">
+        <div
+          class="reveal relative overflow-hidden rounded-[2rem] bg-teal-deep px-6 py-14 text-cream sm:px-12 lg:px-16 lg:py-20"
+        >
+          <!-- soft radial glows -->
+          <div class="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-surf/20 blur-3xl"></div>
+          <div class="pointer-events-none absolute -bottom-28 -left-20 h-72 w-72 rounded-full bg-teal/30 blur-3xl"></div>
+
+          <div class="relative grid items-center gap-10 lg:grid-cols-2">
+            <div>
+              <p class="eyebrow text-surf">The Sunday Letter</p>
+              <h2 class="mt-4 font-serif text-3xl font-medium leading-tight tracking-tight sm:text-4xl lg:text-[2.75rem]">
+                One considered email. Every Sunday morning.
+              </h2>
+              <p class="mt-5 max-w-md text-cream/70">
+                The week&rsquo;s best essay, three links worth your time, and a
+                single question to sit with. No tracking pixels, no &ldquo;hot
+                takes,&rdquo; unsubscribe in one click. Join 24,800 thoughtful readers.
+              </p>
+            </div>
+
+            <div>
+              <form id="newsletterForm" class="space-y-3" novalidate>
+                <label for="email" class="sr-only">Email address</label>
+                <div class="flex flex-col gap-3 sm:flex-row">
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    required
+                    autocomplete="email"
+                    placeholder="you@studio.com"
+                    class="w-full rounded-full border border-cream/25 bg-cream/10 px-5 py-3.5 text-cream placeholder-cream/45 outline-none transition focus:border-surf focus:bg-cream/15"
+                  />
+                  <button
+                    type="submit"
+                    class="shrink-0 rounded-full bg-cream px-7 py-3.5 font-medium text-teal-deep transition hover:bg-surf hover:text-ink"
+                  >
+                    Subscribe
+                  </button>
+                </div>
+                <p id="formMsg" class="min-h-[1.25rem] text-sm" role="status" aria-live="polite"></p>
+              </form>
+              <p class="mt-2 text-xs text-cream/50">
+                Free forever. We&rsquo;ll never sell your address &mdash; that&rsquo;s the whole point.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ============================================================= -->
+    <!-- FOOTER -->
+    <!-- ============================================================= -->
+    <footer class="border-t border-ink/10 bg-sand">
+      <div class="mx-auto max-w-7xl px-5 py-16 sm:px-8">
+        <div class="grid gap-12 lg:grid-cols-12">
+          <!-- Brand -->
+          <div class="lg:col-span-4">
+            <a href="#top" class="flex items-baseline gap-2">
+              <span class="font-serif text-2xl font-semibold tracking-tight text-ink">Tidewater</span>
+              <span class="eyebrow mt-0.5 text-teal-deep">Review</span>
+            </a>
+            <p class="mt-5 max-w-xs text-sm leading-relaxed text-ink-soft">
+              An independent magazine on design, technology, and the slow craft
+              of building things that last. Published from the coast since 2019.
+            </p>
+            <div class="mt-6 flex items-center gap-3">
+              <a href="#" aria-label="Tidewater Review on Mastodon" class="grid h-10 w-10 place-items-center rounded-full border border-ink/15 text-ink-soft transition hover:border-teal hover:text-teal-deep">
+                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M21.6 8.6c0-3.9-2.6-5-2.6-5C17.7 3 15.8 2.8 12 2.8h-.1C8.2 2.8 6.3 3 5 3.6c0 0-2.6 1.1-2.6 5 0 .9 0 1.9.1 3 .2 3.8.8 7.5 4.3 8.4 1.6.4 3 .5 4.1.5 1.9 0 3-.6 3-.6l-.1-1.4s-1.4.4-2.9.4c-1.5-.1-3.1-.2-3.4-2 0-.2-.1-.4-.1-.6 0 0 1.5.4 3.5.5h1c1.7-.1 3.3-.1 4.9-.3 3.2-.4 3.9-3.6 4-5l.1-3.6Zm-3.3 5.5h-2v-5c0-1-.5-1.6-1.4-1.6-1 0-1.5.6-1.5 1.9v2.7h-2v-2.7c0-1.3-.5-1.9-1.5-1.9-.9 0-1.4.6-1.4 1.6v5h-2V8.9c0-1 .3-1.8.8-2.4.5-.6 1.2-.9 2.1-.9 1 0 1.8.4 2.3 1.2l.5.9.5-.9c.5-.8 1.3-1.2 2.3-1.2.9 0 1.6.3 2.1.9.5.6.8 1.4.8 2.4v5.2Z"/></svg>
+              </a>
+              <a href="#" aria-label="Tidewater Review RSS feed" class="grid h-10 w-10 place-items-center rounded-full border border-ink/15 text-ink-soft transition hover:border-teal hover:text-teal-deep">
+                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M5 17a2 2 0 1 1 0 4 2 2 0 0 1 0-4Zm-1-7c4.4 0 8 3.6 8 8h-2.8c0-2.9-2.3-5.2-5.2-5.2V10Zm0-5c7.2 0 13 5.8 13 13h-2.8C16.2 10.3 10.7 4.8 4 4.8V5Z"/></svg>
+              </a>
+              <a href="#" aria-label="Tidewater Review on GitHub" class="grid h-10 w-10 place-items-center rounded-full border border-ink/15 text-ink-soft transition hover:border-teal hover:text-teal-deep">
+                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.6.3-1.1.6-1.3-2.2-.2-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.6 0 0 .8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .5 1.3.2 2.3.1 2.6.6.7 1 1.6 1 2.7 0 3.9-2.4 4.8-4.6 5 .3.3.6.9.6 1.8v2.7c0 .3.2.6.7.5A10 10 0 0 0 12 2Z"/></svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- Link columns -->
+          <div class="grid grid-cols-2 gap-8 sm:grid-cols-3 lg:col-span-8 lg:pl-8">
+            <div>
+              <h3 class="eyebrow text-ink-soft">Sections</h3>
+              <ul class="mt-5 space-y-3 text-sm">
+                <li><a href="#latest" class="ulink text-ink hover:text-teal-deep">Design</a></li>
+                <li><a href="#latest" class="ulink text-ink hover:text-teal-deep">Engineering</a></li>
+                <li><a href="#latest" class="ulink text-ink hover:text-teal-deep">Typography</a></li>
+                <li><a href="#latest" class="ulink text-ink hover:text-teal-deep">Culture</a></li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="eyebrow text-ink-soft">Columns</h3>
+              <ul class="mt-5 space-y-3 text-sm">
+                <li><a href="#columns" class="ulink text-ink hover:text-teal-deep">The Margin</a></li>
+                <li><a href="#columns" class="ulink text-ink hover:text-teal-deep">Ship Log</a></li>
+                <li><a href="#columns" class="ulink text-ink hover:text-teal-deep">Setwidth</a></li>
+                <li><a href="#columns" class="ulink text-ink hover:text-teal-deep">Low Tide</a></li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="eyebrow text-ink-soft">The Review</h3>
+              <ul class="mt-5 space-y-3 text-sm">
+                <li><a href="#" class="ulink text-ink hover:text-teal-deep">About &amp; masthead</a></li>
+                <li><a href="#letter" class="ulink text-ink hover:text-teal-deep">The Sunday Letter</a></li>
+                <li><a href="#" class="ulink text-ink hover:text-teal-deep">Submit a pitch</a></li>
+                <li><a href="#" class="ulink text-ink hover:text-teal-deep">Advertise</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-14 flex flex-col items-center justify-between gap-4 border-t border-ink/10 pt-8 text-sm text-ink-soft sm:flex-row">
+          <p>&copy; 2026 The Tidewater Review. Set in Fraunces &amp; Space Grotesk.</p>
+          <div class="flex items-center gap-6">
+            <a href="#" class="ulink hover:text-ink">Privacy</a>
+            <a href="#" class="ulink hover:text-ink">Ethics</a>
+            <a href="#top" class="ulink hover:text-ink">Back to top &uarr;</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- ============================================================= -->
+    <!-- SCRIPT — mobile nav, scroll elevation, filters, reveal, form -->
+    <!-- ============================================================= -->
+    <script>
+      (function () {
+        "use strict";
+
+        /* ---- Mobile menu ---- */
+        var toggle = document.getElementById("navToggle");
+        var menu = document.getElementById("mobileMenu");
+        var iconOpen = document.getElementById("iconOpen");
+        var iconClose = document.getElementById("iconClose");
+
+        function setMenu(open) {
+          menu.classList.toggle("hidden", !open);
+          iconOpen.classList.toggle("hidden", open);
+          iconClose.classList.toggle("hidden", !open);
+          toggle.setAttribute("aria-expanded", String(open));
+          toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+        }
+        toggle.addEventListener("click", function () {
+          setMenu(menu.classList.contains("hidden"));
+        });
+        menu.querySelectorAll("a").forEach(function (a) {
+          a.addEventListener("click", function () { setMenu(false); });
+        });
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape" && !menu.classList.contains("hidden")) {
+            setMenu(false);
+            toggle.focus();
+          }
+        });
+
+        /* ---- Scroll elevation for the header ---- */
+        var nav = document.getElementById("nav");
+        function onScroll() {
+          if (window.scrollY > 8) {
+            nav.classList.add("shadow-[0_8px_30px_-18px_rgba(28,43,51,0.4)]");
+          } else {
+            nav.classList.remove("shadow-[0_8px_30px_-18px_rgba(28,43,51,0.4)]");
+          }
+        }
+        onScroll();
+        window.addEventListener("scroll", onScroll, { passive: true });
+
+        /* ---- Reveal on scroll ---- */
+        var reveals = document.querySelectorAll(".reveal");
+        if ("IntersectionObserver" in window) {
+          var io = new IntersectionObserver(
+            function (entries) {
+              entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                  entry.target.classList.add("in");
+                  io.unobserve(entry.target);
+                }
+              });
+            },
+            { rootMargin: "0px 0px -10% 0px", threshold: 0.08 }
+          );
+          reveals.forEach(function (el) { io.observe(el); });
+        } else {
+          reveals.forEach(function (el) { el.classList.add("in"); });
+        }
+
+        /* ---- Category filtering ---- */
+        var buttons = document.querySelectorAll(".filter-btn");
+        var posts = document.querySelectorAll(".post");
+        var emptyState = document.getElementById("emptyState");
+
+        function activate(btn) {
+          buttons.forEach(function (b) {
+            var on = b === btn;
+            b.setAttribute("aria-pressed", String(on));
+            b.classList.toggle("bg-ink", on);
+            b.classList.toggle("text-cream", on);
+            b.classList.toggle("border-ink", on);
+            b.classList.toggle("border-ink/20", !on);
+            b.classList.toggle("text-ink-soft", !on);
+          });
+        }
+
+        buttons.forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            var filter = btn.getAttribute("data-filter");
+            activate(btn);
+            var shown = 0;
+            posts.forEach(function (post) {
+              var match = filter === "all" || post.getAttribute("data-category") === filter;
+              post.classList.toggle("hidden", !match);
+              if (match) {
+                shown++;
+                // re-trigger reveal for items entering view
+                post.classList.add("in");
+              }
+            });
+            emptyState.classList.toggle("hidden", shown !== 0);
+          });
+        });
+
+        /* ---- Newsletter form ---- */
+        var form = document.getElementById("newsletterForm");
+        var input = document.getElementById("email");
+        var msg = document.getElementById("formMsg");
+        form.addEventListener("submit", function (e) {
+          e.preventDefault();
+          var value = input.value.trim();
+          var valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+          if (!valid) {
+            msg.textContent = "Please enter a valid email address.";
+            msg.className = "min-h-[1.25rem] text-sm text-surf";
+            input.focus();
+            return;
+          }
+          msg.textContent = "You're in. Look for your first letter this Sunday.";
+          msg.className = "min-h-[1.25rem] text-sm text-cream";
+          form.reset();
+        });
+      })();
+    </script>
+  </body>
+</html>

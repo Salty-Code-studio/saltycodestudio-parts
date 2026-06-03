@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>saltycodestudio · Feature Showcase — preview</title>
+  <meta name="description" content="Alternating image-and-text feature rows. Brand palette Sand & Surf." />
+
+  <!-- Tailwind Play CDN (preview only — use a real Tailwind build in production) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Brand fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            display: ['"Space Grotesk"', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    h1, h2, h3 { font-family: 'Space Grotesk', system-ui, sans-serif; }
+    .font-mono { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+  </style>
+</head>
+<body class="bg-[#fbf7f0] text-[#1c2b33] antialiased">
+
+  <!-- Minimal brand nav for context -->
+  <header class="sticky top-0 z-40 border-b border-[#ece0cd] bg-[#fbf7f0]/85 backdrop-blur">
+    <nav class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4 lg:px-8" aria-label="Primary">
+      <a href="#" class="flex items-center gap-2.5 font-display text-lg font-bold tracking-tight text-[#0f5c5c]">
+        <span class="grid h-9 w-9 place-items-center rounded-xl bg-[#0f5c5c] font-mono text-base text-[#f4ece0]">~&lt;</span>
+        saltycodestudio
+      </a>
+
+      <div class="hidden items-center gap-8 text-sm font-medium text-[#4a5d66] md:flex">
+        <a href="#process" class="transition-colors hover:text-[#0f5c5c]">Process</a>
+        <a href="#work" class="transition-colors hover:text-[#0f5c5c]">Work</a>
+        <a href="#stack" class="transition-colors hover:text-[#0f5c5c]">Stack</a>
+        <a href="#contact" class="rounded-full bg-[#FF6F59] px-4 py-2 font-semibold text-white shadow-sm transition-colors hover:bg-[#e85c47]">Start a project</a>
+      </div>
+
+      <button id="menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobile-menu"
+        class="inline-flex h-10 w-10 items-center justify-center rounded-lg text-[#0f5c5c] transition-colors hover:bg-[#f4ece0] md:hidden">
+        <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </nav>
+
+    <div id="mobile-menu" class="hidden border-t border-[#ece0cd] bg-[#fbf7f0] md:hidden">
+      <div class="mx-auto flex max-w-6xl flex-col gap-1 px-6 py-3 text-sm font-medium text-[#4a5d66]">
+        <a href="#process" class="rounded-lg px-3 py-2 transition-colors hover:bg-[#f4ece0] hover:text-[#0f5c5c]">Process</a>
+        <a href="#work" class="rounded-lg px-3 py-2 transition-colors hover:bg-[#f4ece0] hover:text-[#0f5c5c]">Work</a>
+        <a href="#stack" class="rounded-lg px-3 py-2 transition-colors hover:bg-[#f4ece0] hover:text-[#0f5c5c]">Stack</a>
+        <a href="#contact" class="mt-1 rounded-lg bg-[#FF6F59] px-3 py-2 font-semibold text-white">Start a project</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Tiny hero strip so the section sits in a real page -->
+  <div class="mx-auto max-w-6xl px-6 pt-14 pb-2 text-center lg:px-8">
+    <p class="font-mono text-xs uppercase tracking-[0.2em] text-[#1f8a8a]">Clean code, warm coast</p>
+  </div>
+
+  <!-- ===== BEGIN feature-showcase section (paste of section.html) ===== -->
+  <section aria-labelledby="feature-showcase-heading" class="bg-[#fbf7f0] py-20 sm:py-28">
+    <div class="mx-auto max-w-6xl px-6 lg:px-8">
+      <div class="mx-auto max-w-2xl text-center">
+        <p class="font-mono text-xs font-medium uppercase tracking-[0.2em] text-[#1f8a8a]">How we work</p>
+        <h2 id="feature-showcase-heading" class="mt-3 text-3xl font-bold tracking-tight text-[#1c2b33] sm:text-4xl">
+          Three steps, no surprises
+        </h2>
+        <p class="mt-4 text-lg leading-relaxed text-[#4a5d66]">
+          A small studio that treats your roadmap like its own. Here's what shipping with us looks like —
+          from the first sketch to the keys in your hands.
+        </p>
+      </div>
+
+      <div class="mt-16 flex flex-col gap-16 sm:mt-20 sm:gap-24">
+
+        <!-- Row 1 -->
+        <article aria-labelledby="fs-row-0" class="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+          <div class="lg:order-1">
+            <div class="relative overflow-hidden rounded-3xl border border-[#ece0cd] bg-[#f4ece0] shadow-[0_20px_50px_-30px_rgba(15,92,92,0.55)]">
+              <div class="aspect-[4/3] w-full">
+                <svg role="img" aria-label="Abstract coastal pattern of layered waves" viewBox="0 0 640 460" preserveAspectRatio="xMidYMid slice" class="h-full w-full">
+                  <defs><linearGradient id="fs-sky-0" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#9fd2e3"/><stop offset="100%" stop-color="#e7f1f2"/></linearGradient></defs>
+                  <rect width="640" height="460" fill="url(#fs-sky-0)"/>
+                  <circle cx="492" cy="118" r="56" fill="#FF6F59" opacity="0.9"/>
+                  <path d="M0 300 C 120 256 200 332 320 300 C 440 268 540 332 640 296 L640 460 L0 460 Z" fill="#4FA8C9"/>
+                  <path d="M0 350 C 130 312 210 384 330 352 C 450 320 545 384 640 348 L640 460 L0 460 Z" fill="#0E3A40" opacity="0.92"/>
+                  <path d="M0 402 C 140 372 220 432 340 404 C 460 376 560 432 640 400 L640 460 L0 460 Z" fill="#0E3A40"/>
+                </svg>
+              </div>
+              <span class="pointer-events-none absolute bottom-4 left-4 rounded-full bg-[#0f5c5c]/90 px-3 py-1 font-mono text-xs tracking-wide text-[#f4ece0]">discovery.md</span>
+            </div>
+          </div>
+          <div class="lg:order-2">
+            <p class="font-mono text-xs font-medium uppercase tracking-[0.2em] text-[#0f5c5c]">01 — Discovery</p>
+            <h3 id="fs-row-0" class="mt-3 text-2xl font-bold tracking-tight text-[#1c2b33] sm:text-3xl">
+              We map the work before we write a line of code
+            </h3>
+            <p class="mt-4 text-base leading-relaxed text-[#4a5d66]">
+              Every build starts on the whiteboard, not the keyboard. We pin down the real goal, the edge cases,
+              and the one metric that matters — so the code we ship is the code you actually needed.
+            </p>
+            <ul class="mt-6 space-y-3">
+              <li class="flex gap-3 text-[#1c2b33]">
+                <svg viewBox="0 0 20 20" class="mt-0.5 h-5 w-5 flex-none text-[#1f8a8a]" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5" opacity="0.5"/><path d="M6 10.5l2.5 2.5L14 7.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span class="leading-relaxed">Half-day product audit and tech-debt readout</span>
+              </li>
+              <li class="flex gap-3 text-[#1c2b33]">
+                <svg viewBox="0 0 20 20" class="mt-0.5 h-5 w-5 flex-none text-[#1f8a8a]" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5" opacity="0.5"/><path d="M6 10.5l2.5 2.5L14 7.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span class="leading-relaxed">A scoped roadmap with honest estimates</span>
+              </li>
+              <li class="flex gap-3 text-[#1c2b33]">
+                <svg viewBox="0 0 20 20" class="mt-0.5 h-5 w-5 flex-none text-[#1f8a8a]" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5" opacity="0.5"/><path d="M6 10.5l2.5 2.5L14 7.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span class="leading-relaxed">One Slack channel, one point of contact</span>
+              </li>
+            </ul>
+            <a href="#process" class="group mt-7 inline-flex items-center gap-2 rounded-full bg-[#1f8a8a] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors duration-200 hover:bg-[#0f5c5c] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f5c5c]">
+              See our process
+              <svg viewBox="0 0 24 24" class="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </div>
+        </article>
+
+        <!-- Row 2 (flipped) -->
+        <article aria-labelledby="fs-row-1" class="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+          <div class="lg:order-2">
+            <div class="relative overflow-hidden rounded-3xl border border-[#ece0cd] bg-[#f4ece0] shadow-[0_20px_50px_-30px_rgba(15,92,92,0.55)]">
+              <div class="aspect-[4/3] w-full">
+                <svg role="img" aria-label="Abstract coastal pattern of layered waves" viewBox="0 0 640 460" preserveAspectRatio="xMidYMid slice" class="h-full w-full">
+                  <defs><linearGradient id="fs-sky-1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#9fd2e3"/><stop offset="100%" stop-color="#e7f1f2"/></linearGradient></defs>
+                  <rect width="640" height="460" fill="url(#fs-sky-1)"/>
+                  <circle cx="492" cy="118" r="56" fill="#FF6F59" opacity="0.9"/>
+                  <path d="M0 300 C 120 256 200 332 320 300 C 440 268 540 332 640 296 L640 460 L0 460 Z" fill="#4FA8C9"/>
+                  <path d="M0 350 C 130 312 210 384 330 352 C 450 320 545 384 640 348 L640 460 L0 460 Z" fill="#0E3A40" opacity="0.92"/>
+                  <path d="M0 402 C 140 372 220 432 340 404 C 460 376 560 432 640 400 L640 460 L0 460 Z" fill="#0E3A40"/>
+                </svg>
+              </div>
+              <span class="pointer-events-none absolute bottom-4 left-4 rounded-full bg-[#0f5c5c]/90 px-3 py-1 font-mono text-xs tracking-wide text-[#f4ece0]">deploy --prod</span>
+            </div>
+          </div>
+          <div class="lg:order-1">
+            <p class="font-mono text-xs font-medium uppercase tracking-[0.2em] text-[#0f5c5c]">02 — Build</p>
+            <h3 id="fs-row-1" class="mt-3 text-2xl font-bold tracking-tight text-[#1c2b33] sm:text-3xl">
+              Clean code, warm coast — shipped on internet time
+            </h3>
+            <p class="mt-4 text-base leading-relaxed text-[#4a5d66]">
+              Typed, tested, and reviewed by a human who will still be here next quarter. We deploy small and often,
+              so you watch the product grow instead of waiting for a big-bang reveal.
+            </p>
+            <ul class="mt-6 space-y-3">
+              <li class="flex gap-3 text-[#1c2b33]">
+                <svg viewBox="0 0 20 20" class="mt-0.5 h-5 w-5 flex-none text-[#1f8a8a]" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5" opacity="0.5"/><path d="M6 10.5l2.5 2.5L14 7.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span class="leading-relaxed">Type-safe React, Next.js, and Tailwind front to back</span>
+              </li>
+              <li class="flex gap-3 text-[#1c2b33]">
+                <svg viewBox="0 0 20 20" class="mt-0.5 h-5 w-5 flex-none text-[#1f8a8a]" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5" opacity="0.5"/><path d="M6 10.5l2.5 2.5L14 7.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span class="leading-relaxed">Preview deploys on every pull request</span>
+              </li>
+              <li class="flex gap-3 text-[#1c2b33]">
+                <svg viewBox="0 0 20 20" class="mt-0.5 h-5 w-5 flex-none text-[#1f8a8a]" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5" opacity="0.5"/><path d="M6 10.5l2.5 2.5L14 7.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span class="leading-relaxed">Tests that cover the paths your users actually take</span>
+              </li>
+            </ul>
+            <a href="#stack" class="group mt-7 inline-flex items-center gap-2 rounded-full bg-[#1f8a8a] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors duration-200 hover:bg-[#0f5c5c] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f5c5c]">
+              View the stack
+              <svg viewBox="0 0 24 24" class="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </div>
+        </article>
+
+        <!-- Row 3 -->
+        <article aria-labelledby="fs-row-2" class="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+          <div class="lg:order-1">
+            <div class="relative overflow-hidden rounded-3xl border border-[#ece0cd] bg-[#f4ece0] shadow-[0_20px_50px_-30px_rgba(15,92,92,0.55)]">
+              <div class="aspect-[4/3] w-full">
+                <svg role="img" aria-label="Abstract coastal pattern of layered waves" viewBox="0 0 640 460" preserveAspectRatio="xMidYMid slice" class="h-full w-full">
+                  <defs><linearGradient id="fs-sky-2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#9fd2e3"/><stop offset="100%" stop-color="#e7f1f2"/></linearGradient></defs>
+                  <rect width="640" height="460" fill="url(#fs-sky-2)"/>
+                  <circle cx="492" cy="118" r="56" fill="#FF6F59" opacity="0.9"/>
+                  <path d="M0 300 C 120 256 200 332 320 300 C 440 268 540 332 640 296 L640 460 L0 460 Z" fill="#4FA8C9"/>
+                  <path d="M0 350 C 130 312 210 384 330 352 C 450 320 545 384 640 348 L640 460 L0 460 Z" fill="#0E3A40" opacity="0.92"/>
+                  <path d="M0 402 C 140 372 220 432 340 404 C 460 376 560 432 640 400 L640 460 L0 460 Z" fill="#0E3A40"/>
+                </svg>
+              </div>
+              <span class="pointer-events-none absolute bottom-4 left-4 rounded-full bg-[#0f5c5c]/90 px-3 py-1 font-mono text-xs tracking-wide text-[#f4ece0]">handover/</span>
+            </div>
+          </div>
+          <div class="lg:order-2">
+            <p class="font-mono text-xs font-medium uppercase tracking-[0.2em] text-[#0f5c5c]">03 — Handover</p>
+            <h3 id="fs-row-2" class="mt-3 text-2xl font-bold tracking-tight text-[#1c2b33] sm:text-3xl">
+              You own everything when the surf settles
+            </h3>
+            <p class="mt-4 text-base leading-relaxed text-[#4a5d66]">
+              No lock-in, no mystery infrastructure. You get the repo, the docs, and a walkthrough — plus a standing
+              line to us for the months that follow launch.
+            </p>
+            <ul class="mt-6 space-y-3">
+              <li class="flex gap-3 text-[#1c2b33]">
+                <svg viewBox="0 0 20 20" class="mt-0.5 h-5 w-5 flex-none text-[#1f8a8a]" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5" opacity="0.5"/><path d="M6 10.5l2.5 2.5L14 7.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span class="leading-relaxed">Documented repo and runbook you keep forever</span>
+              </li>
+              <li class="flex gap-3 text-[#1c2b33]">
+                <svg viewBox="0 0 20 20" class="mt-0.5 h-5 w-5 flex-none text-[#1f8a8a]" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5" opacity="0.5"/><path d="M6 10.5l2.5 2.5L14 7.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span class="leading-relaxed">A recorded handover walkthrough for the team</span>
+              </li>
+              <li class="flex gap-3 text-[#1c2b33]">
+                <svg viewBox="0 0 20 20" class="mt-0.5 h-5 w-5 flex-none text-[#1f8a8a]" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5" opacity="0.5"/><path d="M6 10.5l2.5 2.5L14 7.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span class="leading-relaxed">30 days of post-launch support, no clock-watching</span>
+              </li>
+            </ul>
+            <a href="#contact" class="group mt-7 inline-flex items-center gap-2 rounded-full bg-[#1f8a8a] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors duration-200 hover:bg-[#0f5c5c] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f5c5c]">
+              Start a project
+              <svg viewBox="0 0 24 24" class="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+  <!-- ===== END feature-showcase section ===== -->
+
+  <!-- Minimal footer for context -->
+  <footer class="border-t border-[#ece0cd] bg-[#f4ece0]">
+    <div class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-6 py-8 text-sm text-[#4a5d66] sm:flex-row lg:px-8">
+      <p class="font-mono text-xs uppercase tracking-[0.18em]">~&lt; saltycodestudio</p>
+      <p>© 2026 saltycodestudio · Clean code, warm coast.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile menu toggle (vanilla JS — no framework)
+    (function () {
+      var btn = document.getElementById('menu-toggle');
+      var menu = document.getElementById('mobile-menu');
+      if (!btn || !menu) return;
+      btn.addEventListener('click', function () {
+        var open = menu.classList.toggle('hidden') === false;
+        btn.setAttribute('aria-expanded', String(open));
+      });
+      menu.querySelectorAll('a').forEach(function (link) {
+        link.addEventListener('click', function () {
+          menu.classList.add('hidden');
+          btn.setAttribute('aria-expanded', 'false');
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

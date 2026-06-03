@@ -1,0 +1,13 @@
+{
+  "name": "Toast",
+  "slug": "toast",
+  "category": "react",
+  "tier": "practical",
+  "tags": ["toast", "notification", "provider", "hook", "snackbar", "alert", "accessible"],
+  "description": "A toast notification system with a provider plus useToast() hook, stacked toasts, four variants, auto-dismiss with pause-on-hover, and enter/exit animation.",
+  "deps": [],
+  "files": ["Toast.tsx"],
+  "usage": "Wrap your app in <ToastProvider position=\"bottom-right\" max={4}> then call const { toast } = useToast(); toast({ title, description, variant, duration, action }).",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
+}

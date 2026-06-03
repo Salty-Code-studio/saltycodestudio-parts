@@ -1,0 +1,334 @@
+/* ==========================================================================
+   saltycodestudio — Foundations: Palettes
+   --------------------------------------------------------------------------
+   Five curated PREMIUM color systems exposed as CSS custom-property themes.
+
+   HOW TO USE
+   ----------
+   1. Pick a palette and (optionally) a mode on any element. The closest
+      ancestor wins, so you can scope a palette to a section or the whole page:
+
+        <html data-palette="sand-surf" data-mode="light"> … </html>
+        <section data-palette="midnight" data-mode="dark"> … </section>
+
+   2. Consume the SEMANTIC tokens — never the raw brand values — in your CSS:
+
+        body      { background: var(--bg);   color: var(--text); }
+        .card     { background: var(--surface); border: 1px solid var(--border); }
+        .btn      { background: var(--primary); color: var(--primary-fg); }
+        .btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+   3. Light is the default. Add data-mode="dark" to flip. If you prefer to
+      follow the OS, drop data-mode and the prefers-color-scheme block at the
+      bottom of each palette applies the dark variant automatically.
+
+   SEMANTIC TOKEN CONTRACT (every palette defines all nine)
+   --------------------------------------------------------
+     --bg          Page background. The furthest-back surface.
+     --surface     Raised surface: cards, sheets, inputs, popovers.
+     --text        Primary body + heading text. Highest-contrast on --bg.
+     --muted       Secondary text: captions, metadata, placeholders.
+     --border      Hairlines, dividers, input outlines.
+     --primary     Primary action / brand fill (buttons, active states).
+     --primary-fg  Foreground (text/icon) that sits ON --primary.
+     --accent      Secondary highlight: links, focus glow, small flourishes.
+     --ring        Focus ring color. Tuned for visibility on --bg + --surface.
+
+   CONTRAST
+   --------
+   Token pairs below are tuned to clear WCAG 2.1 AA (4.5:1 for body text,
+   3:1 for large text / UI). See palettes.md for the per-pair guidance table.
+   ========================================================================== */
+
+
+/* ==========================================================================
+   1. SAND-SURF  —  The saltycodestudio brand ("Sand & Surf")
+   --------------------------------------------------------------------------
+   Sun-bleached sand and cream against deep ink, lifted by ocean teal.
+   The house default: calm, premium, coastal, trustworthy.
+   ========================================================================== */
+
+[data-palette="sand-surf"] {
+  /* ---- Brand source values (Sand & Surf) ---- */
+  --brand-sand-50:  #fbf7f0; /* lightest cream */
+  --brand-sand-100: #f4ece0; /* warm sand */
+  --brand-sand-200: #ece0cd; /* deeper sand */
+  --brand-ink:      #1c2b33; /* ink text */
+  --brand-ink-soft: #4a5d66; /* soft ink / muted */
+  --brand-teal:     #1f8a8a; /* ocean teal (primary) */
+  --brand-teal-deep:#0f5c5c; /* deep teal */
+  --brand-surf:     #2ec3c3; /* surf (bright accent) */
+
+  /* ---- Light variant (default) ---- */
+  --bg:          var(--brand-sand-50);
+  --surface:     #ffffff;
+  --text:        var(--brand-ink);
+  --muted:       var(--brand-ink-soft);
+  --border:      var(--brand-sand-200);
+  --primary:     var(--brand-teal);
+  --primary-fg:  #ffffff;
+  --accent:      var(--brand-teal-deep);
+  --ring:        var(--brand-teal);
+}
+
+/* Sand-surf — Dark variant: deep ink "night ocean", sand pulled to a warm off-white. */
+[data-palette="sand-surf"][data-mode="dark"] {
+  --bg:          #0e171c; /* near-black teal-ink */
+  --surface:     #16242b; /* raised ink slab */
+  --text:        #f4ece0; /* warm sand on dark */
+  --muted:       #9fb3ba; /* desaturated soft-ink */
+  --border:      #283941; /* low-contrast hairline */
+  --primary:     var(--brand-surf); /* brighter surf reads on dark */
+  --primary-fg:  #06231f; /* deep teal-black on bright surf */
+  --accent:      #7fe3e3; /* airy surf glow */
+  --ring:        var(--brand-surf);
+}
+
+/* Sand-surf — follow OS when no explicit data-mode is set. */
+@media (prefers-color-scheme: dark) {
+  [data-palette="sand-surf"]:not([data-mode]) {
+    --bg:          #0e171c;
+    --surface:     #16242b;
+    --text:        #f4ece0;
+    --muted:       #9fb3ba;
+    --border:      #283941;
+    --primary:     var(--brand-surf);
+    --primary-fg:  #06231f;
+    --accent:      #7fe3e3;
+    --ring:        var(--brand-surf);
+  }
+}
+
+
+/* ==========================================================================
+   2. MIDNIGHT  —  Dark luxe
+   --------------------------------------------------------------------------
+   Inky blue-black with a refined indigo/violet primary and a champagne-gold
+   accent. Reads expensive, nocturnal, high-end SaaS / fintech / agency.
+   Light variant = a cool "platinum" daytime counterpart.
+   ========================================================================== */
+
+[data-palette="midnight"] {
+  /* ---- Source values ---- */
+  --mid-black:    #0a0c14; /* deepest midnight */
+  --mid-slab:     #141826; /* raised slab */
+  --mid-line:     #262c40; /* hairline */
+  --mid-indigo:   #6d7cff; /* electric indigo (primary, dark) */
+  --mid-indigo-2: #4f46e5; /* deeper indigo (primary, light) */
+  --mid-gold:     #d6b06a; /* champagne gold (accent) */
+  --mid-cloud:    #e6e9f5; /* high text on dark */
+  --mid-haze:     #9aa3c4; /* muted on dark */
+
+  /* ---- Light variant (default): cool platinum ---- */
+  --bg:          #f6f7fb;
+  --surface:     #ffffff;
+  --text:        #161a2b;
+  --muted:       #5b6280;
+  --border:      #e1e4ef;
+  --primary:     var(--mid-indigo-2);
+  --primary-fg:  #ffffff;
+  --accent:      #9a7b2e; /* darkened gold for AA on light */
+  --ring:        var(--mid-indigo-2);
+}
+
+/* Midnight — Dark variant: the signature look. */
+[data-palette="midnight"][data-mode="dark"] {
+  --bg:          var(--mid-black);
+  --surface:     var(--mid-slab);
+  --text:        var(--mid-cloud);
+  --muted:       var(--mid-haze);
+  --border:      var(--mid-line);
+  --primary:     var(--mid-indigo);
+  --primary-fg:  #0a0c14;
+  --accent:      var(--mid-gold);
+  --ring:        var(--mid-indigo);
+}
+
+@media (prefers-color-scheme: dark) {
+  [data-palette="midnight"]:not([data-mode]) {
+    --bg:          var(--mid-black);
+    --surface:     var(--mid-slab);
+    --text:        var(--mid-cloud);
+    --muted:       var(--mid-haze);
+    --border:      var(--mid-line);
+    --primary:     var(--mid-indigo);
+    --primary-fg:  #0a0c14;
+    --accent:      var(--mid-gold);
+    --ring:        var(--mid-indigo);
+  }
+}
+
+
+/* ==========================================================================
+   3. EDITORIAL  —  Warm paper + ink
+   --------------------------------------------------------------------------
+   Magazine / long-form aesthetic: warm paper, near-black ink, and a single
+   confident vermilion. Timeless, literary, content-first.
+   Dark variant = a warm "reading at night" sepia-on-charcoal.
+   ========================================================================== */
+
+[data-palette="editorial"] {
+  /* ---- Source values ---- */
+  --ed-paper:   #f7f3ea; /* warm paper */
+  --ed-paper-2: #efe8da; /* deeper paper */
+  --ed-ink:     #1a1714; /* near-black warm ink */
+  --ed-ink-2:   #6a6256; /* muted ink */
+  --ed-line:    #ddd3c2; /* paper hairline */
+  --ed-red:     #c1442e; /* vermilion (primary) */
+  --ed-red-2:   #9e3322; /* deep vermilion */
+
+  /* ---- Light variant (default) ---- */
+  --bg:          var(--ed-paper);
+  --surface:     #fffdf8;
+  --text:        var(--ed-ink);
+  --muted:       var(--ed-ink-2);
+  --border:      var(--ed-line);
+  --primary:     var(--ed-red);
+  --primary-fg:  #fffaf3;
+  --accent:      var(--ed-red-2);
+  --ring:        var(--ed-red);
+}
+
+/* Editorial — Dark variant: warm sepia ink on charcoal. */
+[data-palette="editorial"][data-mode="dark"] {
+  --bg:          #181512;
+  --surface:     #221d18;
+  --text:        #efe6d6; /* warm paper text */
+  --muted:       #a99f8d; /* dimmed paper */
+  --border:      #352d24;
+  --primary:     #e2674f; /* lifted vermilion for dark */
+  --primary-fg:  #1a0f0b;
+  --accent:      #f0a18d; /* warm coral glow */
+  --ring:        #e2674f;
+}
+
+@media (prefers-color-scheme: dark) {
+  [data-palette="editorial"]:not([data-mode]) {
+    --bg:          #181512;
+    --surface:     #221d18;
+    --text:        #efe6d6;
+    --muted:       #a99f8d;
+    --border:      #352d24;
+    --primary:     #e2674f;
+    --primary-fg:  #1a0f0b;
+    --accent:      #f0a18d;
+    --ring:        #e2674f;
+  }
+}
+
+
+/* ==========================================================================
+   4. NEON-NOIR  —  Dark + electric accent
+   --------------------------------------------------------------------------
+   Pure black-graphite canvas with a single high-voltage cyan-green accent.
+   Cyberpunk, dev-tool, product-launch energy. Use the neon sparingly.
+   Light variant = a stark white "studio" with the neon dialed to readable.
+   ========================================================================== */
+
+[data-palette="neon-noir"] {
+  /* ---- Source values ---- */
+  --nn-void:    #060709; /* the void */
+  --nn-slab:    #111418; /* raised graphite */
+  --nn-line:    #232830; /* hairline */
+  --nn-neon:    #39ffb0; /* high-voltage cyan-green (primary, dark) */
+  --nn-neon-2:  #00c08a; /* readable neon (primary, light) */
+  --nn-magenta: #ff4d8d; /* electric magenta (accent) */
+  --nn-white:   #eef2f0; /* high text on void */
+  --nn-grey:    #8b9499; /* muted on void */
+
+  /* ---- Light variant (default): stark studio white ---- */
+  --bg:          #fafafa;
+  --surface:     #ffffff;
+  --text:        #0c0e10;
+  --muted:       #565d63;
+  --border:      #e6e8ea;
+  --primary:     var(--nn-neon-2);
+  --primary-fg:  #00150e;
+  --accent:      #d1196b; /* darkened magenta for AA on light */
+  --ring:        var(--nn-neon-2);
+}
+
+/* Neon-noir — Dark variant: the signature look. */
+[data-palette="neon-noir"][data-mode="dark"] {
+  --bg:          var(--nn-void);
+  --surface:     var(--nn-slab);
+  --text:        var(--nn-white);
+  --muted:       var(--nn-grey);
+  --border:      var(--nn-line);
+  --primary:     var(--nn-neon);
+  --primary-fg:  #032015;
+  --accent:      var(--nn-magenta);
+  --ring:        var(--nn-neon);
+}
+
+@media (prefers-color-scheme: dark) {
+  [data-palette="neon-noir"]:not([data-mode]) {
+    --bg:          var(--nn-void);
+    --surface:     var(--nn-slab);
+    --text:        var(--nn-white);
+    --muted:       var(--nn-grey);
+    --border:      var(--nn-line);
+    --primary:     var(--nn-neon);
+    --primary-fg:  #032015;
+    --accent:      var(--nn-magenta);
+    --ring:        var(--nn-neon);
+  }
+}
+
+
+/* ==========================================================================
+   5. FOREST  —  Deep green + cream
+   --------------------------------------------------------------------------
+   Botanical, grounded, organic luxury: deep pine green with cream and a
+   muted clay/terracotta accent. Wellness, hospitality, craft, sustainability.
+   Dark variant = a "forest at night" — near-black green with moss highlights.
+   ========================================================================== */
+
+[data-palette="forest"] {
+  /* ---- Source values ---- */
+  --fo-cream:   #f5f1e6; /* warm cream */
+  --fo-cream-2: #ece5d4; /* deeper cream */
+  --fo-pine:    #1f3a2e; /* deep pine (text + primary, light) */
+  --fo-moss:    #3f6b54; /* moss (muted-strong) */
+  --fo-line:    #d8d0bd; /* cream hairline */
+  --fo-clay:    #b4623f; /* muted clay/terracotta (accent) */
+  --fo-leaf:    #6fae8e; /* fresh leaf (primary, dark) */
+
+  /* ---- Light variant (default) ---- */
+  --bg:          var(--fo-cream);
+  --surface:     #fffdf6;
+  --text:        var(--fo-pine);
+  --muted:       var(--fo-moss);
+  --border:      var(--fo-line);
+  --primary:     var(--fo-pine);
+  --primary-fg:  var(--fo-cream);
+  --accent:      var(--fo-clay);
+  --ring:        var(--fo-moss);
+}
+
+/* Forest — Dark variant: forest at night. */
+[data-palette="forest"][data-mode="dark"] {
+  --bg:          #0d1611; /* near-black green */
+  --surface:     #15211a; /* raised forest slab */
+  --text:        #eef0e3; /* cream on dark */
+  --muted:       #9bb3a4; /* foggy moss */
+  --border:      #243329;
+  --primary:     var(--fo-leaf); /* fresh leaf reads on dark */
+  --primary-fg:  #06160f;
+  --accent:      #e0855f; /* warm clay glow */
+  --ring:        var(--fo-leaf);
+}
+
+@media (prefers-color-scheme: dark) {
+  [data-palette="forest"]:not([data-mode]) {
+    --bg:          #0d1611;
+    --surface:     #15211a;
+    --text:        #eef0e3;
+    --muted:       #9bb3a4;
+    --border:      #243329;
+    --primary:     var(--fo-leaf);
+    --primary-fg:  #06160f;
+    --accent:      #e0855f;
+    --ring:        var(--fo-leaf);
+  }
+}

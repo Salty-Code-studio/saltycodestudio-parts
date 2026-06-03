@@ -1,0 +1,13 @@
+{
+  "name": "Choice Controls",
+  "slug": "choice-controls",
+  "category": "react",
+  "tier": "practical",
+  "tags": ["checkbox", "radio", "toggle", "switch", "form", "accessible", "controls"],
+  "description": "A styled checkbox, radio group, and toggle switch sharing one Sand & Surf design language, fully accessible with ARIA, keyboard support, and visible focus rings.",
+  "deps": ["react", "tailwindcss"],
+  "files": ["ChoiceControls.tsx"],
+  "usage": "import ChoiceControls, { Checkbox, RadioGroup, Radio, Toggle } from \"@/components/ChoiceControls\"; then render <Checkbox label=\"…\" />, a <RadioGroup label=\"…\"><Radio value=\"…\" label=\"…\" /></RadioGroup>, or <Toggle label=\"…\" />.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
+}

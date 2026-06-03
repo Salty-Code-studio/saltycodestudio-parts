@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Accessible Form Validation — Sand &amp; Surf</title>
+  <style>
+    :root {
+      --sand-bg: #fbf7f0;
+      --sand-2: #f4ece0;
+      --sand-3: #ece0cd;
+      --ink: #1c2b33;
+      --ink-soft: #4a5d66;
+      --teal: #1f8a8a;
+      --teal-deep: #0f5c5c;
+      --surf: #2ec3c3;
+      --error: #c0392b;
+      --error-soft: #fbeae8;
+      --ok: #1f8a8a;
+      --fv-warn-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M12 2 1 21h22L12 2Zm0 5a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0V8a1 1 0 0 1 1-1Zm0 11.5a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5Z'/%3E%3C/svg%3E");
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 3rem 1.25rem 5rem;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(1200px 600px at 100% -10%, rgba(46, 195, 195, 0.12), transparent 60%),
+        radial-gradient(900px 500px at -10% 110%, rgba(31, 138, 138, 0.10), transparent 55%),
+        var(--sand-bg);
+      min-height: 100vh;
+    }
+
+    .wrap {
+      max-width: 60rem;
+      margin: 0 auto;
+    }
+
+    .page-head { margin-bottom: 2.5rem; }
+    .eyebrow {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--teal-deep);
+      background: var(--sand-3);
+      padding: 0.3rem 0.7rem;
+      border-radius: 999px;
+      margin: 0 0 0.9rem;
+    }
+    h1 {
+      margin: 0 0 0.5rem;
+      font-size: clamp(1.7rem, 4vw, 2.6rem);
+      letter-spacing: -0.02em;
+    }
+    .lede {
+      margin: 0;
+      max-width: 46ch;
+      color: var(--ink-soft);
+      font-size: 1.0625rem;
+      line-height: 1.55;
+    }
+
+    .grid {
+      display: grid;
+      gap: 1.75rem;
+      grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+      align-items: start;
+    }
+
+    .card {
+      background: var(--sand-2);
+      border: 1px solid var(--sand-3);
+      border-radius: 18px;
+      padding: 1.75rem;
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset, 0 18px 40px -28px rgba(15, 92, 92, 0.45);
+    }
+
+    .card__title {
+      margin: 0 0 0.35rem;
+      font-size: 1.05rem;
+    }
+    .card__note {
+      margin: 0 0 1.4rem;
+      color: var(--ink-soft);
+      font-size: 0.875rem;
+      line-height: 1.45;
+    }
+
+    /* ===== component styles (mirror of styles.css) ===== */
+    .form {
+      --field-radius: 12px;
+      display: grid;
+      gap: 1.25rem;
+      max-width: 28rem;
+      margin: 0;
+      color: var(--ink);
+    }
+    .field { display: grid; gap: 0.4rem; }
+    .field__label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      color: var(--ink);
+    }
+    .field__control {
+      width: 100%;
+      padding: 0.7rem 0.85rem;
+      font-size: 1rem;
+      font-family: inherit;
+      color: var(--ink);
+      background: #fff;
+      border: 1.5px solid var(--sand-3);
+      border-radius: var(--field-radius);
+      transition: border-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+      appearance: none;
+    }
+    .field__control::placeholder { color: #9bafb6; }
+    .field__control:hover { border-color: #d7c6ac; }
+    .field__control:focus {
+      outline: none;
+      border-color: var(--teal);
+      box-shadow: 0 0 0 3px rgba(31, 138, 138, 0.18);
+    }
+    .field__control:focus-visible {
+      outline: 2px solid transparent;
+      border-color: var(--teal-deep);
+      box-shadow: 0 0 0 3px rgba(15, 92, 92, 0.28);
+    }
+    .field__control[aria-invalid="true"] {
+      border-color: var(--error);
+      background: var(--error-soft);
+    }
+    .field__control[aria-invalid="true"]:focus,
+    .field__control[aria-invalid="true"]:focus-visible {
+      border-color: var(--error);
+      box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.2);
+    }
+    .field__control[data-valid="true"] { border-color: var(--teal); }
+    .field__hint { margin: 0; font-size: 0.8125rem; color: var(--ink-soft); }
+    .field__error {
+      margin: 0;
+      min-height: 1.1em;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      line-height: 1.3;
+      color: var(--error);
+      display: flex;
+      align-items: flex-start;
+      gap: 0.35rem;
+    }
+    .field__error:not(:empty)::before {
+      content: "";
+      flex: 0 0 auto;
+      width: 1em;
+      height: 1em;
+      margin-top: 0.1em;
+      background: var(--error);
+      -webkit-mask: var(--fv-warn-icon) center / contain no-repeat;
+      mask: var(--fv-warn-icon) center / contain no-repeat;
+    }
+    .form__submit {
+      justify-self: start;
+      margin-top: 0.25rem;
+      padding: 0.75rem 1.5rem;
+      font-size: 0.95rem;
+      font-weight: 700;
+      font-family: inherit;
+      letter-spacing: 0.01em;
+      color: #fff;
+      background: var(--teal);
+      border: none;
+      border-radius: var(--field-radius);
+      cursor: pointer;
+      transition: background-color 0.18s ease, transform 0.06s ease, box-shadow 0.18s ease;
+    }
+    .form__submit:hover { background: var(--teal-deep); }
+    .form__submit:active { transform: translateY(1px); }
+    .form__submit:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px var(--sand-2), 0 0 0 5px var(--teal-deep);
+    }
+    .form__status { margin: 0; min-height: 1.1em; font-size: 0.875rem; font-weight: 600; }
+    .form__status[data-state="error"] { color: var(--error); }
+    .form__status[data-state="success"] { color: var(--ok); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .field__control, .form__submit { transition: none; }
+    }
+
+    /* state legend */
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1rem;
+      margin: 0 0 1.4rem;
+      padding: 0;
+      list-style: none;
+      font-size: 0.8rem;
+      color: var(--ink-soft);
+    }
+    .legend li { display: flex; align-items: center; gap: 0.4rem; }
+    .dot { width: 0.7rem; height: 0.7rem; border-radius: 50%; display: inline-block; }
+    .dot--rest { background: var(--sand-3); }
+    .dot--valid { background: var(--teal); }
+    .dot--error { background: var(--error); }
+    .dot--focus { background: var(--surf); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="page-head">
+      <p class="eyebrow">saltycodestudio · vanilla</p>
+      <h1>Accessible form validation</h1>
+      <p class="lede">
+        Inline errors that fire on blur and on submit. Each control carries
+        <code>aria-invalid</code>, points at a polite live region for its message,
+        and gets focused first when submit fails. No library — just native
+        constraints plus a small script.
+      </p>
+    </header>
+
+    <ul class="legend">
+      <li><span class="dot dot--rest"></span> Rest</li>
+      <li><span class="dot dot--focus"></span> Focus</li>
+      <li><span class="dot dot--valid"></span> Valid</li>
+      <li><span class="dot dot--error"></span> Error</li>
+    </ul>
+
+    <div class="grid">
+      <!-- LIVE FORM: try it -->
+      <section class="card">
+        <h2 class="card__title">Live — try it</h2>
+        <p class="card__note">
+          Tab through and leave a field empty, or hit “Create account” to validate
+          everything at once. Fix a field and watch its message clear instantly.
+        </p>
+
+        <form class="form" novalidate data-validate data-demo>
+          <div class="field">
+            <label class="field__label" for="fv-name">Full name</label>
+            <input class="field__control" id="fv-name" name="name" type="text"
+              autocomplete="name" required minlength="2"
+              aria-describedby="fv-name-error"
+              data-error-required="Please enter your name."
+              data-error-minlength="Use at least 2 characters." />
+            <p class="field__error" id="fv-name-error" aria-live="polite"></p>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="fv-email">Email</label>
+            <input class="field__control" id="fv-email" name="email" type="email"
+              autocomplete="email" required
+              aria-describedby="fv-email-error"
+              data-error-required="We need an email to reach you."
+              data-error-type="That doesn't look like a valid email." />
+            <p class="field__error" id="fv-email-error" aria-live="polite"></p>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="fv-password">Password</label>
+            <input class="field__control" id="fv-password" name="password" type="password"
+              autocomplete="new-password" required minlength="8" pattern="(?=.*\d).{8,}"
+              aria-describedby="fv-password-hint fv-password-error"
+              data-error-required="Choose a password."
+              data-error-minlength="At least 8 characters."
+              data-error-pattern="Include at least one number." />
+            <p class="field__hint" id="fv-password-hint">8+ characters, including a number.</p>
+            <p class="field__error" id="fv-password-error" aria-live="polite"></p>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="fv-confirm">Confirm password</label>
+            <input class="field__control" id="fv-confirm" name="confirm" type="password"
+              autocomplete="new-password" required data-match="fv-password"
+              aria-describedby="fv-confirm-error"
+              data-error-required="Re-enter your password."
+              data-error-match="Passwords don't match." />
+            <p class="field__error" id="fv-confirm-error" aria-live="polite"></p>
+          </div>
+
+          <button class="form__submit" type="submit">Create account</button>
+          <p class="form__status" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+
+      <!-- STATIC STATES: every visual state at once -->
+      <section class="card">
+        <h2 class="card__title">States</h2>
+        <p class="card__note">
+          The same field rendered in each state so you can see the styling without
+          interacting. These are pre-set for display.
+        </p>
+
+        <div class="form" aria-hidden="false">
+          <div class="field">
+            <label class="field__label" for="s-rest">Rest</label>
+            <input class="field__control" id="s-rest" type="text" value="Jolanda Martina"
+              aria-describedby="s-rest-error" readonly />
+            <p class="field__error" id="s-rest-error"></p>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="s-valid">Valid</label>
+            <input class="field__control" id="s-valid" type="email" value="hello@saltycode.studio"
+              data-valid="true" aria-invalid="false" aria-describedby="s-valid-error" readonly />
+            <p class="field__error" id="s-valid-error"></p>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="s-error">Error</label>
+            <input class="field__control" id="s-error" type="email" value="not-an-email"
+              aria-invalid="true" aria-describedby="s-error-error" readonly />
+            <p class="field__error" id="s-error-error">That doesn't look like a valid email.</p>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="s-hint">With hint</label>
+            <input class="field__control" id="s-hint" type="password" value="••••••••"
+              aria-describedby="s-hint-hint s-hint-error" readonly />
+            <p class="field__hint" id="s-hint-hint">8+ characters, including a number.</p>
+            <p class="field__error" id="s-hint-error"></p>
+          </div>
+
+          <p class="form__status" data-state="error">Please fix the 2 highlighted fields.</p>
+          <p class="form__status" data-state="success">Looks good — form is valid.</p>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+  /* ===== component script (mirror of script.js) ===== */
+  (function () {
+    "use strict";
+    var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    function errorRegionFor(control) {
+      var ids = (control.getAttribute("aria-describedby") || "").split(/\s+/);
+      for (var i = 0; i < ids.length; i++) {
+        if (!ids[i]) continue;
+        var el = document.getElementById(ids[i]);
+        if (el && el.classList.contains("field__error")) return el;
+      }
+      return null;
+    }
+    function msg(control, rule, fallback) {
+      return control.getAttribute("data-error-" + rule) || fallback;
+    }
+    function validate(control) {
+      var value = control.value.trim();
+      var type = (control.getAttribute("type") || "text").toLowerCase();
+      if (control.hasAttribute("required") && value === "")
+        return msg(control, "required", "This field is required.");
+      if (value === "") return "";
+      if (type === "email" && !EMAIL_RE.test(value))
+        return msg(control, "type", "Please enter a valid email address.");
+      if (type === "url") {
+        try { new URL(value); } catch (e) {
+          return msg(control, "type", "Please enter a valid URL.");
+        }
+      }
+      var matchId = control.getAttribute("data-match");
+      if (matchId) {
+        var other = document.getElementById(matchId);
+        if (other && value !== other.value.trim())
+          return msg(control, "match", "Values do not match.");
+      }
+      var minlength = parseInt(control.getAttribute("minlength"), 10);
+      if (!isNaN(minlength) && value.length < minlength)
+        return msg(control, "minlength", "Use at least " + minlength + " characters.");
+      var maxlength = parseInt(control.getAttribute("maxlength"), 10);
+      if (!isNaN(maxlength) && value.length > maxlength)
+        return msg(control, "maxlength", "Use at most " + maxlength + " characters.");
+      var pattern = control.getAttribute("pattern");
+      if (pattern) {
+        var re = new RegExp("^(?:" + pattern + ")$");
+        if (!re.test(value)) return msg(control, "pattern", "Please match the requested format.");
+      }
+      if (type === "number") {
+        var num = parseFloat(value);
+        var min = parseFloat(control.getAttribute("min"));
+        var max = parseFloat(control.getAttribute("max"));
+        if (!isNaN(min) && num < min) return msg(control, "min", "Must be at least " + min + ".");
+        if (!isNaN(max) && num > max) return msg(control, "max", "Must be at most " + max + ".");
+      }
+      return "";
+    }
+    function apply(control, message) {
+      var region = errorRegionFor(control);
+      if (message) {
+        control.setAttribute("aria-invalid", "true");
+        control.removeAttribute("data-valid");
+        if (region) region.textContent = message;
+      } else {
+        control.setAttribute("aria-invalid", "false");
+        control.setAttribute("data-valid", "true");
+        if (region) region.textContent = "";
+      }
+      return !message;
+    }
+    function controlsOf(form) {
+      return Array.prototype.slice.call(
+        form.querySelectorAll("input.field__control, select.field__control, textarea.field__control")
+      );
+    }
+    function wire(form) {
+      var controls = controlsOf(form);
+      var status = form.querySelector(".form__status");
+      controls.forEach(function (control) {
+        control.addEventListener("blur", function () { apply(control, validate(control)); });
+        control.addEventListener("input", function () {
+          if (control.getAttribute("aria-invalid") === "true") apply(control, validate(control));
+          var dependents = form.querySelectorAll('[data-match="' + control.id + '"]');
+          Array.prototype.forEach.call(dependents, function (dep) {
+            if (dep.getAttribute("aria-invalid") === "true") apply(dep, validate(dep));
+          });
+        });
+      });
+      form.addEventListener("submit", function (event) {
+        var firstInvalid = null, invalidCount = 0;
+        controls.forEach(function (control) {
+          if (!apply(control, validate(control))) {
+            invalidCount++;
+            if (!firstInvalid) firstInvalid = control;
+          }
+        });
+        if (firstInvalid) {
+          event.preventDefault();
+          firstInvalid.focus();
+          if (status) {
+            status.setAttribute("data-state", "error");
+            status.textContent = invalidCount === 1
+              ? "Please fix the highlighted field."
+              : "Please fix the " + invalidCount + " highlighted fields.";
+          }
+          return;
+        }
+        if (status) {
+          status.setAttribute("data-state", "success");
+          status.textContent = "Looks good — submitting…";
+        }
+        if (form.hasAttribute("data-demo")) {
+          event.preventDefault();
+          if (status) status.textContent = "Looks good — form is valid.";
+        }
+      });
+    }
+    function init(root) {
+      var scope = root || document;
+      Array.prototype.forEach.call(scope.querySelectorAll("form[data-validate]"), wire);
+    }
+    if (document.readyState === "loading")
+      document.addEventListener("DOMContentLoaded", function () { init(); });
+    else init();
+    window.FormValidation = { init: init, validate: validate };
+  })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!-- saltycodestudio · hero-split section · Tailwind utility classes, no React -->
+<section class="relative overflow-hidden bg-[#F2EBDD] text-[#0E3A40]">
+  <!-- Soft surf glows -->
+  <div aria-hidden="true" class="pointer-events-none absolute -top-24 -right-24 h-80 w-80 rounded-full bg-[#4FA8C9]/20 blur-3xl"></div>
+  <div aria-hidden="true" class="pointer-events-none absolute -bottom-32 -left-20 h-80 w-80 rounded-full bg-[#FF6F59]/10 blur-3xl"></div>
+
+  <div class="relative mx-auto grid max-w-7xl items-center gap-12 px-6 py-20 md:py-28 lg:grid-cols-2 lg:gap-16 lg:px-8">
+    <!-- Left: copy -->
+    <div class="max-w-xl">
+      <p class="inline-flex items-center gap-2 rounded-full border border-[#0E3A40]/15 bg-white/50 px-4 py-1.5 font-mono text-xs uppercase tracking-[0.18em] text-[#0E3A40]/70">
+        ~&lt; web design &amp; development
+      </p>
+
+      <h1 class="mt-6 font-[var(--font-display,'Space_Grotesk',sans-serif)] text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
+        Clean code, <span class="text-[#FF6F59]">warm coast.</span>
+      </h1>
+
+      <p class="mt-6 text-lg leading-relaxed text-[#1C2B2E]/75">
+        We build fast, accessible websites and apps with the calm of island time and the rigor of real engineering. No bloat, no buzzwords — just software that ships and holds up.
+      </p>
+
+      <div class="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
+        <a href="#contact" class="inline-flex items-center justify-center gap-2 rounded-xl bg-[#FF6F59] px-7 py-3.5 text-base font-semibold text-white shadow-sm transition hover:bg-[#f25c45] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FF6F59]">
+          Start a project
+          <svg aria-hidden="true" viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4">
+            <path fill-rule="evenodd" d="M3 10a.75.75 0 0 1 .75-.75h9.69L9.97 5.78a.75.75 0 1 1 1.06-1.06l4.5 4.5a.75.75 0 0 1 0 1.06l-4.5 4.5a.75.75 0 1 1-1.06-1.06l3.47-3.47H3.75A.75.75 0 0 1 3 10Z" clip-rule="evenodd" />
+          </svg>
+        </a>
+        <a href="#work" class="inline-flex items-center justify-center gap-2 rounded-xl border border-[#0E3A40]/20 bg-white/40 px-7 py-3.5 text-base font-semibold text-[#0E3A40] transition hover:border-[#0E3A40]/40 hover:bg-white/70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0E3A40]">
+          See the work
+        </a>
+      </div>
+
+      <p class="mt-5 font-mono text-xs uppercase tracking-[0.14em] text-[#0E3A40]/55">
+        Trusted by founders from Bonaire to Brooklyn.
+      </p>
+
+      <dl class="mt-10 grid grid-cols-3 gap-6 border-t border-[#0E3A40]/10 pt-8">
+        <div>
+          <dt class="sr-only">Lighthouse, median</dt>
+          <dd>
+            <span class="block font-[var(--font-display,'Space_Grotesk',sans-serif)] text-3xl font-bold tracking-tight">98</span>
+            <span class="mt-1 block text-sm text-[#1C2B2E]/60">Lighthouse, median</span>
+          </dd>
+        </div>
+        <div>
+          <dt class="sr-only">Idea to launch</dt>
+          <dd>
+            <span class="block font-[var(--font-display,'Space_Grotesk',sans-serif)] text-3xl font-bold tracking-tight">11d</span>
+            <span class="mt-1 block text-sm text-[#1C2B2E]/60">Idea to launch</span>
+          </dd>
+        </div>
+        <div>
+          <dt class="sr-only">Sites shipped</dt>
+          <dd>
+            <span class="block font-[var(--font-display,'Space_Grotesk',sans-serif)] text-3xl font-bold tracking-tight">40+</span>
+            <span class="mt-1 block text-sm text-[#1C2B2E]/60">Sites shipped</span>
+          </dd>
+        </div>
+      </dl>
+    </div>
+
+    <!-- Right: code-window mockup -->
+    <div class="relative">
+      <div aria-hidden="true" class="absolute -inset-4 -z-10 rounded-3xl bg-gradient-to-br from-[#4FA8C9]/25 to-[#FF6F59]/15 blur-2xl"></div>
+      <div class="overflow-hidden rounded-2xl border border-[#0E3A40]/15 bg-[#0E3A40] shadow-2xl shadow-[#0E3A40]/20">
+        <!-- Title bar -->
+        <div class="flex items-center gap-2 border-b border-white/10 px-4 py-3">
+          <span class="h-3 w-3 rounded-full bg-[#FF6F59]"></span>
+          <span class="h-3 w-3 rounded-full bg-[#4FA8C9]"></span>
+          <span class="h-3 w-3 rounded-full bg-[#F2EBDD]/70"></span>
+          <span class="ml-3 font-mono text-xs text-[#F2EBDD]/60">studio.ts</span>
+        </div>
+        <!-- Code body -->
+        <pre class="overflow-x-auto px-5 py-5 font-mono text-[13px] leading-relaxed text-[#F2EBDD]/90"><code><span class="grid grid-cols-[2ch_1fr] gap-4"><span class="select-none text-right text-[#4FA8C9]/50">1</span><span>export const studio = {</span></span><span class="grid grid-cols-[2ch_1fr] gap-4"><span class="select-none text-right text-[#4FA8C9]/50">2</span><span>  name: "saltycodestudio",</span></span><span class="grid grid-cols-[2ch_1fr] gap-4"><span class="select-none text-right text-[#4FA8C9]/50">3</span><span>  tagline: "Clean code, warm coast.",</span></span><span class="grid grid-cols-[2ch_1fr] gap-4"><span class="select-none text-right text-[#4FA8C9]/50">4</span><span>  stack: ["react", "tailwind", "edge"],</span></span><span class="grid grid-cols-[2ch_1fr] gap-4"><span class="select-none text-right text-[#4FA8C9]/50">5</span><span>  ships(idea) {</span></span><span class="grid grid-cols-[2ch_1fr] gap-4"><span class="select-none text-right text-[#4FA8C9]/50">6</span><span>    return build(idea).fast().accessible();</span></span><span class="grid grid-cols-[2ch_1fr] gap-4"><span class="select-none text-right text-[#4FA8C9]/50">7</span><span>  },</span></span><span class="grid grid-cols-[2ch_1fr] gap-4"><span class="select-none text-right text-[#4FA8C9]/50">8</span><span>};</span></span></code></pre>
+        <!-- Status strip -->
+        <div class="flex items-center justify-between border-t border-white/10 bg-[#1C2B2E] px-5 py-3 font-mono text-xs text-[#F2EBDD]/55">
+          <span class="flex items-center gap-2">
+            <span class="h-2 w-2 rounded-full bg-[#4FA8C9]"></span>
+            build passing
+          </span>
+          <span>deployed to the edge · 38ms</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

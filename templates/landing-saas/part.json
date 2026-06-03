@@ -1,0 +1,14 @@
+{
+  "name": "Landing — SaaS",
+  "slug": "landing-saas",
+  "kind": "template",
+  "category": "template",
+  "tier": "showcase",
+  "tags": ["template", "landing", "saas", "marketing", "pricing", "bento", "faq", "testimonials", "responsive", "accessible", "sand-and-surf"],
+  "description": "A complete, polished SaaS marketing landing page with nav, hero, logo cloud, feature bento, how-it-works, pricing, testimonials, FAQ, CTA, and footer.",
+  "deps": [],
+  "files": ["index.html"],
+  "usage": "Open index.html in a browser — it is the full page and its own preview. Built on the Tailwind Play CDN with an inline config (Sand & Surf colors + Space Grotesk / JetBrains Mono / Inter). No build step. Replace the 'Tidewell' brand name, copy, and pricing with your own, swap the inline tailwind.config colors to rebrand, and wire the nav, pricing toggle, and CTA form to real routes. Vanilla JS handles the mobile nav, scroll elevation, billing toggle, and scroll-reveal — all degrade gracefully without JS and respect prefers-reduced-motion.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
+}

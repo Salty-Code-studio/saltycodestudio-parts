@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Avatar — saltycodestudio-parts</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+      body {
+        font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+      }
+    </style>
+  </head>
+  <body class="bg-[#fbf7f0] text-[#1c2b33]">
+    <div id="root"></div>
+
+    <script type="text/babel" data-presets="react,typescript" data-type="module">
+      const { useState } = React;
+
+      const SIZE_MAP = {
+        xs: { box: "h-6 w-6", text: "text-[10px]", ring: "ring-1", dot: "h-1.5 w-1.5" },
+        sm: { box: "h-8 w-8", text: "text-xs", ring: "ring-2", dot: "h-2 w-2" },
+        md: { box: "h-10 w-10", text: "text-sm", ring: "ring-2", dot: "h-2.5 w-2.5" },
+        lg: { box: "h-14 w-14", text: "text-base", ring: "ring-2", dot: "h-3 w-3" },
+        xl: { box: "h-20 w-20", text: "text-xl", ring: "ring-4", dot: "h-4 w-4" },
+      };
+
+      const STATUS_MAP = {
+        online: { color: "#1f8a8a", label: "Online" },
+        away: { color: "#e0a93b", label: "Away" },
+        busy: { color: "#d6553f", label: "Busy" },
+        offline: { color: "#9bb0b8", label: "Offline" },
+      };
+
+      function getInitials(name) {
+        const parts = name.trim().split(/\s+/).filter(Boolean);
+        if (parts.length === 0) return "?";
+        if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+        return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+      }
+
+      const INITIAL_TINTS = [
+        { bg: "#0f5c5c", fg: "#eafaf7" },
+        { bg: "#1f8a8a", fg: "#f6fffe" },
+        { bg: "#2ec3c3", fg: "#053b3b" },
+        { bg: "#1c2b33", fg: "#f4ece0" },
+        { bg: "#4a5d66", fg: "#fbf7f0" },
+      ];
+
+      function tintFor(seed) {
+        let hash = 0;
+        for (let i = 0; i < seed.length; i++) {
+          hash = (hash * 31 + seed.charCodeAt(i)) | 0;
+        }
+        return INITIAL_TINTS[Math.abs(hash) % INITIAL_TINTS.length];
+      }
+
+      function Avatar({ src, name, size = "md", status, ringed = false, className = "" }) {
+        const [errored, setErrored] = useState(false);
+        const sz = SIZE_MAP[size];
+        const showImage = Boolean(src) && !errored;
+        const tint = tintFor(name);
+        const statusInfo = status ? STATUS_MAP[status] : null;
+
+        return (
+          <span
+            className={`relative inline-flex shrink-0 ${className}`}
+            role="img"
+            aria-label={statusInfo ? `${name} — ${statusInfo.label}` : name}
+            title={name}
+          >
+            <span
+              className={`relative flex ${sz.box} items-center justify-center overflow-hidden rounded-full bg-[#ece0cd] ${
+                ringed ? `${sz.ring} ring-[#fbf7f0]` : ""
+              }`}
+              style={!showImage ? { backgroundColor: tint.bg } : undefined}
+            >
+              {showImage ? (
+                <img
+                  src={src}
+                  alt=""
+                  aria-hidden="true"
+                  loading="lazy"
+                  onError={() => setErrored(true)}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <span
+                  aria-hidden="true"
+                  className={`select-none font-semibold ${sz.text}`}
+                  style={{ color: tint.fg }}
+                >
+                  {getInitials(name)}
+                </span>
+              )}
+            </span>
+
+            {statusInfo && (
+              <span
+                className={`absolute bottom-0 right-0 ${sz.dot} translate-x-[12%] translate-y-[12%] rounded-full ring-2 ring-[#fbf7f0]`}
+                style={{ backgroundColor: statusInfo.color }}
+                aria-hidden="true"
+              />
+            )}
+          </span>
+        );
+      }
+
+      function AvatarGroup({ avatars, max = 4, size = "md", className = "" }) {
+        const visible = avatars.slice(0, max);
+        const overflow = avatars.length - visible.length;
+        const sz = SIZE_MAP[size];
+        const hiddenNames = avatars.slice(max).map((a) => a.name);
+
+        return (
+          <ul
+            className={`flex items-center ${className}`}
+            aria-label={`${avatars.length} ${avatars.length === 1 ? "person" : "people"}`}
+          >
+            {visible.map((a, i) => (
+              <li key={`${a.name}-${i}`} className="-ml-2 first:ml-0">
+                <Avatar src={a.src} name={a.name} status={a.status} size={size} ringed />
+              </li>
+            ))}
+
+            {overflow > 0 && (
+              <li className="-ml-2">
+                <button
+                  type="button"
+                  title={hiddenNames.join(", ")}
+                  aria-label={`${overflow} more: ${hiddenNames.join(", ")}`}
+                  className={`flex ${sz.box} items-center justify-center rounded-full bg-[#1c2b33] font-semibold text-[#f4ece0] ${sz.ring} ring-[#fbf7f0] ${sz.text} transition-colors duration-200 hover:bg-[#0f5c5c] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1f8a8a] focus-visible:ring-offset-2 focus-visible:ring-offset-[#fbf7f0]`}
+                >
+                  +{overflow}
+                </button>
+              </li>
+            )}
+          </ul>
+        );
+      }
+
+      /* ---------------- Demo data (Sand & Surf cast) ---------------- */
+      // Stable portrait images; some intentionally broken to show fallback.
+      const IMG = (seed) => `https://i.pravatar.cc/160?u=${encodeURIComponent(seed)}`;
+      const BROKEN = "https://example.com/this-image-does-not-exist-404.jpg";
+
+      const TEAM = [
+        { name: "Ava Reef", src: IMG("ava-reef"), status: "online" },
+        { name: "Milo Sand", src: IMG("milo-sand"), status: "away" },
+        { name: "Nia Cove", status: "busy" },
+        { name: "Theo Dune", src: IMG("theo-dune") },
+        { name: "Remy Surf", status: "offline" },
+        { name: "Iris Bay", src: IMG("iris-bay") },
+        { name: "Cleo Tide" },
+      ];
+
+      function Section({ title, hint, children }) {
+        return (
+          <section className="mb-12">
+            <div className="mb-5 flex items-baseline gap-3">
+              <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-[#1f8a8a]">
+                {title}
+              </h2>
+              {hint && <span className="text-sm text-[#4a5d66]">{hint}</span>}
+            </div>
+            <div className="rounded-3xl border border-[#e7ddcd] bg-[#f4ece0] p-8 shadow-[0_1px_0_rgba(255,255,255,0.7)_inset]">
+              {children}
+            </div>
+          </section>
+        );
+      }
+
+      function Demo() {
+        return (
+          <main className="mx-auto max-w-4xl px-6 py-16">
+            <header className="mb-14">
+              <p className="text-sm font-semibold tracking-tight text-[#1f8a8a]">
+                saltycodestudio-parts
+              </p>
+              <h1 className="mt-1 text-4xl font-semibold tracking-tight text-[#1c2b33]">
+                Avatar
+              </h1>
+              <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-[#4a5d66]">
+                Image with deterministic initials fallback, a presence status dot, and an
+                overlapping group that collapses extras into a <code className="rounded bg-[#ece0cd] px-1.5 py-0.5 text-[13px]">+N</code> chip.
+              </p>
+            </header>
+
+            <Section title="Sizes" hint="xs · sm · md · lg · xl">
+              <div className="flex flex-wrap items-end gap-6">
+                {["xs", "sm", "md", "lg", "xl"].map((s) => (
+                  <div key={s} className="flex flex-col items-center gap-2">
+                    <Avatar name="Ava Reef" src={IMG("ava-reef")} size={s} />
+                    <span className="text-xs text-[#4a5d66]">{s}</span>
+                  </div>
+                ))}
+              </div>
+            </Section>
+
+            <Section title="Initials fallback" hint="no src, or image failed to load">
+              <div className="flex flex-wrap items-end gap-6">
+                <div className="flex flex-col items-center gap-2">
+                  <Avatar name="Nia Cove" size="lg" />
+                  <span className="text-xs text-[#4a5d66]">no src</span>
+                </div>
+                <div className="flex flex-col items-center gap-2">
+                  <Avatar name="Theo Dune" size="lg" />
+                  <span className="text-xs text-[#4a5d66]">no src</span>
+                </div>
+                <div className="flex flex-col items-center gap-2">
+                  <Avatar name="Remy Surf" size="lg" />
+                  <span className="text-xs text-[#4a5d66]">no src</span>
+                </div>
+                <div className="flex flex-col items-center gap-2">
+                  <Avatar name="Cleo Tide" src={BROKEN} size="lg" />
+                  <span className="text-xs text-[#4a5d66]">broken src → fallback</span>
+                </div>
+                <div className="flex flex-col items-center gap-2">
+                  <Avatar name="playa" size="lg" />
+                  <span className="text-xs text-[#4a5d66]">single name</span>
+                </div>
+              </div>
+            </Section>
+
+            <Section title="Status dot" hint="online · away · busy · offline">
+              <div className="flex flex-wrap items-end gap-6">
+                {[
+                  ["online", "Ava Reef", IMG("ava-reef")],
+                  ["away", "Milo Sand", IMG("milo-sand")],
+                  ["busy", "Nia Cove", null],
+                  ["offline", "Remy Surf", null],
+                ].map(([st, nm, src]) => (
+                  <div key={st} className="flex flex-col items-center gap-2">
+                    <Avatar name={nm} src={src || undefined} status={st} size="lg" />
+                    <span className="text-xs capitalize text-[#4a5d66]">{st}</span>
+                  </div>
+                ))}
+              </div>
+            </Section>
+
+            <Section title="Avatar group" hint="overlapping, with +N overflow — the chip is keyboard-focusable">
+              <div className="flex flex-col gap-8">
+                <div>
+                  <p className="mb-3 text-xs text-[#4a5d66]">max = 4 (default)</p>
+                  <AvatarGroup avatars={TEAM} max={4} size="lg" />
+                </div>
+                <div>
+                  <p className="mb-3 text-xs text-[#4a5d66]">max = 5, size md</p>
+                  <AvatarGroup avatars={TEAM} max={5} size="md" />
+                </div>
+                <div>
+                  <p className="mb-3 text-xs text-[#4a5d66]">no overflow (3 of 3)</p>
+                  <AvatarGroup avatars={TEAM.slice(0, 3)} max={4} size="sm" />
+                </div>
+              </div>
+            </Section>
+          </main>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(<Demo />);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,50 @@
+/* ============================================================================
+ * global.css — the single CSS entry point for this Astro app.
+ * Imported once from src/layouts/Base.astro.
+ *
+ * It interleaves the shared "Sand & Surf" foundation layers with Tailwind in
+ * the exact order the foundations require (see foundations/README.md):
+ *
+ *   1. tokens.css      MUST come BEFORE @tailwind — the Tailwind preset reads
+ *                      its `--rgb-*` channels to resolve brand colors.
+ *   2. typography.css  fluid type scale (needs tokens).
+ *   3. palettes.css    semantic theme tokens (--bg, --surface, --text, ...).
+ *   --- Tailwind layers ---
+ *   4. shadows.css     elevation helpers — AFTER utilities so they win cascade.
+ *   5. gradients.css   gradient/mesh backgrounds.
+ *   6. motion.css      .anim-* utilities + reduced-motion kill-switch (last).
+ *
+ * NOTE: we deliberately DO NOT import foundations/base.css. Under Tailwind,
+ * Preflight (@tailwind base) already resets the page; stacking two resets
+ * fights itself. That's also why astro.config.mjs sets
+ * `tailwind({ applyBaseStyles: false })` and we call @tailwind base ourselves.
+ *
+ * Path note: these are relative to THIS file (src/styles/), hence the
+ * four-level climb up to the repo root, then into /foundations.
+ * Astro/Vite inlines them at build time, so there's no waterfall in prod.
+ * ==========================================================================*/
+
+/* 1 · palette + scales — first so the preset can read --rgb-* channels */
+@import "../../../../foundations/tokens.css";
+/* 2 · fluid type scale */
+@import "../../../../foundations/typography.css";
+/* 3 · semantic theme tokens (data-palette / data-mode) */
+@import "../../../../foundations/palettes.css";
+
+/* --- Tailwind --- (v3 three-layer form; the @astrojs/tailwind integration
+ * runs the PostCSS pipeline that expands these and applies your config) */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 4 · elevation tokens + .surface-card / .elevation-* helpers */
+@import "../../../../foundations/shadows.css";
+/* 5 · gradient + mesh backgrounds */
+@import "../../../../foundations/gradients.css";
+/* 6 · animation utilities — last so .anim-* wins the cascade */
+@import "../../../../foundations/motion.css";
+
+/* ----------------------------------------------------------------------------
+ * App-specific styles go below this line. Prefer Tailwind utilities and the
+ * foundation classes; only drop to raw CSS for things the system doesn't cover.
+ * --------------------------------------------------------------------------*/

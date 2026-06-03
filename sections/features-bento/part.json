@@ -1,0 +1,14 @@
+{
+  "name": "Features Bento",
+  "slug": "features-bento",
+  "kind": "section",
+  "category": "features",
+  "tier": "showcase",
+  "tags": ["features", "bento", "grid", "cards", "responsive", "accessible", "sand-and-surf"],
+  "description": "Bento-style feature layout mixing large, tall, and small cards across a responsive three-column grid.",
+  "deps": ["react", "tailwindcss"],
+  "files": ["FeaturesBento.tsx", "section.html"],
+  "usage": "React: import FeaturesBento from './FeaturesBento'; then <FeaturesBento /> (pass eyebrow, title, description, tiles, ctaLabel, ctaHref to customize). HTML: copy the <section> from section.html into any Tailwind page. Both expect the Sand & Surf palette and Space Grotesk / JetBrains Mono / Inter fonts; open preview.html to see it rendered.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
+}

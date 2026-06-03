@@ -1,0 +1,23 @@
+{
+  // Astro ships preset tsconfigs. "strict" turns on strict type-checking but
+  // (unlike "strictest") is forgiving enough for fast prototyping. Astro's
+  // base also sets up the Astro types, JSX runtime, and module resolution.
+  "extends": "astro/tsconfigs/strict",
+  "compilerOptions": {
+    // React 18 automatic JSX runtime — required for the .tsx islands you pull
+    // from ../../components/react. With "react-jsx" you do NOT need to
+    // `import React` in every file.
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+
+    // Convenience path alias so imports read `@/components/...` instead of a
+    // pile of `../../`. (Used for files INSIDE this starter's src/.)
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  },
+  // Astro generates types into .astro/ — make sure they're seen.
+  "include": [".astro/types.d.ts", "**/*"],
+  "exclude": ["dist", "node_modules"]
+}

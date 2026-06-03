@@ -1,0 +1,24 @@
+{
+  "name": "Hero Centered",
+  "slug": "hero-centered",
+  "kind": "section",
+  "category": "hero",
+  "tier": "showcase",
+  "tags": [
+    "hero",
+    "centered",
+    "headline",
+    "eyebrow",
+    "cta",
+    "gradient",
+    "landing",
+    "responsive",
+    "accessible"
+  ],
+  "description": "Centered hero with a monospace eyebrow, oversized display headline, supporting lede, dual CTAs, reassurance note, and a soft sand-to-surf gradient backdrop with glow and grid ornaments.",
+  "deps": ["react", "tailwindcss"],
+  "files": ["HeroCentered.tsx", "section.html"],
+  "usage": "React: import HeroCentered from './HeroCentered' and render <HeroCentered /> — override eyebrow, headline (string or node), subheadline, primaryCta, secondaryCta, note, and trustedBy via props. HTML: paste section.html as the first block inside <main>; it relies on the Sand & Surf Tailwind preset (bg-sand, text-teal, bg-coral, shadow-coral, rounded-pill, font-display, font-mono). No JavaScript required.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
+}

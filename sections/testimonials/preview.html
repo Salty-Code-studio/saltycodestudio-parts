@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Testimonials — saltycodestudio · Sand &amp; Surf</title>
+
+  <!-- Tailwind Play CDN (no build step) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Brand fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['"Space Grotesk"', "system-ui", "sans-serif"],
+            mono: ['"JetBrains Mono"', "ui-monospace", "monospace"],
+            sans: ['"Inter"', "system-ui", "sans-serif"],
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    body { font-family: "Inter", system-ui, sans-serif; }
+  </style>
+</head>
+<body class="bg-[#F2EBDD] text-[#1C2B2E] antialiased">
+
+  <!-- ===== Minimal brand nav for context ===== -->
+  <header class="border-b border-[#0E3A40]/10 bg-[#F2EBDD]/80 backdrop-blur">
+    <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4 lg:px-8">
+      <a href="#" class="flex items-center gap-2 font-display text-lg font-semibold text-[#0E3A40]">
+        <span class="font-mono text-2xl leading-none text-[#FF6F59]">~&lt;</span>
+        saltycodestudio
+      </a>
+      <nav class="hidden items-center gap-8 text-sm text-[#1C2B2E]/70 md:flex">
+        <a href="#" class="transition-colors hover:text-[#0E3A40]">Work</a>
+        <a href="#" class="transition-colors hover:text-[#0E3A40]">Services</a>
+        <a href="#" class="font-medium text-[#0E3A40]">Clients</a>
+        <a href="#" class="rounded-full bg-[#0E3A40] px-4 py-2 font-medium text-[#F2EBDD] transition-colors hover:bg-[#1C2B2E]">Start a project</a>
+      </nav>
+      <button id="menuBtn" class="md:hidden text-[#0E3A40]" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+        <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div id="mobileMenu" class="hidden border-t border-[#0E3A40]/10 px-6 py-3 md:hidden">
+      <a href="#" class="block py-2 text-sm text-[#1C2B2E]/80">Work</a>
+      <a href="#" class="block py-2 text-sm text-[#1C2B2E]/80">Services</a>
+      <a href="#" class="block py-2 text-sm font-medium text-[#0E3A40]">Clients</a>
+      <a href="#" class="mt-2 block rounded-full bg-[#0E3A40] px-4 py-2 text-center text-sm font-medium text-[#F2EBDD]">Start a project</a>
+    </div>
+  </header>
+
+  <!-- ===== SECTION: testimonials (paste section.html below) ===== -->
+  <section aria-labelledby="testimonials-heading" class="bg-[#F2EBDD] py-20 sm:py-28">
+    <div class="mx-auto max-w-6xl px-6 lg:px-8">
+      <!-- Header -->
+      <div class="mx-auto max-w-2xl text-center">
+        <p class="font-mono text-xs uppercase tracking-[0.2em] text-[#FF6F59]">Kind words</p>
+        <h2 id="testimonials-heading" class="mt-3 font-display text-3xl font-bold tracking-tight text-[#0E3A40] sm:text-4xl">
+          Teams that ship with us
+        </h2>
+        <p class="mt-4 text-base leading-relaxed text-[#1C2B2E]/70">
+          We keep client relationships the way we keep our codebases — clean, honest, and built to last.
+        </p>
+      </div>
+
+      <!-- Cards -->
+      <div class="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+
+        <!-- Card 1 -->
+        <figure class="group flex h-full flex-col rounded-2xl border border-[#0E3A40]/10 bg-[#FBF7EF] p-7 shadow-[0_1px_0_rgba(14,58,64,0.04)] transition-all duration-300 hover:-translate-y-1 hover:border-[#0E3A40]/20 hover:shadow-[0_18px_40px_-22px_rgba(14,58,64,0.45)]">
+          <svg viewBox="0 0 32 32" aria-hidden="true" class="h-7 w-7 text-[#4FA8C9]" fill="currentColor">
+            <path d="M13.5 8c-3.6 1.4-6 4.7-6 8.6V24h8v-8H10c0-2.4 1.6-4.3 3.9-5L13.5 8zm12 0c-3.6 1.4-6 4.7-6 8.6V24h8v-8h-5.5c0-2.4 1.6-4.3 3.9-5L25.5 8z" />
+          </svg>
+          <blockquote class="mt-4 flex-1 text-[15px] leading-relaxed text-[#1C2B2E]/90">
+            <p>They shipped our marketing site in three weeks and it loads faster than anything we'd ever had. No drama, no buzzwords — just clean work and straight answers.</p>
+          </blockquote>
+          <div class="mt-5 flex items-center gap-0.5" role="img" aria-label="5 out of 5 stars">
+            <svg viewBox="0 0 20 20" aria-hidden="true" class="h-4 w-4 text-[#FF6F59]" fill="currentColor"><path d="M10 1.5l2.6 5.27 5.82.85-4.21 4.1.99 5.8L10 14.78l-5.2 2.74.99-5.8-4.21-4.1 5.82-.85L10 1.5z"/></svg>
+            <svg viewBox="0 0 20 20" aria-hidden="true" class="h-4 w-4 text-[#FF6F59]" fill="currentColor"><path d="M10 1.5l2.6 5.27 5.82.85-4.21 4.1.99 5.8L10 14.78l-5.2 2.74.99-5.8-4.21-4.1 5.82-.85L10 1.5z"/></svg>
+            <svg viewBox="0 0 20 20" aria-hidden="true" class="h-4 w-4 text-[#FF6F59]" fill="currentColor"><path d="M10 1.5l2.6 5.27 5.82.85-4.21 4.1.99 5.8L10 14.78l-5.2 2.74.99-5.8-4.21-4.1 5.82-.85L10 1.5z"/></svg>
+            <svg viewBox="0 0 20 20" aria-hidden="true" class="h-4 w-4 text-[#FF6F59]" fill="currentColor"><path d="M10 1.5l2.6 5.27 5.82.85-4.21 4.1.99 5.8L10 14.78l-5.2 2.74.99-5.8-4.21-4.1 5.82-.85L10 1.5z"/></svg>
+            <svg viewBox="0 0 20 20" aria-hidden="true" class="h-4 w-4 text-[#FF6F59]" fill="currentColor"><path d="M10 1.5l2.6 5.27 5.82.85-4.21 4.1.99 5.8L10 14.78l-5.2 2.74.99-5.8-4.21-4.1 5.82-.85L10 1.5z"/></svg>
+          </div>
+          <figcaption class="mt-5 flex items-center gap-3 border-t border-[#0E3A40]/10 pt-5">
+            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=240&h=240&auto=format&fit=crop&crop=faces" alt="" loading="lazy" width="44" height="44" class="h-11 w-11 shrink-0 rounded-full object-cover ring-2 ring-[#F2EBDD]" />
+            <div class="min-w-0">
+              <div class="truncate font-display font-semibold text-[#0E3A40]">Marisol Ferreira</div>
+              <div class="truncate text-sm text-[#1C2B2E]/60">Founder, Tidepool Labs</div>
+            </div>
+          </figcaption>
+        </figure>
+
+        <!-- Card 2 -->
+        <figure class="group flex h-full flex-col rounded-2xl border border-[#0E3A40]/10 bg-[#FBF7EF] p-7 shadow-[0_1px_0_rgba(14,58,64,0.04)] transition-all duration-300 hover:-translate-y-1 hover:border-[#0E3A40]/20 hover:shadow-[0_18px_40px_-22px_rgba(14,58,64,0.45)]">
+          <svg viewBox="0 0 32 32" aria-hidden="true" class="h-7 w-7 text-[#4FA8C9]" fill="currentColor">
+            <path d="M13.5 8c-3.6 1.4-6 4.7-6 8.6V24h8v-8H10c0-2.4 1.6-4.3 3.9-5L13.5 8zm12 0c-3.6 1.4-6 4.7-6 8.6V24h8v-8h-5.5c0-2.4 1.6-4.3 3.9-5L25.5 8z" />
+          </svg>
+          <blockquote class="mt-4 flex-1 text-[15px] leading-relaxed text-[#1C2B2E]/90">
+            <p>I came in with a half-baked Figma file and left with a real product. The codebase is so tidy our new engineer was committing on day one.</p>
+          </blockquote>
+          <div class="mt-5 flex items-center gap-0.5" role="img" aria-label="5 out of 5 stars">
+            <svg viewBox="0 0 20 20" aria-hidden="true" class="h-4 w-4 text-[#FF6F59]" fill="currentColor"><path d="M10 1.5l2.6 5.27 5.82.85-4.21 4.1.99 5.8L10 14.78l-5.2 2.74.99-5.8-4.21-4.1 5.82-.85L10 1.5z"/></svg>
+            <svg viewBox="0 0 20 20" aria-hidden="true" class="h-4 w-4 text-[#FF6F59]" fill="currentColor"><path d="M10 1.5l2.6 5.27 5.82.85-4.21 4.1.99 5.8L10 14.78l-5.2 2.74.99-5.8-4.21-4.1 5.82-.85L10 1.5z"/></svg>
+            <svg viewBox="0 0 20 20" aria-hidden="true" class="h-4 w-4 text-[#FF6F59]" fill="currentColor"><path d="M10 1.5l2.6 5.27 5.82.85-4.21 4.1.99 5.8L10 14.78l-5.2 2.74.99-5.8-4.21-4.1 5.82-.85L10 1.5z"/></svg>
+            <svg viewBox="0 0 20 20" aria-hidden="true" class="h-4 w-4 text-[#FF6F59]" fill="currentColor"><path d="M10 1.5l2.6 5.27 5.82.85-4.21 4.1.99 5.8L10 14.78l-5.2 2.74.99-5.8-4.21-4.1 5.82-.85L10 1.5z"/></svg>
+            <svg viewBox="0 0 20 20" aria-hidden="true" class="h-4 w-4 text-[#FF6F59]" fill="currentColor"><path d="M10 1.5l2.6 5.27 5.82.85-4.21 4.1.99 5.8L10 14.78l-5.2 2.74.99-5.8-4.21-4.1 5.82-.85L10 1.5z"/></svg>
+          </div>
+          <figcaption class="mt-5 flex items-center gap-3 border-t border-[#0E3A40]/10 pt-5">
+            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=240&h=240&auto=format&fit=crop&crop=faces" alt="" loading="lazy" width="44" height="44" class="h-11 w-11 shrink-0 rounded-full object-cover ring-2 ring-[#F2EBDD]" />
+            <div class="min-w-0">
+              <div class="truncate font-display font-semibold text-[#0E3A40]">Daniel Okonkwo</div>
+              <div class="truncate text-sm text-[#1C2B2E]/60">CTO, Reefline</div>
+            </div>
+          </figcaption>
+        </figure>
+
+        <!-- Card 3 -->
+        <figure class="group flex h-full flex-col rounded-2xl border border-[#0E3A40]/10 bg-[#FBF7EF] p-7 shadow-[0_1px_0_rgba(14,58,64,0.04)] transition-all duration-300 hover:-translate-y-1 hover:border-[#0E3A40]/20 hover:shadow-[0_18px_40px_-22px_rgba(14,58,64,0.45)]">
+          <svg viewBox="0 0 32 32" aria-hidden="true" class="h-7 w-7 text-[#4FA8C9]" fill="currentColor">
+            <path d="M13.5 8c-3.6 1.4-6 4.7-6 8.6V24h8v-8H10c0-2.4 1.6-4.3 3.9-5L13.5 8zm12 0c-3.6 1.4-6 4.7-6 8.6V24h8v-8h-5.5c0-2.4 1.6-4.3 3.9-5L25.5 8z" />
+          </svg>
+          <blockquote class="mt-4 flex-1 text-[15px] leading-relaxed text-[#1C2B2E]/90">
+            <p>Most studios disappear after launch. These folks stuck around, watched the analytics with us, and quietly fixed things before I even noticed.</p>
+          </blockquote>
+          <div class="mt-5 flex items-center gap-0.5" role="img" aria-label="5 out of 5 stars">
+            <svg viewBox="0 0 20 20" aria-hidden="true" class="h-4 w-4 text-[#FF6F59]" fill="currentColor"><path d="M10 1.5l2.6 5.27 5.82.85-4.21 4.1.99 5.8L10 14.78l-5.2 2.74.99-5.8-4.21-4.1 5.82-.85L10 1.5z"/></svg>
+            <svg viewBox="0 0 20 20" aria-hidden="true" class="h-4 w-4 text-[#FF6F59]" fill="currentColor"><path d="M10 1.5l2.6 5.27 5.82.85-4.21 4.1.99 5.8L10 14.78l-5.2 2.74.99-5.8-4.21-4.1 5.82-.85L10 1.5z"/></svg>
+            <svg viewBox="0 0 20 20" aria-hidden="true" class="h-4 w-4 text-[#FF6F59]" fill="currentColor"><path d="M10 1.5l2.6 5.27 5.82.85-4.21 4.1.99 5.8L10 14.78l-5.2 2.74.99-5.8-4.21-4.1 5.82-.85L10 1.5z"/></svg>
+            <svg viewBox="0 0 20 20" aria-hidden="true" class="h-4 w-4 text-[#FF6F59]" fill="currentColor"><path d="M10 1.5l2.6 5.27 5.82.85-4.21 4.1.99 5.8L10 14.78l-5.2 2.74.99-5.8-4.21-4.1 5.82-.85L10 1.5z"/></svg>
+            <svg viewBox="0 0 20 20" aria-hidden="true" class="h-4 w-4 text-[#FF6F59]" fill="currentColor"><path d="M10 1.5l2.6 5.27 5.82.85-4.21 4.1.99 5.8L10 14.78l-5.2 2.74.99-5.8-4.21-4.1 5.82-.85L10 1.5z"/></svg>
+          </div>
+          <figcaption class="mt-5 flex items-center gap-3 border-t border-[#0E3A40]/10 pt-5">
+            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=240&h=240&auto=format&fit=crop&crop=faces" alt="" loading="lazy" width="44" height="44" class="h-11 w-11 shrink-0 rounded-full object-cover ring-2 ring-[#F2EBDD]" />
+            <div class="min-w-0">
+              <div class="truncate font-display font-semibold text-[#0E3A40]">Priya Nair</div>
+              <div class="truncate text-sm text-[#1C2B2E]/60">Head of Growth, Saltwater</div>
+            </div>
+          </figcaption>
+        </figure>
+
+        <!-- Card 4 -->
+        <figure class="group flex h-full flex-col rounded-2xl border border-[#0E3A40]/10 bg-[#FBF7EF] p-7 shadow-[0_1px_0_rgba(14,58,64,0.04)] transition-all duration-300 hover:-translate-y-1 hover:border-[#0E3A40]/20 hover:shadow-[0_18px_40px_-22px_rgba(14,58,64,0.45)]">
+          <svg viewBox="0 0 32 32" aria-hidden="true" class="h-7 w-7 text-[#4FA8C9]" fill="currentColor">
+            <path d="M13.5 8c-3.6 1.4-6 4.7-6 8.6V24h8v-8H10c0-2.4 1.6-4.3 3.9-5L13.5 8zm12 0c-3.6 1.4-6 4.7-6 8.6V24h8v-8h-5.5c0-2.4 1.6-4.3 3.9-5L25.5 8z" />
+          </svg>
+          <blockquote class="mt-4 flex-1 text-[15px] leading-relaxed text-[#1C2B2E]/90">
+            <p>Our conversion rate climbed 38% after the rebuild. Same traffic, better site. That's the whole story.</p>
+          </blockquote>
+          <div class="mt-5 flex items-center gap-0.5" role="img" aria-label="5 out of 5 stars">
+            <svg viewBox="0 0 20 20" aria-hidden="true" class="h-4 w-4 text-[#FF6F59]" fill="currentColor"><path d="M10 1.5l2.6 5.27 5.82.85-4.21 4.1.99 5.8L10 14.78l-5.2 2.74.99-5.8-4.21-4.1 5.82-.85L10 1.5z"/></svg>
+            <svg viewBox="0 0 20 20" aria-hidden="true" class="h-4 w-4 text-[#FF6F59]" fill="currentColor"><path d="M10 1.5l2.6 5.27 5.82.85-4.21 4.1.99 5.8L10 14.78l-5.2 2.74.99-5.8-4.21-4.1 5.82-.85L10 1.5z"/></svg>
+            <svg viewBox="0 0 20 20" aria-hidden="true" class="h-4 w-4 text-[#FF6F59]" fill="currentColor"><path d="M10 1.5l2.6 5.27 5.82.85-4.21 4.1.99 5.8L10 14.78l-5.2 2.74.99-5.8-4.21-4.1 5.82-.85L10 1.5z"/></svg>
+            <svg viewBox="0 0 20 20" aria-hidden="true" class="h-4 w-4 text-[#FF6F59]" fill="currentColor"><path d="M10 1.5l2.6 5.27 5.82.85-4.21 4.1.99 5.8L10 14.78l-5.2 2.74.99-5.8-4.21-4.1 5.82-.85L10 1.5z"/></svg>
+            <svg viewBox="0 0 20 20" aria-hidden="true" class="h-4 w-4 text-[#FF6F59]" fill="currentColor"><path d="M10 1.5l2.6 5.27 5.82.85-4.21 4.1.99 5.8L10 14.78l-5.2 2.74.99-5.8-4.21-4.1 5.82-.85L10 1.5z"/></svg>
+          </div>
+          <figcaption class="mt-5 flex items-center gap-3 border-t border-[#0E3A40]/10 pt-5">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=240&h=240&auto=format&fit=crop&crop=faces" alt="" loading="lazy" width="44" height="44" class="h-11 w-11 shrink-0 rounded-full object-cover ring-2 ring-[#F2EBDD]" />
+            <div class="min-w-0">
+              <div class="truncate font-display font-semibold text-[#0E3A40]">Tomás Vega</div>
+              <div class="truncate text-sm text-[#1C2B2E]/60">Owner, Driftwood Coffee</div>
+            </div>
+          </figcaption>
+        </figure>
+
+        <!-- Card 5 -->
+        <figure class="group flex h-full flex-col rounded-2xl border border-[#0E3A40]/10 bg-[#FBF7EF] p-7 shadow-[0_1px_0_rgba(14,58,64,0.04)] transition-all duration-300 hover:-translate-y-1 hover:border-[#0E3A40]/20 hover:shadow-[0_18px_40px_-22px_rgba(14,58,64,0.45)]">
+          <svg viewBox="0 0 32 32" aria-hidden="true" class="h-7 w-7 text-[#4FA8C9]" fill="currentColor">
+            <path d="M13.5 8c-3.6 1.4-6 4.7-6 8.6V24h8v-8H10c0-2.4 1.6-4.3 3.9-5L13.5 8zm12 0c-3.6 1.4-6 4.7-6 8.6V24h8v-8h-5.5c0-2.4 1.6-4.3 3.9-5L25.5 8z" />
+          </svg>
+          <blockquote class="mt-4 flex-1 text-[15px] leading-relaxed text-[#1C2B2E]/90">
+            <p>They translated a gnarly internal tool into something my whole team actually wants to use. Calm, fast, well-documented.</p>
+          </blockquote>
+          <div class="mt-5 flex items-center gap-0.5" role="img" aria-label="5 out of 5 stars">
+            <svg viewBox="0 0 20 20" aria-hidden="true" class="h-4 w-4 text-[#FF6F59]" fill="currentColor"><path d="M10 1.5l2.6 5.27 5.82.85-4.21 4.1.99 5.8L10 14.78l-5.2 2.74.99-5.8-4.21-4.1 5.82-.85L10 1.5z"/></svg>
+            <svg viewBox="0 0 20 20" aria-hidden="true" class="h-4 w-4 text-[#FF6F59]" fill="currentColor"><path d="M10 1.5l2.6 5.27 5.82.85-4.21 4.1.99 5.8L10 14.78l-5.2 2.74.99-5.8-4.21-4.1 5.82-.85L10 1.5z"/></svg>
+            <svg viewBox="0 0 20 20" aria-hidden="true" class="h-4 w-4 text-[#FF6F59]" fill="currentColor"><path d="M10 1.5l2.6 5.27 5.82.85-4.21 4.1.99 5.8L10 14.78l-5.2 2.74.99-5.8-4.21-4.1 5.82-.85L10 1.5z"/></svg>
+            <svg viewBox="0 0 20 20" aria-hidden="true" class="h-4 w-4 text-[#FF6F59]" fill="currentColor"><path d="M10 1.5l2.6 5.27 5.82.85-4.21 4.1.99 5.8L10 14.78l-5.2 2.74.99-5.8-4.21-4.1 5.82-.85L10 1.5z"/></svg>
+            <svg viewBox="0 0 20 20" aria-hidden="true" class="h-4 w-4 text-[#FF6F59]" fill="currentColor"><path d="M10 1.5l2.6 5.27 5.82.85-4.21 4.1.99 5.8L10 14.78l-5.2 2.74.99-5.8-4.21-4.1 5.82-.85L10 1.5z"/></svg>
+          </div>
+          <figcaption class="mt-5 flex items-center gap-3 border-t border-[#0E3A40]/10 pt-5">
+            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=240&h=240&auto=format&fit=crop&crop=faces" alt="" loading="lazy" width="44" height="44" class="h-11 w-11 shrink-0 rounded-full object-cover ring-2 ring-[#F2EBDD]" />
+            <div class="min-w-0">
+              <div class="truncate font-display font-semibold text-[#0E3A40]">Hannah Bergström</div>
+              <div class="truncate text-sm text-[#1C2B2E]/60">Ops Lead, Harborwave</div>
+            </div>
+          </figcaption>
+        </figure>
+
+        <!-- Card 6 -->
+        <figure class="group flex h-full flex-col rounded-2xl border border-[#0E3A40]/10 bg-[#FBF7EF] p-7 shadow-[0_1px_0_rgba(14,58,64,0.04)] transition-all duration-300 hover:-translate-y-1 hover:border-[#0E3A40]/20 hover:shadow-[0_18px_40px_-22px_rgba(14,58,64,0.45)]">
+          <svg viewBox="0 0 32 32" aria-hidden="true" class="h-7 w-7 text-[#4FA8C9]" fill="currentColor">
+            <path d="M13.5 8c-3.6 1.4-6 4.7-6 8.6V24h8v-8H10c0-2.4 1.6-4.3 3.9-5L13.5 8zm12 0c-3.6 1.4-6 4.7-6 8.6V24h8v-8h-5.5c0-2.4 1.6-4.3 3.9-5L25.5 8z" />
+          </svg>
+          <blockquote class="mt-4 flex-1 text-[15px] leading-relaxed text-[#1C2B2E]/90">
+            <p>Working with a small studio felt risky on paper. In practice it was the most senior team I've ever hired. Worth every cent.</p>
+          </blockquote>
+          <div class="mt-5 flex items-center gap-0.5" role="img" aria-label="5 out of 5 stars">
+            <svg viewBox="0 0 20 20" aria-hidden="true" class="h-4 w-4 text-[#FF6F59]" fill="currentColor"><path d="M10 1.5l2.6 5.27 5.82.85-4.21 4.1.99 5.8L10 14.78l-5.2 2.74.99-5.8-4.21-4.1 5.82-.85L10 1.5z"/></svg>
+            <svg viewBox="0 0 20 20" aria-hidden="true" class="h-4 w-4 text-[#FF6F59]" fill="currentColor"><path d="M10 1.5l2.6 5.27 5.82.85-4.21 4.1.99 5.8L10 14.78l-5.2 2.74.99-5.8-4.21-4.1 5.82-.85L10 1.5z"/></svg>
+            <svg viewBox="0 0 20 20" aria-hidden="true" class="h-4 w-4 text-[#FF6F59]" fill="currentColor"><path d="M10 1.5l2.6 5.27 5.82.85-4.21 4.1.99 5.8L10 14.78l-5.2 2.74.99-5.8-4.21-4.1 5.82-.85L10 1.5z"/></svg>
+            <svg viewBox="0 0 20 20" aria-hidden="true" class="h-4 w-4 text-[#FF6F59]" fill="currentColor"><path d="M10 1.5l2.6 5.27 5.82.85-4.21 4.1.99 5.8L10 14.78l-5.2 2.74.99-5.8-4.21-4.1 5.82-.85L10 1.5z"/></svg>
+            <svg viewBox="0 0 20 20" aria-hidden="true" class="h-4 w-4 text-[#FF6F59]" fill="currentColor"><path d="M10 1.5l2.6 5.27 5.82.85-4.21 4.1.99 5.8L10 14.78l-5.2 2.74.99-5.8-4.21-4.1 5.82-.85L10 1.5z"/></svg>
+          </div>
+          <figcaption class="mt-5 flex items-center gap-3 border-t border-[#0E3A40]/10 pt-5">
+            <img src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=240&h=240&auto=format&fit=crop&crop=faces" alt="" loading="lazy" width="44" height="44" class="h-11 w-11 shrink-0 rounded-full object-cover ring-2 ring-[#F2EBDD]" />
+            <div class="min-w-0">
+              <div class="truncate font-display font-semibold text-[#0E3A40]">Wesley Carter</div>
+              <div class="truncate text-sm text-[#1C2B2E]/60">VP Product, Lagoon Health</div>
+            </div>
+          </figcaption>
+        </figure>
+
+      </div>
+    </div>
+  </section>
+  <!-- ===== /SECTION ===== -->
+
+  <!-- Minimal footer for context -->
+  <footer class="border-t border-[#0E3A40]/10 bg-[#F2EBDD] py-8">
+    <div class="mx-auto max-w-6xl px-6 text-center font-mono text-xs uppercase tracking-[0.2em] text-[#1C2B2E]/40 lg:px-8">
+      ~&lt; saltycodestudio — Clean code, warm coast.
+    </div>
+  </footer>
+
+  <script>
+    // Mobile menu toggle (vanilla, for preview context)
+    (function () {
+      var btn = document.getElementById("menuBtn");
+      var menu = document.getElementById("mobileMenu");
+      if (!btn || !menu) return;
+      btn.addEventListener("click", function () {
+        var open = menu.classList.toggle("hidden") === false;
+        btn.setAttribute("aria-expanded", String(open));
+      });
+    })();
+  </script>
+</body>
+</html>

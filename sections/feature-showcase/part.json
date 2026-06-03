@@ -1,0 +1,14 @@
+{
+  "name": "Feature Showcase",
+  "slug": "feature-showcase",
+  "kind": "section",
+  "category": "features",
+  "tier": "practical",
+  "tags": ["features", "alternating", "image-text", "zigzag", "showcase", "responsive", "accessible"],
+  "description": "Alternating image-and-text feature rows that flip left and right down the page, each pairing a captioned visual with a headline, supporting copy, a checklist, and a call to action.",
+  "deps": ["react", "tailwindcss"],
+  "files": ["FeatureShowcase.tsx", "section.html"],
+  "usage": "Import FeatureShowcase and render <FeatureShowcase /> (or pass your own `eyebrow`, `heading`, `intro`, and `features` array). For plain HTML, copy the <section> from section.html into any Tailwind page. The preview.html file renders the HTML variant standalone via the Tailwind Play CDN.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
+}

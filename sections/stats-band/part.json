@@ -1,0 +1,14 @@
+{
+  "name": "Stats Band",
+  "slug": "stats-band",
+  "kind": "section",
+  "category": "stats",
+  "tier": "practical",
+  "tags": ["stats", "metrics", "numbers", "kpi", "band", "accent", "dark", "responsive"],
+  "description": "A band of key metrics with labels on an accent background, with an eyebrow, heading, and supporting copy.",
+  "deps": ["react", "tailwindcss"],
+  "files": ["StatsBand.tsx", "section.html"],
+  "usage": "import StatsBand from './StatsBand';\n\nexport default function Page() {\n  return (\n    <StatsBand\n      eyebrow=\"By the numbers\"\n      heading=\"Proof in the shipping log\"\n      stats={[\n        { value: '120+', label: 'Sites shipped', detail: 'From landing pages to full builds' },\n        { value: '99.9%', label: 'Uptime delivered', detail: 'Across hosted client projects' },\n        { value: '0.9s', label: 'Median load time', detail: 'Measured on real-world 4G' },\n        { value: '4.9/5', label: 'Client rating', detail: 'Based on 60+ engagements' },\n      ]}\n    />\n  );\n}\n\nFor a no-React page, copy section.html into your Tailwind markup. See README.md for details.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
+}

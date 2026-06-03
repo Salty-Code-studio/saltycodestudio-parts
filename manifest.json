@@ -1,75 +1,899 @@
 [
   {
-    "name": ":has() Sibling Dim Spotlight",
-    "slug": "has-sibling-spotlight",
-    "category": "css",
-    "tier": "showcase",
+    "name": "Alert Callout",
+    "slug": "alert-callout",
+    "category": "react",
+    "tier": "practical",
     "tags": [
-      ":has()",
-      "parent-selector",
-      "hover",
-      "interactive",
-      "list",
-      "no-js"
+      "alert",
+      "callout",
+      "notification",
+      "banner",
+      "info",
+      "success",
+      "warning",
+      "error",
+      "dismiss",
+      "accessibility"
     ],
-    "description": "Hovering any item in a grid dims every sibling and lifts the focused one, a focus-spotlight interaction built with pure CSS and no JavaScript.",
+    "description": "An accessible info/success/warning/error callout with an icon, optional title, body content, and an optional dismiss button.",
     "deps": [],
     "files": [
-      "styles.css",
-      "index.html"
+      "AlertCallout.tsx"
     ],
-    "usage": "Drop styles.css into your stylesheet and wrap focusable cards in a .spotlight-grid using the markup from index.html. Hover or keyboard-focus any .spotlight-card and its siblings dim while it lifts — no script required.",
-    "source": "https://blog.logrocket.com/blog/different-ways-to-use-css-has/",
-    "license": "LogRocket Blog article — code snippets free to reuse; reimplemented cleanly. :has() is native Baseline CSS.",
-    "path": "components/css/has-sibling-spotlight",
-    "preview": "components/css/has-sibling-spotlight/preview.html"
+    "usage": "Import AlertCallout and render <AlertCallout variant=\"warning\" title=\"Heads up\">Body text…</AlertCallout>; pass onDismiss to make it dismissible. Variants info/success use role=status (polite) and warning/error use role=alert (assertive) automatically.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
+    "path": "components/react/alert-callout",
+    "kind": "component",
+    "preview": "components/react/alert-callout/preview.html"
   },
   {
-    "name": "3D Tilt Card",
-    "slug": "tilt-card-3d",
-    "category": "css",
+    "name": "Animated Beam Connector",
+    "slug": "animated-beam-connector",
+    "category": "react",
+    "tier": "showcase",
+    "tags": [
+      "beam",
+      "connector",
+      "diagram",
+      "svg",
+      "integrations",
+      "flow"
+    ],
+    "description": "An animated gradient pulse that travels along a curved SVG path connecting two referenced DOM nodes, ideal for integration and architecture diagrams.",
+    "deps": [
+      "motion",
+      "tailwindcss"
+    ],
+    "files": [
+      "AnimatedBeam.tsx"
+    ],
+    "usage": "Give a relative container a ref, give each node you want to wire its own ref, then render one <AnimatedBeam containerRef fromRef toRef /> per connection; tune curvature, reverse, duration, delay and the gradient colours, and the path auto-recomputes on resize via a ResizeObserver.",
+    "source": "https://magicui.design/docs/components/animated-beam",
+    "license": "MIT (Magic UI, github.com/magicuidesign/magicui) — reimplemented cleanly with credit",
+    "path": "components/react/animated-beam-connector",
+    "kind": "component",
+    "preview": "components/react/animated-beam-connector/preview.html"
+  },
+  {
+    "name": "Animated Counter",
+    "slug": "animated-counter",
+    "category": "react",
+    "tier": "practical",
+    "tags": [
+      "counter",
+      "count-up",
+      "stats",
+      "scroll",
+      "intersection-observer"
+    ],
+    "description": "A number that eases up to a target value when it scrolls into view, with prefix/suffix and locale formatting.",
+    "deps": [
+      "react",
+      "tailwindcss"
+    ],
+    "files": [
+      "AnimatedCounter.tsx"
+    ],
+    "usage": "Use <AnimatedCounter value={1200} suffix='+' /> for a single stat, or <StatGrid /> for the sample row.",
+    "path": "components/react/animated-counter",
+    "kind": "component",
+    "preview": "components/react/animated-counter/preview.html"
+  },
+  {
+    "name": "Avatar",
+    "slug": "avatar",
+    "category": "react",
+    "tier": "practical",
+    "tags": [
+      "avatar",
+      "image",
+      "initials",
+      "fallback",
+      "status",
+      "presence",
+      "group",
+      "stack"
+    ],
+    "description": "An accessible avatar with image plus deterministic initials fallback, a presence status dot, and an overlapping avatar group that collapses extras into a +N chip.",
+    "deps": [],
+    "files": [
+      "Avatar.tsx"
+    ],
+    "usage": "Import Avatar (default) and AvatarGroup (named) from Avatar.tsx. Render <Avatar name=\"Salty Code\" src=\"/me.jpg\" status=\"online\" size=\"lg\" />; if src is missing or fails to load it shows colored initials. Render <AvatarGroup avatars={[{name, src, status}, ...]} max={4} /> for an overlapping stack with a +N overflow chip.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
+    "path": "components/react/avatar",
+    "kind": "component",
+    "preview": "components/react/avatar/preview.html"
+  },
+  {
+    "name": "Badge / Tag",
+    "slug": "badge-tag",
+    "category": "react",
+    "tier": "practical",
+    "tags": [
+      "badge",
+      "tag",
+      "pill",
+      "label",
+      "status",
+      "chip"
+    ],
+    "description": "Accessible badge/tag/pill component with semantic color variants, three sizes, status dot, outline, and removable variants.",
+    "deps": [
+      "react",
+      "tailwindcss"
+    ],
+    "files": [
+      "BadgeTag.tsx"
+    ],
+    "usage": "Render <BadgeTag variant=\"ocean\" dot>Live</BadgeTag>, or pass onRemove to get a removable tag.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
+    "path": "components/react/badge-tag",
+    "kind": "component",
+    "preview": "components/react/badge-tag/preview.html"
+  },
+  {
+    "name": "Bento Grid",
+    "slug": "bento-grid",
+    "category": "react",
+    "tier": "practical",
+    "tags": [
+      "bento",
+      "grid",
+      "layout",
+      "cards",
+      "features"
+    ],
+    "description": "A responsive asymmetric bento grid of feature cards with a subtle hover-lift and glow.",
+    "deps": [
+      "react",
+      "tailwindcss"
+    ],
+    "files": [
+      "BentoGrid.tsx"
+    ],
+    "usage": "Import BentoGrid and pass an items array, or use the default Sand & Surf sample content.",
+    "path": "components/react/bento-grid",
+    "kind": "component",
+    "preview": "components/react/bento-grid/preview.html"
+  },
+  {
+    "name": "Border Beam",
+    "slug": "border-beam",
+    "category": "react",
+    "tier": "showcase",
+    "tags": [
+      "border",
+      "beam",
+      "glow",
+      "card",
+      "animated-border",
+      "tailwind"
+    ],
+    "description": "An animated beam of light that continuously travels around the border of any container, framing cards and pricing tiers with a premium glow.",
+    "deps": [
+      "motion",
+      "tailwindcss"
+    ],
+    "files": [
+      "BorderBeam.tsx"
+    ],
+    "usage": "Drop <BorderBeam /> inside any relative + overflow-hidden, rounded container to frame it with a travelling glow; tune colorFrom/colorTo, duration, delay, reverse and initialOffset, and stack two beams with offset delays for a chasing effect.",
+    "source": "https://magicui.design/docs/components/border-beam",
+    "license": "MIT (Magic UI, github.com/magicuidesign/magicui) — reimplemented cleanly with credit",
+    "path": "components/react/border-beam",
+    "kind": "component",
+    "preview": "components/react/border-beam/preview.html"
+  },
+  {
+    "name": "Breadcrumb",
+    "slug": "breadcrumb",
+    "category": "react",
+    "tier": "practical",
+    "tags": [
+      "breadcrumb",
+      "navigation",
+      "nav",
+      "truncation",
+      "collapse",
+      "accessible"
+    ],
+    "description": "Accessible breadcrumb navigation with chevron or slash separators and truncation plus an expandable collapse for long paths.",
+    "deps": [],
+    "files": [
+      "Breadcrumb.tsx"
+    ],
+    "usage": "Render <Breadcrumb items={[{ label: 'Home', href: '/' }, { label: 'Current page' }]} />. Add maxItems={3} to collapse long trails and truncateLabels to cap crumb width.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
+    "path": "components/react/breadcrumb",
+    "kind": "component",
+    "preview": "components/react/breadcrumb/preview.html"
+  },
+  {
+    "name": "Button Set",
+    "slug": "button-set",
+    "category": "react",
+    "tier": "practical",
+    "tags": [
+      "button",
+      "variants",
+      "loading",
+      "disabled",
+      "icon",
+      "accessible",
+      "tailwind"
+    ],
+    "description": "A complete button system with primary, secondary, ghost, outline and destructive variants, three sizes, loading and disabled states and full icon support.",
+    "deps": [],
+    "files": [
+      "ButtonSet.tsx"
+    ],
+    "usage": "Import ButtonSet and render <ButtonSet variant=\"primary\" size=\"md\">Save</ButtonSet>. Pick variant (primary|secondary|ghost|outline|destructive) and size (sm|md|lg). Add loading to show a spinner and block clicks (optionally loadingText), disabled to disable, leftIcon/rightIcon for icons, iconOnly with an aria-label for square icon buttons, and fullWidth to stretch. It forwards refs and spreads all native button props.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
+    "path": "components/react/button-set",
+    "kind": "component",
+    "preview": "components/react/button-set/preview.html"
+  },
+  {
+    "name": "Canvas Particle Field",
+    "slug": "canvas-particle-field",
+    "category": "react",
+    "tier": "practical",
+    "tags": [
+      "particles",
+      "canvas",
+      "interactive",
+      "depth",
+      "mouse",
+      "background"
+    ],
+    "description": "Lightweight canvas particles that drift and gently react to the cursor, adding depth and motion behind hero content.",
+    "deps": [],
+    "files": [
+      "CanvasParticleField.tsx"
+    ],
+    "usage": "Render <CanvasParticleField /> as the first child of a position:relative hero section so it sits absolutely behind your content. Tune quantity, size, color, vx/vy drift, staticity, and ease to dial in the depth and mouse responsiveness.",
+    "source": "https://magicui.design/docs/components/particles",
+    "license": "MIT — reimplemented (inspired by Magic UI, magicuidesign/magicui)",
+    "path": "components/react/canvas-particle-field",
+    "kind": "component",
+    "preview": "components/react/canvas-particle-field/preview.html"
+  },
+  {
+    "name": "Card",
+    "slug": "card",
+    "category": "react",
     "tier": "practical",
     "tags": [
       "card",
-      "3d",
-      "tilt",
-      "hover",
-      "parallax"
+      "surface",
+      "container",
+      "media",
+      "composable",
+      "hover-lift"
     ],
-    "description": "A card that lifts and tilts in 3D perspective on hover, with inner layers floating at different depths and a sheen sweep.",
-    "deps": [],
+    "description": "Versatile, composable content card with optional media, header, body, and footer slots, three surface variants, and an accessible hover-lift link mode.",
+    "deps": [
+      "react",
+      "tailwindcss"
+    ],
     "files": [
-      "styles.css",
-      "index.html"
+      "Card.tsx"
     ],
-    "usage": "Wrap the card in .scs-tilt (sets perspective). Inner content gets .scs-tilt__layer plus a depth class; tune the rotateX/rotateY and translateZ values to taste.",
-    "path": "components/css/tilt-card-3d",
-    "preview": "components/css/tilt-card-3d/preview.html"
+    "usage": "Compose <Card hoverLift><CardMedia .../><CardHeader title=\"...\" /><CardBody>...</CardBody><CardFooter>...</CardFooter></Card>, or pass href to make the whole card one keyboard-reachable link.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
+    "path": "components/react/card",
+    "kind": "component",
+    "preview": "components/react/card/preview.html"
   },
   {
-    "name": "Animated Details Accordion",
-    "slug": "details-accordion",
-    "category": "css",
+    "name": "Choice Controls",
+    "slug": "choice-controls",
+    "category": "react",
+    "tier": "practical",
+    "tags": [
+      "checkbox",
+      "radio",
+      "toggle",
+      "switch",
+      "form",
+      "accessible",
+      "controls"
+    ],
+    "description": "A styled checkbox, radio group, and toggle switch sharing one Sand & Surf design language, fully accessible with ARIA, keyboard support, and visible focus rings.",
+    "deps": [
+      "react",
+      "tailwindcss"
+    ],
+    "files": [
+      "ChoiceControls.tsx"
+    ],
+    "usage": "import ChoiceControls, { Checkbox, RadioGroup, Radio, Toggle } from \"@/components/ChoiceControls\"; then render <Checkbox label=\"…\" />, a <RadioGroup label=\"…\"><Radio value=\"…\" label=\"…\" /></RadioGroup>, or <Toggle label=\"…\" />.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
+    "path": "components/react/choice-controls",
+    "kind": "component",
+    "preview": "components/react/choice-controls/preview.html"
+  },
+  {
+    "name": "Command Palette",
+    "slug": "command-palette",
+    "category": "react",
+    "tier": "showcase",
+    "tags": [
+      "command-palette",
+      "cmdk",
+      "search",
+      "modal",
+      "keyboard"
+    ],
+    "description": "A ⌘K-style command palette modal with fuzzy filtering, keyboard navigation, and grouped commands.",
+    "deps": [
+      "react",
+      "tailwindcss"
+    ],
+    "files": [
+      "CommandPalette.tsx"
+    ],
+    "usage": "Render <CommandPalette commands={...} /> anywhere; press ⌘K / Ctrl+K to open. Pass your own commands array.",
+    "path": "components/react/command-palette",
+    "kind": "component",
+    "preview": "components/react/command-palette/preview.html"
+  },
+  {
+    "name": "Confetti Button",
+    "slug": "confetti-button",
+    "category": "react",
+    "tier": "practical",
+    "tags": [
+      "confetti",
+      "button",
+      "celebration",
+      "feedback",
+      "canvas",
+      "delight"
+    ],
+    "description": "A button that bursts confetti from its own position on click to celebrate signups, purchases and other success moments.",
+    "deps": [
+      "canvas-confetti"
+    ],
+    "files": [
+      "ConfettiButton.tsx"
+    ],
+    "usage": "Render <ConfettiButton>Sign up</ConfettiButton> wherever you want a celebratory click; on press it reads its own bounding rect, normalises the centre to viewport-origin coordinates and fires canvas-confetti from that exact spot. Tune particleCount, spread, angle, startVelocity, gravity, scalar and colors, and use onConfetti for follow-up logic.",
+    "source": "https://magicui.design/docs/components/confetti",
+    "license": "MIT (Magic UI; wraps MIT canvas-confetti) — reimplemented cleanly with credit",
+    "path": "components/react/confetti-button",
+    "kind": "component",
+    "preview": "components/react/confetti-button/preview.html"
+  },
+  {
+    "name": "Dark Mode Toggle",
+    "slug": "dark-mode-toggle",
+    "category": "react",
+    "tier": "practical",
+    "tags": [
+      "dark-mode",
+      "theme",
+      "toggle",
+      "accessibility",
+      "sun-moon"
+    ],
+    "description": "An accessible animated theme toggle that morphs a sun into a moon and persists the choice to localStorage.",
+    "deps": [
+      "react",
+      "tailwindcss"
+    ],
+    "files": [
+      "DarkModeToggle.tsx"
+    ],
+    "usage": "Render <DarkModeToggle />; it toggles the `dark` class on <html> and remembers the preference.",
+    "path": "components/react/dark-mode-toggle",
+    "kind": "component",
+    "preview": "components/react/dark-mode-toggle/preview.html"
+  },
+  {
+    "name": "Data Table",
+    "slug": "data-table",
+    "category": "react",
+    "tier": "practical",
+    "tags": [
+      "table",
+      "data-table",
+      "sortable",
+      "sticky-header",
+      "empty-state"
+    ],
+    "description": "A clean, accessible data table with sortable columns, zebra striping, hover rows, a sticky header, loading skeletons, and an empty state.",
+    "deps": [],
+    "files": [
+      "DataTable.tsx"
+    ],
+    "usage": "Import DataTable and pass typed columns + data: <DataTable columns={columns} data={rows} title=\"Customers\" stickyHeader maxHeight=\"24rem\" />. Sorting is uncontrolled by default; pass sort + onSortChange to control it.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
+    "path": "components/react/data-table",
+    "kind": "component",
+    "preview": "components/react/data-table/preview.html"
+  },
+  {
+    "name": "Feature Accordion",
+    "slug": "feature-accordion",
+    "category": "react",
     "tier": "practical",
     "tags": [
       "accordion",
-      "details",
-      "summary",
-      "grid-template-rows",
-      "no-js",
-      "accessible"
+      "features",
+      "faq",
+      "disclosure",
+      "animation"
     ],
-    "description": "A native, accessible accordion that smoothly animates open and closed from height 0 to auto using the details element with zero JavaScript.",
+    "description": "A single-open accordion of features with smooth grid-based height animation and accessible disclosure semantics.",
+    "deps": [
+      "react",
+      "tailwindcss"
+    ],
+    "files": [
+      "FeatureAccordion.tsx"
+    ],
+    "usage": "Render <FeatureAccordion items={[...]} /> or use the built-in sample features.",
+    "path": "components/react/feature-accordion",
+    "kind": "component",
+    "preview": "components/react/feature-accordion/preview.html"
+  },
+  {
+    "name": "Gradient Mesh Hero",
+    "slug": "gradient-mesh-hero",
+    "category": "react",
+    "tier": "showcase",
+    "tags": [
+      "hero",
+      "gradient",
+      "mesh",
+      "blob",
+      "animation",
+      "framer-motion"
+    ],
+    "description": "A hero section with an animated gradient-mesh blob background, grain overlay, and a bold headline.",
+    "deps": [
+      "react",
+      "tailwindcss",
+      "framer-motion"
+    ],
+    "files": [
+      "GradientMeshHero.tsx"
+    ],
+    "usage": "Render <GradientMeshHero /> at the top of a page; pass eyebrow/title/subtitle/CTA props to customize.",
+    "path": "components/react/gradient-mesh-hero",
+    "kind": "component",
+    "preview": "components/react/gradient-mesh-hero/preview.html"
+  },
+  {
+    "name": "Hover Glow Border",
+    "slug": "hover-glow-border",
+    "category": "react",
+    "tier": "showcase",
+    "tags": [
+      "glow",
+      "border",
+      "cursor",
+      "conic-gradient",
+      "card",
+      "cursor-style"
+    ],
+    "description": "A Cursor-style border glow that orbits any card and concentrates toward the mouse pointer, adapting to any container size.",
+    "deps": [
+      "motion",
+      "tailwindcss"
+    ],
+    "files": [
+      "HoverGlowBorder.tsx"
+    ],
+    "usage": "Wrap any card or panel in <HoverGlowBorder> and give the inner element a matching rounded background; tune spread, proximity, inactiveZone and movementDuration to shape how tightly the glow chases the cursor.",
+    "source": "https://ui.aceternity.com/components/glowing-effect",
+    "license": "MIT (Aceternity UI) — reimplemented cleanly with credit",
+    "path": "components/react/hover-glow-border",
+    "kind": "component",
+    "preview": "components/react/hover-glow-border/preview.html"
+  },
+  {
+    "name": "Input Field",
+    "slug": "input-field",
+    "category": "react",
+    "tier": "practical",
+    "tags": [
+      "input",
+      "form",
+      "text-field",
+      "floating-label",
+      "validation",
+      "accessibility"
+    ],
+    "description": "An accessible text input with floating or standard label, helper text, error state, leading/trailing icons, and a required indicator.",
     "deps": [],
     "files": [
-      "styles.css",
-      "index.html"
+      "InputField.tsx"
     ],
-    "usage": "Copy styles.css and the markup from index.html, then give every <details> in a group the same name attribute for exclusive (one-open-at-a-time) behaviour. Add the open attribute to whichever panel should start expanded.",
-    "source": "https://www.builder.io/blog/animated-css-accordions",
-    "license": "Builder.io blog article — code shared for reuse; details/::details-content are native HTML/CSS. Reimplemented cleanly.",
-    "path": "components/css/details-accordion",
-    "preview": "components/css/details-accordion/preview.html"
+    "usage": "import InputField from './InputField'; <InputField label=\"Email\" type=\"email\" required leadingIcon={<MailIcon />} helperText=\"We'll never share it.\" error={errors.email} />",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
+    "path": "components/react/input-field",
+    "kind": "component",
+    "preview": "components/react/input-field/preview.html"
+  },
+  {
+    "name": "Lamp Effect",
+    "slug": "lamp-effect",
+    "category": "react",
+    "tier": "showcase",
+    "tags": [
+      "lamp",
+      "spotlight",
+      "section-header",
+      "conic-gradient",
+      "linear-style",
+      "hero"
+    ],
+    "description": "A Linear-inspired overhead lamp glow that fans light down onto a section header, with the headline rising into the beam on scroll.",
+    "deps": [
+      "motion",
+      "tailwindcss"
+    ],
+    "files": [
+      "LampEffect.tsx"
+    ],
+    "usage": "Render <LampEffect title=\"...\" subtitle=\"...\" /> as a section header; pass a `glow` color to retint the beam and optional children for CTAs.",
+    "source": "https://ui.aceternity.com/components/lamp-effect",
+    "license": "MIT (Aceternity UI) — reimplemented cleanly with credit",
+    "path": "components/react/lamp-effect",
+    "kind": "component",
+    "preview": "components/react/lamp-effect/preview.html"
+  },
+  {
+    "name": "Logo Marquee",
+    "slug": "logo-marquee",
+    "category": "react",
+    "tier": "practical",
+    "tags": [
+      "marquee",
+      "logos",
+      "infinite-scroll",
+      "social-proof",
+      "ticker"
+    ],
+    "description": "An infinite horizontal marquee of client/partner logos with edge fade and pause-on-hover.",
+    "deps": [
+      "react",
+      "tailwindcss"
+    ],
+    "files": [
+      "LogoMarquee.tsx"
+    ],
+    "usage": "Render <LogoMarquee logos={[...]} /> with text or node logos; defaults to sample wordmarks.",
+    "path": "components/react/logo-marquee",
+    "kind": "component",
+    "preview": "components/react/logo-marquee/preview.html"
+  },
+  {
+    "name": "macOS Dock",
+    "slug": "macos-dock",
+    "category": "react",
+    "tier": "showcase",
+    "tags": [
+      "dock",
+      "navigation",
+      "magnify",
+      "macos",
+      "hover",
+      "toolbar"
+    ],
+    "description": "A macOS-style icon dock whose items magnify and lift as the cursor approaches, for portfolio nav bars and app launchers.",
+    "deps": [
+      "motion",
+      "tailwindcss"
+    ],
+    "files": [
+      "MacosDock.tsx"
+    ],
+    "usage": "Wrap a row of <DockItem label=\"...\"> icons in <MacosDock>; the dock tracks the cursor's X position and springs each icon's size so neighbours scale in a smooth bell curve around the hovered icon. Tune baseSize, maxSize, and distance props to taste.",
+    "source": "https://magicui.design/docs/components/dock",
+    "license": "MIT (Magic UI) — reimplemented cleanly with credit",
+    "path": "components/react/macos-dock",
+    "kind": "component",
+    "preview": "components/react/macos-dock/preview.html"
+  },
+  {
+    "name": "Pagination",
+    "slug": "pagination",
+    "category": "react",
+    "tier": "practical",
+    "tags": [
+      "pagination",
+      "navigation",
+      "pager",
+      "ellipsis",
+      "accessible"
+    ],
+    "description": "Accessible pagination control with prev/next, numbered pages, smart ellipsis truncation, and disabled edges.",
+    "deps": [],
+    "files": [
+      "Pagination.tsx"
+    ],
+    "usage": "Render <Pagination page={page} totalPages={20} onPageChange={setPage} /> and store the active page in state.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
+    "path": "components/react/pagination",
+    "kind": "component",
+    "preview": "components/react/pagination/preview.html"
+  },
+  {
+    "name": "Pricing Toggle",
+    "slug": "pricing-toggle",
+    "category": "react",
+    "tier": "practical",
+    "tags": [
+      "pricing",
+      "toggle",
+      "plans",
+      "billing",
+      "cards"
+    ],
+    "description": "Pricing cards with a monthly/annual switch that animates the displayed price and shows annual savings.",
+    "deps": [
+      "react",
+      "tailwindcss"
+    ],
+    "files": [
+      "PricingToggle.tsx"
+    ],
+    "usage": "Render <PricingToggle plans={...} /> or use the built-in sample tiers.",
+    "path": "components/react/pricing-toggle",
+    "kind": "component",
+    "preview": "components/react/pricing-toggle/preview.html"
+  },
+  {
+    "name": "Segmented Control",
+    "slug": "segmented-control",
+    "category": "react",
+    "tier": "practical",
+    "tags": [
+      "segmented-control",
+      "tabs",
+      "switcher",
+      "toggle",
+      "radiogroup",
+      "ios"
+    ],
+    "description": "iOS-style segmented control / tab switcher with an animated sliding active pill, full keyboard support, and a WAI-ARIA radiogroup.",
+    "deps": [
+      "react",
+      "tailwindcss"
+    ],
+    "files": [
+      "SegmentedControl.tsx"
+    ],
+    "usage": "Render <SegmentedControl options={[{value:'list',label:'List'},{value:'grid',label:'Grid'}]} value={value} onChange={setValue} aria-label=\"View mode\" />.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
+    "path": "components/react/segmented-control",
+    "kind": "component",
+    "preview": "components/react/segmented-control/preview.html"
+  },
+  {
+    "name": "Select Menu",
+    "slug": "select-menu",
+    "category": "react",
+    "tier": "practical",
+    "tags": [
+      "select",
+      "dropdown",
+      "combobox",
+      "listbox",
+      "accessible",
+      "keyboard",
+      "search"
+    ],
+    "description": "An accessible custom select/dropdown with full keyboard navigation, optional search filtering, and a checkmark on the selected option.",
+    "deps": [],
+    "files": [
+      "SelectMenu.tsx"
+    ],
+    "usage": "Import SelectMenu and pass an options array plus an onChange handler: <SelectMenu options={[{value:'bonaire',label:'Bonaire'}]} onChange={(v)=>setValue(v)} />. Add searchable to enable type-to-filter.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
+    "path": "components/react/select-menu",
+    "kind": "component",
+    "preview": "components/react/select-menu/preview.html"
+  },
+  {
+    "name": "Shrinking Sticky Navbar",
+    "slug": "shrinking-sticky-navbar",
+    "category": "react",
+    "tier": "practical",
+    "tags": [
+      "navbar",
+      "sticky",
+      "scroll",
+      "header",
+      "blur"
+    ],
+    "description": "A sticky navbar that condenses its height and gains a backdrop blur once the page is scrolled.",
+    "deps": [
+      "react",
+      "tailwindcss"
+    ],
+    "files": [
+      "ShrinkingStickyNavbar.tsx"
+    ],
+    "usage": "Render <ShrinkingStickyNavbar /> at the top of your layout; it manages its own scroll listener.",
+    "path": "components/react/shrinking-sticky-navbar",
+    "kind": "component",
+    "preview": "components/react/shrinking-sticky-navbar/preview.html"
+  },
+  {
+    "name": "Spotlight Card",
+    "slug": "spotlight-card",
+    "category": "react",
+    "tier": "practical",
+    "tags": [
+      "card",
+      "spotlight",
+      "hover",
+      "radial-gradient",
+      "pointer-tracking",
+      "feature"
+    ],
+    "description": "A card that reveals a soft radial spotlight following the cursor on hover, ideal for premium-but-safe feature and pricing grids.",
+    "deps": [
+      "motion",
+      "tailwindcss"
+    ],
+    "files": [
+      "SpotlightCard.tsx"
+    ],
+    "usage": "Import SpotlightCard and pass title/description/icon (or your own children); arrange several in a grid for feature or pricing layouts. Move the cursor over a card to reveal the spotlight.",
+    "source": "https://ui.aceternity.com/components/card-spotlight",
+    "license": "MIT (Aceternity UI) — reimplemented with credit",
+    "path": "components/react/spotlight-card",
+    "kind": "component",
+    "preview": "components/react/spotlight-card/preview.html"
+  },
+  {
+    "name": "Testimonial Carousel",
+    "slug": "testimonial-carousel",
+    "category": "react",
+    "tier": "practical",
+    "tags": [
+      "testimonial",
+      "carousel",
+      "slider",
+      "reviews",
+      "social-proof"
+    ],
+    "description": "An auto-advancing testimonial slider with dot navigation, pause-on-hover, and smooth fade/slide transitions.",
+    "deps": [
+      "react",
+      "tailwindcss"
+    ],
+    "files": [
+      "TestimonialCarousel.tsx"
+    ],
+    "usage": "Render <TestimonialCarousel testimonials={...} /> or use the built-in sample quotes.",
+    "path": "components/react/testimonial-carousel",
+    "kind": "component",
+    "preview": "components/react/testimonial-carousel/preview.html"
+  },
+  {
+    "name": "Text Shimmer",
+    "slug": "text-shimmer",
+    "category": "react",
+    "tier": "practical",
+    "tags": [
+      "text",
+      "shimmer",
+      "shine",
+      "gradient",
+      "badge",
+      "loading"
+    ],
+    "description": "Text with a soft light sheen sweeping across it left to right, perfect for announcement pills, badges and subtle loading labels.",
+    "deps": [
+      "tailwindcss"
+    ],
+    "files": [
+      "TextShimmer.tsx"
+    ],
+    "usage": "Import TextShimmer and wrap any short string, e.g. <TextShimmer>Now in beta</TextShimmer> inside a pill, or set as=\"label\" with a longer duration for a subtle loading label. Tune duration, spread, baseColor and shineColor via props.",
+    "source": "https://magicui.design/docs/components/animated-shiny-text",
+    "license": "MIT (Magic UI) — reimplemented cleanly with credit",
+    "path": "components/react/text-shimmer",
+    "kind": "component",
+    "preview": "components/react/text-shimmer/preview.html"
+  },
+  {
+    "name": "Toast",
+    "slug": "toast",
+    "category": "react",
+    "tier": "practical",
+    "tags": [
+      "toast",
+      "notification",
+      "provider",
+      "hook",
+      "snackbar",
+      "alert",
+      "accessible"
+    ],
+    "description": "A toast notification system with a provider plus useToast() hook, stacked toasts, four variants, auto-dismiss with pause-on-hover, and enter/exit animation.",
+    "deps": [],
+    "files": [
+      "Toast.tsx"
+    ],
+    "usage": "Wrap your app in <ToastProvider position=\"bottom-right\" max={4}> then call const { toast } = useToast(); toast({ title, description, variant, duration, action }).",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
+    "path": "components/react/toast",
+    "kind": "component",
+    "preview": "components/react/toast/preview.html"
+  },
+  {
+    "name": "Tooltip",
+    "slug": "tooltip",
+    "category": "react",
+    "tier": "practical",
+    "tags": [
+      "tooltip",
+      "overlay",
+      "accessibility",
+      "hover",
+      "focus",
+      "placement"
+    ],
+    "description": "An accessible tooltip that opens on hover and keyboard focus with viewport-aware smart placement and a small pointing arrow.",
+    "deps": [],
+    "files": [
+      "Tooltip.tsx"
+    ],
+    "usage": "Wrap any focusable element: <Tooltip content=\"Copy link\"><button>Copy</button></Tooltip>. Set placement, delay, and offset as needed.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
+    "path": "components/react/tooltip",
+    "kind": "component",
+    "preview": "components/react/tooltip/preview.html"
+  },
+  {
+    "name": "WebGL Mesh Gradient Plasma",
+    "slug": "webgl-mesh-gradient-plasma",
+    "category": "react",
+    "tier": "showcase",
+    "tags": [
+      "mesh",
+      "gradient",
+      "plasma",
+      "webgl",
+      "shader",
+      "hero"
+    ],
+    "description": "A flowing WebGL mesh-gradient of color spots that swirl and distort like plasma, for a high-end animated hero canvas.",
+    "deps": [
+      "@paper-design/shaders-react"
+    ],
+    "files": [
+      "MeshGradientPlasma.tsx"
+    ],
+    "usage": "Wrap your hero content in <MeshGradientPlasma> to lay a live GLSL plasma canvas behind it; tune colors, speed, distortion, swirl, grainMixer and grainOverlay to taste. It freezes on a still frame automatically when prefers-reduced-motion is set.",
+    "source": "https://shaders.paper.design/mesh-gradient",
+    "license": "PolyForm Shield — free for commercial/non-commercial use unless it competes with Paper; wrapper code reimplemented cleanly with credit",
+    "path": "components/react/webgl-mesh-gradient-plasma",
+    "kind": "component",
+    "preview": "components/react/webgl-mesh-gradient-plasma/preview.html"
   },
   {
     "name": "Animated Gradient Mesh",
@@ -91,6 +915,7 @@
     ],
     "usage": "Wrap your section in a .scs-mesh element. The mesh fills the container; give the container a height (or use it full-screen) and place your content inside.",
     "path": "components/css/animated-gradient-mesh",
+    "kind": "component",
     "preview": "components/css/animated-gradient-mesh/preview.html"
   },
   {
@@ -115,7 +940,34 @@
     "source": "https://web.dev/articles/speedy-css-tip-animated-gradient-text",
     "license": "web.dev article (Adam Argyle), content under CC-BY 4.0; technique is native CSS — reimplemented",
     "path": "components/css/animated-text-gradient",
+    "kind": "component",
     "preview": "components/css/animated-text-gradient/preview.html"
+  },
+  {
+    "name": "Sliding Underline Link",
+    "slug": "animated-underline",
+    "category": "css",
+    "tier": "practical",
+    "tags": [
+      "underline",
+      "hover",
+      "link",
+      "background-size",
+      "micro-interaction",
+      "multiline"
+    ],
+    "description": "A link underline that wipes in on hover and correctly wraps across multiple lines, using an animated background-size instead of a transform.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "index.html"
+    ],
+    "usage": "Add the styles.css to your stylesheet and apply the .su-link class to any anchor; tune color and thickness per instance with the --su-color and --su-thickness custom properties, or use the --reverse, --bold, and --retract modifiers.",
+    "source": "https://css-irl.info/animating-underlines/",
+    "license": "CSS { In Real Life } blog (Michelle Barker) — educational snippet, reimplemented cleanly",
+    "path": "components/css/animated-underline",
+    "kind": "component",
+    "preview": "components/css/animated-underline/preview.html"
   },
   {
     "name": "Aurora Background",
@@ -137,32 +989,8 @@
     ],
     "usage": "Wrap content in .scs-aurora and include the .scs-aurora__lights layer with its four spans. Give the wrapper a height; content sits above the aurora automatically.",
     "path": "components/css/aurora-background",
+    "kind": "component",
     "preview": "components/css/aurora-background/preview.html"
-  },
-  {
-    "name": "Auto-Invert Difference Cursor",
-    "slug": "difference-blend-cursor",
-    "category": "css",
-    "tier": "showcase",
-    "tags": [
-      "cursor",
-      "mix-blend-mode",
-      "difference",
-      "invert",
-      "interactive",
-      "monochrome"
-    ],
-    "description": "A custom circular cursor that auto-inverts whatever it passes over using mix-blend-mode: difference, so it stays legible on any background.",
-    "deps": [],
-    "files": [
-      "styles.css",
-      "index.html"
-    ],
-    "usage": "Link styles.css, drop the single .scs-difference-cursor element on the page, then paste the script that feeds --x/--y position and toggles state classes; add .scs-cursor-target to any element you want the cursor to grow over (native links/buttons are auto-detected).",
-    "source": "https://css-tricks.com/taming-blend-modes-difference-and-exclusion/",
-    "license": "Public-domain CSS idiom — mix-blend-mode is native CSS; reimplemented cleanly from the CSS-Tricks concept.",
-    "path": "components/css/difference-blend-cursor",
-    "preview": "components/css/difference-blend-cursor/preview.html"
   },
   {
     "name": "Container-Query Adaptive Card",
@@ -187,6 +1015,7 @@
     "source": "https://web.dev/blog/cq-stable",
     "license": "web.dev / content under CC-BY 4.0 — reimplemented; container queries are native Baseline CSS",
     "path": "components/css/container-query-card",
+    "kind": "component",
     "preview": "components/css/container-query-card/preview.html"
   },
   {
@@ -212,32 +1041,60 @@
     "source": "https://tympanus.net/codrops/2024/01/17/a-practical-introduction-to-scroll-driven-animations-with-css-scroll-and-view/",
     "license": "Public-domain CSS idiom — reimplemented; technique is a native CSS feature (no library).",
     "path": "components/css/css-scroll-reveal-timeline",
+    "kind": "component",
     "preview": "components/css/css-scroll-reveal-timeline/preview.html"
   },
   {
-    "name": "CSS-Only Snap Carousel",
-    "slug": "scroll-snap-carousel",
+    "name": "Animated Details Accordion",
+    "slug": "details-accordion",
     "category": "css",
     "tier": "practical",
     "tags": [
-      "carousel",
-      "scroll-snap",
-      "scroll-marker",
-      "scroll-button",
+      "accordion",
+      "details",
+      "summary",
+      "grid-template-rows",
       "no-js",
       "accessible"
     ],
-    "description": "A swipeable, paginated carousel with prev/next buttons and dot markers built with zero JavaScript via scroll-snap plus the new ::scroll-button and ::scroll-marker pseudo-elements.",
+    "description": "A native, accessible accordion that smoothly animates open and closed from height 0 to auto using the details element with zero JavaScript.",
     "deps": [],
     "files": [
       "styles.css",
       "index.html"
     ],
-    "usage": "Copy styles.css into your project and mark up a .snap-carousel wrapper containing a .snap-carousel__track list with one .snap-carousel__slide per item (see index.html). The browser generates the prev/next buttons and dot pagination automatically — no scripts, no extra markup.",
-    "source": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Overflow/Carousels",
-    "license": "Public-domain CSS idiom — reimplemented from MDN docs (CC-BY-SA 2.5); CSS Overflow L5 features are native and unencumbered",
-    "path": "components/css/scroll-snap-carousel",
-    "preview": "components/css/scroll-snap-carousel/preview.html"
+    "usage": "Copy styles.css and the markup from index.html, then give every <details> in a group the same name attribute for exclusive (one-open-at-a-time) behaviour. Add the open attribute to whichever panel should start expanded.",
+    "source": "https://www.builder.io/blog/animated-css-accordions",
+    "license": "Builder.io blog article — code shared for reuse; details/::details-content are native HTML/CSS. Reimplemented cleanly.",
+    "path": "components/css/details-accordion",
+    "kind": "component",
+    "preview": "components/css/details-accordion/preview.html"
+  },
+  {
+    "name": "Auto-Invert Difference Cursor",
+    "slug": "difference-blend-cursor",
+    "category": "css",
+    "tier": "showcase",
+    "tags": [
+      "cursor",
+      "mix-blend-mode",
+      "difference",
+      "invert",
+      "interactive",
+      "monochrome"
+    ],
+    "description": "A custom circular cursor that auto-inverts whatever it passes over using mix-blend-mode: difference, so it stays legible on any background.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "index.html"
+    ],
+    "usage": "Link styles.css, drop the single .scs-difference-cursor element on the page, then paste the script that feeds --x/--y position and toggles state classes; add .scs-cursor-target to any element you want the cursor to grow over (native links/buttons are auto-detected).",
+    "source": "https://css-tricks.com/taming-blend-modes-difference-and-exclusion/",
+    "license": "Public-domain CSS idiom — mix-blend-mode is native CSS; reimplemented cleanly from the CSS-Tricks concept.",
+    "path": "components/css/difference-blend-cursor",
+    "kind": "component",
+    "preview": "components/css/difference-blend-cursor/preview.html"
   },
   {
     "name": "Glassmorphism Card",
@@ -259,6 +1116,7 @@
     ],
     "usage": "Copy the markup from index.html and styles.css. Place the card over a photo or gradient background so the backdrop-blur has something to frost.",
     "path": "components/css/glassmorphism-card",
+    "kind": "component",
     "preview": "components/css/glassmorphism-card/preview.html"
   },
   {
@@ -281,6 +1139,7 @@
     ],
     "usage": "Option A: drop a .scs-blob div for a self-morphing blob (no SVG). Option B: paste the hidden SVG goo filter once, then use .scs-goo with child spans for circles that gooily merge.",
     "path": "components/css/gooey-blob",
+    "kind": "component",
     "preview": "components/css/gooey-blob/preview.html"
   },
   {
@@ -303,6 +1162,7 @@
     ],
     "usage": "Add class .scs-gradient-border to any container and put content inside. Tune --scs-border-width and --scs-radius; recolor via the conic-gradient stops. Uses @property to animate the angle.",
     "path": "components/css/gradient-border-glow",
+    "kind": "component",
     "preview": "components/css/gradient-border-glow/preview.html"
   },
   {
@@ -325,7 +1185,34 @@
     ],
     "usage": "Add class .scs-grain to any positioned section. Optional modifiers: .scs-grain--film (heavier) and .scs-grain--animated (flicker).",
     "path": "components/css/grain-noise-overlay",
+    "kind": "component",
     "preview": "components/css/grain-noise-overlay/preview.html"
+  },
+  {
+    "name": ":has() Sibling Dim Spotlight",
+    "slug": "has-sibling-spotlight",
+    "category": "css",
+    "tier": "showcase",
+    "tags": [
+      ":has()",
+      "parent-selector",
+      "hover",
+      "interactive",
+      "list",
+      "no-js"
+    ],
+    "description": "Hovering any item in a grid dims every sibling and lifts the focused one, a focus-spotlight interaction built with pure CSS and no JavaScript.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "index.html"
+    ],
+    "usage": "Drop styles.css into your stylesheet and wrap focusable cards in a .spotlight-grid using the markup from index.html. Hover or keyboard-focus any .spotlight-card and its siblings dim while it lifts — no script required.",
+    "source": "https://blog.logrocket.com/blog/different-ways-to-use-css-has/",
+    "license": "LogRocket Blog article — code snippets free to reuse; reimplemented cleanly. :has() is native Baseline CSS.",
+    "path": "components/css/has-sibling-spotlight",
+    "kind": "component",
+    "preview": "components/css/has-sibling-spotlight/preview.html"
   },
   {
     "name": "Heart Like Burst",
@@ -350,6 +1237,7 @@
     "source": "https://css-tricks.com/recreating-the-twitter-heart-animation/",
     "license": "CSS-Tricks tutorial by Ana Tudor — technique reimplemented cleanly, shared for learning",
     "path": "components/css/heart-like-burst",
+    "kind": "component",
     "preview": "components/css/heart-like-burst/preview.html"
   },
   {
@@ -372,6 +1260,7 @@
     ],
     "usage": "Duplicate the content group twice inside the track (mark the copy aria-hidden). Tune speed/spacing with the --scs-marquee-duration and --scs-marquee-gap variables; add .scs-marquee--reverse to flip direction.",
     "path": "components/css/marquee",
+    "kind": "component",
     "preview": "components/css/marquee/preview.html"
   },
   {
@@ -394,6 +1283,7 @@
     ],
     "usage": "Add class .scs-neon-btn to a <button> or <a>. Change glow color via the --scs-neon variable or the --sand / --violet modifier classes.",
     "path": "components/css/neon-glow-button",
+    "kind": "component",
     "preview": "components/css/neon-glow-button/preview.html"
   },
   {
@@ -420,7 +1310,34 @@
     "source": "https://freefrontend.com/code/pure-css-synthwave-80s-animation-2026-01-20/",
     "license": "MIT — reimplemented from scratch; technique (perspective grid via repeating gradients) is an unencumbered public-domain CSS idiom",
     "path": "components/css/retro-grid-floor",
+    "kind": "component",
     "preview": "components/css/retro-grid-floor/preview.html"
+  },
+  {
+    "name": "CSS-Only Snap Carousel",
+    "slug": "scroll-snap-carousel",
+    "category": "css",
+    "tier": "practical",
+    "tags": [
+      "carousel",
+      "scroll-snap",
+      "scroll-marker",
+      "scroll-button",
+      "no-js",
+      "accessible"
+    ],
+    "description": "A swipeable, paginated carousel with prev/next buttons and dot markers built with zero JavaScript via scroll-snap plus the new ::scroll-button and ::scroll-marker pseudo-elements.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "index.html"
+    ],
+    "usage": "Copy styles.css into your project and mark up a .snap-carousel wrapper containing a .snap-carousel__track list with one .snap-carousel__slide per item (see index.html). The browser generates the prev/next buttons and dot pagination automatically — no scripts, no extra markup.",
+    "source": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Overflow/Carousels",
+    "license": "Public-domain CSS idiom — reimplemented from MDN docs (CC-BY-SA 2.5); CSS Overflow L5 features are native and unencumbered",
+    "path": "components/css/scroll-snap-carousel",
+    "kind": "component",
+    "preview": "components/css/scroll-snap-carousel/preview.html"
   },
   {
     "name": "Shimmer Skeleton",
@@ -442,62 +1359,241 @@
     ],
     "usage": "Use .scs-skeleton with a shape helper (--text, --title, --avatar, --thumb, --btn) and optional width helper (--w90/--w75/--w60/--w40). Compose blocks to mirror your real content, then swap in content when loaded.",
     "path": "components/css/shimmer-skeleton",
+    "kind": "component",
     "preview": "components/css/shimmer-skeleton/preview.html"
   },
   {
-    "name": "Sliding Underline Link",
-    "slug": "animated-underline",
+    "name": "3D Tilt Card",
+    "slug": "tilt-card-3d",
     "category": "css",
     "tier": "practical",
     "tags": [
-      "underline",
+      "card",
+      "3d",
+      "tilt",
       "hover",
-      "link",
-      "background-size",
-      "micro-interaction",
-      "multiline"
+      "parallax"
     ],
-    "description": "A link underline that wipes in on hover and correctly wraps across multiple lines, using an animated background-size instead of a transform.",
+    "description": "A card that lifts and tilts in 3D perspective on hover, with inner layers floating at different depths and a sheen sweep.",
     "deps": [],
     "files": [
       "styles.css",
       "index.html"
     ],
-    "usage": "Add the styles.css to your stylesheet and apply the .su-link class to any anchor; tune color and thickness per instance with the --su-color and --su-thickness custom properties, or use the --reverse, --bold, and --retract modifiers.",
-    "source": "https://css-irl.info/animating-underlines/",
-    "license": "CSS { In Real Life } blog (Michelle Barker) — educational snippet, reimplemented cleanly",
-    "path": "components/css/animated-underline",
-    "preview": "components/css/animated-underline/preview.html"
+    "usage": "Wrap the card in .scs-tilt (sets perspective). Inner content gets .scs-tilt__layer plus a depth class; tune the rotateX/rotateY and translateZ values to taste.",
+    "path": "components/css/tilt-card-3d",
+    "kind": "component",
+    "preview": "components/css/tilt-card-3d/preview.html"
   },
   {
-    "name": "3D Scroll Text Cylinder",
-    "slug": "scroll-text-cylinder",
-    "category": "motion",
+    "name": "Copy to Clipboard",
+    "slug": "copy-to-clipboard",
+    "category": "vanilla",
+    "tier": "practical",
+    "tags": [
+      "clipboard",
+      "copy",
+      "button",
+      "feedback"
+    ],
+    "description": "A copy button that uses the async Clipboard API (with a legacy fallback) and shows an animated \"Copied!\" confirmation state.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "script.js"
+    ],
+    "usage": "Add a button with data-copy=\"text\" or data-copy-target=\"#selector\". script.js handles copying and the confirmation state automatically.",
+    "path": "components/vanilla/copy-to-clipboard",
+    "kind": "component",
+    "preview": "components/vanilla/copy-to-clipboard/preview.html"
+  },
+  {
+    "name": "Custom Cursor",
+    "slug": "custom-cursor",
+    "category": "vanilla",
     "tier": "showcase",
     "tags": [
-      "text",
-      "3d",
-      "scroll",
-      "perspective",
-      "cylinder",
-      "gsap",
-      "transform"
+      "cursor",
+      "pointer",
+      "interaction",
+      "lerp",
+      "trailing"
     ],
-    "description": "Lines of text wrapped around an invisible 3D cylinder that rotates through depth as you scroll, with no WebGL required.",
-    "deps": [
-      "gsap",
-      "gsap/ScrollTrigger",
-      "gsap/ScrollSmoother"
-    ],
+    "description": "A custom cursor with a precise dot and a lerp-trailing ring that grows and changes over links and buttons; hides the native cursor and disables itself on touch devices.",
+    "deps": [],
     "files": [
-      "animation.js",
-      "styles.css"
+      "styles.css",
+      "script.js"
     ],
-    "usage": "Wrap .cyl-line spans in a [data-cylinder] element inside a .cyl-stage section, then call initScrollCylinder(); tune via data-radius, data-arc, data-spin and data-axis (\"x\" tube or \"y\" carousel). ScrollSmoother is optional and auto-detected for inertia.",
-    "source": "https://tympanus.net/codrops/2025/11/04/creating-3d-scroll-driven-text-animations-with-css-and-gsap/",
-    "license": "MIT — reimplemented from the Codrops/Tympanus tutorial technique (free for personal and commercial use; GSAP plugins are now free).",
-    "path": "components/motion/scroll-text-cylinder",
-    "preview": "components/motion/scroll-text-cylinder/preview.html"
+    "usage": "Link styles.css and script.js, add <div class=\"cursor-dot\"></div><div class=\"cursor-ring\"></div> to the page. Mark interactive elements with [data-cursor] or rely on a/button auto-detection.",
+    "path": "components/vanilla/custom-cursor",
+    "kind": "component",
+    "preview": "components/vanilla/custom-cursor/preview.html"
+  },
+  {
+    "name": "Form Validation",
+    "slug": "form-validation",
+    "category": "vanilla",
+    "tier": "practical",
+    "tags": [
+      "form",
+      "validation",
+      "accessible",
+      "aria-invalid",
+      "inline-errors",
+      "no-library"
+    ],
+    "description": "Dependency-free accessible form validation with inline errors on blur and submit, aria-invalid, live-region messages, and first-invalid focus.",
+    "deps": [],
+    "files": [
+      "index.html",
+      "styles.css",
+      "script.js"
+    ],
+    "usage": "Add novalidate + data-validate to the form, give each .field__control an id and aria-describedby pointing at a .field__error region, declare native constraints (required, type, minlength, pattern) plus optional data-match and data-error-* messages. script.js auto-wires blur/submit validation, aria-invalid and focus management.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
+    "path": "components/vanilla/form-validation",
+    "kind": "component",
+    "preview": "components/vanilla/form-validation/preview.html"
+  },
+  {
+    "name": "Modal Dialog",
+    "slug": "modal",
+    "category": "vanilla",
+    "tier": "practical",
+    "tags": [
+      "modal",
+      "dialog",
+      "focus-trap",
+      "accessible",
+      "overlay"
+    ],
+    "description": "An accessible modal dialog with focus trap, Esc-to-close, backdrop-click close, body scroll lock, and a fade/scale-in animation.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "script.js"
+    ],
+    "usage": "Add the modal markup, give triggers data-modal-open=\"<id>\". script.js wires open/close, focus trapping and scroll lock automatically.",
+    "path": "components/vanilla/modal",
+    "kind": "component",
+    "preview": "components/vanilla/modal/preview.html"
+  },
+  {
+    "name": "Preloader",
+    "slug": "preloader",
+    "category": "vanilla",
+    "tier": "showcase",
+    "tags": [
+      "preloader",
+      "loader",
+      "intro",
+      "counter",
+      "page-load"
+    ],
+    "description": "A polished full-screen preloader with an animated count-up and progress sweep that slides away once the page has finished loading.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "script.js"
+    ],
+    "usage": "Paste the preloader markup as the first child of <body>, link styles.css and script.js. It removes itself on window load; reveals page content via a body class.",
+    "path": "components/vanilla/preloader",
+    "kind": "component",
+    "preview": "components/vanilla/preloader/preview.html"
+  },
+  {
+    "name": "Scrollspy Nav",
+    "slug": "scrollspy-nav",
+    "category": "vanilla",
+    "tier": "practical",
+    "tags": [
+      "scrollspy",
+      "navigation",
+      "intersection-observer",
+      "anchor",
+      "smooth-scroll"
+    ],
+    "description": "A navigation that highlights the current section using IntersectionObserver and smooth-scrolls to anchors on click.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "script.js"
+    ],
+    "usage": "Give nav links href=\"#section-id\" and a data-scrollspy attribute on the nav. Sections need matching ids. script.js observes them and toggles .is-active.",
+    "path": "components/vanilla/scrollspy-nav",
+    "kind": "component",
+    "preview": "components/vanilla/scrollspy-nav/preview.html"
+  },
+  {
+    "name": "Smooth Scroll",
+    "slug": "smooth-scroll",
+    "category": "vanilla",
+    "tier": "practical",
+    "tags": [
+      "scroll",
+      "smooth-scroll",
+      "lerp",
+      "raf",
+      "inertia"
+    ],
+    "description": "Lerp-based smooth (inertia) page scrolling driven by requestAnimationFrame, with automatic opt-out for prefers-reduced-motion and touch devices.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "script.js"
+    ],
+    "usage": "Link styles.css and script.js. Wrap page content in <div id=\"scroll-content\">...</div>. Disable by removing the script or via prefers-reduced-motion.",
+    "path": "components/vanilla/smooth-scroll",
+    "kind": "component",
+    "preview": "components/vanilla/smooth-scroll/preview.html"
+  },
+  {
+    "name": "Tabs",
+    "slug": "tabs",
+    "category": "vanilla",
+    "tier": "practical",
+    "tags": [
+      "tabs",
+      "accessible",
+      "aria",
+      "keyboard",
+      "indicator"
+    ],
+    "description": "Accessible tabs with full ARIA roles and arrow-key navigation, plus a sliding active indicator that animates between tabs.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "script.js"
+    ],
+    "usage": "Use the tablist/tab/tabpanel markup with matching ids and aria-controls. script.js handles selection, keyboard nav and the moving indicator.",
+    "path": "components/vanilla/tabs",
+    "kind": "component",
+    "preview": "components/vanilla/tabs/preview.html"
+  },
+  {
+    "name": "Theme Switcher",
+    "slug": "theme-switcher",
+    "category": "vanilla",
+    "tier": "practical",
+    "tags": [
+      "theme",
+      "dark-mode",
+      "css-variables",
+      "localstorage",
+      "prefers-color-scheme"
+    ],
+    "description": "A light/dark theme toggle built on CSS variables and a data-theme attribute that persists to localStorage and respects the OS prefers-color-scheme.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "script.js"
+    ],
+    "usage": "Add the inline no-flash snippet in <head>, a button with id=\"theme-toggle\", then link styles.css and script.js. Build your UI with the provided CSS variables.",
+    "path": "components/vanilla/theme-switcher",
+    "kind": "component",
+    "preview": "components/vanilla/theme-switcher/preview.html"
   },
   {
     "name": "Gravity Mouse Trail",
@@ -525,6 +1621,7 @@
     "source": "https://tympanus.net/codrops/2026/05/20/made-with-gsap-building-a-fun-gravity-based-mouse-trail/",
     "license": "Codrops/Tympanus license — free for personal and commercial use, no redistribution as-is. Reimplemented cleanly for saltycodestudio; no physics engine.",
     "path": "components/motion/gravity-mouse-trail",
+    "kind": "component",
     "preview": "components/motion/gravity-mouse-trail/preview.html"
   },
   {
@@ -551,6 +1648,7 @@
     ],
     "usage": "Wrap panels in .hscroll > .hscroll-track > .hscroll-panel and call initHorizontalGallery().",
     "path": "components/motion/horizontal-scroll-gallery",
+    "kind": "component",
     "preview": "components/motion/horizontal-scroll-gallery/preview.html"
   },
   {
@@ -578,6 +1676,7 @@
     ],
     "usage": "Provide a tall .scrub-section wrapping a pinned <canvas class=\"scrub-canvas\">, then call initScrubSequence().",
     "path": "components/motion/image-scrub-sequence",
+    "kind": "component",
     "preview": "components/motion/image-scrub-sequence/preview.html"
   },
   {
@@ -609,6 +1708,7 @@
     "source": "https://tympanus.net/codrops/2026/05/28/the-never-ending-story-building-a-seamless-infinite-scroll-experience-with-gsap-lenis/",
     "license": "Codrops/Tympanus — reimplemented; demo code free for personal and commercial use, not redistributed as-is.",
     "path": "components/motion/infinite-parallax-scroll",
+    "kind": "component",
     "preview": "components/motion/infinite-parallax-scroll/preview.html"
   },
   {
@@ -639,6 +1739,7 @@
     "source": "https://tympanus.net/codrops/2025/10/29/building-a-layered-zoom-scroll-effect-with-gsap-scrollsmoother-and-scrolltrigger/",
     "license": "Codrops tutorial — clean reimplementation; credits original Telescope site authors; GSAP plugins (incl. ScrollSmoother) are now free for everyone.",
     "path": "components/motion/layered-zoom-scroll",
+    "kind": "component",
     "preview": "components/motion/layered-zoom-scroll/preview.html"
   },
   {
@@ -664,6 +1765,7 @@
     ],
     "usage": "Add class .magnetic with an inner .magnetic-label, then call initMagneticButtons().",
     "path": "components/motion/magnetic-button",
+    "kind": "component",
     "preview": "components/motion/magnetic-button/preview.html"
   },
   {
@@ -690,6 +1792,7 @@
     ],
     "usage": "Give layer elements data-parallax-speed (e.g. -0.3 to 0.6) inside a .parallax-scene and call initParallaxLayers().",
     "path": "components/motion/parallax-layers",
+    "kind": "component",
     "preview": "components/motion/parallax-layers/preview.html"
   },
   {
@@ -716,6 +1819,7 @@
     ],
     "usage": "Wrap your section in .pin-section with a .pin-inner and stage elements; call initPinnedSection() after GSAP + ScrollTrigger load.",
     "path": "components/motion/pinned-scroll-section",
+    "kind": "component",
     "preview": "components/motion/pinned-scroll-section/preview.html"
   },
   {
@@ -742,7 +1846,39 @@
     ],
     "usage": "Add a <div class=\"scroll-progress\"><span class=\"scroll-progress-fill\"></span></div> at the top of body and call initScrollProgress().",
     "path": "components/motion/scroll-progress-bar",
+    "kind": "component",
     "preview": "components/motion/scroll-progress-bar/preview.html"
+  },
+  {
+    "name": "3D Scroll Text Cylinder",
+    "slug": "scroll-text-cylinder",
+    "category": "motion",
+    "tier": "showcase",
+    "tags": [
+      "text",
+      "3d",
+      "scroll",
+      "perspective",
+      "cylinder",
+      "gsap",
+      "transform"
+    ],
+    "description": "Lines of text wrapped around an invisible 3D cylinder that rotates through depth as you scroll, with no WebGL required.",
+    "deps": [
+      "gsap",
+      "gsap/ScrollTrigger",
+      "gsap/ScrollSmoother"
+    ],
+    "files": [
+      "animation.js",
+      "styles.css"
+    ],
+    "usage": "Wrap .cyl-line spans in a [data-cylinder] element inside a .cyl-stage section, then call initScrollCylinder(); tune via data-radius, data-arc, data-spin and data-axis (\"x\" tube or \"y\" carousel). ScrollSmoother is optional and auto-detected for inertia.",
+    "source": "https://tympanus.net/codrops/2025/11/04/creating-3d-scroll-driven-text-animations-with-css-and-gsap/",
+    "license": "MIT — reimplemented from the Codrops/Tympanus tutorial technique (free for personal and commercial use; GSAP plugins are now free).",
+    "path": "components/motion/scroll-text-cylinder",
+    "kind": "component",
+    "preview": "components/motion/scroll-text-cylinder/preview.html"
   },
   {
     "name": "Scroll Text Reveal",
@@ -769,6 +1905,7 @@
     ],
     "usage": "Add data-reveal (optionally data-reveal=\"words\") to text elements and call initScrollReveal().",
     "path": "components/motion/scroll-text-reveal",
+    "kind": "component",
     "preview": "components/motion/scroll-text-reveal/preview.html"
   },
   {
@@ -797,6 +1934,7 @@
     "source": "https://codepen.io/GreenSock/pen/eYpGLYL",
     "license": "Inspired by an official GreenSock CodePen; reimplemented cleanly. GSAP core is free under the standard GreenSock 'no charge' license.",
     "path": "components/motion/scroll-velocity-skew-marquee",
+    "kind": "component",
     "preview": "components/motion/scroll-velocity-skew-marquee/preview.html"
   },
   {
@@ -824,6 +1962,7 @@
     ],
     "usage": "Add data-split (\"chars\" or \"words\") to a heading and call initSplitStagger(); fires on scroll into view.",
     "path": "components/motion/split-text-stagger",
+    "kind": "component",
     "preview": "components/motion/split-text-stagger/preview.html"
   },
   {
@@ -855,6 +1994,7 @@
     "source": "https://tympanus.net/codrops/2026/03/02/sticky-grid-scroll-building-a-scroll-driven-animated-grid/",
     "license": "Inspired by a Codrops/Tympanus tutorial (free for personal & commercial use) — reimplemented cleanly, no verbatim source.",
     "path": "components/motion/sticky-grid-scroll",
+    "kind": "component",
     "preview": "components/motion/sticky-grid-scroll/preview.html"
   },
   {
@@ -881,6 +2021,7 @@
     ],
     "usage": "Wrap .stack-card items in a .stack-cards container and call initStackingCards().",
     "path": "components/motion/sticky-stacking-cards",
+    "kind": "component",
     "preview": "components/motion/sticky-stacking-cards/preview.html"
   },
   {
@@ -910,6 +2051,7 @@
     "source": "https://gsap.com/docs/v3/Plugins/DrawSVGPlugin/",
     "license": "GSAP + DrawSVGPlugin are now free under the standard GSAP license; this is an original reimplementation using the stroke-dashoffset idiom on core GSAP. Pure-CSS scroll-timeline variant is an unrestricted public-domain idiom. MIT — reimplemented.",
     "path": "components/motion/svg-line-draw-on-scroll",
+    "kind": "component",
     "preview": "components/motion/svg-line-draw-on-scroll/preview.html"
   },
   {
@@ -939,687 +2081,667 @@
     "source": "https://tympanus.net/codrops/2024/01/10/experimental-on-scroll-text-animations-with-svg-clip-path/",
     "license": "Inspired by Codrops/Tympanus demo; reimplemented from scratch. Codrops license: free for personal and commercial use, no redistribution as-is.",
     "path": "components/motion/svg-text-clip-reveal",
+    "kind": "component",
     "preview": "components/motion/svg-text-clip-reveal/preview.html"
   },
   {
-    "name": "Animated Beam Connector",
-    "slug": "animated-beam-connector",
-    "category": "react",
-    "tier": "showcase",
-    "tags": [
-      "beam",
-      "connector",
-      "diagram",
-      "svg",
-      "integrations",
-      "flow"
-    ],
-    "description": "An animated gradient pulse that travels along a curved SVG path connecting two referenced DOM nodes, ideal for integration and architecture diagrams.",
-    "deps": [
-      "motion",
-      "tailwindcss"
-    ],
-    "files": [
-      "AnimatedBeam.tsx"
-    ],
-    "usage": "Give a relative container a ref, give each node you want to wire its own ref, then render one <AnimatedBeam containerRef fromRef toRef /> per connection; tune curvature, reverse, duration, delay and the gradient colours, and the path auto-recomputes on resize via a ResizeObserver.",
-    "source": "https://magicui.design/docs/components/animated-beam",
-    "license": "MIT (Magic UI, github.com/magicuidesign/magicui) — reimplemented cleanly with credit",
-    "path": "components/react/animated-beam-connector",
-    "preview": "components/react/animated-beam-connector/preview.html"
-  },
-  {
-    "name": "Animated Counter",
-    "slug": "animated-counter",
-    "category": "react",
+    "name": "Blog Grid",
+    "slug": "blog-grid",
+    "kind": "section",
+    "category": "blog",
     "tier": "practical",
     "tags": [
-      "counter",
-      "count-up",
-      "stats",
-      "scroll",
-      "intersection-observer"
+      "blog",
+      "grid",
+      "articles",
+      "cards",
+      "cover-image",
+      "category-tag",
+      "excerpt",
+      "responsive",
+      "accessible",
+      "sand-and-surf"
     ],
-    "description": "A number that eases up to a target value when it scrolls into view, with prefix/suffix and locale formatting.",
+    "description": "A responsive blog post grid where each card pairs a cover image, category tag, title, excerpt, and author-and-date meta into a clean, scannable archive.",
     "deps": [
       "react",
       "tailwindcss"
     ],
     "files": [
-      "AnimatedCounter.tsx"
+      "BlogGrid.tsx",
+      "section.html"
     ],
-    "usage": "Use <AnimatedCounter value={1200} suffix='+' /> for a single stat, or <StatGrid /> for the sample row.",
-    "path": "components/react/animated-counter",
-    "preview": "components/react/animated-counter/preview.html"
+    "usage": "React: import BlogGrid from './BlogGrid'; then <BlogGrid /> (override eyebrow, heading, intro, posts, and ariaLabel to customize). HTML: copy the <section> from section.html into any Tailwind page. Both use the Sand & Surf palette; open preview.html in a browser to see the section rendered standalone via the Tailwind Play CDN.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
+    "path": "sections/blog-grid",
+    "preview": "sections/blog-grid/preview.html"
   },
   {
-    "name": "Bento Grid",
-    "slug": "bento-grid",
-    "category": "react",
+    "name": "Contact Form",
+    "slug": "contact-form",
+    "kind": "section",
+    "category": "contact",
     "tier": "practical",
     "tags": [
+      "contact",
+      "form",
+      "validation",
+      "lead",
+      "accessible",
+      "aria",
+      "map",
+      "sand-and-surf"
+    ],
+    "description": "A validated contact section pairing a name/email/message form with studio contact details and a stylized map placeholder, with inline error feedback and a thank-you state.",
+    "deps": [
+      "react",
+      "tailwindcss"
+    ],
+    "files": [
+      "ContactForm.tsx",
+      "section.html"
+    ],
+    "usage": "React: import ContactForm from './ContactForm' and render <ContactForm /> (pass headline/details/onSubmit props, or omit onSubmit to get a simulated send). HTML: paste the <section> from section.html plus its scoped inline <script>, which wires client-side validation, the sending state, and the thank-you toggle. Both variants validate name/email/message on submit and clear each error as the visitor fixes it.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
+    "path": "sections/contact-form",
+    "preview": "sections/contact-form/preview.html"
+  },
+  {
+    "name": "CTA Band",
+    "slug": "cta-band",
+    "kind": "section",
+    "category": "cta",
+    "tier": "showcase",
+    "tags": [
+      "cta",
+      "call-to-action",
+      "gradient",
+      "band",
+      "conversion",
+      "buttons",
+      "full-width",
+      "sand-and-surf"
+    ],
+    "description": "Full-width call-to-action band with an eyebrow, headline, subcopy, and one or two buttons on a deep-teal gradient with coral and sky-blue glows.",
+    "deps": [
+      "react",
+      "tailwindcss"
+    ],
+    "files": [
+      "CtaBand.tsx",
+      "section.html"
+    ],
+    "usage": "import CtaBand from './CtaBand'; then <CtaBand headline=\"Let's ship something clean.\" actions={[{ label: 'Book a build call', href: '#contact', variant: 'primary' }, { label: 'See recent work', href: '#work', variant: 'secondary' }]} />. For non-React pages, paste section.html and ensure Space Grotesk / Inter / JetBrains Mono are loaded for the full brand feel.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
+    "path": "sections/cta-band",
+    "preview": "sections/cta-band/preview.html"
+  },
+  {
+    "name": "FAQ Accordion",
+    "slug": "faq",
+    "kind": "section",
+    "category": "faq",
+    "tier": "practical",
+    "tags": [
+      "faq",
+      "accordion",
+      "disclosure",
+      "accessible",
+      "aria",
+      "collapse",
+      "sand-and-surf"
+    ],
+    "description": "An accessible FAQ accordion with smooth height-animated open/close, single or multiple expand modes, and full ARIA wiring.",
+    "deps": [
+      "react",
+      "tailwindcss"
+    ],
+    "files": [
+      "Faq.tsx",
+      "section.html"
+    ],
+    "usage": "React: import { Faq } from './Faq' and render <Faq /> (or pass items/heading/mode props). HTML: paste the <section> from section.html plus the one-time delegated <script> at the end; it drives every [data-faq] block on the page. Both variants animate with a CSS grid-rows 0fr->1fr transition and respect prefers-reduced-motion.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
+    "path": "sections/faq",
+    "preview": "sections/faq/preview.html"
+  },
+  {
+    "name": "Feature Showcase",
+    "slug": "feature-showcase",
+    "kind": "section",
+    "category": "features",
+    "tier": "practical",
+    "tags": [
+      "features",
+      "alternating",
+      "image-text",
+      "zigzag",
+      "showcase",
+      "responsive",
+      "accessible"
+    ],
+    "description": "Alternating image-and-text feature rows that flip left and right down the page, each pairing a captioned visual with a headline, supporting copy, a checklist, and a call to action.",
+    "deps": [
+      "react",
+      "tailwindcss"
+    ],
+    "files": [
+      "FeatureShowcase.tsx",
+      "section.html"
+    ],
+    "usage": "Import FeatureShowcase and render <FeatureShowcase /> (or pass your own `eyebrow`, `heading`, `intro`, and `features` array). For plain HTML, copy the <section> from section.html into any Tailwind page. The preview.html file renders the HTML variant standalone via the Tailwind Play CDN.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
+    "path": "sections/feature-showcase",
+    "preview": "sections/feature-showcase/preview.html"
+  },
+  {
+    "name": "Features Bento",
+    "slug": "features-bento",
+    "kind": "section",
+    "category": "features",
+    "tier": "showcase",
+    "tags": [
+      "features",
       "bento",
       "grid",
-      "layout",
       "cards",
-      "features"
+      "responsive",
+      "accessible",
+      "sand-and-surf"
     ],
-    "description": "A responsive asymmetric bento grid of feature cards with a subtle hover-lift and glow.",
+    "description": "Bento-style feature layout mixing large, tall, and small cards across a responsive three-column grid.",
     "deps": [
       "react",
       "tailwindcss"
     ],
     "files": [
-      "BentoGrid.tsx"
+      "FeaturesBento.tsx",
+      "section.html"
     ],
-    "usage": "Import BentoGrid and pass an items array, or use the default Sand & Surf sample content.",
-    "path": "components/react/bento-grid",
-    "preview": "components/react/bento-grid/preview.html"
+    "usage": "React: import FeaturesBento from './FeaturesBento'; then <FeaturesBento /> (pass eyebrow, title, description, tiles, ctaLabel, ctaHref to customize). HTML: copy the <section> from section.html into any Tailwind page. Both expect the Sand & Surf palette and Space Grotesk / JetBrains Mono / Inter fonts; open preview.html to see it rendered.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
+    "path": "sections/features-bento",
+    "preview": "sections/features-bento/preview.html"
   },
   {
-    "name": "Border Beam",
-    "slug": "border-beam",
-    "category": "react",
-    "tier": "showcase",
+    "name": "Features Grid",
+    "slug": "features-grid",
+    "kind": "section",
+    "category": "features",
+    "tier": "practical",
     "tags": [
-      "border",
-      "beam",
-      "glow",
-      "card",
-      "animated-border",
+      "features",
+      "grid",
+      "icons",
+      "cards",
+      "responsive",
+      "sand-and-surf"
+    ],
+    "description": "A responsive three- or four-column feature grid with icon tiles, titles, and short descriptions.",
+    "deps": [
+      "react",
+      "tailwindcss"
+    ],
+    "files": [
+      "FeaturesGrid.tsx",
+      "section.html"
+    ],
+    "usage": "Import the component: `import FeaturesGrid from './FeaturesGrid'` then render `<FeaturesGrid />` (override eyebrow, heading, subheading, features, columns, ariaLabel as needed). For non-React projects, paste the markup from section.html into any Tailwind page. Open preview.html in a browser to see it rendered.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
+    "path": "sections/features-grid",
+    "preview": "sections/features-grid/preview.html"
+  },
+  {
+    "name": "Footer",
+    "slug": "footer",
+    "kind": "section",
+    "category": "footer",
+    "tier": "practical",
+    "tags": [
+      "footer",
+      "links",
+      "newsletter",
+      "social",
+      "responsive",
+      "accessible",
       "tailwind"
     ],
-    "description": "An animated beam of light that continuously travels around the border of any container, framing cards and pricing tiers with a premium glow.",
-    "deps": [
-      "motion",
-      "tailwindcss"
-    ],
-    "files": [
-      "BorderBeam.tsx"
-    ],
-    "usage": "Drop <BorderBeam /> inside any relative + overflow-hidden, rounded container to frame it with a travelling glow; tune colorFrom/colorTo, duration, delay, reverse and initialOffset, and stack two beams with offset delays for a chasing effect.",
-    "source": "https://magicui.design/docs/components/border-beam",
-    "license": "MIT (Magic UI, github.com/magicuidesign/magicui) — reimplemented cleanly with credit",
-    "path": "components/react/border-beam",
-    "preview": "components/react/border-beam/preview.html"
-  },
-  {
-    "name": "Canvas Particle Field",
-    "slug": "canvas-particle-field",
-    "category": "react",
-    "tier": "practical",
-    "tags": [
-      "particles",
-      "canvas",
-      "interactive",
-      "depth",
-      "mouse",
-      "background"
-    ],
-    "description": "Lightweight canvas particles that drift and gently react to the cursor, adding depth and motion behind hero content.",
-    "deps": [],
-    "files": [
-      "CanvasParticleField.tsx"
-    ],
-    "usage": "Render <CanvasParticleField /> as the first child of a position:relative hero section so it sits absolutely behind your content. Tune quantity, size, color, vx/vy drift, staticity, and ease to dial in the depth and mouse responsiveness.",
-    "source": "https://magicui.design/docs/components/particles",
-    "license": "MIT — reimplemented (inspired by Magic UI, magicuidesign/magicui)",
-    "path": "components/react/canvas-particle-field",
-    "preview": "components/react/canvas-particle-field/preview.html"
-  },
-  {
-    "name": "Command Palette",
-    "slug": "command-palette",
-    "category": "react",
-    "tier": "showcase",
-    "tags": [
-      "command-palette",
-      "cmdk",
-      "search",
-      "modal",
-      "keyboard"
-    ],
-    "description": "A ⌘K-style command palette modal with fuzzy filtering, keyboard navigation, and grouped commands.",
+    "description": "Multi-column site footer with a brand block, newsletter signup, link columns, social icon buttons, and a legal/sign-off bottom row on a deep-teal canvas.",
     "deps": [
       "react",
       "tailwindcss"
     ],
     "files": [
-      "CommandPalette.tsx"
+      "Footer.tsx",
+      "section.html"
     ],
-    "usage": "Render <CommandPalette commands={...} /> anywhere; press ⌘K / Ctrl+K to open. Pass your own commands array.",
-    "path": "components/react/command-palette",
-    "preview": "components/react/command-palette/preview.html"
+    "usage": "React: import Footer from './Footer' and render <Footer /> at the bottom of your layout; override brand, blurb, groups, socials, legalLinks, and the newsletter copy via props, or pass onSubscribe to capture the email. HTML: paste section.html (including its <script>) at the end of your <body>; it needs Tailwind and handles the newsletter success state on its own.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
+    "path": "sections/footer",
+    "preview": "sections/footer/preview.html"
   },
   {
-    "name": "Confetti Button",
-    "slug": "confetti-button",
-    "category": "react",
-    "tier": "practical",
-    "tags": [
-      "confetti",
-      "button",
-      "celebration",
-      "feedback",
-      "canvas",
-      "delight"
-    ],
-    "description": "A button that bursts confetti from its own position on click to celebrate signups, purchases and other success moments.",
-    "deps": [
-      "canvas-confetti"
-    ],
-    "files": [
-      "ConfettiButton.tsx"
-    ],
-    "usage": "Render <ConfettiButton>Sign up</ConfettiButton> wherever you want a celebratory click; on press it reads its own bounding rect, normalises the centre to viewport-origin coordinates and fires canvas-confetti from that exact spot. Tune particleCount, spread, angle, startVelocity, gravity, scalar and colors, and use onConfetti for follow-up logic.",
-    "source": "https://magicui.design/docs/components/confetti",
-    "license": "MIT (Magic UI; wraps MIT canvas-confetti) — reimplemented cleanly with credit",
-    "path": "components/react/confetti-button",
-    "preview": "components/react/confetti-button/preview.html"
-  },
-  {
-    "name": "Dark Mode Toggle",
-    "slug": "dark-mode-toggle",
-    "category": "react",
-    "tier": "practical",
-    "tags": [
-      "dark-mode",
-      "theme",
-      "toggle",
-      "accessibility",
-      "sun-moon"
-    ],
-    "description": "An accessible animated theme toggle that morphs a sun into a moon and persists the choice to localStorage.",
-    "deps": [
-      "react",
-      "tailwindcss"
-    ],
-    "files": [
-      "DarkModeToggle.tsx"
-    ],
-    "usage": "Render <DarkModeToggle />; it toggles the `dark` class on <html> and remembers the preference.",
-    "path": "components/react/dark-mode-toggle",
-    "preview": "components/react/dark-mode-toggle/preview.html"
-  },
-  {
-    "name": "Feature Accordion",
-    "slug": "feature-accordion",
-    "category": "react",
-    "tier": "practical",
-    "tags": [
-      "accordion",
-      "features",
-      "faq",
-      "disclosure",
-      "animation"
-    ],
-    "description": "A single-open accordion of features with smooth grid-based height animation and accessible disclosure semantics.",
-    "deps": [
-      "react",
-      "tailwindcss"
-    ],
-    "files": [
-      "FeatureAccordion.tsx"
-    ],
-    "usage": "Render <FeatureAccordion items={[...]} /> or use the built-in sample features.",
-    "path": "components/react/feature-accordion",
-    "preview": "components/react/feature-accordion/preview.html"
-  },
-  {
-    "name": "Gradient Mesh Hero",
-    "slug": "gradient-mesh-hero",
-    "category": "react",
+    "name": "Hero Centered",
+    "slug": "hero-centered",
+    "kind": "section",
+    "category": "hero",
     "tier": "showcase",
     "tags": [
       "hero",
+      "centered",
+      "headline",
+      "eyebrow",
+      "cta",
       "gradient",
-      "mesh",
-      "blob",
-      "animation",
-      "framer-motion"
+      "landing",
+      "responsive",
+      "accessible"
     ],
-    "description": "A hero section with an animated gradient-mesh blob background, grain overlay, and a bold headline.",
+    "description": "Centered hero with a monospace eyebrow, oversized display headline, supporting lede, dual CTAs, reassurance note, and a soft sand-to-surf gradient backdrop with glow and grid ornaments.",
     "deps": [
       "react",
-      "tailwindcss",
-      "framer-motion"
-    ],
-    "files": [
-      "GradientMeshHero.tsx"
-    ],
-    "usage": "Render <GradientMeshHero /> at the top of a page; pass eyebrow/title/subtitle/CTA props to customize.",
-    "path": "components/react/gradient-mesh-hero",
-    "preview": "components/react/gradient-mesh-hero/preview.html"
-  },
-  {
-    "name": "Hover Glow Border",
-    "slug": "hover-glow-border",
-    "category": "react",
-    "tier": "showcase",
-    "tags": [
-      "glow",
-      "border",
-      "cursor",
-      "conic-gradient",
-      "card",
-      "cursor-style"
-    ],
-    "description": "A Cursor-style border glow that orbits any card and concentrates toward the mouse pointer, adapting to any container size.",
-    "deps": [
-      "motion",
       "tailwindcss"
     ],
     "files": [
-      "HoverGlowBorder.tsx"
+      "HeroCentered.tsx",
+      "section.html"
     ],
-    "usage": "Wrap any card or panel in <HoverGlowBorder> and give the inner element a matching rounded background; tune spread, proximity, inactiveZone and movementDuration to shape how tightly the glow chases the cursor.",
-    "source": "https://ui.aceternity.com/components/glowing-effect",
-    "license": "MIT (Aceternity UI) — reimplemented cleanly with credit",
-    "path": "components/react/hover-glow-border",
-    "preview": "components/react/hover-glow-border/preview.html"
+    "usage": "React: import HeroCentered from './HeroCentered' and render <HeroCentered /> — override eyebrow, headline (string or node), subheadline, primaryCta, secondaryCta, note, and trustedBy via props. HTML: paste section.html as the first block inside <main>; it relies on the Sand & Surf Tailwind preset (bg-sand, text-teal, bg-coral, shadow-coral, rounded-pill, font-display, font-mono). No JavaScript required.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
+    "path": "sections/hero-centered",
+    "preview": "sections/hero-centered/preview.html"
   },
   {
-    "name": "Lamp Effect",
-    "slug": "lamp-effect",
-    "category": "react",
+    "name": "Hero Split",
+    "slug": "hero-split",
+    "kind": "section",
+    "category": "hero",
     "tier": "showcase",
     "tags": [
-      "lamp",
-      "spotlight",
-      "section-header",
-      "conic-gradient",
-      "linear-style",
-      "hero"
+      "hero",
+      "split",
+      "two-column",
+      "cta",
+      "code-mockup",
+      "stats",
+      "responsive",
+      "saltycodestudio"
     ],
-    "description": "A Linear-inspired overhead lamp glow that fans light down onto a section header, with the headline rising into the beam on scroll.",
+    "description": "Split hero with a bold headline, subcopy, dual CTAs and stats on one side and a code-window mockup on the other.",
     "deps": [
-      "motion",
+      "react",
       "tailwindcss"
     ],
     "files": [
-      "LampEffect.tsx"
+      "HeroSplit.tsx",
+      "section.html"
     ],
-    "usage": "Render <LampEffect title=\"...\" subtitle=\"...\" /> as a section header; pass a `glow` color to retint the beam and optional children for CTAs.",
-    "source": "https://ui.aceternity.com/components/lamp-effect",
-    "license": "MIT (Aceternity UI) — reimplemented cleanly with credit",
-    "path": "components/react/lamp-effect",
-    "preview": "components/react/lamp-effect/preview.html"
+    "usage": "Import HeroSplit and drop it at the top of a landing page: <HeroSplit headline=\"Clean code, warm coast.\" accentWord=\"warm coast.\" primaryCta={{ label: 'Start a project', href: '#contact' }} />. Or paste section.html into any Tailwind page. Both default to realistic saltycodestudio content.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
+    "path": "sections/hero-split",
+    "preview": "sections/hero-split/preview.html"
   },
   {
-    "name": "Logo Marquee",
-    "slug": "logo-marquee",
-    "category": "react",
+    "name": "Logo Cloud",
+    "slug": "logo-cloud",
+    "kind": "section",
+    "category": "social-proof",
     "tier": "practical",
     "tags": [
-      "marquee",
-      "logos",
-      "infinite-scroll",
+      "logo-cloud",
       "social-proof",
-      "ticker"
-    ],
-    "description": "An infinite horizontal marquee of client/partner logos with edge fade and pause-on-hover.",
-    "deps": [
-      "react",
-      "tailwindcss"
-    ],
-    "files": [
-      "LogoMarquee.tsx"
-    ],
-    "usage": "Render <LogoMarquee logos={[...]} /> with text or node logos; defaults to sample wordmarks.",
-    "path": "components/react/logo-marquee",
-    "preview": "components/react/logo-marquee/preview.html"
-  },
-  {
-    "name": "macOS Dock",
-    "slug": "macos-dock",
-    "category": "react",
-    "tier": "showcase",
-    "tags": [
-      "dock",
-      "navigation",
-      "magnify",
-      "macos",
+      "trusted-by",
+      "logos",
+      "grayscale",
       "hover",
-      "toolbar"
+      "brands",
+      "marquee"
     ],
-    "description": "A macOS-style icon dock whose items magnify and lift as the cursor approaches, for portfolio nav bars and app launchers.",
-    "deps": [
-      "motion",
-      "tailwindcss"
-    ],
-    "files": [
-      "MacosDock.tsx"
-    ],
-    "usage": "Wrap a row of <DockItem label=\"...\"> icons in <MacosDock>; the dock tracks the cursor's X position and springs each icon's size so neighbours scale in a smooth bell curve around the hovered icon. Tune baseSize, maxSize, and distance props to taste.",
-    "source": "https://magicui.design/docs/components/dock",
-    "license": "MIT (Magic UI) — reimplemented cleanly with credit",
-    "path": "components/react/macos-dock",
-    "preview": "components/react/macos-dock/preview.html"
-  },
-  {
-    "name": "Pricing Toggle",
-    "slug": "pricing-toggle",
-    "category": "react",
-    "tier": "practical",
-    "tags": [
-      "pricing",
-      "toggle",
-      "plans",
-      "billing",
-      "cards"
-    ],
-    "description": "Pricing cards with a monthly/annual switch that animates the displayed price and shows annual savings.",
+    "description": "A 'Trusted by' logo strip that fades brand marks in from grayscale to full color on hover for tasteful, lightweight social proof.",
     "deps": [
       "react",
       "tailwindcss"
     ],
     "files": [
-      "PricingToggle.tsx"
+      "LogoCloud.tsx",
+      "section.html"
     ],
-    "usage": "Render <PricingToggle plans={...} /> or use the built-in sample tiers.",
-    "path": "components/react/pricing-toggle",
-    "preview": "components/react/pricing-toggle/preview.html"
+    "usage": "Import LogoCloud and drop it below a hero or above a footer: <LogoCloud eyebrow=\"Trusted by teams shipping on the coast\" logos={[{ name: 'Tide & Co', src: '/logos/tide.svg', href: 'https://tideandco.example' }]} />. Pass your own logos array (name + svg/img src, optional href). For the no-React version, paste the markup from section.html and swap the inline SVGs for your brand marks.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
+    "path": "sections/logo-cloud",
+    "preview": "sections/logo-cloud/preview.html"
   },
   {
-    "name": "Shrinking Sticky Navbar",
-    "slug": "shrinking-sticky-navbar",
-    "category": "react",
+    "name": "Navbar",
+    "slug": "navbar",
+    "kind": "section",
+    "category": "nav",
     "tier": "practical",
     "tags": [
       "navbar",
-      "sticky",
-      "scroll",
-      "header",
-      "blur"
-    ],
-    "description": "A sticky navbar that condenses its height and gains a backdrop blur once the page is scrolled.",
-    "deps": [
-      "react",
-      "tailwindcss"
-    ],
-    "files": [
-      "ShrinkingStickyNavbar.tsx"
-    ],
-    "usage": "Render <ShrinkingStickyNavbar /> at the top of your layout; it manages its own scroll listener.",
-    "path": "components/react/shrinking-sticky-navbar",
-    "preview": "components/react/shrinking-sticky-navbar/preview.html"
-  },
-  {
-    "name": "Spotlight Card",
-    "slug": "spotlight-card",
-    "category": "react",
-    "tier": "practical",
-    "tags": [
-      "card",
-      "spotlight",
-      "hover",
-      "radial-gradient",
-      "pointer-tracking",
-      "feature"
-    ],
-    "description": "A card that reveals a soft radial spotlight following the cursor on hover, ideal for premium-but-safe feature and pricing grids.",
-    "deps": [
-      "motion",
-      "tailwindcss"
-    ],
-    "files": [
-      "SpotlightCard.tsx"
-    ],
-    "usage": "Import SpotlightCard and pass title/description/icon (or your own children); arrange several in a grid for feature or pricing layouts. Move the cursor over a card to reveal the spotlight.",
-    "source": "https://ui.aceternity.com/components/card-spotlight",
-    "license": "MIT (Aceternity UI) — reimplemented with credit",
-    "path": "components/react/spotlight-card",
-    "preview": "components/react/spotlight-card/preview.html"
-  },
-  {
-    "name": "Testimonial Carousel",
-    "slug": "testimonial-carousel",
-    "category": "react",
-    "tier": "practical",
-    "tags": [
-      "testimonial",
-      "carousel",
-      "slider",
-      "reviews",
-      "social-proof"
-    ],
-    "description": "An auto-advancing testimonial slider with dot navigation, pause-on-hover, and smooth fade/slide transitions.",
-    "deps": [
-      "react",
-      "tailwindcss"
-    ],
-    "files": [
-      "TestimonialCarousel.tsx"
-    ],
-    "usage": "Render <TestimonialCarousel testimonials={...} /> or use the built-in sample quotes.",
-    "path": "components/react/testimonial-carousel",
-    "preview": "components/react/testimonial-carousel/preview.html"
-  },
-  {
-    "name": "Text Shimmer",
-    "slug": "text-shimmer",
-    "category": "react",
-    "tier": "practical",
-    "tags": [
-      "text",
-      "shimmer",
-      "shine",
-      "gradient",
-      "badge",
-      "loading"
-    ],
-    "description": "Text with a soft light sheen sweeping across it left to right, perfect for announcement pills, badges and subtle loading labels.",
-    "deps": [
-      "tailwindcss"
-    ],
-    "files": [
-      "TextShimmer.tsx"
-    ],
-    "usage": "Import TextShimmer and wrap any short string, e.g. <TextShimmer>Now in beta</TextShimmer> inside a pill, or set as=\"label\" with a longer duration for a subtle loading label. Tune duration, spread, baseColor and shineColor via props.",
-    "source": "https://magicui.design/docs/components/animated-shiny-text",
-    "license": "MIT (Magic UI) — reimplemented cleanly with credit",
-    "path": "components/react/text-shimmer",
-    "preview": "components/react/text-shimmer/preview.html"
-  },
-  {
-    "name": "WebGL Mesh Gradient Plasma",
-    "slug": "webgl-mesh-gradient-plasma",
-    "category": "react",
-    "tier": "showcase",
-    "tags": [
-      "mesh",
-      "gradient",
-      "plasma",
-      "webgl",
-      "shader",
-      "hero"
-    ],
-    "description": "A flowing WebGL mesh-gradient of color spots that swirl and distort like plasma, for a high-end animated hero canvas.",
-    "deps": [
-      "@paper-design/shaders-react"
-    ],
-    "files": [
-      "MeshGradientPlasma.tsx"
-    ],
-    "usage": "Wrap your hero content in <MeshGradientPlasma> to lay a live GLSL plasma canvas behind it; tune colors, speed, distortion, swirl, grainMixer and grainOverlay to taste. It freezes on a still frame automatically when prefers-reduced-motion is set.",
-    "source": "https://shaders.paper.design/mesh-gradient",
-    "license": "PolyForm Shield — free for commercial/non-commercial use unless it competes with Paper; wrapper code reimplemented cleanly with credit",
-    "path": "components/react/webgl-mesh-gradient-plasma",
-    "preview": "components/react/webgl-mesh-gradient-plasma/preview.html"
-  },
-  {
-    "name": "Copy to Clipboard",
-    "slug": "copy-to-clipboard",
-    "category": "vanilla",
-    "tier": "practical",
-    "tags": [
-      "clipboard",
-      "copy",
-      "button",
-      "feedback"
-    ],
-    "description": "A copy button that uses the async Clipboard API (with a legacy fallback) and shows an animated \"Copied!\" confirmation state.",
-    "deps": [],
-    "files": [
-      "styles.css",
-      "script.js"
-    ],
-    "usage": "Add a button with data-copy=\"text\" or data-copy-target=\"#selector\". script.js handles copying and the confirmation state automatically.",
-    "path": "components/vanilla/copy-to-clipboard",
-    "preview": "components/vanilla/copy-to-clipboard/preview.html"
-  },
-  {
-    "name": "Custom Cursor",
-    "slug": "custom-cursor",
-    "category": "vanilla",
-    "tier": "showcase",
-    "tags": [
-      "cursor",
-      "pointer",
-      "interaction",
-      "lerp",
-      "trailing"
-    ],
-    "description": "A custom cursor with a precise dot and a lerp-trailing ring that grows and changes over links and buttons; hides the native cursor and disables itself on touch devices.",
-    "deps": [],
-    "files": [
-      "styles.css",
-      "script.js"
-    ],
-    "usage": "Link styles.css and script.js, add <div class=\"cursor-dot\"></div><div class=\"cursor-ring\"></div> to the page. Mark interactive elements with [data-cursor] or rely on a/button auto-detection.",
-    "path": "components/vanilla/custom-cursor",
-    "preview": "components/vanilla/custom-cursor/preview.html"
-  },
-  {
-    "name": "Modal Dialog",
-    "slug": "modal",
-    "category": "vanilla",
-    "tier": "practical",
-    "tags": [
-      "modal",
-      "dialog",
-      "focus-trap",
-      "accessible",
-      "overlay"
-    ],
-    "description": "An accessible modal dialog with focus trap, Esc-to-close, backdrop-click close, body scroll lock, and a fade/scale-in animation.",
-    "deps": [],
-    "files": [
-      "styles.css",
-      "script.js"
-    ],
-    "usage": "Add the modal markup, give triggers data-modal-open=\"<id>\". script.js wires open/close, focus trapping and scroll lock automatically.",
-    "path": "components/vanilla/modal",
-    "preview": "components/vanilla/modal/preview.html"
-  },
-  {
-    "name": "Preloader",
-    "slug": "preloader",
-    "category": "vanilla",
-    "tier": "showcase",
-    "tags": [
-      "preloader",
-      "loader",
-      "intro",
-      "counter",
-      "page-load"
-    ],
-    "description": "A polished full-screen preloader with an animated count-up and progress sweep that slides away once the page has finished loading.",
-    "deps": [],
-    "files": [
-      "styles.css",
-      "script.js"
-    ],
-    "usage": "Paste the preloader markup as the first child of <body>, link styles.css and script.js. It removes itself on window load; reveals page content via a body class.",
-    "path": "components/vanilla/preloader",
-    "preview": "components/vanilla/preloader/preview.html"
-  },
-  {
-    "name": "Scrollspy Nav",
-    "slug": "scrollspy-nav",
-    "category": "vanilla",
-    "tier": "practical",
-    "tags": [
-      "scrollspy",
       "navigation",
-      "intersection-observer",
-      "anchor",
-      "smooth-scroll"
-    ],
-    "description": "A navigation that highlights the current section using IntersectionObserver and smooth-scrolls to anchors on click.",
-    "deps": [],
-    "files": [
-      "styles.css",
-      "script.js"
-    ],
-    "usage": "Give nav links href=\"#section-id\" and a data-scrollspy attribute on the nav. Sections need matching ids. script.js observes them and toggles .is-active.",
-    "path": "components/vanilla/scrollspy-nav",
-    "preview": "components/vanilla/scrollspy-nav/preview.html"
-  },
-  {
-    "name": "Smooth Scroll",
-    "slug": "smooth-scroll",
-    "category": "vanilla",
-    "tier": "practical",
-    "tags": [
-      "scroll",
-      "smooth-scroll",
-      "lerp",
-      "raf",
-      "inertia"
-    ],
-    "description": "Lerp-based smooth (inertia) page scrolling driven by requestAnimationFrame, with automatic opt-out for prefers-reduced-motion and touch devices.",
-    "deps": [],
-    "files": [
-      "styles.css",
-      "script.js"
-    ],
-    "usage": "Link styles.css and script.js. Wrap page content in <div id=\"scroll-content\">...</div>. Disable by removing the script or via prefers-reduced-motion.",
-    "path": "components/vanilla/smooth-scroll",
-    "preview": "components/vanilla/smooth-scroll/preview.html"
-  },
-  {
-    "name": "Tabs",
-    "slug": "tabs",
-    "category": "vanilla",
-    "tier": "practical",
-    "tags": [
-      "tabs",
+      "header",
+      "sticky",
+      "responsive",
+      "hamburger",
+      "mobile-menu",
+      "cta",
       "accessible",
-      "aria",
-      "keyboard",
-      "indicator"
+      "tailwind"
     ],
-    "description": "Accessible tabs with full ARIA roles and arrow-key navigation, plus a sliding active indicator that animates between tabs.",
-    "deps": [],
+    "description": "Responsive sticky navbar with logo, links, a coral CTA, and an animated mobile hamburger menu that elevates on scroll.",
+    "deps": [
+      "react",
+      "tailwindcss"
+    ],
     "files": [
-      "styles.css",
-      "script.js"
+      "Navbar.tsx",
+      "section.html"
     ],
-    "usage": "Use the tablist/tab/tabpanel markup with matching ids and aria-controls. script.js handles selection, keyboard nav and the moving indicator.",
-    "path": "components/vanilla/tabs",
-    "preview": "components/vanilla/tabs/preview.html"
+    "usage": "React: import Navbar from './Navbar' and render <Navbar /> at the top of your layout; override brand, links, ctaLabel/ctaHref, and secondaryLabel/secondaryHref via props. HTML: paste section.html (including its <script>) at the top of your <body>; it needs Tailwind and handles the hamburger toggle, scroll elevation, and Escape-to-close on its own.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
+    "path": "sections/navbar",
+    "preview": "sections/navbar/preview.html"
   },
   {
-    "name": "Theme Switcher",
-    "slug": "theme-switcher",
-    "category": "vanilla",
+    "name": "Pricing Tiers",
+    "slug": "pricing",
+    "kind": "section",
+    "category": "pricing",
+    "tier": "showcase",
+    "tags": [
+      "pricing",
+      "plans",
+      "tiers",
+      "recommended",
+      "feature-list",
+      "saas",
+      "studio",
+      "sand-surf"
+    ],
+    "description": "Three-tier pricing section with a highlighted recommended plan and per-plan feature lists with included and excluded states.",
+    "deps": [
+      "react",
+      "tailwindcss"
+    ],
+    "files": [
+      "PricingTiers.tsx",
+      "section.html"
+    ],
+    "usage": "import PricingTiers from './PricingTiers'; then <PricingTiers /> for the defaults, or pass plans={[...]} with PricingPlan objects to customize. For non-React projects, paste section.html into any Tailwind page; see preview.html for a self-contained rendered example.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
+    "path": "sections/pricing",
+    "preview": "sections/pricing/preview.html"
+  },
+  {
+    "name": "Stats Band",
+    "slug": "stats-band",
+    "kind": "section",
+    "category": "stats",
     "tier": "practical",
     "tags": [
-      "theme",
-      "dark-mode",
-      "css-variables",
-      "localstorage",
-      "prefers-color-scheme"
+      "stats",
+      "metrics",
+      "numbers",
+      "kpi",
+      "band",
+      "accent",
+      "dark",
+      "responsive"
     ],
-    "description": "A light/dark theme toggle built on CSS variables and a data-theme attribute that persists to localStorage and respects the OS prefers-color-scheme.",
+    "description": "A band of key metrics with labels on an accent background, with an eyebrow, heading, and supporting copy.",
+    "deps": [
+      "react",
+      "tailwindcss"
+    ],
+    "files": [
+      "StatsBand.tsx",
+      "section.html"
+    ],
+    "usage": "import StatsBand from './StatsBand';\n\nexport default function Page() {\n  return (\n    <StatsBand\n      eyebrow=\"By the numbers\"\n      heading=\"Proof in the shipping log\"\n      stats={[\n        { value: '120+', label: 'Sites shipped', detail: 'From landing pages to full builds' },\n        { value: '99.9%', label: 'Uptime delivered', detail: 'Across hosted client projects' },\n        { value: '0.9s', label: 'Median load time', detail: 'Measured on real-world 4G' },\n        { value: '4.9/5', label: 'Client rating', detail: 'Based on 60+ engagements' },\n      ]}\n    />\n  );\n}\n\nFor a no-React page, copy section.html into your Tailwind markup. See README.md for details.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
+    "path": "sections/stats-band",
+    "preview": "sections/stats-band/preview.html"
+  },
+  {
+    "name": "Team Grid",
+    "slug": "team-grid",
+    "kind": "section",
+    "category": "team",
+    "tags": [
+      "team",
+      "people",
+      "grid",
+      "about",
+      "cards",
+      "responsive",
+      "sand-and-surf"
+    ],
+    "tier": "practical",
+    "description": "A responsive grid of team members with portrait, name, role, short bio, and social/contact links.",
+    "deps": [
+      "react",
+      "tailwindcss"
+    ],
+    "files": [
+      "TeamGrid.tsx",
+      "section.html"
+    ],
+    "usage": "Import the component: `import TeamGrid from './TeamGrid'` then render `<TeamGrid />` (override eyebrow, heading, description, members as needed). For non-React projects, paste the markup from section.html into any Tailwind page. Open preview.html in a browser to see it rendered.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
+    "path": "sections/team-grid",
+    "preview": "sections/team-grid/preview.html"
+  },
+  {
+    "name": "Testimonials",
+    "slug": "testimonials",
+    "kind": "section",
+    "category": "testimonials",
+    "tier": "practical",
+    "tags": [
+      "testimonials",
+      "reviews",
+      "social-proof",
+      "cards",
+      "quotes",
+      "avatars",
+      "ratings",
+      "grid"
+    ],
+    "description": "A responsive grid of testimonial cards with avatar, quote, star rating, name, and role.",
+    "deps": [
+      "react",
+      "tailwindcss"
+    ],
+    "files": [
+      "Testimonials.tsx",
+      "section.html"
+    ],
+    "usage": "import Testimonials from './Testimonials';\n\n<Testimonials\n  eyebrow=\"Kind words\"\n  heading=\"Teams that ship with us\"\n  testimonials={[{ quote: '...', name: 'Marisol Ferreira', role: 'Founder, Tidepool Labs', avatar: '/marisol.jpg', rating: 5 }]}\n/>",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
+    "path": "sections/testimonials",
+    "preview": "sections/testimonials/preview.html"
+  },
+  {
+    "name": "Agency Studio",
+    "slug": "agency-studio",
+    "kind": "template",
+    "category": "template",
+    "tier": "showcase",
+    "tags": [
+      "template",
+      "agency",
+      "studio",
+      "creative-agency",
+      "portfolio",
+      "services",
+      "case-studies",
+      "process",
+      "testimonials",
+      "contact",
+      "marketing-site",
+      "sand-and-surf",
+      "responsive",
+      "accessible",
+      "tailwind"
+    ],
+    "description": "A bold creative agency and studio one-pager with a striking hero, services, a selected-work case grid, a numbered process, testimonials, a contact form, and footer in the Sand & Surf palette.",
     "deps": [],
     "files": [
-      "styles.css",
-      "script.js"
+      "index.html"
     ],
-    "usage": "Add the inline no-flash snippet in <head>, a button with id=\"theme-toggle\", then link styles.css and script.js. Build your UI with the provided CSS variables.",
-    "path": "components/vanilla/theme-switcher",
-    "preview": "components/vanilla/theme-switcher/preview.html"
+    "usage": "Open index.html in a browser to preview, or drop it into any static host. It loads Tailwind via the Play CDN with an inline brand config, so no build step is needed. Replace the studio name, copy, work samples, testimonials, and contact details with your own; swap the inline tailwind.config colors to rebrand. Everything (mobile nav, smooth scroll, scroll-reveal, marquee, count-up stats) runs from one inline vanilla-JS block at the bottom.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
+    "path": "templates/agency-studio",
+    "preview": "templates/agency-studio/index.html"
+  },
+  {
+    "name": "Blog / Magazine",
+    "slug": "blog-magazine",
+    "kind": "template",
+    "category": "template",
+    "tier": "showcase",
+    "tags": [
+      "blog",
+      "magazine",
+      "editorial",
+      "publication",
+      "newsletter",
+      "post-grid",
+      "category-filter",
+      "featured-hero",
+      "responsive",
+      "accessible",
+      "sand-and-surf",
+      "website"
+    ],
+    "description": "A clean editorial blog and magazine landing page with a featured-post masthead hero, category-filterable post grid, weekly columns, an editor's pick, a newsletter CTA, and a footer.",
+    "deps": [],
+    "files": [
+      "index.html"
+    ],
+    "usage": "Open index.html in any browser to preview, or deploy it as-is — it is a complete static page loading Tailwind via the Play CDN. Edit the inline tailwind.config to retheme brand colors and fonts; swap the Unsplash cover images, post copy, and category data attributes to make it yours. The vanilla JS handles the mobile nav, scroll elevation, category filtering, scroll reveals, and newsletter validation with no build step.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
+    "path": "templates/blog-magazine",
+    "preview": "templates/blog-magazine/index.html"
+  },
+  {
+    "name": "Ecommerce Product",
+    "slug": "ecommerce-product",
+    "kind": "template",
+    "category": "template",
+    "tier": "showcase",
+    "tags": [
+      "ecommerce",
+      "product",
+      "pdp",
+      "landing",
+      "shop",
+      "store",
+      "cart",
+      "cart-drawer",
+      "gallery",
+      "buy-box",
+      "variants",
+      "reviews",
+      "specs",
+      "related-products",
+      "responsive",
+      "accessible",
+      "tailwind",
+      "saltycodestudio"
+    ],
+    "description": "A complete single-product e-commerce/landing page with a sticky cart-drawer nav, product gallery and buy box with live variant/quantity pricing, features, specs, reviews, related products, and footer.",
+    "deps": [],
+    "files": [
+      "index.html"
+    ],
+    "usage": "Open index.html in any browser — no build step (Tailwind Play CDN + brand fonts). It is both the page and its own preview. Replace the product name, copy, prices, swatches, sizes and review content; the buy box recalculates the live price from the selected size and quantity, and the cart drawer, toast, gallery, mobile nav and newsletter are wired in vanilla JS. To productionize, swap the Play CDN for a compiled Tailwind build and wire the Add-to-cart / Checkout buttons to your commerce backend.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
+    "path": "templates/ecommerce-product",
+    "preview": "templates/ecommerce-product/index.html"
+  },
+  {
+    "name": "Landing — SaaS",
+    "slug": "landing-saas",
+    "kind": "template",
+    "category": "template",
+    "tier": "showcase",
+    "tags": [
+      "template",
+      "landing",
+      "saas",
+      "marketing",
+      "pricing",
+      "bento",
+      "faq",
+      "testimonials",
+      "responsive",
+      "accessible",
+      "sand-and-surf"
+    ],
+    "description": "A complete, polished SaaS marketing landing page with nav, hero, logo cloud, feature bento, how-it-works, pricing, testimonials, FAQ, CTA, and footer.",
+    "deps": [],
+    "files": [
+      "index.html"
+    ],
+    "usage": "Open index.html in a browser — it is the full page and its own preview. Built on the Tailwind Play CDN with an inline config (Sand & Surf colors + Space Grotesk / JetBrains Mono / Inter). No build step. Replace the 'Tidewell' brand name, copy, and pricing with your own, swap the inline tailwind.config colors to rebrand, and wire the nav, pricing toggle, and CTA form to real routes. Vanilla JS handles the mobile nav, scroll elevation, billing toggle, and scroll-reveal — all degrade gracefully without JS and respect prefers-reduced-motion.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
+    "path": "templates/landing-saas",
+    "preview": "templates/landing-saas/index.html"
+  },
+  {
+    "name": "Portfolio",
+    "slug": "portfolio",
+    "kind": "template",
+    "category": "template",
+    "tier": "showcase",
+    "tags": [
+      "portfolio",
+      "personal",
+      "creative",
+      "designer",
+      "developer",
+      "case-study",
+      "showcase",
+      "about",
+      "skills",
+      "contact-form",
+      "responsive",
+      "accessible",
+      "single-page",
+      "tailwind",
+      "saltycodestudio"
+    ],
+    "description": "A polished single-page personal/creative portfolio with hero intro, about, case-study project grid, skills, contact form, and footer.",
+    "deps": [],
+    "files": [
+      "index.html"
+    ],
+    "usage": "Open index.html in a browser to preview, or deploy it as-is to any static host. Swap the placeholder name (Maya Solano), copy, projects, and contact details for your own; recolor by editing the inline tailwind.config palette. No build step — it runs on the Tailwind Play CDN with vanilla JS for the mobile nav, scroll reveals, skill bars, scroll-spy, and demo contact form.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
+    "path": "templates/portfolio",
+    "preview": "templates/portfolio/index.html"
   }
 ]

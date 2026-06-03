@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>saltycodestudio · cta-band preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['"Space Grotesk"', "system-ui", "sans-serif"],
+            body: ['"Inter"', "system-ui", "sans-serif"],
+            mono: ['"JetBrains Mono"', "ui-monospace", "monospace"],
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    body { font-family: "Inter", system-ui, sans-serif; }
+    .font-display { font-family: "Space Grotesk", system-ui, sans-serif; }
+    .font-mono { font-family: "JetBrains Mono", ui-monospace, monospace; }
+  </style>
+</head>
+<body class="bg-[#F2EBDD] text-[#1C2B2E] antialiased">
+
+  <!-- Minimal surrounding context: brand nav -->
+  <header class="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
+    <a href="#" class="flex items-center gap-2.5">
+      <span class="font-mono text-lg font-medium text-[#0E3A40]">~&lt;</span>
+      <span class="font-display text-base font-semibold tracking-tight text-[#0E3A40]">saltycodestudio</span>
+    </a>
+    <nav class="hidden items-center gap-7 text-sm text-[#1C2B2E]/70 sm:flex">
+      <a href="#" class="transition-colors hover:text-[#0E3A40]">Work</a>
+      <a href="#" class="transition-colors hover:text-[#0E3A40]">Services</a>
+      <a href="#" class="transition-colors hover:text-[#0E3A40]">About</a>
+    </nav>
+  </header>
+
+  <!-- A little context above the band so the gradient has something to land against -->
+  <main>
+    <section class="mx-auto max-w-6xl px-6 pb-16 pt-8 text-center">
+      <p class="font-mono text-xs uppercase tracking-[0.18em] text-[#4FA8C9]">Clean code, warm coast</p>
+      <h1 class="mx-auto mt-4 max-w-3xl font-display text-4xl font-bold leading-tight tracking-tight text-[#0E3A40] sm:text-5xl">
+        Web design &amp; development with salt in the air.
+      </h1>
+      <p class="mx-auto mt-5 max-w-xl text-lg text-[#1C2B2E]/70">
+        A small studio shipping considered software — fast sites, honest builds, and interfaces that feel handmade.
+      </p>
+    </section>
+
+    <!-- ===== BEGIN cta-band (section.html) ===== -->
+    <section aria-label="Get in touch" class="relative isolate overflow-hidden bg-[#0E3A40] text-[#F2EBDD]">
+      <div aria-hidden="true" class="absolute inset-0 -z-10 bg-gradient-to-br from-[#0E3A40] via-[#0E3A40] to-[#1C2B2E]"></div>
+      <div aria-hidden="true" class="absolute -left-24 -top-24 -z-10 h-72 w-72 rounded-full bg-[#4FA8C9]/20 blur-3xl"></div>
+      <div aria-hidden="true" class="absolute -bottom-32 right-0 -z-10 h-80 w-80 rounded-full bg-[#FF6F59]/20 blur-3xl"></div>
+      <div aria-hidden="true" class="absolute inset-x-0 top-0 -z-10 h-px bg-gradient-to-r from-transparent via-[#4FA8C9]/40 to-transparent"></div>
+
+      <div class="mx-auto flex max-w-6xl flex-col gap-10 px-6 py-16 sm:py-20 lg:flex-row lg:items-center lg:justify-between lg:gap-16 lg:py-24">
+        <div class="max-w-2xl">
+          <p class="mb-4 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.18em] text-[#4FA8C9]">~&lt; Ready when you are</p>
+
+          <h2 class="font-display text-3xl font-bold leading-tight tracking-tight text-[#F2EBDD] sm:text-4xl lg:text-5xl">
+            Let's ship something clean.
+          </h2>
+
+          <p class="mt-5 max-w-xl text-base leading-relaxed text-[#F2EBDD]/75 sm:text-lg">
+            Tell us what you're building. We'll come back with a plan, a timeline, and a fixed quote — no retainer, no buzzwords.
+          </p>
+
+          <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+            <a href="#contact" class="inline-flex items-center justify-center gap-2 rounded-full bg-[#FF6F59] px-7 py-3.5 text-sm font-semibold text-[#1C2B2E] shadow-lg shadow-[#FF6F59]/20 transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#ff8068] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FF6F59]">
+              Book a build call
+              <svg aria-hidden="true" viewBox="0 0 20 20" fill="none" class="h-4 w-4">
+                <path d="M4 10h12m0 0-4.5-4.5M16 10l-4.5 4.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+            </a>
+            <a href="#work" class="inline-flex items-center justify-center gap-2 rounded-full border border-[#F2EBDD]/30 px-7 py-3.5 text-sm font-semibold text-[#F2EBDD] transition-all duration-200 hover:-translate-y-0.5 hover:border-[#F2EBDD]/60 hover:bg-[#F2EBDD]/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#4FA8C9]">
+              See recent work
+            </a>
+          </div>
+
+          <p class="mt-6 text-xs text-[#F2EBDD]/55">Replies within one business day · Based in Bonaire, building on internet time</p>
+        </div>
+      </div>
+    </section>
+    <!-- ===== END cta-band ===== -->
+
+    <!-- A little footer context below -->
+    <footer class="mx-auto max-w-6xl px-6 py-10 text-sm text-[#1C2B2E]/55">
+      <p>© 2026 saltycodestudio · Built on island time, shipped on internet time.</p>
+    </footer>
+  </main>
+
+</body>
+</html>

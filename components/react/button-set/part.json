@@ -1,0 +1,13 @@
+{
+  "name": "Button Set",
+  "slug": "button-set",
+  "category": "react",
+  "tier": "practical",
+  "tags": ["button", "variants", "loading", "disabled", "icon", "accessible", "tailwind"],
+  "description": "A complete button system with primary, secondary, ghost, outline and destructive variants, three sizes, loading and disabled states and full icon support.",
+  "deps": [],
+  "files": ["ButtonSet.tsx"],
+  "usage": "Import ButtonSet and render <ButtonSet variant=\"primary\" size=\"md\">Save</ButtonSet>. Pick variant (primary|secondary|ghost|outline|destructive) and size (sm|md|lg). Add loading to show a spinner and block clicks (optionally loadingText), disabled to disable, leftIcon/rightIcon for icons, iconOnly with an aria-label for square icon buttons, and fullWidth to stretch. It forwards refs and spreads all native button props.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
+}

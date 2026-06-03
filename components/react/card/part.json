@@ -1,0 +1,13 @@
+{
+  "name": "Card",
+  "slug": "card",
+  "category": "react",
+  "tier": "practical",
+  "tags": ["card", "surface", "container", "media", "composable", "hover-lift"],
+  "description": "Versatile, composable content card with optional media, header, body, and footer slots, three surface variants, and an accessible hover-lift link mode.",
+  "deps": ["react", "tailwindcss"],
+  "files": ["Card.tsx"],
+  "usage": "Compose <Card hoverLift><CardMedia .../><CardHeader title=\"...\" /><CardBody>...</CardBody><CardFooter>...</CardFooter></Card>, or pass href to make the whole card one keyboard-reachable link.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
+}

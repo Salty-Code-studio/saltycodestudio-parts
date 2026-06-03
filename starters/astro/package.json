@@ -1,0 +1,28 @@
+{
+  "name": "saltycodestudio-astro-starter",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Astro + Tailwind starter wired to the saltycodestudio-parts foundations (Sand & Surf). Drop parts from ../../components on top.",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "astro": "^4.16.18",
+    "@astrojs/tailwind": "^5.1.5",
+    "tailwindcss": "^3.4.17",
+
+    "@astrojs/react": "^3.6.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "typescript": "^5.7.3"
+  }
+}

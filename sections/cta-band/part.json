@@ -1,0 +1,14 @@
+{
+  "name": "CTA Band",
+  "slug": "cta-band",
+  "kind": "section",
+  "category": "cta",
+  "tier": "showcase",
+  "tags": ["cta", "call-to-action", "gradient", "band", "conversion", "buttons", "full-width", "sand-and-surf"],
+  "description": "Full-width call-to-action band with an eyebrow, headline, subcopy, and one or two buttons on a deep-teal gradient with coral and sky-blue glows.",
+  "deps": ["react", "tailwindcss"],
+  "files": ["CtaBand.tsx", "section.html"],
+  "usage": "import CtaBand from './CtaBand'; then <CtaBand headline=\"Let's ship something clean.\" actions={[{ label: 'Book a build call', href: '#contact', variant: 'primary' }, { label: 'See recent work', href: '#work', variant: 'secondary' }]} />. For non-React pages, paste section.html and ensure Space Grotesk / Inter / JetBrains Mono are loaded for the full brand feel.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
+}

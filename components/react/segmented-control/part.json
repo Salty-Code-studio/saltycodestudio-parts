@@ -1,0 +1,13 @@
+{
+  "name": "Segmented Control",
+  "slug": "segmented-control",
+  "category": "react",
+  "tier": "practical",
+  "tags": ["segmented-control", "tabs", "switcher", "toggle", "radiogroup", "ios"],
+  "description": "iOS-style segmented control / tab switcher with an animated sliding active pill, full keyboard support, and a WAI-ARIA radiogroup.",
+  "deps": ["react", "tailwindcss"],
+  "files": ["SegmentedControl.tsx"],
+  "usage": "Render <SegmentedControl options={[{value:'list',label:'List'},{value:'grid',label:'Grid'}]} value={value} onChange={setValue} aria-label=\"View mode\" />.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
+}

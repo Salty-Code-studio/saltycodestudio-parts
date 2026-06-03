@@ -1,0 +1,395 @@
+/* =============================================================================
+   typography.css — saltycodestudio foundations
+   -----------------------------------------------------------------------------
+   A fluid, responsive type system built on a modular scale with clamp().
+   Drop this in early (after a reset, before component styles) and everything
+   downstream inherits sensible, accessible defaults.
+
+   What's inside:
+     1. Fluid type scale tokens   (--step--2 … --step-6)
+     2. Supporting tokens         (line-height, measure, tracking, weights)
+     3. Base element defaults     (html, body, headings, paragraphs, etc.)
+     4. Utility classes           (.measure, .text-balance, .text-pretty, …)
+
+   Scale: 1.250 (Major Third) on mobile, widening to ~1.333 (Perfect Fourth)
+   on large viewports. The clamp() min/max are computed so the curve stays
+   smooth and never produces awkward in-between sizes.
+
+   Fluid clamp() formula used throughout:
+     clamp(MIN, MIN + (MAX - MIN) * ((100vw - MINvw) / (MAXvw - MINvw)), MAX)
+   Simplified to the standard `calc(base + slope * vw)` middle term, with the
+   viewport range locked to 320px → 1240px.
+============================================================================= */
+
+:root {
+  /* ---------------------------------------------------------------------------
+     1. FLUID TYPE SCALE
+     ---------------------------------------------------------------------------
+     Each step interpolates between a small-screen and large-screen size.
+     The middle term uses `rem + vw` so it scales with the viewport but still
+     respects user font-size preferences (the rem component).
+
+     Reference range: 320px (min) → 1240px (max) viewport.
+     Body text (--step-0) lands at 1rem → 1.125rem.
+  --------------------------------------------------------------------------- */
+
+  /* Small supporting text — captions, footnotes, fine print */
+  --step--2: clamp(0.6944rem, 0.6577rem + 0.1835vw, 0.8rem);
+  /* Secondary text — labels, metadata, small UI */
+  --step--1: clamp(0.8333rem, 0.7754rem + 0.2899vw, 1rem);
+  /* Body — the baseline everything is measured against */
+  --step-0:  clamp(1rem, 0.913rem + 0.4348vw, 1.25rem);
+  /* Lead paragraph / large body */
+  --step-1:  clamp(1.2rem, 1.0739rem + 0.6304vw, 1.5625rem);
+  /* h4 / small headings */
+  --step-2:  clamp(1.44rem, 1.2615rem + 0.8924vw, 1.9531rem);
+  /* h3 */
+  --step-3:  clamp(1.728rem, 1.4799rem + 1.2407vw, 2.4414rem);
+  /* h2 */
+  --step-4:  clamp(2.0736rem, 1.7334rem + 1.7011vw, 3.0518rem);
+  /* h1 */
+  --step-5:  clamp(2.4883rem, 2.0254rem + 2.3147vw, 3.8147rem);
+  /* Display — hero headlines, oversized statements */
+  --step-6:  clamp(2.986rem, 2.3613rem + 3.1235vw, 4.7684rem);
+
+  /* ---------------------------------------------------------------------------
+     2. SUPPORTING TYPOGRAPHY TOKENS
+  --------------------------------------------------------------------------- */
+
+  /* Font families — overridable per project. See font-pairings.md for combos.
+     Falls back to a high-quality modern system stack so type looks good even
+     before / without web fonts loaded. */
+  --font-body: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  --font-heading: var(--font-body);
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+    "Liberation Mono", monospace;
+
+  /* Line heights — tight for big type, generous for reading */
+  --leading-tight: 1.1;   /* large display headings */
+  --leading-snug: 1.2;    /* headings */
+  --leading-normal: 1.6;  /* body copy */
+  --leading-loose: 1.75;  /* long-form articles */
+
+  /* Letter-spacing (tracking) — large type wants negative tracking to feel
+     intentional; small caps / labels want positive tracking to breathe. */
+  --tracking-tighter: -0.04em; /* display */
+  --tracking-tight: -0.02em;   /* large headings */
+  --tracking-normal: 0;        /* body */
+  --tracking-wide: 0.02em;     /* small caps, labels */
+  --tracking-wider: 0.08em;    /* eyebrow / overline text */
+
+  /* Font weights */
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  /* Optimal measure (max line length) for comfortable reading.
+     ~66ch is the classic sweet spot; the others give you room to choose. */
+  --measure: 66ch;
+  --measure-narrow: 48ch;
+  --measure-wide: 78ch;
+
+  /* Vertical rhythm — spacing between text blocks, tied to the body size */
+  --flow-space: 1.25em;
+}
+
+/* =============================================================================
+   3. BASE ELEMENT DEFAULTS
+============================================================================= */
+
+html {
+  /* Keep the 1rem = 16px relationship intact for accessibility; the fluid
+     scale handles responsiveness, not a root font-size hack. */
+  font-size: 100%;
+  /* Smooth, opt-in scrolling that respects reduced-motion (see bottom). */
+  scroll-behavior: smooth;
+  /* Prevent iOS bumping text up on orientation change. */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--step-0);
+  line-height: var(--leading-normal);
+  letter-spacing: var(--tracking-normal);
+  font-weight: var(--weight-regular);
+  /* Crisp rendering on macOS / retina without over-thinning everywhere. */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Optimize for legibility: enables kerning + common ligatures. */
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+}
+
+/* --- Headings ---------------------------------------------------------------
+   Shared heading defaults, then per-level size + tracking. Headings get
+   text-wrap: balance so short multi-line titles distribute evenly instead of
+   leaving an orphaned last word. */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-snug);
+  /* Balance heading line breaks (supported browsers; harmless elsewhere). */
+  text-wrap: balance;
+  /* Tighten margins; rely on a flow utility / layout for spacing. */
+  margin-block: 0 0.5em;
+}
+
+h1 {
+  font-size: var(--step-5);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+}
+
+h2 {
+  font-size: var(--step-4);
+  letter-spacing: var(--tracking-tight);
+}
+
+h3 {
+  font-size: var(--step-3);
+  letter-spacing: var(--tracking-tight);
+}
+
+h4 {
+  font-size: var(--step-2);
+}
+
+h5 {
+  font-size: var(--step-1);
+}
+
+h6 {
+  font-size: var(--step-0);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+/* --- Body copy --------------------------------------------------------------
+   Paragraphs get pretty wrapping (avoids single-word orphans) and a capped
+   measure so lines never run uncomfortably wide. */
+p {
+  max-width: var(--measure);
+  text-wrap: pretty;
+  margin-block: 0 var(--flow-space);
+}
+
+/* Remove the trailing margin on the last block in any container. */
+p:last-child,
+ul:last-child,
+ol:last-child {
+  margin-block-end: 0;
+}
+
+/* Lead paragraph — first paragraph after a heading, or opt-in via class. */
+.lead,
+h1 + p,
+h2 + p {
+  font-size: var(--step-1);
+  line-height: var(--leading-normal);
+  color: inherit;
+}
+
+/* --- Inline + small text ---------------------------------------------------- */
+small,
+.text-sm {
+  font-size: var(--step--1);
+}
+
+.text-xs {
+  font-size: var(--step--2);
+}
+
+/* Eyebrow / overline — small, spaced, uppercase label above a heading. */
+.eyebrow,
+.overline {
+  display: inline-block;
+  font-size: var(--step--1);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+/* --- Display headline — bigger than h1, for heroes ------------------------- */
+.display {
+  font-family: var(--font-heading);
+  font-size: var(--step-6);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tighter);
+  text-wrap: balance;
+}
+
+/* --- Lists ------------------------------------------------------------------ */
+ul, ol {
+  max-width: var(--measure);
+  padding-inline-start: 1.25em;
+  margin-block: 0 var(--flow-space);
+}
+
+li {
+  margin-block-end: 0.4em;
+}
+
+li:last-child {
+  margin-block-end: 0;
+}
+
+/* --- Links ------------------------------------------------------------------ */
+a {
+  color: inherit;
+  text-decoration-line: underline;
+  text-decoration-thickness: max(1px, 0.05em);
+  text-underline-offset: 0.15em;
+  /* Don't break underlines across descenders. */
+  text-decoration-skip-ink: auto;
+}
+
+/* --- Quotes ----------------------------------------------------------------- */
+blockquote {
+  max-width: var(--measure);
+  margin-block: var(--flow-space);
+  padding-inline-start: 1em;
+  border-inline-start: 0.2em solid currentColor;
+  font-size: var(--step-1);
+  line-height: var(--leading-normal);
+  text-wrap: pretty;
+}
+
+blockquote p {
+  max-width: none;
+}
+
+cite {
+  display: block;
+  margin-block-start: 0.5em;
+  font-size: var(--step--1);
+  font-style: normal;
+  opacity: 0.7;
+}
+
+/* --- Code ------------------------------------------------------------------- */
+code, kbd, samp, pre {
+  font-family: var(--font-mono);
+  font-size: 0.9em; /* mono fonts read large; nudge down relative to context */
+}
+
+pre {
+  max-width: 100%;
+  overflow-x: auto;
+  line-height: var(--leading-normal);
+  -webkit-text-size-adjust: 100%;
+}
+
+pre code {
+  font-size: inherit;
+}
+
+/* --- Emphasis & weights ----------------------------------------------------- */
+strong, b { font-weight: var(--weight-bold); }
+em, i     { font-style: italic; }
+
+/* --- Tabular figures for numbers in tables (aligned columns) ---------------- */
+.nums-tabular {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+/* --- Horizontal rule -------------------------------------------------------- */
+hr {
+  border: 0;
+  border-block-start: 1px solid currentColor;
+  opacity: 0.15;
+  margin-block: 2em;
+}
+
+/* =============================================================================
+   4. UTILITY CLASSES
+   ----------------------------------------------------------------------------
+   Composable helpers so you can apply typographic intent anywhere without
+   reaching for the element selectors.
+============================================================================= */
+
+/* Cap line length for any block. Use the variants for tighter/wider columns. */
+.measure         { max-width: var(--measure); }
+.measure-narrow  { max-width: var(--measure-narrow); }
+.measure-wide    { max-width: var(--measure-wide); }
+.measure-none    { max-width: none; }
+
+/* Wrapping intent. `balance` for short headings, `pretty` for paragraphs. */
+.text-balance { text-wrap: balance; }
+.text-pretty  { text-wrap: pretty; }
+.text-nowrap  { white-space: nowrap; }
+
+/* Tracking helpers. */
+.tracking-tighter { letter-spacing: var(--tracking-tighter); }
+.tracking-tight   { letter-spacing: var(--tracking-tight); }
+.tracking-normal  { letter-spacing: var(--tracking-normal); }
+.tracking-wide    { letter-spacing: var(--tracking-wide); }
+.tracking-wider   { letter-spacing: var(--tracking-wider); }
+
+/* Leading helpers. */
+.leading-tight  { line-height: var(--leading-tight); }
+.leading-snug   { line-height: var(--leading-snug); }
+.leading-normal { line-height: var(--leading-normal); }
+.leading-loose  { line-height: var(--leading-loose); }
+
+/* Direct step access — for one-off sizing without a semantic element. */
+.text-step--2 { font-size: var(--step--2); }
+.text-step--1 { font-size: var(--step--1); }
+.text-step-0  { font-size: var(--step-0); }
+.text-step-1  { font-size: var(--step-1); }
+.text-step-2  { font-size: var(--step-2); }
+.text-step-3  { font-size: var(--step-3); }
+.text-step-4  { font-size: var(--step-4); }
+.text-step-5  { font-size: var(--step-5); }
+.text-step-6  { font-size: var(--step-6); }
+
+/* Truncate to a single line with an ellipsis. */
+.truncate {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* Clamp to N lines (set --lines, default 2). */
+.line-clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: var(--lines, 2);
+  line-clamp: var(--lines, 2);
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Vertical rhythm: add consistent space between flow children. */
+.flow > * + * {
+  margin-block-start: var(--flow-space);
+}
+
+/* Accessible visually-hidden text (screen-reader only). */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* =============================================================================
+   5. PREFERENCES & SAFEGUARDS
+============================================================================= */
+
+/* Respect users who ask for reduced motion — disable smooth scroll. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}

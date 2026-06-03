@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Alert Callout — saltycodestudio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+      body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }
+    </style>
+  </head>
+  <body class="bg-[#f4ece0]">
+    <div id="root"></div>
+    <script type="text/babel" data-presets="react">
+      const { useId, useState } = React;
+
+      /* Inline SVG glyphs (currentColor) */
+      const InfoIcon = (
+        <svg viewBox="0 0 20 20" fill="none" className="h-5 w-5" aria-hidden="true">
+          <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="1.6" />
+          <path d="M10 9v4.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+          <circle cx="10" cy="6.4" r="1" fill="currentColor" />
+        </svg>
+      );
+      const SuccessIcon = (
+        <svg viewBox="0 0 20 20" fill="none" className="h-5 w-5" aria-hidden="true">
+          <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="1.6" />
+          <path d="m6.4 10.2 2.3 2.3 4.9-4.9" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      );
+      const WarningIcon = (
+        <svg viewBox="0 0 20 20" fill="none" className="h-5 w-5" aria-hidden="true">
+          <path d="M10 2.8 18 16.2H2L10 2.8Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+          <path d="M10 8v3.4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+          <circle cx="10" cy="13.6" r="1" fill="currentColor" />
+        </svg>
+      );
+      const ErrorIcon = (
+        <svg viewBox="0 0 20 20" fill="none" className="h-5 w-5" aria-hidden="true">
+          <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="1.6" />
+          <path d="m7.4 7.4 5.2 5.2M12.6 7.4l-5.2 5.2" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+        </svg>
+      );
+
+      const VARIANTS = {
+        info: {
+          role: "status", live: "polite",
+          container: "border-[#bfe3e3] bg-[#eef7f7]",
+          iconWrap: "bg-[#1f8a8a]/12 text-[#0f5c5c]",
+          title: "text-[#0f5c5c]", body: "text-[#33555c]",
+          dismiss: "text-[#0f5c5c] hover:bg-[#1f8a8a]/12 focus-visible:ring-[#1f8a8a]",
+          icon: InfoIcon,
+        },
+        success: {
+          role: "status", live: "polite",
+          container: "border-[#bfe3d6] bg-[#edf7f1]",
+          iconWrap: "bg-[#2f8f6b]/12 text-[#1f6b4f]",
+          title: "text-[#1f6b4f]", body: "text-[#3a5b50]",
+          dismiss: "text-[#1f6b4f] hover:bg-[#2f8f6b]/12 focus-visible:ring-[#2f8f6b]",
+          icon: SuccessIcon,
+        },
+        warning: {
+          role: "alert", live: "assertive",
+          container: "border-[#ecd9b0] bg-[#fbf3e2]",
+          iconWrap: "bg-[#c08a1e]/14 text-[#8a6310]",
+          title: "text-[#8a6310]", body: "text-[#6b5326]",
+          dismiss: "text-[#8a6310] hover:bg-[#c08a1e]/14 focus-visible:ring-[#c08a1e]",
+          icon: WarningIcon,
+        },
+        error: {
+          role: "alert", live: "assertive",
+          container: "border-[#eccdc6] bg-[#fbeeea]",
+          iconWrap: "bg-[#c0432e]/12 text-[#9a341f]",
+          title: "text-[#9a341f]", body: "text-[#6b3a30]",
+          dismiss: "text-[#9a341f] hover:bg-[#c0432e]/12 focus-visible:ring-[#c0432e]",
+          icon: ErrorIcon,
+        },
+      };
+
+      function AlertCallout({
+        variant = "info",
+        title,
+        children,
+        onDismiss,
+        dismissLabel = "Dismiss",
+        icon,
+        className = "",
+      }) {
+        const styles = VARIANTS[variant];
+        const titleId = useId();
+        const resolvedIcon = icon === undefined ? styles.icon : icon;
+
+        return (
+          <div
+            role={styles.role}
+            aria-live={styles.live}
+            aria-labelledby={title ? titleId : undefined}
+            className={`flex items-start gap-3 rounded-2xl border p-4 shadow-[0_1px_0_rgba(255,255,255,0.6)_inset] ${styles.container} ${className}`}
+          >
+            {resolvedIcon != null && (
+              <span
+                aria-hidden="true"
+                className={`mt-0.5 flex h-8 w-8 flex-none items-center justify-center rounded-xl ${styles.iconWrap}`}
+              >
+                {resolvedIcon}
+              </span>
+            )}
+
+            <div className="min-w-0 flex-1">
+              {title && (
+                <p id={titleId} className={`text-sm font-semibold tracking-tight ${styles.title}`}>
+                  {title}
+                </p>
+              )}
+              {children != null && (
+                <div className={`text-sm leading-relaxed ${styles.body} ${title ? "mt-1" : ""}`}>
+                  {children}
+                </div>
+              )}
+            </div>
+
+            {onDismiss && (
+              <button
+                type="button"
+                onClick={onDismiss}
+                aria-label={dismissLabel}
+                className={`-mr-1 -mt-1 flex h-8 w-8 flex-none items-center justify-center rounded-lg outline-none transition-colors focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-offset-transparent ${styles.dismiss}`}
+              >
+                <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4" aria-hidden="true">
+                  <path d="m5.5 5.5 9 9M14.5 5.5l-9 9" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+                </svg>
+              </button>
+            )}
+          </div>
+        );
+      }
+
+      function Section({ label, children }) {
+        return (
+          <section className="mb-12">
+            <h2 className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-[#0f5c5c]">{label}</h2>
+            <div className="space-y-3">{children}</div>
+          </section>
+        );
+      }
+
+      function Demo() {
+        const [open, setOpen] = useState({ info: true, success: true, warning: true, error: true });
+        const dismiss = (k) => setOpen((s) => ({ ...s, [k]: false }));
+        const resetAll = () => setOpen({ info: true, success: true, warning: true, error: true });
+        const allHidden = !open.info && !open.success && !open.warning && !open.error;
+
+        return (
+          <main className="min-h-screen px-6 py-16 sm:px-8">
+            <div className="mx-auto mb-12 max-w-2xl text-center">
+              <span className="inline-block rounded-full bg-[#1f8a8a]/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#0f5c5c]">
+                Sand &amp; Surf · Callout
+              </span>
+              <h1 className="mt-4 text-4xl font-semibold leading-tight tracking-tight text-[#1c2b33]">
+                Alert Callout
+              </h1>
+              <p className="mt-4 text-base leading-relaxed text-[#4a5d66]">
+                Info, success, warning and error states with icon, title, body and optional dismiss.
+                Try tabbing to the × buttons — focus is fully visible.
+              </p>
+            </div>
+
+            <div className="mx-auto max-w-2xl">
+              <Section label="Variants — title + body">
+                <AlertCallout variant="info" title="New region available">
+                  We just turned on an edge node closer to your visitors for faster first paint.
+                </AlertCallout>
+                <AlertCallout variant="success" title="Deploy succeeded">
+                  Your site is live across every coast. No action needed.
+                </AlertCallout>
+                <AlertCallout variant="warning" title="Certificate expiring">
+                  Your SSL certificate for <code>surf.example.com</code> renews in 3 days.
+                </AlertCallout>
+                <AlertCallout variant="error" title="Build failed">
+                  Module <code>./surf</code> could not be resolved during the bundle step.
+                </AlertCallout>
+              </Section>
+
+              <Section label="Body only (no title)">
+                <AlertCallout variant="info">
+                  Heads up — maintenance is scheduled for tonight at 02:00 island time.
+                </AlertCallout>
+                <AlertCallout variant="success">
+                  Saved. Your preferences will sync to all devices.
+                </AlertCallout>
+              </Section>
+
+              <Section label="Title only & no icon">
+                <AlertCallout variant="warning" title="Low on credits — top up to keep deploying." />
+                <AlertCallout variant="info" icon={null} title="Compact notice">
+                  This callout hides its icon via <code>icon={`{null}`}</code>.
+                </AlertCallout>
+              </Section>
+
+              <Section label="Dismissible (interactive)">
+                {open.info && (
+                  <AlertCallout variant="info" title="Tip" onDismiss={() => dismiss("info")}>
+                    You can pin frequent callouts to the top of your dashboard.
+                  </AlertCallout>
+                )}
+                {open.success && (
+                  <AlertCallout variant="success" title="Invite sent" onDismiss={() => dismiss("success")}>
+                    Your teammate will get an email shortly.
+                  </AlertCallout>
+                )}
+                {open.warning && (
+                  <AlertCallout variant="warning" title="Unsaved changes" onDismiss={() => dismiss("warning")}>
+                    You have edits that haven't been published yet.
+                  </AlertCallout>
+                )}
+                {open.error && (
+                  <AlertCallout variant="error" title="Payment declined" onDismiss={() => dismiss("error")}>
+                    We couldn't charge your card. Update your billing details to continue.
+                  </AlertCallout>
+                )}
+                {allHidden && (
+                  <button
+                    type="button"
+                    onClick={resetAll}
+                    className="rounded-xl bg-[#1c2b33] px-4 py-2.5 text-sm font-semibold text-[#fbf7f0] outline-none transition-transform hover:scale-[1.02] focus-visible:ring-2 focus-visible:ring-[#1f8a8a] focus-visible:ring-offset-2 focus-visible:ring-offset-[#f4ece0]"
+                  >
+                    Restore callouts
+                  </button>
+                )}
+              </Section>
+            </div>
+          </main>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(<Demo />);
+    </script>
+  </body>
+</html>

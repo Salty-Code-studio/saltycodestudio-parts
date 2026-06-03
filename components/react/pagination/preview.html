@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pagination — saltycodestudio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+      body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }
+    </style>
+  </head>
+  <body class="bg-[#fbf7f0] text-[#1c2b33]">
+    <div id="root"></div>
+    <script type="text/babel" data-presets="react">
+      const { useMemo, useState } = React;
+
+      const DOTS = "…";
+
+      function range(start, end) {
+        const out = [];
+        for (let i = start; i <= end; i += 1) out.push(i);
+        return out;
+      }
+
+      function usePaginationRange({ page, totalPages, siblingCount = 1, boundaryCount = 1 }) {
+        return useMemo(() => {
+          const totalPageNumbers = boundaryCount * 2 + siblingCount * 2 + 3;
+          if (totalPages <= totalPageNumbers) return range(1, totalPages);
+
+          const startPages = range(1, boundaryCount);
+          const endPages = range(totalPages - boundaryCount + 1, totalPages);
+
+          const siblingsStart = Math.max(
+            Math.min(page - siblingCount, totalPages - boundaryCount - siblingCount * 2 - 1),
+            boundaryCount + 2,
+          );
+          const siblingsEnd = Math.min(
+            Math.max(page + siblingCount, boundaryCount + siblingCount * 2 + 2),
+            endPages.length > 0 ? endPages[0] - 2 : totalPages - 1,
+          );
+
+          const items = [...startPages];
+
+          if (siblingsStart > boundaryCount + 2) {
+            items.push("start-ellipsis");
+          } else if (boundaryCount + 1 < totalPages - boundaryCount) {
+            items.push(boundaryCount + 1);
+          }
+
+          items.push(...range(siblingsStart, siblingsEnd));
+
+          if (siblingsEnd < totalPages - boundaryCount - 1) {
+            items.push("end-ellipsis");
+          } else if (totalPages - boundaryCount > boundaryCount) {
+            items.push(totalPages - boundaryCount);
+          }
+
+          items.push(...endPages);
+          return items;
+        }, [page, totalPages, siblingCount, boundaryCount]);
+      }
+
+      const baseItem =
+        "inline-flex h-10 min-w-10 items-center justify-center rounded-xl px-3 text-sm font-medium tabular-nums transition-colors outline-none focus-visible:ring-2 focus-visible:ring-[#2ec3c3] focus-visible:ring-offset-2 focus-visible:ring-offset-[#fbf7f0]";
+
+      function ChevronLeft() {
+        return (
+          <svg className="h-4 w-4" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M12.5 15 7.5 10l5-5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        );
+      }
+      function ChevronRight() {
+        return (
+          <svg className="h-4 w-4" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M7.5 5 12.5 10l-5 5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        );
+      }
+
+      function Pagination({
+        page,
+        totalPages,
+        onPageChange,
+        siblingCount = 1,
+        boundaryCount = 1,
+        hidePrevNext = false,
+        ariaLabel = "Pagination",
+        className = "",
+      }) {
+        const items = usePaginationRange({ page, totalPages, siblingCount, boundaryCount });
+        const isFirst = page <= 1;
+        const isLast = page >= totalPages;
+
+        const go = (next) => {
+          const clamped = Math.min(Math.max(next, 1), totalPages);
+          if (clamped !== page) onPageChange(clamped);
+        };
+
+        const edgeBtn = (disabled) =>
+          `${baseItem} gap-1 border border-[#ece0cd] bg-[#fbf7f0] ${
+            disabled
+              ? "cursor-not-allowed text-[#4a5d66]/40"
+              : "text-[#1c2b33] hover:border-[#2ec3c3] hover:text-[#0f5c5c] active:bg-[#f4ece0]"
+          }`;
+
+        return (
+          <nav role="navigation" aria-label={ariaLabel} className={`flex items-center gap-1.5 ${className}`}>
+            {!hidePrevNext && (
+              <button type="button" onClick={() => go(page - 1)} disabled={isFirst} aria-label="Go to previous page" className={edgeBtn(isFirst)}>
+                <ChevronLeft />
+                <span className="hidden sm:inline">Prev</span>
+              </button>
+            )}
+
+            <ul className="flex items-center gap-1.5">
+              {items.map((item, i) => {
+                if (item === "start-ellipsis" || item === "end-ellipsis") {
+                  return (
+                    <li key={`${item}-${i}`} aria-hidden="true">
+                      <span className={`${baseItem} pointer-events-none select-none text-[#4a5d66]`}>{DOTS}</span>
+                    </li>
+                  );
+                }
+                const isCurrent = item === page;
+                return (
+                  <li key={item}>
+                    <button
+                      type="button"
+                      onClick={() => go(item)}
+                      aria-current={isCurrent ? "page" : undefined}
+                      aria-label={isCurrent ? `Page ${item}, current page` : `Go to page ${item}`}
+                      className={`${baseItem} ${
+                        isCurrent
+                          ? "bg-[#0f5c5c] text-white shadow-sm shadow-[#0a4a4a]/20 hover:bg-[#0a4a4a]"
+                          : "border border-[#ece0cd] bg-[#fbf7f0] text-[#1c2b33] hover:border-[#2ec3c3] hover:text-[#0f5c5c] active:bg-[#f4ece0]"
+                      }`}
+                    >
+                      {item}
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+
+            {!hidePrevNext && (
+              <button type="button" onClick={() => go(page + 1)} disabled={isLast} aria-label="Go to next page" className={edgeBtn(isLast)}>
+                <span className="hidden sm:inline">Next</span>
+                <ChevronRight />
+              </button>
+            )}
+          </nav>
+        );
+      }
+
+      /* ---------- Demo harness ---------- */
+
+      function Demo({ title, note, total, initial, siblingCount, boundaryCount, hidePrevNext }) {
+        const [page, setPage] = useState(initial);
+        return (
+          <div className="rounded-3xl border border-[#ece0cd] bg-[#f4ece0] p-6 shadow-sm">
+            <div className="mb-1 flex items-baseline justify-between gap-3">
+              <h2 className="text-sm font-semibold uppercase tracking-wider text-[#0f5c5c]">{title}</h2>
+              <span className="text-xs text-[#4a5d66]">page {page} / {total}</span>
+            </div>
+            <p className="mb-5 text-sm text-[#4a5d66]">{note}</p>
+            <div className="overflow-x-auto rounded-2xl bg-[#fbf7f0] p-4 ring-1 ring-[#ece0cd]">
+              <Pagination
+                page={page}
+                totalPages={total}
+                onPageChange={setPage}
+                siblingCount={siblingCount}
+                boundaryCount={boundaryCount}
+                hidePrevNext={hidePrevNext}
+              />
+            </div>
+          </div>
+        );
+      }
+
+      function App() {
+        return (
+          <main className="mx-auto max-w-3xl px-6 py-16">
+            <header className="mb-10">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#1f8a8a]">saltycodestudio · Sand &amp; Surf</p>
+              <h1 className="mt-2 text-3xl font-semibold tracking-tight text-[#1c2b33]">Pagination</h1>
+              <p className="mt-2 max-w-xl text-[#4a5d66]">
+                Controlled pager with prev/next, numbered pages, smart ellipsis truncation, and
+                disabled edges. Try clicking through each — disabled edges, the current-page highlight,
+                and ellipses behave live. Tab to a button to see the focus ring.
+              </p>
+            </header>
+
+            <div className="space-y-6">
+              <Demo title="Default — start" note="20 pages, sitting on page 1. Previous is disabled; the end collapses behind an ellipsis." total={20} initial={1} />
+              <Demo title="Middle" note="Both sides truncate with ellipses while boundaries (1 and 20) stay pinned." total={20} initial={10} />
+              <Demo title="Near the end" note="Page 19 of 20. The start collapses; Next is one click from disabled." total={20} initial={19} />
+              <Demo title="Few pages — no ellipsis" note="Only 5 pages, so every page renders without truncation." total={5} initial={3} />
+              <Demo title="Wider window — siblingCount 2, boundaryCount 2" note="More numbers visible around the current page and at each edge before collapsing." total={30} initial={14} siblingCount={2} boundaryCount={2} />
+              <Demo title="Numbers only — hidePrevNext" note="Prev/Next hidden for a compact, numbers-only pager." total={12} initial={6} hidePrevNext={true} />
+            </div>
+
+            <footer className="mt-12 border-t border-[#ece0cd] pt-6 text-sm text-[#4a5d66]">
+              <code className="rounded bg-[#f4ece0] px-1.5 py-0.5 text-[#0f5c5c]">&lt;Pagination page=&#123;page&#125; totalPages=&#123;20&#125; onPageChange=&#123;setPage&#125; /&gt;</code>
+            </footer>
+          </main>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+    </script>
+  </body>
+</html>

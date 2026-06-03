@@ -1,0 +1,14 @@
+{
+  "name": "Logo Cloud",
+  "slug": "logo-cloud",
+  "kind": "section",
+  "category": "social-proof",
+  "tier": "practical",
+  "tags": ["logo-cloud", "social-proof", "trusted-by", "logos", "grayscale", "hover", "brands", "marquee"],
+  "description": "A 'Trusted by' logo strip that fades brand marks in from grayscale to full color on hover for tasteful, lightweight social proof.",
+  "deps": ["react", "tailwindcss"],
+  "files": ["LogoCloud.tsx", "section.html"],
+  "usage": "Import LogoCloud and drop it below a hero or above a footer: <LogoCloud eyebrow=\"Trusted by teams shipping on the coast\" logos={[{ name: 'Tide & Co', src: '/logos/tide.svg', href: 'https://tideandco.example' }]} />. Pass your own logos array (name + svg/img src, optional href). For the no-React version, paste the markup from section.html and swap the inline SVGs for your brand marks.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
+}

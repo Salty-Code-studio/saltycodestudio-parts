@@ -1,0 +1,230 @@
+<!-- ===== BEGIN contact-form (section.html) ===== -->
+<!--
+  Sand & Surf contact section: validated form + contact details + map placeholder.
+  Vanilla JS validation lives in the inline <script> at the bottom of this block.
+  Requires Tailwind utility classes on the page. Fonts (Space Grotesk / Inter /
+  JetBrains Mono) are optional but recommended via .font-display / .font-mono.
+-->
+<section aria-label="Contact us" class="relative isolate overflow-hidden bg-[#FBF7F0] text-[#1C2B2E]">
+  <div aria-hidden="true" class="absolute -right-32 -top-32 -z-10 h-80 w-80 rounded-full bg-[#2EC3C3]/10 blur-3xl"></div>
+  <div aria-hidden="true" class="absolute -bottom-40 -left-24 -z-10 h-96 w-96 rounded-full bg-[#1F8A8A]/10 blur-3xl"></div>
+
+  <div class="mx-auto max-w-6xl px-6 py-20 sm:py-24 lg:py-28">
+    <div class="max-w-2xl">
+      <p class="mb-4 font-mono text-xs uppercase tracking-[0.18em] text-[#1F8A8A]">~&lt; Say hello</p>
+      <h2 class="font-display text-3xl font-bold leading-tight tracking-tight text-[#0F5C5C] sm:text-4xl lg:text-5xl">
+        Let's talk about your build.
+      </h2>
+      <p class="mt-5 max-w-xl text-base leading-relaxed text-[#4A5D66] sm:text-lg">
+        Tell us where you are and where you'd like to be. We'll reply within one business day with next steps — no sales script, no pressure.
+      </p>
+    </div>
+
+    <div class="mt-12 grid gap-8 lg:mt-16 lg:grid-cols-[1.15fr_0.85fr] lg:gap-10">
+      <!-- Form card -->
+      <div class="rounded-3xl border border-[#1C2B2E]/10 bg-white/70 p-6 shadow-[0_24px_60px_-32px_rgba(15,92,92,0.35)] backdrop-blur sm:p-8">
+        <form id="cf-form" novalidate class="space-y-5">
+          <div class="grid gap-5 sm:grid-cols-2">
+            <div>
+              <label for="cf-name" class="mb-1.5 block text-sm font-medium text-[#1C2B2E]">Name</label>
+              <input id="cf-name" name="name" type="text" autocomplete="name" placeholder="Marisol Anthony"
+                class="w-full rounded-xl border border-[#1C2B2E]/15 bg-[#FBF7F0] px-4 py-3 text-sm text-[#1C2B2E] shadow-sm transition-colors placeholder:text-[#1C2B2E]/40 focus:border-[#1F8A8A] focus:outline-none focus:ring-2 focus:ring-[#2EC3C3]/30 aria-[invalid=true]:border-[#FF6F59] aria-[invalid=true]:ring-[#FF6F59]/25" />
+              <p data-error-for="name" class="mt-1.5 hidden text-xs font-medium text-[#c8472f]"></p>
+            </div>
+            <div>
+              <label for="cf-email" class="mb-1.5 block text-sm font-medium text-[#1C2B2E]">Email</label>
+              <input id="cf-email" name="email" type="email" autocomplete="email" placeholder="you@company.com"
+                class="w-full rounded-xl border border-[#1C2B2E]/15 bg-[#FBF7F0] px-4 py-3 text-sm text-[#1C2B2E] shadow-sm transition-colors placeholder:text-[#1C2B2E]/40 focus:border-[#1F8A8A] focus:outline-none focus:ring-2 focus:ring-[#2EC3C3]/30 aria-[invalid=true]:border-[#FF6F59] aria-[invalid=true]:ring-[#FF6F59]/25" />
+              <p data-error-for="email" class="mt-1.5 hidden text-xs font-medium text-[#c8472f]"></p>
+            </div>
+          </div>
+
+          <div>
+            <label for="cf-company" class="mb-1.5 block text-sm font-medium text-[#1C2B2E]">
+              Company <span class="font-normal text-[#1C2B2E]/45">(optional)</span>
+            </label>
+            <input id="cf-company" name="company" type="text" autocomplete="organization" placeholder="Where you work"
+              class="w-full rounded-xl border border-[#1C2B2E]/15 bg-[#FBF7F0] px-4 py-3 text-sm text-[#1C2B2E] shadow-sm transition-colors placeholder:text-[#1C2B2E]/40 focus:border-[#1F8A8A] focus:outline-none focus:ring-2 focus:ring-[#2EC3C3]/30" />
+          </div>
+
+          <div>
+            <label for="cf-message" class="mb-1.5 block text-sm font-medium text-[#1C2B2E]">What can we help with?</label>
+            <textarea id="cf-message" name="message" rows="5" placeholder="A few lines about the project, timeline, and budget range if you have one."
+              class="w-full resize-y rounded-xl border border-[#1C2B2E]/15 bg-[#FBF7F0] px-4 py-3 text-sm text-[#1C2B2E] shadow-sm transition-colors placeholder:text-[#1C2B2E]/40 focus:border-[#1F8A8A] focus:outline-none focus:ring-2 focus:ring-[#2EC3C3]/30 aria-[invalid=true]:border-[#FF6F59] aria-[invalid=true]:ring-[#FF6F59]/25"></textarea>
+            <p data-error-for="message" class="mt-1.5 hidden text-xs font-medium text-[#c8472f]"></p>
+          </div>
+
+          <div class="flex flex-col gap-3 pt-1 sm:flex-row sm:items-center sm:justify-between">
+            <button type="submit" data-cf-submit
+              class="inline-flex items-center justify-center gap-2 rounded-full bg-[#1F8A8A] px-7 py-3.5 text-sm font-semibold text-[#FBF7F0] shadow-lg shadow-[#1F8A8A]/20 transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#0F5C5C] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1F8A8A] disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:translate-y-0">
+              <span data-cf-label>Send message</span>
+              <svg aria-hidden="true" viewBox="0 0 20 20" fill="none" class="h-4 w-4">
+                <path d="M4 10h12m0 0-4.5-4.5M16 10l-4.5 4.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+            </button>
+            <p class="text-xs text-[#4A5D66] sm:max-w-[18rem] sm:text-right">
+              We reply within one business day. Your details stay between us.
+            </p>
+          </div>
+        </form>
+
+        <!-- Thank-you state (toggled by JS) -->
+        <div data-cf-success role="status" class="hidden h-full min-h-[20rem] flex-col items-center justify-center text-center">
+          <span class="flex h-14 w-14 items-center justify-center rounded-full bg-[#2EC3C3]/15 text-[#0F5C5C]">
+            <svg viewBox="0 0 24 24" fill="none" class="h-7 w-7">
+              <path d="m5 12.5 4 4 10-10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </span>
+          <h3 class="mt-5 font-display text-xl font-bold text-[#0F5C5C]">Message on its way.</h3>
+          <p class="mt-2 max-w-sm text-sm text-[#4A5D66]">
+            Thanks for reaching out — we'll be back to you within one business day. Check your inbox (and the occasional spam folder).
+          </p>
+          <button type="button" data-cf-reset
+            class="mt-6 text-sm font-semibold text-[#1F8A8A] underline-offset-4 transition-colors hover:text-[#0F5C5C] hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1F8A8A]">
+            Send another message
+          </button>
+        </div>
+      </div>
+
+      <!-- Details + map -->
+      <div class="flex flex-col gap-6">
+        <ul class="grid gap-5 rounded-3xl border border-[#1C2B2E]/10 bg-[#F4ECE0] p-6 sm:p-7">
+          <li class="flex items-start gap-4">
+            <span class="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#2EC3C3]/15 text-[#0F5C5C]">
+              <svg viewBox="0 0 20 20" fill="none" class="h-5 w-5"><path d="M3 6.5 10 11l7-4.5M3.5 5h13a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-13a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </span>
+            <div>
+              <p class="text-xs font-medium uppercase tracking-[0.14em] text-[#4A5D66]">Email</p>
+              <a href="mailto:studio@saltycode.studio" class="mt-0.5 block text-sm font-semibold text-[#1C2B2E] transition-colors hover:text-[#1F8A8A] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1F8A8A]">studio@saltycode.studio</a>
+            </div>
+          </li>
+          <li class="flex items-start gap-4">
+            <span class="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#2EC3C3]/15 text-[#0F5C5C]">
+              <svg viewBox="0 0 20 20" fill="none" class="h-5 w-5"><path d="M6.5 3.5 8 6 6.5 7.5a9 9 0 0 0 4 4L12 10l2.5 1.5v3a1.5 1.5 0 0 1-1.6 1.5C7.8 15.6 4.4 12.2 3.5 6.6A1.5 1.5 0 0 1 5 5h1.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </span>
+            <div>
+              <p class="text-xs font-medium uppercase tracking-[0.14em] text-[#4A5D66]">Phone</p>
+              <a href="tel:+5997001820" class="mt-0.5 block text-sm font-semibold text-[#1C2B2E] transition-colors hover:text-[#1F8A8A] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1F8A8A]">+599 700 1820</a>
+            </div>
+          </li>
+          <li class="flex items-start gap-4">
+            <span class="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#2EC3C3]/15 text-[#0F5C5C]">
+              <svg viewBox="0 0 20 20" fill="none" class="h-5 w-5"><path d="M10 17s5.5-4.8 5.5-9a5.5 5.5 0 1 0-11 0c0 4.2 5.5 9 5.5 9Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><circle cx="10" cy="8" r="1.9" stroke="currentColor" stroke-width="1.5"></circle></svg>
+            </span>
+            <div>
+              <p class="text-xs font-medium uppercase tracking-[0.14em] text-[#4A5D66]">Studio</p>
+              <p class="mt-0.5 text-sm font-semibold text-[#1C2B2E]">Kaya Grandi 42, Kralendijk, Bonaire</p>
+            </div>
+          </li>
+          <li class="flex items-start gap-4">
+            <span class="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#2EC3C3]/15 text-[#0F5C5C]">
+              <svg viewBox="0 0 20 20" fill="none" class="h-5 w-5"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.5"></circle><path d="M10 6v4l2.5 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </span>
+            <div>
+              <p class="text-xs font-medium uppercase tracking-[0.14em] text-[#4A5D66]">Hours</p>
+              <p class="mt-0.5 text-sm font-semibold text-[#1C2B2E]">Mon–Fri · 9:00–17:00 AST</p>
+            </div>
+          </li>
+        </ul>
+
+        <!-- Map placeholder -->
+        <div role="img" aria-label="Map of Kralendijk, Bonaire — Dutch Caribbean"
+          class="relative isolate flex min-h-[12rem] flex-1 items-end overflow-hidden rounded-3xl border border-[#1C2B2E]/10 bg-[#ECE0CD]">
+          <svg aria-hidden="true" class="absolute inset-0 -z-10 h-full w-full text-[#1F8A8A]/20" preserveAspectRatio="xMidYMid slice" viewBox="0 0 400 240" fill="none">
+            <rect width="400" height="240" fill="#E7D8C2"></rect>
+            <path d="M0 80h400M0 150h400M0 200h400M90 0v240M210 0v240M320 0v240" stroke="currentColor" stroke-width="2"></path>
+            <path d="M-20 120C80 60 160 200 260 130S420 80 440 150" stroke="#2EC3C3" stroke-opacity="0.5" stroke-width="6" fill="none"></path>
+            <circle cx="210" cy="150" r="34" fill="#2EC3C3" fill-opacity="0.12"></circle>
+          </svg>
+          <span class="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+            <span class="flex h-9 w-9 items-center justify-center rounded-full bg-[#FF6F59] text-[#1C2B2E] shadow-lg shadow-[#0F5C5C]/30 ring-4 ring-[#FBF7F0]">
+              <svg viewBox="0 0 20 20" fill="none" class="h-5 w-5"><path d="M10 17s5.5-4.8 5.5-9a5.5 5.5 0 1 0-11 0c0 4.2 5.5 9 5.5 9Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><circle cx="10" cy="8" r="1.9" stroke="currentColor" stroke-width="1.5"></circle></svg>
+            </span>
+          </span>
+          <p class="relative m-4 rounded-full bg-[#FBF7F0]/85 px-4 py-1.5 text-xs font-medium text-[#0F5C5C] backdrop-blur">Kralendijk, Bonaire — Dutch Caribbean</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Self-contained, scoped validation for the contact-form section.
+  (function () {
+    var form = document.getElementById("cf-form");
+    if (!form || form.dataset.cfBound) return;
+    form.dataset.cfBound = "true";
+
+    var card = form.parentElement;
+    var success = card.querySelector("[data-cf-success]");
+    var submitBtn = form.querySelector("[data-cf-submit]");
+    var submitLabel = form.querySelector("[data-cf-label]");
+    var resetBtn = card.querySelector("[data-cf-reset]");
+
+    function field(name) { return form.querySelector('[name="' + name + '"]'); }
+    function errorEl(name) { return form.querySelector('[data-error-for="' + name + '"]'); }
+
+    function setError(name, msg) {
+      var input = field(name), el = errorEl(name);
+      if (msg) {
+        input.setAttribute("aria-invalid", "true");
+        input.setAttribute("aria-describedby", "cf-" + name + "-error");
+        el.id = "cf-" + name + "-error";
+        el.textContent = msg;
+        el.classList.remove("hidden");
+      } else {
+        input.removeAttribute("aria-invalid");
+        input.removeAttribute("aria-describedby");
+        el.textContent = "";
+        el.classList.add("hidden");
+      }
+    }
+
+    function validate() {
+      var errs = {};
+      var name = field("name").value.trim();
+      var email = field("email").value.trim();
+      var message = field("message").value.trim();
+      if (!name) errs.name = "Please tell us your name.";
+      if (!email) errs.email = "We need an email to reply to.";
+      else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errs.email = "That email doesn't look quite right.";
+      if (message.length < 10) errs.message = "A little more detail helps us help you (10+ characters).";
+      return errs;
+    }
+
+    ["name", "email", "message"].forEach(function (name) {
+      field(name).addEventListener("input", function () {
+        if (field(name).getAttribute("aria-invalid") === "true") setError(name, null);
+      });
+    });
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var errs = validate();
+      ["name", "email", "message"].forEach(function (n) { setError(n, errs[n] || null); });
+      var keys = Object.keys(errs);
+      if (keys.length) { field(keys[0]).focus(); return; }
+
+      submitBtn.disabled = true;
+      if (submitLabel) submitLabel.textContent = "Sending…";
+      setTimeout(function () {
+        form.reset();
+        form.classList.add("hidden");
+        success.classList.remove("hidden");
+        success.classList.add("flex");
+        submitBtn.disabled = false;
+        if (submitLabel) submitLabel.textContent = "Send message";
+      }, 700);
+    });
+
+    if (resetBtn) {
+      resetBtn.addEventListener("click", function () {
+        success.classList.add("hidden");
+        success.classList.remove("flex");
+        form.classList.remove("hidden");
+        field("name").focus();
+      });
+    }
+  })();
+</script>
+<!-- ===== END contact-form ===== -->

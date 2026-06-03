@@ -1,0 +1,87 @@
+<!--
+  Accessible form validation — required markup.
+
+  Rules per field:
+    - Wrap each control in a .field.
+    - Give the control an id; the <label> uses for="<id>".
+    - Add a help/error region: <p class="field__error" id="<id>-error"></p>
+      and point the control at it with aria-describedby="<id>-error".
+    - Declare constraints with native attributes (required, type, minlength,
+      pattern, …) and/or data-* rules read by script.js:
+        data-match="<id>"        cross-field equality (e.g. confirm password)
+        data-error-required, data-error-type, data-error-pattern,
+        data-error-minlength, data-error-match  custom messages
+  script.js validates on blur and on submit, sets aria-invalid, and renders
+  the first failing message into the field's error region.
+-->
+<form class="form" novalidate data-validate>
+  <div class="field">
+    <label class="field__label" for="fv-name">Full name</label>
+    <input
+      class="field__control"
+      id="fv-name"
+      name="name"
+      type="text"
+      autocomplete="name"
+      required
+      minlength="2"
+      aria-describedby="fv-name-error"
+      data-error-required="Please enter your name."
+      data-error-minlength="Use at least 2 characters." />
+    <p class="field__error" id="fv-name-error" aria-live="polite"></p>
+  </div>
+
+  <div class="field">
+    <label class="field__label" for="fv-email">Email</label>
+    <input
+      class="field__control"
+      id="fv-email"
+      name="email"
+      type="email"
+      autocomplete="email"
+      required
+      aria-describedby="fv-email-error"
+      data-error-required="We need an email to reach you."
+      data-error-type="That doesn't look like a valid email." />
+    <p class="field__error" id="fv-email-error" aria-live="polite"></p>
+  </div>
+
+  <div class="field">
+    <label class="field__label" for="fv-password">Password</label>
+    <input
+      class="field__control"
+      id="fv-password"
+      name="password"
+      type="password"
+      autocomplete="new-password"
+      required
+      minlength="8"
+      pattern="(?=.*\d).{8,}"
+      aria-describedby="fv-password-hint fv-password-error"
+      data-error-required="Choose a password."
+      data-error-minlength="At least 8 characters."
+      data-error-pattern="Include at least one number." />
+    <p class="field__hint" id="fv-password-hint">8+ characters, including a number.</p>
+    <p class="field__error" id="fv-password-error" aria-live="polite"></p>
+  </div>
+
+  <div class="field">
+    <label class="field__label" for="fv-confirm">Confirm password</label>
+    <input
+      class="field__control"
+      id="fv-confirm"
+      name="confirm"
+      type="password"
+      autocomplete="new-password"
+      required
+      data-match="fv-password"
+      aria-describedby="fv-confirm-error"
+      data-error-required="Re-enter your password."
+      data-error-match="Passwords don't match." />
+    <p class="field__error" id="fv-confirm-error" aria-live="polite"></p>
+  </div>
+
+  <button class="form__submit" type="submit">Create account</button>
+
+  <p class="form__status" role="status" aria-live="polite"></p>
+</form>

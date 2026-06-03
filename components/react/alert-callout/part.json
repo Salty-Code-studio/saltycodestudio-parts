@@ -1,0 +1,13 @@
+{
+  "name": "Alert Callout",
+  "slug": "alert-callout",
+  "category": "react",
+  "tier": "practical",
+  "tags": ["alert", "callout", "notification", "banner", "info", "success", "warning", "error", "dismiss", "accessibility"],
+  "description": "An accessible info/success/warning/error callout with an icon, optional title, body content, and an optional dismiss button.",
+  "deps": [],
+  "files": ["AlertCallout.tsx"],
+  "usage": "Import AlertCallout and render <AlertCallout variant=\"warning\" title=\"Heads up\">Body text…</AlertCallout>; pass onDismiss to make it dismissible. Variants info/success use role=status (polite) and warning/error use role=alert (assertive) automatically.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
+}

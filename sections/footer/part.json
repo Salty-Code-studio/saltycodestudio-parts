@@ -1,0 +1,22 @@
+{
+  "name": "Footer",
+  "slug": "footer",
+  "kind": "section",
+  "category": "footer",
+  "tier": "practical",
+  "tags": [
+    "footer",
+    "links",
+    "newsletter",
+    "social",
+    "responsive",
+    "accessible",
+    "tailwind"
+  ],
+  "description": "Multi-column site footer with a brand block, newsletter signup, link columns, social icon buttons, and a legal/sign-off bottom row on a deep-teal canvas.",
+  "deps": ["react", "tailwindcss"],
+  "files": ["Footer.tsx", "section.html"],
+  "usage": "React: import Footer from './Footer' and render <Footer /> at the bottom of your layout; override brand, blurb, groups, socials, legalLinks, and the newsletter copy via props, or pass onSubscribe to capture the email. HTML: paste section.html (including its <script>) at the end of your <body>; it needs Tailwind and handles the newsletter success state on its own.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
+}

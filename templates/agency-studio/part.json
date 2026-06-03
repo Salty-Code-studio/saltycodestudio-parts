@@ -1,0 +1,30 @@
+{
+  "name": "Agency Studio",
+  "slug": "agency-studio",
+  "kind": "template",
+  "category": "template",
+  "tier": "showcase",
+  "tags": [
+    "template",
+    "agency",
+    "studio",
+    "creative-agency",
+    "portfolio",
+    "services",
+    "case-studies",
+    "process",
+    "testimonials",
+    "contact",
+    "marketing-site",
+    "sand-and-surf",
+    "responsive",
+    "accessible",
+    "tailwind"
+  ],
+  "description": "A bold creative agency and studio one-pager with a striking hero, services, a selected-work case grid, a numbered process, testimonials, a contact form, and footer in the Sand & Surf palette.",
+  "deps": [],
+  "files": ["index.html"],
+  "usage": "Open index.html in a browser to preview, or drop it into any static host. It loads Tailwind via the Play CDN with an inline brand config, so no build step is needed. Replace the studio name, copy, work samples, testimonials, and contact details with your own; swap the inline tailwind.config colors to rebrand. Everything (mobile nav, smooth scroll, scroll-reveal, marquee, count-up stats) runs from one inline vanilla-JS block at the bottom.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
+}

@@ -1,0 +1,74 @@
+<!--
+  HeroCentered — saltycodestudio "Sand & Surf"  (plain HTML + Tailwind utilities)
+  ------------------------------------------------------------------------------
+  Centered hero: monospace eyebrow, oversized display headline, lede, dual CTAs
+  (coral primary + ghost secondary), reassurance note, soft trust strip, and a
+  sand→surf gradient backdrop with glow + grid ornaments. No JavaScript needed.
+
+  Uses brand utilities (bg-sand, text-teal, bg-coral, text-ink, shadow-coral,
+  rounded-pill, font-display, font-mono) from the saltycodestudio Tailwind
+  preset. In a plain-CDN page the preview wires these names via tailwind.config.
+-->
+<section class="relative isolate overflow-hidden bg-sand" aria-labelledby="hero-centered-heading">
+  <!-- Gradient + ornament backdrop -->
+  <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
+    <div class="absolute inset-0 bg-[radial-gradient(120%_90%_at_50%_-10%,rgba(79,168,201,0.18)_0%,rgba(242,235,221,0)_55%)]"></div>
+    <div class="absolute -left-24 -top-24 h-[28rem] w-[28rem] rounded-full bg-coral/20 blur-3xl"></div>
+    <div class="absolute -bottom-32 -right-20 h-[30rem] w-[30rem] rounded-full bg-sky/25 blur-3xl"></div>
+    <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(14,58,64,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(14,58,64,0.05)_1px,transparent_1px)] bg-[size:56px_56px] [mask-image:radial-gradient(80%_60%_at_50%_30%,#000_30%,transparent_75%)]"></div>
+    <div class="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-sand"></div>
+  </div>
+
+  <div class="mx-auto flex max-w-3xl flex-col items-center px-6 py-24 text-center sm:py-32 lg:py-40">
+    <!-- Eyebrow -->
+    <span class="inline-flex items-center gap-2 rounded-pill border border-teal/15 bg-white/60 px-3.5 py-1.5 font-mono text-[0.7rem] font-medium uppercase tracking-[0.18em] text-teal shadow-xs backdrop-blur-sm">
+      <svg viewBox="0 0 20 20" class="h-3.5 w-3.5 text-coral" fill="currentColor" aria-hidden="true">
+        <path d="M10 1.5l1.7 4.9 4.8 1.7-4.8 1.7L10 14.7 8.3 9.8 3.5 8.1l4.8-1.7L10 1.5z" />
+      </svg>
+      Web studio · Bonaire → worldwide
+    </span>
+
+    <!-- Headline -->
+    <h1 id="hero-centered-heading" class="mt-7 font-display text-4xl font-bold leading-[1.05] tracking-tight text-teal text-balance sm:text-5xl lg:text-6xl xl:text-7xl">
+      Ship a coastal-calm site<br class="hidden sm:block" />
+      that <span class="text-coral">actually converts</span>.
+    </h1>
+
+    <!-- Subheadline -->
+    <p class="mt-6 max-w-2xl text-pretty text-base leading-relaxed text-ink/70 sm:text-lg">
+      saltycodestudio designs and builds fast, accessible sites for brands that want to feel premium without the agency price tag. Strategy, design, and code from one tight team.
+    </p>
+
+    <!-- CTAs -->
+    <div class="mt-9 flex w-full flex-col items-center justify-center gap-3 sm:w-auto sm:flex-row">
+      <a href="#contact" class="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-coral px-7 py-3.5 font-display text-base font-semibold text-white shadow-coral transition-all duration-200 hover:-translate-y-0.5 hover:brightness-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-coral active:translate-y-0 sm:w-auto">
+        Start a project
+        <svg viewBox="0 0 20 20" class="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 10h12M11 5l5 5-5 5" />
+        </svg>
+      </a>
+      <a href="#work" class="group inline-flex w-full items-center justify-center gap-2 rounded-full border border-teal/20 bg-white/70 px-7 py-3.5 font-display text-base font-semibold text-teal backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-teal/40 hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal sm:w-auto">
+        See the work
+      </a>
+    </div>
+
+    <!-- Reassurance note -->
+    <p class="mt-5 font-mono text-xs uppercase tracking-[0.14em] text-ink/45">
+      Free 20-minute fit call · No pitch decks, just a plan.
+    </p>
+
+    <!-- Trust strip -->
+    <div class="mt-14 w-full border-t border-teal/10 pt-8">
+      <p class="font-mono text-[0.68rem] uppercase tracking-[0.2em] text-ink/40">
+        Trusted by coastal &amp; lifestyle brands
+      </p>
+      <ul class="mt-5 flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
+        <li class="font-display text-sm font-semibold tracking-tight text-teal/55 transition-colors duration-200 hover:text-teal">Dushi Club</li>
+        <li class="font-display text-sm font-semibold tracking-tight text-teal/55 transition-colors duration-200 hover:text-teal">PLAYA</li>
+        <li class="font-display text-sm font-semibold tracking-tight text-teal/55 transition-colors duration-200 hover:text-teal">United Liquors</li>
+        <li class="font-display text-sm font-semibold tracking-tight text-teal/55 transition-colors duration-200 hover:text-teal">ORIGEN</li>
+        <li class="font-display text-sm font-semibold tracking-tight text-teal/55 transition-colors duration-200 hover:text-teal">Reef &amp; Co.</li>
+      </ul>
+    </div>
+  </div>
+</section>

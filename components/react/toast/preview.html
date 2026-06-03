@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Toast — saltycodestudio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+      body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }
+      @keyframes toast-countdown {
+        from { width: 100%; }
+        to   { width: 0%; }
+      }
+    </style>
+  </head>
+  <body class="min-h-screen bg-[#fbf7f0] text-[#1c2b33]">
+    <div id="root"></div>
+
+    <script type="text/babel" data-presets="react">
+      const {
+        createContext, useCallback, useContext, useEffect, useMemo, useRef, useState,
+      } = React;
+
+      /* ====================== Toast system ====================== */
+      const ToastContext = createContext(null);
+      function useToast() {
+        const ctx = useContext(ToastContext);
+        if (!ctx) throw new Error("useToast() must be used within a <ToastProvider>.");
+        return ctx;
+      }
+
+      const EXIT_MS = 260;
+      let counter = 0;
+      const makeId = () => `toast-${Date.now().toString(36)}-${++counter}`;
+
+      const VARIANT_META = {
+        info: {
+          ring: "ring-[#1f8a8a]/25", iconBg: "bg-[#2ec3c3]/15", iconFg: "text-[#0f5c5c]",
+          bar: "bg-[#1f8a8a]", role: "status", label: "Information",
+          icon: (
+            <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4" aria-hidden="true">
+              <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="1.6" />
+              <path d="M10 9v4.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+              <circle cx="10" cy="6.2" r="1" fill="currentColor" />
+            </svg>
+          ),
+        },
+        success: {
+          ring: "ring-[#1f8a8a]/30", iconBg: "bg-[#2ec3c3]/20", iconFg: "text-[#0f5c5c]",
+          bar: "bg-[#0f5c5c]", role: "status", label: "Success",
+          icon: (
+            <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4" aria-hidden="true">
+              <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="1.6" />
+              <path d="m6.5 10.2 2.4 2.4 4.6-5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          ),
+        },
+        warning: {
+          ring: "ring-amber-500/30", iconBg: "bg-amber-400/20", iconFg: "text-amber-700",
+          bar: "bg-amber-500", role: "alert", label: "Warning",
+          icon: (
+            <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4" aria-hidden="true">
+              <path d="M10 2.8 18 16.5H2L10 2.8Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+              <path d="M10 8v3.4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+              <circle cx="10" cy="13.6" r="1" fill="currentColor" />
+            </svg>
+          ),
+        },
+        error: {
+          ring: "ring-rose-500/30", iconBg: "bg-rose-400/15", iconFg: "text-rose-700",
+          bar: "bg-rose-600", role: "alert", label: "Error",
+          icon: (
+            <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4" aria-hidden="true">
+              <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="1.6" />
+              <path d="m7.5 7.5 5 5m0-5-5 5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+            </svg>
+          ),
+        },
+      };
+
+      const POSITION_CLASSES = {
+        "top-left": "top-0 left-0 items-start",
+        "top-center": "top-0 left-1/2 -translate-x-1/2 items-center",
+        "top-right": "top-0 right-0 items-end",
+        "bottom-left": "bottom-0 left-0 items-start",
+        "bottom-center": "bottom-0 left-1/2 -translate-x-1/2 items-center",
+        "bottom-right": "bottom-0 right-0 items-end",
+      };
+
+      function ToastProvider({ children, position = "bottom-right", max = 4, defaultDuration = 5000 }) {
+        const [toasts, setToasts] = useState([]);
+        const isTop = position.startsWith("top");
+        const dismissTimers = useRef(new Map());
+        const removeTimers = useRef(new Map());
+
+        const clearTimer = (map, id) => {
+          const t = map.current.get(id);
+          if (t !== undefined) { window.clearTimeout(t); map.current.delete(id); }
+        };
+
+        const remove = useCallback((id) => {
+          setToasts((prev) => prev.filter((t) => t.id !== id));
+          clearTimer(removeTimers, id);
+        }, []);
+
+        const dismiss = useCallback((id) => {
+          clearTimer(dismissTimers, id);
+          setToasts((prev) => prev.map((t) => (t.id === id ? { ...t, leaving: true } : t)));
+          if (!removeTimers.current.has(id)) {
+            removeTimers.current.set(id, window.setTimeout(() => remove(id), EXIT_MS));
+          }
+        }, [remove]);
+
+        const startAutoDismiss = useCallback((id, duration) => {
+          if (!duration || duration === Infinity) return;
+          clearTimer(dismissTimers, id);
+          dismissTimers.current.set(id, window.setTimeout(() => dismiss(id), duration));
+        }, [dismiss]);
+
+        const toast = useCallback((opts) => {
+          const id = opts.id ?? makeId();
+          const duration = opts.duration ?? defaultDuration;
+          const record = {
+            id, title: opts.title, description: opts.description,
+            variant: opts.variant ?? "info", duration, action: opts.action, leaving: false,
+          };
+          setToasts((prev) => {
+            const existing = prev.findIndex((t) => t.id === id);
+            let next;
+            if (existing >= 0) { next = [...prev]; next[existing] = record; }
+            else { next = isTop ? [record, ...prev] : [...prev, record]; }
+            const live = next.filter((t) => !t.leaving);
+            if (live.length > max) {
+              live.slice(0, live.length - max).forEach((t) => dismiss(t.id));
+            }
+            return next;
+          });
+          startAutoDismiss(id, duration);
+          return id;
+        }, [defaultDuration, dismiss, isTop, max, startAutoDismiss]);
+
+        const dismissAll = useCallback(() => {
+          setToasts((prev) => {
+            prev.forEach((t) => clearTimer(dismissTimers, t.id));
+            return prev.map((t) => ({ ...t, leaving: true }));
+          });
+          setToasts((prev) => {
+            prev.forEach((t) => {
+              if (!removeTimers.current.has(t.id)) {
+                removeTimers.current.set(t.id, window.setTimeout(() => remove(t.id), EXIT_MS));
+              }
+            });
+            return prev;
+          });
+        }, [remove]);
+
+        useEffect(() => {
+          const dt = dismissTimers.current, rt = removeTimers.current;
+          return () => {
+            dt.forEach((t) => window.clearTimeout(t));
+            rt.forEach((t) => window.clearTimeout(t));
+            dt.clear(); rt.clear();
+          };
+        }, []);
+
+        const ctx = useMemo(() => ({ toast, dismiss, dismissAll }), [toast, dismiss, dismissAll]);
+
+        return (
+          <ToastContext.Provider value={ctx}>
+            {children}
+            <ToastViewport
+              toasts={toasts} position={position} isTop={isTop}
+              onDismiss={dismiss}
+              onPause={(id) => clearTimer(dismissTimers, id)}
+              onResume={(id, d) => startAutoDismiss(id, d)}
+            />
+          </ToastContext.Provider>
+        );
+      }
+
+      function ToastViewport({ toasts, position, isTop, onDismiss, onPause, onResume }) {
+        if (toasts.length === 0) return null;
+        return (
+          <div
+            aria-live="polite" aria-atomic="false" aria-label="Notifications"
+            className={`pointer-events-none fixed z-[60] flex w-full max-w-full flex-col gap-3 p-4 sm:max-w-sm ${POSITION_CLASSES[position]}`}
+          >
+            {toasts.map((t) => (
+              <ToastItem key={t.id} toast={t} isTop={isTop}
+                onDismiss={onDismiss} onPause={onPause} onResume={onResume} />
+            ))}
+          </div>
+        );
+      }
+
+      function ToastItem({ toast, isTop, onDismiss, onPause, onResume }) {
+        const meta = VARIANT_META[toast.variant];
+        const enterFrom = isTop ? "-translate-y-3" : "translate-y-3";
+        const handleAction = () => {
+          if (!toast.action) return;
+          const keep = toast.action.onClick();
+          if (keep !== false) onDismiss(toast.id);
+        };
+        return (
+          <div
+            role={meta.role}
+            aria-live={meta.role === "alert" ? "assertive" : "polite"}
+            tabIndex={0}
+            onMouseEnter={() => onPause(toast.id)}
+            onMouseLeave={() => onResume(toast.id, toast.duration)}
+            onFocus={() => onPause(toast.id)}
+            onBlur={() => onResume(toast.id, toast.duration)}
+            onKeyDown={(e) => { if (e.key === "Escape") { e.stopPropagation(); onDismiss(toast.id); } }}
+            className={[
+              "pointer-events-auto group relative w-full overflow-hidden rounded-2xl border border-[#ece0cd] bg-[#fbf7f0]/95 shadow-lg shadow-[#1c2b33]/10 ring-1 backdrop-blur",
+              "outline-none focus-visible:ring-2 focus-visible:ring-[#1f8a8a] focus-visible:ring-offset-2 focus-visible:ring-offset-[#f4ece0]",
+              "motion-safe:transition motion-safe:duration-300 motion-safe:ease-out",
+              meta.ring,
+              toast.leaving ? `opacity-0 ${enterFrom} motion-safe:duration-[260ms]` : "translate-y-0 opacity-100",
+            ].join(" ")}
+          >
+            <div className="flex items-start gap-3 p-4 pr-10">
+              <span className={`mt-0.5 flex h-7 w-7 flex-none items-center justify-center rounded-full ${meta.iconBg} ${meta.iconFg}`} aria-hidden="true">
+                {meta.icon}
+              </span>
+              <div className="min-w-0 flex-1">
+                {toast.title && (
+                  <p className="text-sm font-semibold leading-snug text-[#1c2b33]">
+                    <span className="sr-only">{meta.label}: </span>{toast.title}
+                  </p>
+                )}
+                {toast.description && (
+                  <p className={`text-sm leading-snug text-[#4a5d66] ${toast.title ? "mt-0.5" : ""}`}>
+                    {!toast.title && <span className="sr-only">{meta.label}: </span>}{toast.description}
+                  </p>
+                )}
+                {toast.action && (
+                  <button type="button" onClick={handleAction}
+                    className="mt-2 rounded-lg px-2 py-1 text-sm font-semibold text-[#0f5c5c] underline-offset-4 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-[#1f8a8a]">
+                    {toast.action.label}
+                  </button>
+                )}
+              </div>
+            </div>
+            <button type="button" onClick={() => onDismiss(toast.id)} aria-label="Dismiss notification"
+              className="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-lg text-[#4a5d66] outline-none transition hover:bg-[#ece0cd]/70 hover:text-[#1c2b33] focus-visible:ring-2 focus-visible:ring-[#1f8a8a]">
+              <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4" aria-hidden="true">
+                <path d="m6 6 8 8m0-8-8 8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+              </svg>
+            </button>
+            {toast.duration && toast.duration !== Infinity ? (
+              <span aria-hidden="true"
+                className={`absolute bottom-0 left-0 h-0.5 ${meta.bar} motion-safe:animate-[toast-countdown_linear_forwards] motion-safe:group-hover:[animation-play-state:paused] motion-safe:group-focus-within:[animation-play-state:paused]`}
+                style={{ animationDuration: `${toast.duration}ms` }} />
+            ) : null}
+          </div>
+        );
+      }
+
+      /* ====================== Demo ====================== */
+      const POSITIONS = ["top-left","top-center","top-right","bottom-left","bottom-center","bottom-right"];
+
+      function Demo() {
+        const { toast, dismissAll } = useToast();
+        const tick = useRef(0);
+
+        const fire = (variant) => {
+          const copy = {
+            info:    { title: "Heads up", description: "Your draft was saved to the cloud." },
+            success: { title: "Booking confirmed", description: "We sent the itinerary to your inbox." },
+            warning: { title: "Storage almost full", description: "You have used 92% of your space." },
+            error:   { title: "Upload failed", description: "The connection dropped. Please retry." },
+          }[variant];
+          toast({ ...copy, variant });
+        };
+
+        return (
+          <main className="mx-auto max-w-3xl px-6 py-16">
+            <header className="mb-10">
+              <div className="inline-flex items-center gap-2 rounded-full border border-[#ece0cd] bg-[#f4ece0] px-3 py-1 text-xs font-semibold tracking-wide text-[#0f5c5c]">
+                <span aria-hidden="true">~&lt;</span> saltycodestudio · Sand &amp; Surf
+              </div>
+              <h1 className="mt-4 text-3xl font-bold tracking-tight text-[#1c2b33]">Toast</h1>
+              <p className="mt-2 max-w-prose text-[#4a5d66]">
+                Provider + <code className="rounded bg-[#f4ece0] px-1 py-0.5 text-[#0f5c5c]">useToast()</code> hook.
+                Stacked toasts, four variants, auto-dismiss with pause-on-hover and a countdown bar,
+                plus enter/exit animation. Hover or focus a toast to pause it; press Esc to dismiss the focused one.
+              </p>
+            </header>
+
+            <section className="rounded-3xl border border-[#ece0cd] bg-[#f4ece0] p-6">
+              <h2 className="text-sm font-semibold uppercase tracking-wider text-[#4a5d66]">Variants</h2>
+              <div className="mt-3 flex flex-wrap gap-3">
+                <button onClick={() => fire("info")} className="rounded-xl bg-[#1f8a8a] px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-[#0f5c5c] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0f5c5c] focus-visible:ring-offset-2 focus-visible:ring-offset-[#f4ece0]">Info</button>
+                <button onClick={() => fire("success")} className="rounded-xl bg-[#0f5c5c] px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-[#1c2b33] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0f5c5c] focus-visible:ring-offset-2 focus-visible:ring-offset-[#f4ece0]">Success</button>
+                <button onClick={() => fire("warning")} className="rounded-xl border border-amber-500/40 bg-amber-50 px-4 py-2 text-sm font-semibold text-amber-700 shadow-sm transition hover:bg-amber-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f4ece0]">Warning</button>
+                <button onClick={() => fire("error")} className="rounded-xl border border-rose-500/40 bg-rose-50 px-4 py-2 text-sm font-semibold text-rose-700 shadow-sm transition hover:bg-rose-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f4ece0]">Error</button>
+              </div>
+
+              <h2 className="mt-8 text-sm font-semibold uppercase tracking-wider text-[#4a5d66]">States</h2>
+              <div className="mt-3 flex flex-wrap gap-3">
+                <button
+                  onClick={() => toast({
+                    title: "Message deleted",
+                    description: "“Beach day plans” moved to Trash.",
+                    variant: "info",
+                    action: { label: "Undo", onClick: () => toast({ description: "Restored.", variant: "success", duration: 3000 }) },
+                  })}
+                  className="rounded-xl border border-[#ece0cd] bg-[#fbf7f0] px-4 py-2 text-sm font-semibold text-[#1c2b33] shadow-sm transition hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1f8a8a]">
+                  With action (Undo)
+                </button>
+                <button
+                  onClick={() => toast({ description: "Description-only toast, no title.", variant: "info" })}
+                  className="rounded-xl border border-[#ece0cd] bg-[#fbf7f0] px-4 py-2 text-sm font-semibold text-[#1c2b33] shadow-sm transition hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1f8a8a]">
+                  Description only
+                </button>
+                <button
+                  onClick={() => toast({ title: "Sticky notice", description: "Stays until dismissed (duration 0).", variant: "warning", duration: 0 })}
+                  className="rounded-xl border border-[#ece0cd] bg-[#fbf7f0] px-4 py-2 text-sm font-semibold text-[#1c2b33] shadow-sm transition hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1f8a8a]">
+                  Sticky (no auto-dismiss)
+                </button>
+                <button
+                  onClick={() => {
+                    ["info","success","warning","error"].forEach((v, i) =>
+                      setTimeout(() => fire(v), i * 220));
+                  }}
+                  className="rounded-xl border border-[#ece0cd] bg-[#fbf7f0] px-4 py-2 text-sm font-semibold text-[#1c2b33] shadow-sm transition hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1f8a8a]">
+                  Stack 4 (test max)
+                </button>
+                <button
+                  onClick={dismissAll}
+                  className="rounded-xl border border-[#ece0cd] bg-[#fbf7f0] px-4 py-2 text-sm font-semibold text-[#4a5d66] shadow-sm transition hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1f8a8a]">
+                  Dismiss all
+                </button>
+              </div>
+              <p className="mt-6 text-xs text-[#4a5d66]">
+                Toasts appear bottom-right (provider <code className="rounded bg-[#fbf7f0] px-1">position</code> prop supports 6 placements).
+                Default auto-dismiss is 5s with a countdown bar that pauses on hover/focus.
+              </p>
+            </section>
+          </main>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(
+        <ToastProvider position="bottom-right" max={4} defaultDuration={5000}>
+          <Demo />
+        </ToastProvider>
+      );
+    </script>
+  </body>
+</html>

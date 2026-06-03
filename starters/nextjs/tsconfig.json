@@ -1,0 +1,40 @@
+{
+  // saltycodestudio — TypeScript config for the Next.js App Router starter.
+  // Mirrors what `create-next-app` emits for Next 14, with the `@/*` path
+  // alias pointing at the project root so you can `import "@/app/..."`.
+  "compilerOptions": {
+    // --- language / output -------------------------------------------------
+    "target": "ES2022",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "module": "esnext",
+    "moduleResolution": "bundler", // Next's bundler resolves "exports" maps
+    "jsx": "preserve",             // Next/SWC handles the JSX transform
+    "allowJs": true,
+
+    // --- strictness (keep these on; they catch real bugs) ------------------
+    "strict": true,
+    "noEmit": true,                // Next compiles; tsc is type-check only
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+
+    // --- module interop ----------------------------------------------------
+    "incremental": true,
+    "plugins": [{ "name": "next" }],
+
+    // --- path aliases ------------------------------------------------------
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": ["node_modules"]
+}

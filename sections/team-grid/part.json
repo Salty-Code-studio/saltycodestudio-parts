@@ -1,0 +1,14 @@
+{
+  "name": "Team Grid",
+  "slug": "team-grid",
+  "kind": "section",
+  "category": "team",
+  "tags": ["team", "people", "grid", "about", "cards", "responsive", "sand-and-surf"],
+  "tier": "practical",
+  "description": "A responsive grid of team members with portrait, name, role, short bio, and social/contact links.",
+  "deps": ["react", "tailwindcss"],
+  "files": ["TeamGrid.tsx", "section.html"],
+  "usage": "Import the component: `import TeamGrid from './TeamGrid'` then render `<TeamGrid />` (override eyebrow, heading, description, members as needed). For non-React projects, paste the markup from section.html into any Tailwind page. Open preview.html in a browser to see it rendered.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
+}

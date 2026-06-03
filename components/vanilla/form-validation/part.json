@@ -1,0 +1,13 @@
+{
+  "name": "Form Validation",
+  "slug": "form-validation",
+  "category": "vanilla",
+  "tier": "practical",
+  "tags": ["form", "validation", "accessible", "aria-invalid", "inline-errors", "no-library"],
+  "description": "Dependency-free accessible form validation with inline errors on blur and submit, aria-invalid, live-region messages, and first-invalid focus.",
+  "deps": [],
+  "files": ["index.html", "styles.css", "script.js"],
+  "usage": "Add novalidate + data-validate to the form, give each .field__control an id and aria-describedby pointing at a .field__error region, declare native constraints (required, type, minlength, pattern) plus optional data-match and data-error-* messages. script.js auto-wires blur/submit validation, aria-invalid and focus management.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
+}

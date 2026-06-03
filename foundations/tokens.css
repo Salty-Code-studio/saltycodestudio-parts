@@ -1,0 +1,207 @@
+/* ============================================================================
+   saltycodestudio — Design Tokens
+   ----------------------------------------------------------------------------
+   Brand: "Sand & Surf" · Coastal × tech web design studio.
+   Foundation layer for the parts library: spacing, radius, z-index, container
+   widths, breakpoints, plus the brand palette exposed as raw RGB channels so a
+   Tailwind preset can compose them with arbitrary alpha — rgb(var(--x) / <a>).
+
+   HOW TO USE
+   ----------
+   1. Import once, as early as possible (before component CSS / Tailwind base):
+        @import "../foundations/tokens.css";
+      …or in HTML:  <link rel="stylesheet" href="/foundations/tokens.css">
+
+   2. Reference tokens directly in plain CSS:
+        padding: var(--space-4);
+        border-radius: var(--radius-lg);
+        max-width: var(--container-lg);
+        z-index: var(--z-modal);
+
+   3. Reference colors. Two shapes are provided for every brand color:
+        • --color-*       hex,  e.g. var(--color-surf-coral)
+        • --rgb-*         "r g b" channels for alpha composition, e.g.
+                          background: rgb(var(--rgb-deep-teal) / 0.08);
+      The Tailwind preset (tailwind.preset.js) consumes the --rgb-* channels.
+
+   NOTE ON BREAKPOINTS
+   -------------------
+   CSS custom properties cannot be used inside @media queries (media features
+   are resolved before var() substitution). The --bp-* tokens below are
+   therefore *documentation + a single source of truth for JS/Tailwind*; the
+   raw px values are restated literally in the @custom-media block and in
+   tailwind.preset.js. Keep all three in sync if you change a breakpoint.
+   ============================================================================ */
+
+:root {
+  /* ------------------------------------------------------------------ */
+  /* 1. BRAND PALETTE — "Sand & Surf"                                   */
+  /*    Sand + Teal carry ~90% of every layout. Coral is ONE accent per */
+  /*    view (never a field). Sky Blue stays supporting.                */
+  /* ------------------------------------------------------------------ */
+
+  /* Hex — for direct use / readability */
+  --color-warm-sand:     #F2EBDD; /* light canvas, page backgrounds   */
+  --color-sand-2:        #EAE1CF; /* second sand, raised/inset surface */
+  --color-deep-teal:     #0E3A40; /* primary ink, headings, logomark  */
+  --color-surf-coral:    #FF6F59; /* accent / CTA — one per view       */
+  --color-sky-blue:      #4FA8C9; /* secondary accent, tags, charts    */
+  --color-driftwood-ink: #1C2B2E; /* dark surface, deep text, borders  */
+  --color-white:         #FFFFFF; /* on-coral / on-teal text           */
+
+  /* RGB channels ("r g b") — for rgb(var(--x) / <alpha>) composition.   */
+  /* This is the surface the Tailwind preset binds against.              */
+  --rgb-warm-sand:     242 235 221;
+  --rgb-sand-2:        234 225 207;
+  --rgb-deep-teal:      14  58  64;
+  --rgb-surf-coral:    255 111  89;
+  --rgb-sky-blue:       79 168 201;
+  --rgb-driftwood-ink:  28  43  46;
+  --rgb-white:         255 255 255;
+
+  /* ------------------------------------------------------------------ */
+  /* 2. SPACING SCALE                                                   */
+  /*    4px base step. Token name = step count. 1 = 0.25rem = 4px.      */
+  /*    Use for padding, margin, gap, inset.                            */
+  /* ------------------------------------------------------------------ */
+  --space-0:   0;
+  --space-px:  1px;
+  --space-0\.5: 0.125rem; /*  2px */
+  --space-1:   0.25rem;   /*  4px */
+  --space-1\.5: 0.375rem; /*  6px */
+  --space-2:   0.5rem;    /*  8px */
+  --space-2\.5: 0.625rem; /* 10px */
+  --space-3:   0.75rem;   /* 12px */
+  --space-4:   1rem;      /* 16px */
+  --space-5:   1.25rem;   /* 20px */
+  --space-6:   1.5rem;    /* 24px */
+  --space-7:   1.75rem;   /* 28px */
+  --space-8:   2rem;      /* 32px */
+  --space-10:  2.5rem;    /* 40px */
+  --space-12:  3rem;      /* 48px */
+  --space-14:  3.5rem;    /* 56px */
+  --space-16:  4rem;      /* 64px */
+  --space-20:  5rem;      /* 80px */
+  --space-24:  6rem;      /* 96px */
+  --space-28:  7rem;      /* 112px */
+  --space-32:  8rem;      /* 128px */
+  --space-40: 10rem;      /* 160px */
+  --space-48: 12rem;      /* 192px */
+  --space-56: 14rem;      /* 224px */
+  --space-64: 16rem;      /* 256px */
+
+  /* Semantic section rhythm — generous vertical spacing is part of the */
+  /* coastal/editorial feel of the brand.                               */
+  --space-section:       clamp(4rem, 9vw, 8rem);  /* between page sections */
+  --space-section-tight: clamp(2.5rem, 6vw, 4rem);
+  --space-gutter:        clamp(1rem, 4vw, 2rem);  /* page side gutter      */
+
+  /* ------------------------------------------------------------------ */
+  /* 3. BORDER-RADIUS SCALE                                             */
+  /* ------------------------------------------------------------------ */
+  --radius-none: 0;
+  --radius-xs:   0.25rem;  /*  4px — chips, tight inputs            */
+  --radius-sm:   0.375rem; /*  6px                                  */
+  --radius-md:   0.625rem; /* 10px — buttons (brand default)        */
+  --radius-lg:   0.875rem; /* 14px — cards                          */
+  --radius-xl:   1.25rem;  /* 20px — large panels / media           */
+  --radius-2xl:  1.75rem;  /* 28px — hero cards, feature blocks     */
+  --radius-3xl:  2.5rem;   /* 40px                                  */
+  --radius-pill: 999px;    /* tags, fully-rounded pills             */
+  --radius-full: 9999px;   /* circles / avatars                     */
+
+  /* ------------------------------------------------------------------ */
+  /* 4. Z-INDEX LAYERS                                                  */
+  /*    Named, gapped scale — never hard-code z-index in components.    */
+  /* ------------------------------------------------------------------ */
+  --z-behind:    -1;   /* decorative elements pushed behind content   */
+  --z-base:       0;   /* default in-flow content                     */
+  --z-raised:     10;  /* slightly lifted cards / hover states        */
+  --z-dropdown:   100; /* dropdown menus, select panels               */
+  --z-sticky:     200; /* sticky headers / sub-navs                   */
+  --z-fixed:      300; /* fixed app chrome                            */
+  --z-backdrop:   400; /* modal / drawer dimming backdrop             */
+  --z-drawer:     500; /* side drawers / sheets                       */
+  --z-modal:      600; /* modal dialogs                               */
+  --z-popover:    700; /* popovers anchored above modals              */
+  --z-toast:      800; /* toasts / snackbars                          */
+  --z-tooltip:    900; /* tooltips — always on top of UI              */
+  --z-max:        9999;/* escape hatch (loaders, dev overlays)        */
+
+  /* ------------------------------------------------------------------ */
+  /* 5. CONTAINER MAX-WIDTHS                                            */
+  /*    Constrain content line-length / layout width.                   */
+  /* ------------------------------------------------------------------ */
+  --container-xs:   20rem;  /*  320px — narrow cards                 */
+  --container-sm:   30rem;  /*  480px — forms, single column         */
+  --container-md:   45rem;  /*  720px — readable prose width         */
+  --container-lg:   60rem;  /*  960px — standard content             */
+  --container-xl:   75rem;  /* 1200px — primary page container       */
+  --container-2xl:  90rem;  /* 1440px — wide / dashboard layouts     */
+  --container-prose: 68ch;  /* optimal long-form reading measure     */
+
+  /* ------------------------------------------------------------------ */
+  /* 6. BREAKPOINTS (documentation / single source of truth)           */
+  /*    Mobile-first. See "NOTE ON BREAKPOINTS" in the file header for  */
+  /*    why these cannot be used directly inside @media.                */
+  /* ------------------------------------------------------------------ */
+  --bp-sm:  640px;   /* large phone / small tablet portrait          */
+  --bp-md:  768px;   /* tablet                                       */
+  --bp-lg: 1024px;   /* small laptop                                 */
+  --bp-xl: 1280px;   /* desktop                                      */
+  --bp-2xl:1536px;   /* large desktop                                */
+
+  /* ------------------------------------------------------------------ */
+  /* 7. ELEVATION — brand-tinted shadows                               */
+  /*    Soft, warm shadows tinted with Deep Teal (never neutral black). */
+  /*    Mirrored by boxShadow in the Tailwind preset.                   */
+  /* ------------------------------------------------------------------ */
+  --shadow-xs: 0 1px 2px rgb(var(--rgb-deep-teal) / 0.06);
+  --shadow-sm: 0 1px 3px rgb(var(--rgb-deep-teal) / 0.08),
+               0 1px 2px rgb(var(--rgb-deep-teal) / 0.06);
+  --shadow-md: 0 4px 12px rgb(var(--rgb-deep-teal) / 0.10),
+               0 2px 4px rgb(var(--rgb-deep-teal) / 0.06);
+  --shadow-lg: 0 12px 28px rgb(var(--rgb-deep-teal) / 0.12),
+               0 4px 8px rgb(var(--rgb-deep-teal) / 0.06);
+  --shadow-xl: 0 24px 56px rgb(var(--rgb-deep-teal) / 0.16),
+               0 8px 16px rgb(var(--rgb-deep-teal) / 0.08);
+  --shadow-coral: 0 10px 30px rgb(var(--rgb-surf-coral) / 0.30); /* CTA glow */
+  --shadow-inset: inset 0 1px 0 rgb(var(--rgb-white) / 0.40);
+
+  /* ------------------------------------------------------------------ */
+  /* 8. MOTION — durations & easings used by the keyframes              */
+  /* ------------------------------------------------------------------ */
+  --ease-out:    cubic-bezier(0.22, 1, 0.36, 1);   /* settle / fade-up   */
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);/* overshoot / pop    */
+  --duration-fast:   150ms;
+  --duration-base:   250ms;
+  --duration-slow:   450ms;
+  --duration-slower: 700ms;
+}
+
+/* ---------------------------------------------------------------------------
+   @custom-media — opt-in convenience for PostCSS (postcss-custom-media).
+   Values MUST match the --bp-* tokens above. Safe to delete if your build
+   does not use postcss-custom-media; it is ignored by browsers otherwise.
+
+   Usage:  @media (--md) { … }
+--------------------------------------------------------------------------- */
+@custom-media --sm  (min-width: 640px);
+@custom-media --md  (min-width: 768px);
+@custom-media --lg  (min-width: 1024px);
+@custom-media --xl  (min-width: 1280px);
+@custom-media --2xl (min-width: 1536px);
+
+/* ---------------------------------------------------------------------------
+   Reduced-motion: zero out brand motion durations so any CSS that reads the
+   --duration-* tokens for transitions/animations becomes effectively instant.
+--------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast:   0ms;
+    --duration-base:   0ms;
+    --duration-slow:   0ms;
+    --duration-slower: 0ms;
+  }
+}

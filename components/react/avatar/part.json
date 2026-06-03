@@ -1,0 +1,13 @@
+{
+  "name": "Avatar",
+  "slug": "avatar",
+  "category": "react",
+  "tier": "practical",
+  "tags": ["avatar", "image", "initials", "fallback", "status", "presence", "group", "stack"],
+  "description": "An accessible avatar with image plus deterministic initials fallback, a presence status dot, and an overlapping avatar group that collapses extras into a +N chip.",
+  "deps": [],
+  "files": ["Avatar.tsx"],
+  "usage": "Import Avatar (default) and AvatarGroup (named) from Avatar.tsx. Render <Avatar name=\"Salty Code\" src=\"/me.jpg\" status=\"online\" size=\"lg\" />; if src is missing or fails to load it shows colored initials. Render <AvatarGroup avatars={[{name, src, status}, ...]} max={4} /> for an overlapping stack with a +N overflow chip.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
+}

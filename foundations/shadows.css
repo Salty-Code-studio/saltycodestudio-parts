@@ -1,0 +1,243 @@
+/* ==========================================================================
+   saltycodestudio · foundations/shadows.css
+   --------------------------------------------------------------------------
+   A premium, layered elevation system tuned for the "Sand & Surf" palette.
+
+   Why layered shadows?
+   Real-world shadows are not a single blur. Objects cast a tight contact
+   shadow (close, dark, small spread) plus one or more diffuse ambient
+   shadows (wide, soft, faint). Stacking 2–3 box-shadows per step mimics
+   this and reads as far more "expensive" than a single drop shadow.
+
+   The shadow tint is derived from the ink color (#1c2b33) rather than pure
+   black, so elevations feel warm and integrated with the sand backgrounds
+   instead of muddy/grey. A subtle top inset highlight is added on the larger
+   steps to suggest a soft light source from above.
+
+   Usage:
+     box-shadow: var(--shadow-md);
+     <div class="elevation-3 surface-card"> … </div>
+     <button class="ring ring--accent"> … </button>
+   ========================================================================== */
+
+:root {
+  /* --- Shadow tint -------------------------------------------------------
+     Color channels broken out so the alpha can be tuned per layer.
+     Based on ink #1c2b33 → rgb(28, 43, 51). Cool-neutral, not pure black. */
+  --shadow-color: 200 30% 15%;            /* HSL channels of the ink tint   */
+  --shadow-rgb: 28, 43, 51;               /* RGB fallback of the ink tint   */
+
+  /* Strength multipliers — bump these to globally deepen/soften shadows.   */
+  --shadow-strength: 1;                   /* ambient layers                 */
+  --shadow-strength-contact: 1;           /* tight contact layer            */
+
+  /* --- The scale ---------------------------------------------------------
+     Each step layers a tight contact shadow over wider ambient shadows.
+     xs → 2xl ramps both blur radius and offset for a believable rise. */
+
+  /* xs · hairline lift — chips, inline tags, subtle inputs */
+  --shadow-xs:
+    0 1px 1px hsl(var(--shadow-color) / calc(0.05 * var(--shadow-strength-contact))),
+    0 1px 2px hsl(var(--shadow-color) / calc(0.06 * var(--shadow-strength)));
+
+  /* sm · resting cards, buttons at rest */
+  --shadow-sm:
+    0 1px 1px hsl(var(--shadow-color) / calc(0.06 * var(--shadow-strength-contact))),
+    0 2px 4px hsl(var(--shadow-color) / calc(0.07 * var(--shadow-strength))),
+    0 4px 8px hsl(var(--shadow-color) / calc(0.05 * var(--shadow-strength)));
+
+  /* md · raised cards, popovers, hovered buttons */
+  --shadow-md:
+    0 1px 2px hsl(var(--shadow-color) / calc(0.07 * var(--shadow-strength-contact))),
+    0 4px 8px hsl(var(--shadow-color) / calc(0.08 * var(--shadow-strength))),
+    0 8px 16px hsl(var(--shadow-color) / calc(0.06 * var(--shadow-strength)));
+
+  /* lg · floating panels, dropdown menus */
+  --shadow-lg:
+    0 2px 4px hsl(var(--shadow-color) / calc(0.08 * var(--shadow-strength-contact))),
+    0 8px 16px hsl(var(--shadow-color) / calc(0.10 * var(--shadow-strength))),
+    0 16px 28px hsl(var(--shadow-color) / calc(0.08 * var(--shadow-strength)));
+
+  /* xl · modals, command palettes, prominent feature cards */
+  --shadow-xl:
+    0 4px 8px hsl(var(--shadow-color) / calc(0.09 * var(--shadow-strength-contact))),
+    0 12px 24px hsl(var(--shadow-color) / calc(0.12 * var(--shadow-strength))),
+    0 24px 44px hsl(var(--shadow-color) / calc(0.10 * var(--shadow-strength)));
+
+  /* 2xl · hero / spotlight elevation — use sparingly */
+  --shadow-2xl:
+    0 6px 12px hsl(var(--shadow-color) / calc(0.10 * var(--shadow-strength-contact))),
+    0 18px 36px hsl(var(--shadow-color) / calc(0.14 * var(--shadow-strength))),
+    0 36px 64px hsl(var(--shadow-color) / calc(0.12 * var(--shadow-strength)));
+
+  /* --- Specialty shadows ------------------------------------------------- */
+
+  /* Inset / pressed — for active buttons, wells, and inputs on focus.       */
+  --shadow-inset:
+    inset 0 1px 2px hsl(var(--shadow-color) / 0.10),
+    inset 0 2px 4px hsl(var(--shadow-color) / 0.06);
+
+  /* Accent glow — teal-tinted halo for primary CTAs and active states.      */
+  --shadow-accent:
+    0 2px 6px hsl(180 64% 33% / 0.28),
+    0 8px 20px hsl(180 64% 33% / 0.22);
+
+  /* Surf glow — brighter, used for focus/“live” emphasis.                   */
+  --shadow-surf:
+    0 0 0 1px hsl(180 64% 47% / 0.20),
+    0 4px 16px hsl(180 64% 47% / 0.30);
+
+  /* Soft top highlight — pairs with large elevations to fake a light edge.  */
+  --shadow-highlight: inset 0 1px 0 0 hsl(40 60% 99% / 0.65);
+
+  /* --- Ring tokens (focus / outline halos) ------------------------------- */
+  --ring-width: 3px;
+  --ring-offset-width: 2px;
+  --ring-offset-color: #fbf7f0;                 /* sand background          */
+  --ring-color: hsl(180 64% 33% / 0.45);        /* teal accent, soft        */
+  --ring-color-ink: hsl(200 30% 15% / 0.18);    /* neutral ink ring         */
+}
+
+/* ==========================================================================
+   Elevation utility classes
+   Map the scale to semantic levels (1–6). Includes a gentle motion-aware
+   hover lift so interactive surfaces feel physical.
+   ========================================================================== */
+
+.elevation-0 { box-shadow: none; }
+.elevation-1 { box-shadow: var(--shadow-xs); }
+.elevation-2 { box-shadow: var(--shadow-sm); }
+.elevation-3 { box-shadow: var(--shadow-md); }
+.elevation-4 { box-shadow: var(--shadow-lg); }
+.elevation-5 { box-shadow: var(--shadow-xl); }
+.elevation-6 { box-shadow: var(--shadow-2xl), var(--shadow-highlight); }
+
+/* Interactive lift: raise one step and nudge up on hover.                   */
+.elevation-interactive {
+  box-shadow: var(--shadow-sm);
+  transition:
+    box-shadow 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+.elevation-interactive:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+.elevation-interactive:active {
+  box-shadow: var(--shadow-sm);
+  transform: translateY(0);
+}
+
+/* ==========================================================================
+   Surface helpers — opinionated card + glass treatments
+   ========================================================================== */
+
+/* Solid card: cream surface, layered shadow, hairline edge.                 */
+.surface-card {
+  background: #fbf7f0;
+  border: 1px solid hsl(200 30% 15% / 0.06);
+  border-radius: 16px;
+  box-shadow: var(--shadow-md);
+}
+
+/* ---- Frosted glass --------------------------------------------------------
+   Translucent surface with backdrop blur. Two variants for light/tinted
+   contexts. The inset highlight + saturate keeps it crisp over imagery. */
+.glass {
+  background: hsl(40 50% 97% / 0.55);
+  border: 1px solid hsl(40 60% 99% / 0.55);
+  border-radius: 18px;
+  box-shadow: var(--shadow-lg), var(--shadow-highlight);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  backdrop-filter: blur(16px) saturate(160%);
+}
+
+/* Teal-tinted glass — for accent panels over ocean/photo backgrounds.       */
+.glass--ocean {
+  background: hsl(180 50% 22% / 0.32);
+  border: 1px solid hsl(180 64% 47% / 0.28);
+  border-radius: 18px;
+  box-shadow: var(--shadow-xl);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  backdrop-filter: blur(18px) saturate(150%);
+  color: #fbf7f0;
+}
+
+/* Dark glass — over imagery or the deep-ocean sections.                     */
+.glass--ink {
+  background: hsl(200 30% 15% / 0.45);
+  border: 1px solid hsl(40 60% 99% / 0.14);
+  border-radius: 18px;
+  box-shadow: var(--shadow-xl);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  backdrop-filter: blur(20px) saturate(140%);
+  color: #f4ece0;
+}
+
+/* Graceful degradation where backdrop-filter is unsupported.                */
+@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .glass        { background: hsl(40 50% 97% / 0.92); }
+  .glass--ocean { background: hsl(180 50% 22% / 0.92); }
+  .glass--ink   { background: hsl(200 30% 15% / 0.92); }
+}
+
+/* ==========================================================================
+   Ring utility — soft focus / selection halo
+   Uses layered box-shadow to draw an offset ring without affecting layout
+   (no border-box reflow). Pair `.ring` with a modifier, or use on :focus.
+   ========================================================================== */
+
+.ring {
+  box-shadow:
+    0 0 0 var(--ring-offset-width) var(--ring-offset-color),
+    0 0 0 calc(var(--ring-offset-width) + var(--ring-width)) var(--ring-color);
+}
+
+/* Accent (teal) ring — default emphasis.                                    */
+.ring--accent { --ring-color: hsl(180 64% 33% / 0.45); }
+
+/* Surf ring — brighter, for "active/live" emphasis.                         */
+.ring--surf {
+  --ring-color: hsl(180 64% 47% / 0.55);
+  box-shadow:
+    0 0 0 var(--ring-offset-width) var(--ring-offset-color),
+    0 0 0 calc(var(--ring-offset-width) + var(--ring-width)) var(--ring-color),
+    var(--shadow-surf);
+}
+
+/* Neutral ink ring — quiet selection state.                                 */
+.ring--ink { --ring-color: var(--ring-color-ink); }
+
+/* Apply the ring automatically on keyboard focus for interactive elements.  */
+.ring-focus:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 var(--ring-offset-width) var(--ring-offset-color),
+    0 0 0 calc(var(--ring-offset-width) + var(--ring-width)) var(--ring-color);
+}
+
+/* ==========================================================================
+   Motion & contrast preferences
+   ========================================================================== */
+
+/* Respect reduced-motion: disable hover lift translation.                   */
+@media (prefers-reduced-motion: reduce) {
+  .elevation-interactive {
+    transition: box-shadow 0.2s ease;
+  }
+  .elevation-interactive:hover {
+    transform: none;
+  }
+}
+
+/* In high-contrast / forced-colors mode, fall back to a visible border so
+   elevation is still perceivable.                                           */
+@media (forced-colors: active) {
+  .surface-card,
+  .glass,
+  .glass--ocean,
+  .glass--ink {
+    border: 1px solid CanvasText;
+  }
+}

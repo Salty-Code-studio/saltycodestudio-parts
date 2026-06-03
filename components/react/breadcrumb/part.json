@@ -1,0 +1,13 @@
+{
+  "name": "Breadcrumb",
+  "slug": "breadcrumb",
+  "category": "react",
+  "tier": "practical",
+  "tags": ["breadcrumb", "navigation", "nav", "truncation", "collapse", "accessible"],
+  "description": "Accessible breadcrumb navigation with chevron or slash separators and truncation plus an expandable collapse for long paths.",
+  "deps": [],
+  "files": ["Breadcrumb.tsx"],
+  "usage": "Render <Breadcrumb items={[{ label: 'Home', href: '/' }, { label: 'Current page' }]} />. Add maxItems={3} to collapse long trails and truncateLabels to cap crumb width.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
+}

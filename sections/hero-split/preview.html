@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hero-split · saltycodestudio</title>
+
+  <!-- Tailwind Play CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Brand fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --warm-sand: #F2EBDD;
+      --deep-teal: #0E3A40;
+      --surf-coral: #FF6F59;
+      --sky-blue: #4FA8C9;
+      --driftwood-ink: #1C2B2E;
+      --font-display: "Space Grotesk", system-ui, sans-serif;
+      --font-mono: "JetBrains Mono", ui-monospace, monospace;
+      --font-body: "Inter", system-ui, sans-serif;
+    }
+    body { font-family: var(--font-body); }
+    .font-mono { font-family: var(--font-mono); }
+    h1, .font-\[var\(--font-display\2c \27 Space_Grotesk\27 \2c sans-serif\)\] { font-family: var(--font-display); }
+  </style>
+</head>
+<body class="bg-[#F2EBDD] text-[#0E3A40] antialiased">
+
+  <!-- Minimal brand nav for context -->
+  <header class="sticky top-0 z-30 border-b border-[#0E3A40]/10 bg-[#F2EBDD]/80 backdrop-blur">
+    <nav class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8">
+      <a href="#" class="flex items-center gap-2.5">
+        <span class="font-mono text-2xl font-bold leading-none text-[#0E3A40]">~&lt;</span>
+        <span class="font-[var(--font-display)] text-lg font-semibold tracking-tight">saltycodestudio</span>
+      </a>
+
+      <div class="hidden items-center gap-8 md:flex">
+        <a href="#work" class="text-sm font-medium text-[#1C2B2E]/70 transition hover:text-[#0E3A40]">Work</a>
+        <a href="#services" class="text-sm font-medium text-[#1C2B2E]/70 transition hover:text-[#0E3A40]">Services</a>
+        <a href="#about" class="text-sm font-medium text-[#1C2B2E]/70 transition hover:text-[#0E3A40]">About</a>
+        <a href="#contact" class="rounded-lg bg-[#0E3A40] px-4 py-2 text-sm font-semibold text-[#F2EBDD] transition hover:bg-[#1C2B2E]">Get in touch</a>
+      </div>
+
+      <button id="menuBtn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu" class="md:hidden">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-6 w-6 text-[#0E3A40]">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </nav>
+
+    <!-- Mobile menu -->
+    <div id="mobileMenu" class="hidden border-t border-[#0E3A40]/10 bg-[#F2EBDD] md:hidden">
+      <div class="mx-auto flex max-w-7xl flex-col gap-1 px-6 py-4">
+        <a href="#work" class="rounded-lg px-3 py-2.5 text-sm font-medium text-[#1C2B2E]/80 hover:bg-white/50">Work</a>
+        <a href="#services" class="rounded-lg px-3 py-2.5 text-sm font-medium text-[#1C2B2E]/80 hover:bg-white/50">Services</a>
+        <a href="#about" class="rounded-lg px-3 py-2.5 text-sm font-medium text-[#1C2B2E]/80 hover:bg-white/50">About</a>
+        <a href="#contact" class="mt-1 rounded-lg bg-[#0E3A40] px-3 py-2.5 text-sm font-semibold text-[#F2EBDD]">Get in touch</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== hero-split section (paste-in markup) ===== -->
+  <section class="relative overflow-hidden bg-[#F2EBDD] text-[#0E3A40]">
+    <!-- Soft surf glows -->
+    <div aria-hidden="true" class="pointer-events-none absolute -top-24 -right-24 h-80 w-80 rounded-full bg-[#4FA8C9]/20 blur-3xl"></div>
+    <div aria-hidden="true" class="pointer-events-none absolute -bottom-32 -left-20 h-80 w-80 rounded-full bg-[#FF6F59]/10 blur-3xl"></div>
+
+    <div class="relative mx-auto grid max-w-7xl items-center gap-12 px-6 py-20 md:py-28 lg:grid-cols-2 lg:gap-16 lg:px-8">
+      <!-- Left: copy -->
+      <div class="max-w-xl">
+        <p class="inline-flex items-center gap-2 rounded-full border border-[#0E3A40]/15 bg-white/50 px-4 py-1.5 font-mono text-xs uppercase tracking-[0.18em] text-[#0E3A40]/70">
+          ~&lt; web design &amp; development
+        </p>
+
+        <h1 class="mt-6 font-[var(--font-display,'Space_Grotesk',sans-serif)] text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
+          Clean code, <span class="text-[#FF6F59]">warm coast.</span>
+        </h1>
+
+        <p class="mt-6 text-lg leading-relaxed text-[#1C2B2E]/75">
+          We build fast, accessible websites and apps with the calm of island time and the rigor of real engineering. No bloat, no buzzwords — just software that ships and holds up.
+        </p>
+
+        <div class="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
+          <a href="#contact" class="inline-flex items-center justify-center gap-2 rounded-xl bg-[#FF6F59] px-7 py-3.5 text-base font-semibold text-white shadow-sm transition hover:bg-[#f25c45] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FF6F59]">
+            Start a project
+            <svg aria-hidden="true" viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4">
+              <path fill-rule="evenodd" d="M3 10a.75.75 0 0 1 .75-.75h9.69L9.97 5.78a.75.75 0 1 1 1.06-1.06l4.5 4.5a.75.75 0 0 1 0 1.06l-4.5 4.5a.75.75 0 1 1-1.06-1.06l3.47-3.47H3.75A.75.75 0 0 1 3 10Z" clip-rule="evenodd" />
+            </svg>
+          </a>
+          <a href="#work" class="inline-flex items-center justify-center gap-2 rounded-xl border border-[#0E3A40]/20 bg-white/40 px-7 py-3.5 text-base font-semibold text-[#0E3A40] transition hover:border-[#0E3A40]/40 hover:bg-white/70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0E3A40]">
+            See the work
+          </a>
+        </div>
+
+        <p class="mt-5 font-mono text-xs uppercase tracking-[0.14em] text-[#0E3A40]/55">
+          Trusted by founders from Bonaire to Brooklyn.
+        </p>
+
+        <dl class="mt-10 grid grid-cols-3 gap-6 border-t border-[#0E3A40]/10 pt-8">
+          <div>
+            <dt class="sr-only">Lighthouse, median</dt>
+            <dd>
+              <span class="block font-[var(--font-display,'Space_Grotesk',sans-serif)] text-3xl font-bold tracking-tight">98</span>
+              <span class="mt-1 block text-sm text-[#1C2B2E]/60">Lighthouse, median</span>
+            </dd>
+          </div>
+          <div>
+            <dt class="sr-only">Idea to launch</dt>
+            <dd>
+              <span class="block font-[var(--font-display,'Space_Grotesk',sans-serif)] text-3xl font-bold tracking-tight">11d</span>
+              <span class="mt-1 block text-sm text-[#1C2B2E]/60">Idea to launch</span>
+            </dd>
+          </div>
+          <div>
+            <dt class="sr-only">Sites shipped</dt>
+            <dd>
+              <span class="block font-[var(--font-display,'Space_Grotesk',sans-serif)] text-3xl font-bold tracking-tight">40+</span>
+              <span class="mt-1 block text-sm text-[#1C2B2E]/60">Sites shipped</span>
+            </dd>
+          </div>
+        </dl>
+      </div>
+
+      <!-- Right: code-window mockup -->
+      <div class="relative">
+        <div aria-hidden="true" class="absolute -inset-4 -z-10 rounded-3xl bg-gradient-to-br from-[#4FA8C9]/25 to-[#FF6F59]/15 blur-2xl"></div>
+        <div class="overflow-hidden rounded-2xl border border-[#0E3A40]/15 bg-[#0E3A40] shadow-2xl shadow-[#0E3A40]/20">
+          <!-- Title bar -->
+          <div class="flex items-center gap-2 border-b border-white/10 px-4 py-3">
+            <span class="h-3 w-3 rounded-full bg-[#FF6F59]"></span>
+            <span class="h-3 w-3 rounded-full bg-[#4FA8C9]"></span>
+            <span class="h-3 w-3 rounded-full bg-[#F2EBDD]/70"></span>
+            <span class="ml-3 font-mono text-xs text-[#F2EBDD]/60">studio.ts</span>
+          </div>
+          <!-- Code body -->
+          <pre class="overflow-x-auto px-5 py-5 font-mono text-[13px] leading-relaxed text-[#F2EBDD]/90"><code><span class="grid grid-cols-[2ch_1fr] gap-4"><span class="select-none text-right text-[#4FA8C9]/50">1</span><span>export const studio = {</span></span><span class="grid grid-cols-[2ch_1fr] gap-4"><span class="select-none text-right text-[#4FA8C9]/50">2</span><span>  name: "saltycodestudio",</span></span><span class="grid grid-cols-[2ch_1fr] gap-4"><span class="select-none text-right text-[#4FA8C9]/50">3</span><span>  tagline: "Clean code, warm coast.",</span></span><span class="grid grid-cols-[2ch_1fr] gap-4"><span class="select-none text-right text-[#4FA8C9]/50">4</span><span>  stack: ["react", "tailwind", "edge"],</span></span><span class="grid grid-cols-[2ch_1fr] gap-4"><span class="select-none text-right text-[#4FA8C9]/50">5</span><span>  ships(idea) {</span></span><span class="grid grid-cols-[2ch_1fr] gap-4"><span class="select-none text-right text-[#4FA8C9]/50">6</span><span>    return build(idea).fast().accessible();</span></span><span class="grid grid-cols-[2ch_1fr] gap-4"><span class="select-none text-right text-[#4FA8C9]/50">7</span><span>  },</span></span><span class="grid grid-cols-[2ch_1fr] gap-4"><span class="select-none text-right text-[#4FA8C9]/50">8</span><span>};</span></span></code></pre>
+          <!-- Status strip -->
+          <div class="flex items-center justify-between border-t border-white/10 bg-[#1C2B2E] px-5 py-3 font-mono text-xs text-[#F2EBDD]/55">
+            <span class="flex items-center gap-2">
+              <span class="h-2 w-2 rounded-full bg-[#4FA8C9]"></span>
+              build passing
+            </span>
+            <span>deployed to the edge · 38ms</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- ===== /hero-split section ===== -->
+
+  <script>
+    // Mobile menu toggle
+    (function () {
+      var btn = document.getElementById("menuBtn");
+      var menu = document.getElementById("mobileMenu");
+      if (!btn || !menu) return;
+      btn.addEventListener("click", function () {
+        var open = menu.classList.toggle("hidden") === false;
+        btn.setAttribute("aria-expanded", String(open));
+      });
+    })();
+  </script>
+</body>
+</html>

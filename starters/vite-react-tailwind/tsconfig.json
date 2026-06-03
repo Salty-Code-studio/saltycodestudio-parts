@@ -1,0 +1,32 @@
+{
+  // TypeScript config for a Vite + React 18 app.
+  // Tuned for the modern bundler workflow: TS only type-checks, Vite/esbuild
+  // does the actual transpiling — so we keep "noEmit": true and let Vite emit.
+  "compilerOptions": {
+    /* Language + module target ----------------------------------------- */
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+
+    /* React ------------------------------------------------------------ */
+    "jsx": "react-jsx", // new JSX transform — no `import React` needed
+
+    /* Bundler mode (Vite owns emit) ------------------------------------ */
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "skipLibCheck": true,
+
+    /* Strictness — keep these on; they catch real bugs ----------------- */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true
+  },
+  "include": ["src"]
+}

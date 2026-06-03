@@ -1,0 +1,13 @@
+{
+  "name": "Select Menu",
+  "slug": "select-menu",
+  "category": "react",
+  "tier": "practical",
+  "tags": ["select", "dropdown", "combobox", "listbox", "accessible", "keyboard", "search"],
+  "description": "An accessible custom select/dropdown with full keyboard navigation, optional search filtering, and a checkmark on the selected option.",
+  "deps": [],
+  "files": ["SelectMenu.tsx"],
+  "usage": "Import SelectMenu and pass an options array plus an onChange handler: <SelectMenu options={[{value:'bonaire',label:'Bonaire'}]} onChange={(v)=>setValue(v)} />. Add searchable to enable type-to-filter.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
+}

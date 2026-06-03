@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Input Field — saltycodestudio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+      body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }
+    </style>
+  </head>
+  <body class="bg-[#f4ece0]">
+    <div id="root"></div>
+    <script type="text/babel" data-presets="react">
+      const { useId, useState, forwardRef } = React;
+
+      const InputField = forwardRef(function InputField(
+        {
+          label,
+          labelVariant = "standard",
+          helperText,
+          error,
+          leadingIcon,
+          trailingIcon,
+          required = false,
+          className = "",
+          id,
+          value,
+          defaultValue,
+          onChange,
+          onFocus,
+          onBlur,
+          disabled,
+          placeholder,
+          ...rest
+        },
+        ref
+      ) {
+        const reactId = useId();
+        const inputId = id ?? `scs-input-${reactId}`;
+        const helperId = `${inputId}-helper`;
+        const errorId = `${inputId}-error`;
+
+        const isControlled = value !== undefined;
+        const [innerValue, setInnerValue] = useState(defaultValue != null ? String(defaultValue) : "");
+        const [focused, setFocused] = useState(false);
+
+        const currentValue = isControlled ? String(value) : innerValue;
+        const hasValue = currentValue.length > 0;
+        const invalid = Boolean(error);
+        const floating = labelVariant === "floating";
+        const floatUp = floating && (focused || hasValue || Boolean(placeholder));
+
+        const describedBy =
+          [invalid ? errorId : null, !invalid && helperText ? helperId : null]
+            .filter(Boolean)
+            .join(" ") || undefined;
+
+        function handleChange(e) {
+          if (!isControlled) setInnerValue(e.target.value);
+          onChange && onChange(e);
+        }
+
+        const fieldClasses = [
+          "group relative flex items-center gap-2 rounded-xl border bg-[#faf6ef] px-3.5 transition-all duration-200",
+          floating ? "pt-5 pb-1.5" : "py-2.5",
+          disabled
+            ? "cursor-not-allowed border-[#e7ddcd] opacity-60"
+            : invalid
+            ? "border-rose-400/70 ring-2 ring-rose-300/40 focus-within:border-rose-500 focus-within:ring-rose-300/50"
+            : "border-[#e3d8c5] focus-within:border-[#1f8a8a] focus-within:ring-2 focus-within:ring-[#2ec3c3]/35",
+        ].join(" ");
+
+        const iconColor = invalid
+          ? "text-rose-500"
+          : focused
+          ? "text-[#0f5c5c]"
+          : "text-[#4a5d66]";
+
+        return (
+          <div className={`w-full ${className}`}>
+            {!floating && (
+              <label htmlFor={inputId} className="mb-1.5 block text-sm font-medium text-[#1c2b33]">
+                {label}
+                {required && <span className="ml-0.5 text-rose-500" aria-hidden="true">*</span>}
+              </label>
+            )}
+
+            <div className={fieldClasses}>
+              {leadingIcon && (
+                <span className={`pointer-events-none flex h-5 w-5 shrink-0 items-center justify-center transition-colors duration-200 ${iconColor}`} aria-hidden="true">
+                  {leadingIcon}
+                </span>
+              )}
+
+              <div className="relative flex-1">
+                {floating && (
+                  <label
+                    htmlFor={inputId}
+                    className={[
+                      "pointer-events-none absolute left-0 origin-left truncate transition-all duration-200",
+                      floatUp ? "top-0 -translate-y-3.5 text-xs font-medium" : "top-1/2 -translate-y-1/2 text-base",
+                      invalid ? "text-rose-500" : focused ? "text-[#0f5c5c]" : "text-[#4a5d66]",
+                    ].join(" ")}
+                  >
+                    {label}
+                    {required && <span className="ml-0.5 text-rose-500" aria-hidden="true">*</span>}
+                  </label>
+                )}
+
+                <input
+                  ref={ref}
+                  id={inputId}
+                  value={isControlled ? value : innerValue}
+                  onChange={handleChange}
+                  onFocus={(e) => { setFocused(true); onFocus && onFocus(e); }}
+                  onBlur={(e) => { setFocused(false); onBlur && onBlur(e); }}
+                  disabled={disabled}
+                  required={required}
+                  aria-required={required || undefined}
+                  aria-invalid={invalid || undefined}
+                  aria-describedby={describedBy}
+                  placeholder={floating && !floatUp ? undefined : placeholder}
+                  className="w-full bg-transparent text-[15px] text-[#1c2b33] outline-none placeholder:text-[#9aa7ac] disabled:cursor-not-allowed"
+                  {...rest}
+                />
+              </div>
+
+              {trailingIcon && (
+                <span className={`flex h-5 w-5 shrink-0 items-center justify-center transition-colors duration-200 ${iconColor}`}>
+                  {trailingIcon}
+                </span>
+              )}
+            </div>
+
+            {invalid ? (
+              <p id={errorId} role="alert" className="mt-1.5 flex items-center gap-1 text-xs font-medium text-rose-600">
+                <svg viewBox="0 0 16 16" className="h-3.5 w-3.5 shrink-0" fill="currentColor" aria-hidden="true">
+                  <path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 3a.9.9 0 01.9.9v3.2a.9.9 0 11-1.8 0V4.9A.9.9 0 018 4zm0 7.4a1 1 0 110-2 1 1 0 010 2z" />
+                </svg>
+                {error}
+              </p>
+            ) : helperText ? (
+              <p id={helperId} className="mt-1.5 text-xs text-[#4a5d66]">{helperText}</p>
+            ) : null}
+          </div>
+        );
+      });
+
+      /* --- Icons used in the demo --- */
+      const MailIcon = () => (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
+          <rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 7 9 6 9-6" />
+        </svg>
+      );
+      const UserIcon = () => (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
+          <circle cx="12" cy="8" r="4" /><path d="M4 21a8 8 0 0 1 16 0" />
+        </svg>
+      );
+      const SearchIcon = () => (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
+          <circle cx="11" cy="11" r="7" /><path d="m21 21-4.3-4.3" />
+        </svg>
+      );
+      const CheckIcon = () => (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
+          <path d="M20 6 9 17l-5-5" />
+        </svg>
+      );
+
+      function PasswordField() {
+        const [show, setShow] = useState(false);
+        const [val, setVal] = useState("");
+        const Eye = (
+          <button
+            type="button"
+            onClick={() => setShow((s) => !s)}
+            aria-label={show ? "Hide password" : "Show password"}
+            className="flex h-5 w-5 items-center justify-center rounded text-[#4a5d66] outline-none transition-colors hover:text-[#0f5c5c] focus-visible:ring-2 focus-visible:ring-[#2ec3c3]/60"
+          >
+            {show ? (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
+                <path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z" /><circle cx="12" cy="12" r="3" />
+              </svg>
+            ) : (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
+                <path d="M3 3l18 18M10.6 10.6a3 3 0 0 0 4.2 4.2M9.4 5.2A9.6 9.6 0 0 1 12 5c6 0 10 7 10 7a18 18 0 0 1-3.1 3.9M6.6 6.6A18 18 0 0 0 2 12s4 7 10 7a9.7 9.7 0 0 0 2.6-.4" />
+              </svg>
+            )}
+          </button>
+        );
+        return (
+          <InputField
+            label="Password"
+            labelVariant="floating"
+            type={show ? "text" : "password"}
+            required
+            value={val}
+            onChange={(e) => setVal(e.target.value)}
+            trailingIcon={Eye}
+            helperText="At least 8 characters."
+          />
+        );
+      }
+
+      function Card({ title, children }) {
+        return (
+          <section className="rounded-2xl border border-[#e3d8c5] bg-[#fbf7f0] p-6 shadow-[0_1px_2px_rgba(28,43,51,0.04)]">
+            <h2 className="mb-4 text-xs font-semibold uppercase tracking-wider text-[#0f5c5c]">{title}</h2>
+            <div className="flex flex-col gap-5">{children}</div>
+          </section>
+        );
+      }
+
+      function Demo() {
+        const [name, setName] = useState("Salty Code");
+        return (
+          <div className="mx-auto min-h-screen max-w-3xl px-6 py-14">
+            <header className="mb-10">
+              <p className="mb-1 text-sm font-medium text-[#1f8a8a]">saltycodestudio · Sand &amp; Surf</p>
+              <h1 className="text-3xl font-semibold tracking-tight text-[#1c2b33]">Input Field</h1>
+              <p className="mt-2 max-w-prose text-[#4a5d66]">
+                Floating or standard label, helper text, error state, leading/trailing icons,
+                and a required indicator. Tab through the fields to see focus rings.
+              </p>
+            </header>
+
+            <div className="grid gap-6 sm:grid-cols-2">
+              <Card title="Standard label">
+                <InputField label="Full name" placeholder="Jane Doe" leadingIcon={<UserIcon />} value={name} onChange={(e) => setName(e.target.value)} />
+                <InputField label="Email address" type="email" required placeholder="you@studio.com" leadingIcon={<MailIcon />} helperText="We'll never share it." />
+                <InputField label="Search" type="search" placeholder="Search parts…" leadingIcon={<SearchIcon />} />
+              </Card>
+
+              <Card title="Floating label">
+                <InputField label="Workspace name" labelVariant="floating" defaultValue="Sand & Surf" trailingIcon={<CheckIcon />} />
+                <InputField label="Email address" labelVariant="floating" type="email" required leadingIcon={<MailIcon />} helperText="Used for billing." />
+                <PasswordField />
+              </Card>
+
+              <Card title="Error state">
+                <InputField label="Email address" type="email" required defaultValue="not-an-email" leadingIcon={<MailIcon />} error="Enter a valid email address." />
+                <InputField label="Coupon code" labelVariant="floating" defaultValue="EXPIRED99" error="This code has expired." />
+              </Card>
+
+              <Card title="Disabled">
+                <InputField label="Account ID" defaultValue="scs_8f3a21" disabled leadingIcon={<UserIcon />} helperText="Assigned automatically." />
+                <InputField label="Plan" labelVariant="floating" defaultValue="Studio (locked)" disabled />
+              </Card>
+            </div>
+          </div>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(<Demo />);
+    </script>
+  </body>
+</html>

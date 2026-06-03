@@ -1,0 +1,14 @@
+{
+  "name": "Blog Grid",
+  "slug": "blog-grid",
+  "kind": "section",
+  "category": "blog",
+  "tier": "practical",
+  "tags": ["blog", "grid", "articles", "cards", "cover-image", "category-tag", "excerpt", "responsive", "accessible", "sand-and-surf"],
+  "description": "A responsive blog post grid where each card pairs a cover image, category tag, title, excerpt, and author-and-date meta into a clean, scannable archive.",
+  "deps": ["react", "tailwindcss"],
+  "files": ["BlogGrid.tsx", "section.html"],
+  "usage": "React: import BlogGrid from './BlogGrid'; then <BlogGrid /> (override eyebrow, heading, intro, posts, and ariaLabel to customize). HTML: copy the <section> from section.html into any Tailwind page. Both use the Sand & Surf palette; open preview.html in a browser to see the section rendered standalone via the Tailwind Play CDN.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
+}
