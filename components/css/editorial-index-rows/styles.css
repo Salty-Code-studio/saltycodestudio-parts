@@ -1,0 +1,149 @@
+/* ============================================================================
+   saltycodestudio parts: Editorial Index Rows
+   ============================================================================
+   A stacked list of oversized nav rows separated by hairline rules, each with
+   a trailing arrow. Rows rest in a muted grey. On hover (and keyboard focus)
+   the label fills to full ink with a background-clip text sweep, the arrow
+   slides in from the left with a little overshoot, and the row background
+   tints subtly. Pure CSS, no JavaScript.
+
+   Theming: override the custom properties on .eir (or any ancestor).
+   ============================================================================ */
+
+.eir {
+  /* Theme knobs */
+  --eir-ink: #1c2b33;                        /* label at full strength      */
+  --eir-muted: rgba(28, 43, 51, 0.45);       /* resting label grey          */
+  --eir-rule: rgba(28, 43, 51, 0.14);        /* hairline between rows       */
+  --eir-tint: rgba(31, 138, 138, 0.06);      /* hover background wash       */
+  --eir-arrow: #0f5c5c;                      /* arrow and number accent     */
+  --eir-size: clamp(2.2rem, 6.5vw, 4.6rem);  /* label type size             */
+  --eir-speed: 480ms;                        /* master timing               */
+  --eir-overshoot: cubic-bezier(0.34, 1.56, 0.64, 1); /* arrow spring       */
+
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Hairline rules: one above every row, one closing the stack */
+.eir > li { border-top: 1px solid var(--eir-rule); }
+.eir > li:last-child { border-bottom: 1px solid var(--eir-rule); }
+
+/* The row itself, one oversized flex line */
+.eir-row {
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 3vw, 2.25rem);
+  padding-block: clamp(1.1rem, 3.2vw, 2rem);
+  padding-inline: clamp(0.4rem, 2vw, 1.25rem);
+  font-size: var(--eir-size);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+  color: var(--eir-ink);
+  background-color: transparent;
+  transition: background-color calc(var(--eir-speed) * 0.6) ease;
+}
+
+/* Small leading index number */
+.eir-num {
+  flex: none;
+  font-size: max(0.72rem, 0.2em);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  font-variant-numeric: tabular-nums;
+  color: var(--eir-muted);
+  transition: color calc(var(--eir-speed) * 0.6) ease;
+}
+
+/* The big label. Baseline everywhere: a plain grey to ink color transition.
+   The gradient sweep below upgrades it where background-clip: text exists. */
+.eir-label {
+  margin-inline-end: auto; /* pushes the arrow to the far end of the row */
+  color: var(--eir-muted);
+  transition: color calc(var(--eir-speed) * 0.75) ease;
+}
+
+/* Trailing arrow, sized in em so it scales with the label */
+.eir-arrow {
+  flex: none;
+  inline-size: 0.62em;
+  color: var(--eir-arrow);
+  transition:
+    transform var(--eir-speed) var(--eir-overshoot),
+    opacity calc(var(--eir-speed) * 0.5) ease-out;
+}
+.eir-arrow svg {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+}
+
+/* Park the arrow off to the left, but only where hover is a real capability.
+   Touch screens keep the arrow visible so rows still read as links. */
+@media (hover: hover) and (pointer: fine) {
+  .eir-arrow {
+    opacity: 0;
+    transform: translateX(-0.7em);
+  }
+}
+
+/* Active state, shared by hover and keyboard focus so they mirror exactly */
+.eir-row:is(:hover, :focus-visible) {
+  background-color: var(--eir-tint);
+}
+.eir-row:is(:hover, :focus-visible) .eir-label {
+  color: var(--eir-ink);
+}
+.eir-row:is(:hover, :focus-visible) .eir-num {
+  color: var(--eir-arrow);
+}
+.eir-row:is(:hover, :focus-visible) .eir-arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Visible keyboard ring on top of the mirrored hover state */
+.eir-row:focus-visible {
+  outline: 2px solid var(--eir-arrow);
+  outline-offset: -2px;
+}
+
+/* Enhancement: where background-clip: text is supported, the label fill
+   becomes a left to right ink sweep instead of a flat crossfade. The
+   gradient is 240% wide; sliding background-position from 100% to 0%
+   pulls the ink half across the glyphs. */
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .eir-label {
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    background-image: linear-gradient(
+      to right,
+      var(--eir-ink) 0%,
+      var(--eir-ink) 50%,
+      var(--eir-muted) 56%,
+      var(--eir-muted) 100%
+    );
+    background-size: 240% 100%;
+    background-position: 100% 0;
+    background-repeat: no-repeat;
+    -webkit-background-clip: text;
+    background-clip: text;
+    transition: background-position var(--eir-speed) cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .eir-row:is(:hover, :focus-visible) .eir-label {
+    background-position: 0% 0;
+  }
+}
+
+/* Reduced motion: every state still switches, it just switches instantly */
+@media (prefers-reduced-motion: reduce) {
+  .eir-row,
+  .eir-num,
+  .eir-label,
+  .eir-arrow {
+    transition-duration: 0.01ms;
+  }
+}

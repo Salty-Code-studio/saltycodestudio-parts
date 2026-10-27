@@ -1,0 +1,159 @@
+/* ==========================================================================
+   CSS Stacking Cards (scroll-driven, zero JavaScript)
+   ==========================================================================
+   Sticky cards that pile up while you scroll. Each card pins below the one
+   before it, then scales back as the next card slides up and covers it. The
+   scaling is driven by the native CSS scroll-driven animations API (a named
+   view timeline plus animation-range: exit-crossing), so no JavaScript runs.
+
+   Adapted from the "Stacking Cards" demo by Bramus Van Damme on
+   scroll-driven-animations.style (Apache-2.0), with credit. The demo link is
+   in the README. The original stacking idea comes from CodyHouse.
+
+   HOW IT WORKS
+   1. .sdc-cards is a grid with one fixed-height row per card, and it exposes
+      a named view timeline that tracks the wrapper through the viewport.
+   2. Each .sdc-card is position: sticky with a per-card top offset, so the
+      cards pin and stack under one another with a small visible lip.
+   3. The inner .sdc-card__content (not the card itself) is what animates,
+      so the wrapper height, and therefore the scroll distance, stays stable.
+   4. Each content element is assigned its own slice of the wrapper's
+      exit-crossing range (slice size = 100% / number of cards) and scales
+      from 1 down to its stacked size while that slice plays.
+   ========================================================================== */
+
+.sdc-cards {
+  /* Knobs. Override these on the wrapper, an inline style works well. */
+  --sdc-numcards: 4;                            /* how many .sdc-card children */
+  --sdc-card-height: clamp(26rem, 45vw, 36rem); /* height of one card row */
+  --sdc-gap: 4vw;                               /* space between unstacked cards */
+  --sdc-top-offset: 1.25em;                     /* visible lip of each buried card */
+  --sdc-scale-step: 0.08;                       /* size drop per buried card */
+
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(var(--sdc-numcards), var(--sdc-card-height));
+  gap: var(--sdc-gap);
+
+  /* Make room at the bottom so the last cards can settle into the stack.
+     Keep the gap as margin, padding here would stretch the view timeline. */
+  padding: 0 0 calc(var(--sdc-numcards) * var(--sdc-top-offset));
+  margin: 0 0 var(--sdc-gap);
+}
+
+/* Each card needs to know its own 1-based position in the stack. The first
+   six are covered automatically; for longer stacks set an inline
+   style="--sdc-index: 7" (and so on) on the extra cards. */
+.sdc-card:nth-child(1) { --sdc-index: 1; }
+.sdc-card:nth-child(2) { --sdc-index: 2; }
+.sdc-card:nth-child(3) { --sdc-index: 3; }
+.sdc-card:nth-child(4) { --sdc-index: 4; }
+.sdc-card:nth-child(5) { --sdc-index: 5; }
+.sdc-card:nth-child(6) { --sdc-index: 6; }
+
+.sdc-card {
+  /* The stickiness lives on the card, the animation on its content. The
+     padding-top staircase is what leaves each buried card's lip visible. */
+  position: sticky;
+  top: 0;
+  padding-top: calc(var(--sdc-index) * var(--sdc-top-offset));
+}
+
+.sdc-card__content {
+  --sdc-card-bg: #ffffff;
+  --sdc-card-fg: #1c2b33;
+
+  height: 100%;
+  border-radius: 1.25rem;
+  overflow: hidden;
+  background: var(--sdc-card-bg);
+  color: var(--sdc-card-fg);
+  box-shadow:
+    0 0.2em 1em rgba(28, 43, 51, 0.08),
+    0 1em 2em rgba(28, 43, 51, 0.12);
+
+  display: grid;
+  grid-template-areas: "text art";
+  grid-template-columns: 1fr 1fr;
+  align-items: stretch;
+
+  /* The content scales down while stuck, anchor the scale to its top edge. */
+  transform-origin: 50% 0%;
+  will-change: transform;
+}
+
+.sdc-card__text {
+  grid-area: text;
+  align-self: center;
+  padding: clamp(1.5rem, 4vw, 3rem);
+  display: grid;
+  gap: 1rem;
+  justify-items: start;
+}
+
+.sdc-card__art {
+  grid-area: art;
+  margin: 0;
+  overflow: hidden;
+}
+
+.sdc-card__art > img,
+.sdc-card__art > svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* On small screens, stack the art above the text inside each card. */
+@media (max-width: 640px) {
+  .sdc-card__content {
+    grid-template-areas: "art" "text";
+    grid-template-columns: 1fr;
+    grid-template-rows: 2fr 3fr;
+  }
+}
+
+/* ==========================================================================
+   THE SCROLL-DRIVEN ENGINE
+   Guarded so unsupported browsers (and users who prefer reduced motion)
+   simply get the sticky stacking without the scale-back, fully readable.
+   ========================================================================== */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+
+    .sdc-cards {
+      view-timeline-name: --sdc-cards-scroll;
+    }
+
+    .sdc-card {
+      --sdc-index0: calc(var(--sdc-index) - 1);                       /* 0-based index */
+      --sdc-reverse-index: calc(var(--sdc-numcards) - var(--sdc-index0)); /* 1 = last card */
+    }
+
+    .sdc-card__content {
+      /* Card N owns slice N of the wrapper's exit-crossing range. */
+      --sdc-start-range: calc(var(--sdc-index0) / var(--sdc-numcards) * 100%);
+      --sdc-end-range: calc(var(--sdc-index) / var(--sdc-numcards) * 100%);
+
+      animation: sdc-scale linear forwards;
+      animation-timeline: --sdc-cards-scroll;
+      animation-range:
+        exit-crossing var(--sdc-start-range)
+        exit-crossing var(--sdc-end-range);
+    }
+
+    /* Deeper cards end up smaller. With the default step of 0.08 in a
+       four-card stack the sizes land at 0.76, 0.84, 0.92 and 1. */
+    @keyframes sdc-scale {
+      to {
+        transform: scale(calc(
+          1 + var(--sdc-scale-step)
+            - var(--sdc-scale-step) * var(--sdc-reverse-index)
+        ));
+      }
+    }
+
+  }
+}

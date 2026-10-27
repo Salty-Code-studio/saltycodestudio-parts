@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fly-In Fly-Out List, Sand &amp; Surf demo</title>
+<style>
+  /* ---- Sand & Surf palette ---- */
+  :root {
+    --sand-1: #fbf7f0;
+    --sand-2: #f4ece0;
+    --sand-3: #ece0cd;
+    --ink: #1c2b33;
+    --ink-soft: #4a5d66;
+    --teal: #1f8a8a;
+    --teal-deep: #0f5c5c;
+    --surf: #2ec3c3;
+    --maxw: 1080px;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    font-family: "Helvetica Neue", Arial, system-ui, sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(140% 90% at 50% -10%, var(--sand-1), var(--sand-2) 55%, var(--sand-3) 100%);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: var(--maxw); margin-inline: auto; padding-inline: 1.5rem; }
+
+  /* ============================================================
+     PART: Fly-In Fly-Out List (fly-*)
+     ============================================================ */
+
+  .fly-list {
+    --fly-height:   70vh;
+    --fly-surface:  #ffffff;
+    --fly-border:   #ece0cd;
+    --fly-text:     #1c2b33;
+    --fly-muted:    #4a5d66;
+
+    height: var(--fly-height);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    background: var(--fly-surface);
+    border: 1px solid var(--fly-border);
+    border-radius: 18px;
+  }
+
+  .fly-list--page {
+    height: auto;
+    overflow-y: visible;
+  }
+
+  .fly-list ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    counter-reset: fly-index;
+  }
+
+  .fly-list li {
+    counter-increment: fly-index;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-height: 4.5rem;
+    padding: 0.9rem 1.25rem;
+    border-bottom: 1px solid var(--fly-border);
+  }
+
+  .fly-list li:last-child { border-bottom: none; }
+
+  .fly-list--numbered li::after {
+    content: "#" counter(fly-index);
+    margin-left: auto;
+    color: var(--fly-muted);
+    font-size: 0.78rem;
+    font-variant-numeric: tabular-nums;
+    opacity: 0.7;
+  }
+
+  .fly-avatar {
+    flex: none;
+    display: inline-grid;
+    place-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #1f8a8a, #2ec3c3);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.04em;
+    user-select: none;
+  }
+
+  .fly-list li:nth-child(3n + 2) .fly-avatar {
+    background: linear-gradient(135deg, #0f5c5c, #1f8a8a);
+  }
+
+  .fly-list li:nth-child(3n) .fly-avatar {
+    background: linear-gradient(135deg, #2ec3c3, #7fe3e3);
+    color: #06231f;
+  }
+
+  .fly-name {
+    flex: 1;
+    min-width: 0;
+    color: var(--fly-text);
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .fly-note {
+    display: block;
+    color: var(--fly-muted);
+    font-weight: 400;
+    font-size: 0.82rem;
+  }
+
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      @keyframes fly-in-out {
+        entry 0% {
+          opacity: 0;
+          transform: translateY(100%);
+        }
+        entry 100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        exit 0% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        exit 100% {
+          opacity: 0;
+          transform: translateY(-100%);
+        }
+      }
+
+      .fly-list li {
+        animation: fly-in-out linear;
+        animation-timeline: view();
+      }
+    }
+  }
+
+  /* ============================================================
+     DEMO LAYOUT
+     ============================================================ */
+
+  .hero {
+    min-height: 58vh;
+    display: grid;
+    place-content: center;
+    text-align: center;
+    padding: 5rem 1.5rem 3rem;
+  }
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: .32em;
+    font-size: .72rem;
+    font-weight: 700;
+    color: var(--teal-deep);
+    margin: 0 0 1.2rem;
+  }
+  .hero h1 {
+    font-size: clamp(2.4rem, 6.5vw, 4.6rem);
+    line-height: 1.04;
+    letter-spacing: -.02em;
+    margin: 0;
+  }
+  .hero h1 em { font-style: normal; color: var(--teal-deep); }
+  .hero p {
+    max-width: 46ch;
+    margin: 1.5rem auto 0;
+    color: var(--ink-soft);
+    font-size: 1.12rem;
+  }
+  .note {
+    margin-top: 1.6rem;
+    font-size: .82rem;
+    color: var(--ink-soft);
+    background: rgba(255,255,255,.55);
+    border: 1px dashed rgba(31,138,138,.4);
+    border-radius: 12px;
+    padding: .8rem 1rem;
+    display: inline-block;
+  }
+
+  section { padding-block: clamp(3.5rem, 9vh, 7rem); }
+
+  .split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: center;
+  }
+  @media (max-width: 820px) { .split { grid-template-columns: 1fr; } }
+
+  .split h2 {
+    font-size: clamp(1.7rem, 4vw, 2.6rem);
+    letter-spacing: -.015em;
+    line-height: 1.1;
+    margin: 0 0 1rem;
+  }
+  .split p { color: var(--ink-soft); margin: 0 0 .9rem; }
+
+  .legend {
+    list-style: none;
+    margin: 1.4rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: .7rem;
+  }
+  .legend li {
+    display: flex;
+    gap: .8rem;
+    align-items: baseline;
+    background: rgba(255,255,255,.6);
+    border: 1px solid rgba(28,43,51,.08);
+    border-radius: 12px;
+    padding: .75rem 1rem;
+    font-size: .93rem;
+    color: var(--ink-soft);
+  }
+  .legend code {
+    flex: none;
+    font-size: .82rem;
+    color: var(--teal-deep);
+    background: rgba(46,195,195,.14);
+    border-radius: 6px;
+    padding: .1rem .45rem;
+  }
+
+  /* phone-style frame around the inner-scrolling list */
+  .phone {
+    width: min(400px, 100%);
+    margin-inline: auto;
+    background: #ffffff;
+    border: 1px solid rgba(28,43,51,.1);
+    border-radius: 28px;
+    box-shadow: 0 30px 70px -38px rgba(15,92,92,.65);
+    overflow: hidden;
+  }
+  .phone-head {
+    padding: 1.3rem 1.4rem 1rem;
+    border-bottom: 1px solid var(--sand-3);
+    background: linear-gradient(180deg, #ffffff, #fdfaf4);
+  }
+  .phone-head h2 {
+    margin: 0;
+    font-size: 1.35rem;
+    letter-spacing: -.01em;
+  }
+  .phone-head p {
+    margin: .15rem 0 0;
+    font-size: .85rem;
+    color: var(--ink-soft);
+  }
+  .phone .fly-list {
+    border: none;
+    border-radius: 0;
+  }
+
+  /* page-scroll demo section */
+  .page-demo-head { max-width: 56ch; margin-bottom: 2.5rem; }
+  .page-demo-head h2 {
+    font-size: clamp(1.8rem, 4.5vw, 2.8rem);
+    letter-spacing: -.015em;
+    line-height: 1.08;
+    margin: 0 0 1rem;
+  }
+  .page-demo-head p { color: var(--ink-soft); margin: 0; font-size: 1.05rem; }
+  .page-demo .fly-list { max-width: 640px; }
+
+  footer {
+    text-align: center;
+    padding: 5rem 1.5rem 6rem;
+    color: var(--ink-soft);
+  }
+  footer .mark { font-weight: 700; color: var(--teal-deep); letter-spacing: -.02em; }
+  footer p { margin: .3rem 0; }
+</style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div>
+      <p class="eyebrow">Sand &amp; Surf · Scroll-driven CSS</p>
+      <h1>Rows that <em>fly in</em>,<br />then fly right out</h1>
+      <p>Each list row rides its own <code>view()</code> timeline: it slides and fades in
+         entering the scrollport, then slides and fades away leaving it. Pure CSS, zero JavaScript.</p>
+      <div><span class="note">Needs Chrome/Edge 115+ or Safari 26+. Elsewhere the lists simply render static, fully readable.</span></div>
+    </div>
+  </header>
+
+  <!-- INNER-SCROLL CONTACT CARD -->
+  <section class="wrap">
+    <div class="split">
+      <div>
+        <h2>The classic contact list</h2>
+        <p>The card on the right is its own scroll container. Scroll <strong>inside it</strong>
+           and watch every row animate against the card, not the page.</p>
+        <p>One keyframe set carries its own timeline ranges, so a single
+           <code>animation-timeline: view()</code> declaration handles both directions:</p>
+        <ul class="legend">
+          <li><code>entry 0% to 100%</code> row slides up and fades in while entering at the bottom</li>
+          <li><code>exit 0% to 100%</code> row slides up and fades out while leaving at the top</li>
+          <li><code>@supports</code> unsupported browsers just see a normal list</li>
+        </ul>
+      </div>
+      <div class="phone">
+        <div class="phone-head">
+          <h2>Crew</h2>
+          <p>26 contacts · scroll me</p>
+        </div>
+        <div class="fly-list" style="--fly-height: 62vh">
+          <ul>
+            <li><span class="fly-avatar" aria-hidden="true">AD</span><span class="fly-name">Ava Delmar<small class="fly-note">Surf coach</small></span></li>
+            <li><span class="fly-avatar" aria-hidden="true">BV</span><span class="fly-name">Bo Vandergrift<small class="fly-note">Boat captain</small></span></li>
+            <li><span class="fly-avatar" aria-hidden="true">CR</span><span class="fly-name">Cala Reyes<small class="fly-note">Dive instructor</small></span></li>
+            <li><span class="fly-avatar" aria-hidden="true">DM</span><span class="fly-name">Dario Marés<small class="fly-note">Beach bar</small></span></li>
+            <li><span class="fly-avatar" aria-hidden="true">ES</span><span class="fly-name">Elin Strand<small class="fly-note">Kite school</small></span></li>
+            <li><span class="fly-avatar" aria-hidden="true">FB</span><span class="fly-name">Finn Baywater<small class="fly-note">Fishing charters</small></span></li>
+            <li><span class="fly-avatar" aria-hidden="true">GC</span><span class="fly-name">Gigi Coral<small class="fly-note">Snorkel tours</small></span></li>
+            <li><span class="fly-avatar" aria-hidden="true">HD</span><span class="fly-name">Hugo Delacosta<small class="fly-note">Harbor office</small></span></li>
+            <li><span class="fly-avatar" aria-hidden="true">IM</span><span class="fly-name">Isla Moreno<small class="fly-note">Yoga on the pier</small></span></li>
+            <li><span class="fly-avatar" aria-hidden="true">JT</span><span class="fly-name">Jonas Tidewell<small class="fly-note">Sailmaker</small></span></li>
+            <li><span class="fly-avatar" aria-hidden="true">KO</span><span class="fly-name">Kai Ostend<small class="fly-note">Windsurf coach</small></span></li>
+            <li><span class="fly-avatar" aria-hidden="true">LV</span><span class="fly-name">Lena Vandezee<small class="fly-note">Beach rentals</small></span></li>
+            <li><span class="fly-avatar" aria-hidden="true">MD</span><span class="fly-name">Marlon Duin<small class="fly-note">Lifeguard</small></span></li>
+            <li><span class="fly-avatar" aria-hidden="true">NC</span><span class="fly-name">Nina Costera<small class="fly-note">Ice cream cart</small></span></li>
+            <li><span class="fly-avatar" aria-hidden="true">OV</span><span class="fly-name">Otis Vandermeer<small class="fly-note">Dockhand</small></span></li>
+            <li><span class="fly-avatar" aria-hidden="true">PC</span><span class="fly-name">Perla Costa<small class="fly-note">Seafood kitchen</small></span></li>
+            <li><span class="fly-avatar" aria-hidden="true">QH</span><span class="fly-name">Quinn Harbers<small class="fly-note">Kayak guide</small></span></li>
+            <li><span class="fly-avatar" aria-hidden="true">RS</span><span class="fly-name">Rio Salinas<small class="fly-note">Surf shop</small></span></li>
+            <li><span class="fly-avatar" aria-hidden="true">SD</span><span class="fly-name">Selma Drift<small class="fly-note">Shell museum</small></span></li>
+            <li><span class="fly-avatar" aria-hidden="true">TL</span><span class="fly-name">Teo Lagune<small class="fly-note">Glassbottom boat</small></span></li>
+            <li><span class="fly-avatar" aria-hidden="true">UV</span><span class="fly-name">Uma Vloed<small class="fly-note">Tide charts</small></span></li>
+            <li><span class="fly-avatar" aria-hidden="true">VM</span><span class="fly-name">Vito Marea<small class="fly-note">Marina cafe</small></span></li>
+            <li><span class="fly-avatar" aria-hidden="true">WZ</span><span class="fly-name">Wren Zandvoort<small class="fly-note">Beach photography</small></span></li>
+            <li><span class="fly-avatar" aria-hidden="true">XP</span><span class="fly-name">Xavi Playamar<small class="fly-note">Volleyball league</small></span></li>
+            <li><span class="fly-avatar" aria-hidden="true">YD</span><span class="fly-name">Yara Duinberg<small class="fly-note">Dune tours</small></span></li>
+            <li><span class="fly-avatar" aria-hidden="true">ZW</span><span class="fly-name">Zef Waterman<small class="fly-note">Ferry pilot</small></span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAGE-SCROLL VARIANT -->
+  <section class="wrap page-demo">
+    <div class="page-demo-head">
+      <h2>Or let the page do the scrolling</h2>
+      <p>Add the <code>fly-list--page</code> modifier and the document becomes the
+         scrollport. Keep scrolling: these rows fly in from below and out at the top
+         of your viewport. The <code>fly-list--numbered</code> modifier adds the
+         little row index with a CSS counter.</p>
+    </div>
+    <div class="fly-list fly-list--page fly-list--numbered">
+      <ul>
+        <li><span class="fly-avatar" aria-hidden="true">AS</span><span class="fly-name">Amara Solis<small class="fly-note">Sunset sailing</small></span></li>
+        <li><span class="fly-avatar" aria-hidden="true">BO</span><span class="fly-name">Bram Oosterdok<small class="fly-note">Harbor master</small></span></li>
+        <li><span class="fly-avatar" aria-hidden="true">CF</span><span class="fly-name">Cleo Fontaine<small class="fly-note">Beach club</small></span></li>
+        <li><span class="fly-avatar" aria-hidden="true">DM</span><span class="fly-name">Dex Marisol<small class="fly-note">Jet ski rentals</small></span></li>
+        <li><span class="fly-avatar" aria-hidden="true">FV</span><span class="fly-name">Femke Van Dijk<small class="fly-note">Dive shop</small></span></li>
+        <li><span class="fly-avatar" aria-hidden="true">GP</span><span class="fly-name">Gus Palmera<small class="fly-note">Tiki bar</small></span></li>
+        <li><span class="fly-avatar" aria-hidden="true">HO</span><span class="fly-name">Hana Okada<small class="fly-note">Freediving</small></span></li>
+        <li><span class="fly-avatar" aria-hidden="true">IC</span><span class="fly-name">Ivo Castell<small class="fly-note">Fish market</small></span></li>
+        <li><span class="fly-avatar" aria-hidden="true">JA</span><span class="fly-name">Juno Abrams<small class="fly-note">Lifeguard chief</small></span></li>
+        <li><span class="fly-avatar" aria-hidden="true">KB</span><span class="fly-name">Kees Brander<small class="fly-note">Windsurf school</small></span></li>
+        <li><span class="fly-avatar" aria-hidden="true">LM</span><span class="fly-name">Lola Miramar<small class="fly-note">Paddle tours</small></span></li>
+        <li><span class="fly-avatar" aria-hidden="true">MV</span><span class="fly-name">Milo Vance<small class="fly-note">Night market</small></span></li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    <p><span class="mark">saltycodestudio</span> · Sand &amp; Surf parts library</p>
+    <p>Adapted with credit from the Contact List demo by Bramus Van Damme, scroll-driven-animations.style (Apache-2.0).</p>
+  </footer>
+
+</body>
+</html>

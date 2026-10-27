@@ -1,0 +1,307 @@
+/* Scroll 360 Turntable · saltycodestudio
+ * Structure and the default CSS-3D product: an eight-sided faceted glass
+ * flacon with a cap, standing on a turntable disc. Built entirely from
+ * transformed divs and one inline SVG, no images.
+ *
+ * GSAP owns the spin (rotationY on .turntable-object). Keep filter, opacity
+ * and overflow OFF the preserve-3d containers (.turntable-tilt,
+ * .turntable-object, .turntable-body, .turntable-cap) or the 3D flattens.
+ */
+
+:root {
+  /* Geometry. Face width for an 8-sided prism is 2 * tan(22.5deg) * radius,
+     about 0.828 * radius. We use 0.85 for a hair of overlap (hides seams). */
+  --tt-radius: 120px;
+  --tt-height: 300px;
+  --tt-cap-radius: 44px;
+  --tt-cap-h: 58px;
+  --tt-face-w: calc(var(--tt-radius) * 0.85);
+  --tt-cap-face-w: calc(var(--tt-cap-radius) * 0.85);
+
+  /* Product colors (Sand & Surf glass, driftwood cap, sand disc) */
+  --tt-glass-1: #35c9c4;
+  --tt-glass-2: #1f8a8a;
+  --tt-glass-3: #0c4a4e;
+  --tt-cap-1: #2a3b44;
+  --tt-cap-2: #141f26;
+  --tt-disc-1: #f4ece0;
+  --tt-disc-2: #d9c8a8;
+  --tt-disc-3: #c2ab84;
+  --tt-ink: #1c2b33;
+  --tt-accent: #ff6f59;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Section: full-viewport stage that GSAP pins                            */
+/* ---------------------------------------------------------------------- */
+
+.turntable-section {
+  position: relative;
+  height: 100vh;
+  height: 100svh;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Layered headline (fades and letter-spaces out as the spin progresses)  */
+/* ---------------------------------------------------------------------- */
+
+.turntable-headline {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  pointer-events: none;
+  letter-spacing: 0.02em; /* GSAP drifts this wider while fading out */
+  color: var(--tt-ink);
+}
+
+.turntable-headline h1,
+.turntable-headline h2 {
+  margin: 0;
+  font-size: clamp(3rem, 13vw, 8.5rem);
+  font-weight: 800;
+  line-height: 0.95;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.turntable-kicker {
+  margin: 0 0 1rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  opacity: 0.7;
+}
+
+.turntable-caption {
+  position: absolute;
+  bottom: 1.6rem;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  margin: 0;
+  text-align: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.24em;
+  color: var(--tt-ink);
+  opacity: 0.55;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Scene: perspective camera + a gentle downward tilt                     */
+/* ---------------------------------------------------------------------- */
+
+.turntable-scene {
+  position: relative;
+  z-index: 2;
+  width: calc(var(--tt-radius) * 2.8);
+  height: calc(var(--tt-height) + var(--tt-cap-h) * 2 + 90px);
+  perspective: 1200px;
+}
+
+.turntable-tilt {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transform: rotateX(-8deg); /* look slightly down onto the turntable */
+}
+
+/* Soft contact shadow under the product (flat, outside the 3D stack) */
+.turntable-shadow {
+  position: absolute;
+  left: 50%;
+  bottom: 5%;
+  width: 62%;
+  height: 26px;
+  transform: translateX(-50%);
+  background: radial-gradient(closest-side, rgba(28, 43, 51, 0.32), transparent 72%);
+  filter: blur(6px);
+}
+
+/* ---------------------------------------------------------------------- */
+/* The object GSAP spins. The CSS resting angle below is what no-JS and   */
+/* reduced-motion visitors see; GSAP overrides it when animating.         */
+/* ---------------------------------------------------------------------- */
+
+.turntable-object {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--tt-face-w);
+  height: var(--tt-height);
+  margin: calc(var(--tt-height) / -2) 0 0 calc(var(--tt-face-w) / -2);
+  transform-style: preserve-3d;
+  transform: rotateY(-32deg);
+  will-change: transform;
+}
+
+/* Bottle body: 8 faces around the Y axis */
+.turntable-body {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+}
+
+.turntable-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0) 22%),
+    linear-gradient(180deg, var(--tt-glass-1), var(--tt-glass-2) 48%, var(--tt-glass-3));
+  box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.12);
+}
+
+.turntable-body > .turntable-face:nth-child(1) { transform: rotateY(0deg)   translateZ(var(--tt-radius)); filter: brightness(1.05); }
+.turntable-body > .turntable-face:nth-child(2) { transform: rotateY(45deg)  translateZ(var(--tt-radius)); filter: brightness(0.97); }
+.turntable-body > .turntable-face:nth-child(3) { transform: rotateY(90deg)  translateZ(var(--tt-radius)); filter: brightness(0.90); }
+.turntable-body > .turntable-face:nth-child(4) { transform: rotateY(135deg) translateZ(var(--tt-radius)); filter: brightness(0.84); }
+.turntable-body > .turntable-face:nth-child(5) { transform: rotateY(180deg) translateZ(var(--tt-radius)); filter: brightness(0.80); }
+.turntable-body > .turntable-face:nth-child(6) { transform: rotateY(225deg) translateZ(var(--tt-radius)); filter: brightness(0.84); }
+.turntable-body > .turntable-face:nth-child(7) { transform: rotateY(270deg) translateZ(var(--tt-radius)); filter: brightness(0.90); }
+.turntable-body > .turntable-face:nth-child(8) { transform: rotateY(315deg) translateZ(var(--tt-radius)); filter: brightness(0.97); }
+
+/* Front-face label chip (inline SVG wave + type, no images) */
+.turntable-face--label {
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.turntable-label {
+  display: grid;
+  gap: 0.3rem;
+  place-items: center;
+  width: 80%;
+  padding: 0.6rem 0.35rem;
+  border-radius: 8px;
+  background: rgba(251, 247, 240, 0.94);
+  box-shadow: 0 1px 4px rgba(12, 74, 78, 0.35);
+  text-align: center;
+}
+
+.turntable-label svg {
+  width: 24px;
+  height: auto;
+  color: var(--tt-glass-2);
+}
+
+.turntable-label strong {
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: var(--tt-ink);
+}
+
+.turntable-label span {
+  font-size: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--tt-accent);
+}
+
+/* Octagonal lids close the open tops (visible thanks to the tilt) */
+.turntable-lid {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  backface-visibility: hidden;
+  clip-path: polygon(29.3% 0%, 70.7% 0%, 100% 29.3%, 100% 70.7%, 70.7% 100%, 29.3% 100%, 0% 70.7%, 0% 29.3%);
+}
+
+.turntable-lid--body {
+  width: calc(var(--tt-radius) * 2);
+  height: calc(var(--tt-radius) * 2);
+  transform: translate(-50%, -50%) rotateX(90deg) translateZ(calc(var(--tt-height) / 2));
+  background: radial-gradient(circle at 50% 38%, #43d0d0, #17716f 78%);
+}
+
+.turntable-lid--cap {
+  width: calc(var(--tt-cap-radius) * 2);
+  height: calc(var(--tt-cap-radius) * 2);
+  transform: translate(-50%, -50%) rotateX(90deg) translateZ(calc(var(--tt-cap-h) / 2));
+  background: radial-gradient(circle at 50% 38%, #3b515c, var(--tt-cap-2) 80%);
+}
+
+/* Driftwood cap: a narrower 8-face prism sitting on the body */
+.turntable-cap {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: var(--tt-cap-face-w);
+  height: var(--tt-cap-h);
+  transform: translate(-50%, calc(-100% + 2px));
+  transform-style: preserve-3d;
+}
+
+.turntable-cap > .turntable-face {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0) 30%),
+    linear-gradient(180deg, var(--tt-cap-1), var(--tt-cap-2));
+}
+
+.turntable-cap > .turntable-face:nth-child(1) { transform: rotateY(0deg)   translateZ(var(--tt-cap-radius)); filter: brightness(1.05); }
+.turntable-cap > .turntable-face:nth-child(2) { transform: rotateY(45deg)  translateZ(var(--tt-cap-radius)); filter: brightness(0.97); }
+.turntable-cap > .turntable-face:nth-child(3) { transform: rotateY(90deg)  translateZ(var(--tt-cap-radius)); filter: brightness(0.90); }
+.turntable-cap > .turntable-face:nth-child(4) { transform: rotateY(135deg) translateZ(var(--tt-cap-radius)); filter: brightness(0.84); }
+.turntable-cap > .turntable-face:nth-child(5) { transform: rotateY(180deg) translateZ(var(--tt-cap-radius)); filter: brightness(0.80); }
+.turntable-cap > .turntable-face:nth-child(6) { transform: rotateY(225deg) translateZ(var(--tt-cap-radius)); filter: brightness(0.84); }
+.turntable-cap > .turntable-face:nth-child(7) { transform: rotateY(270deg) translateZ(var(--tt-cap-radius)); filter: brightness(0.90); }
+.turntable-cap > .turntable-face:nth-child(8) { transform: rotateY(315deg) translateZ(var(--tt-cap-radius)); filter: brightness(0.97); }
+
+/* Turntable disc under the bottle */
+.turntable-disc {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: calc(var(--tt-radius) * 2.4);
+  height: calc(var(--tt-radius) * 2.4);
+  border-radius: 50%;
+  backface-visibility: hidden;
+  transform: translate(-50%, -50%) rotateX(90deg) translateZ(calc(var(--tt-height) / -2 - 8px));
+  background: radial-gradient(circle at 50% 42%, var(--tt-disc-1), var(--tt-disc-2) 66%, var(--tt-disc-3));
+  box-shadow: inset 0 0 0 2px rgba(28, 43, 51, 0.08);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Frame-sequence mode: initTurntable({ frames: [urls] })                 */
+/* ---------------------------------------------------------------------- */
+
+.turntable-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* When frames drive the spin, hide the CSS-3D stand-in */
+.turntable--frames .turntable-tilt,
+.turntable--frames .turntable-shadow {
+  display: none;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Smaller screens: shrink the product                                    */
+/* ---------------------------------------------------------------------- */
+
+@media (max-width: 640px) {
+  :root {
+    --tt-radius: 88px;
+    --tt-height: 226px;
+    --tt-cap-radius: 33px;
+    --tt-cap-h: 44px;
+  }
+}
+
+/* Reduced motion: animation.js skips the pin and spin entirely, leaving
+   the resting angle above. Nothing extra is needed here, the section reads
+   as a normal static hero. */

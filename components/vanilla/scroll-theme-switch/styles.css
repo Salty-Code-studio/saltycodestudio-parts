@@ -1,0 +1,88 @@
+/* Scroll Theme Switch (saltycodestudio)
+ * Theme tokens plus the crossfade. script.js flips data-theme on <html>,
+ * and everything painted with these custom properties glides between the
+ * bone-light and near-black looks in about 0.6s.
+ * Without JS the :root defaults below simply stay put, so the page
+ * renders complete and readable in the light theme.
+ */
+
+:root {
+  --ts-duration: 0.6s;
+  --ts-ease: ease;
+
+  /* Bone-light theme (default, also the no-JS fallback) */
+  --ts-bg: #fbf7f0;
+  --ts-ink: #1c2b33;
+  --ts-muted: #4a5d66;
+  --ts-accent: #0f5c5c;
+  --ts-line: rgba(28, 43, 51, 0.14);
+  --ts-surface: rgba(255, 255, 255, 0.62);
+}
+
+:root[data-theme="dark"] {
+  /* Near-black "night ocean" theme */
+  --ts-bg: #0e171c;
+  --ts-ink: #f4ece0;
+  --ts-muted: #9fb3ba;
+  --ts-accent: #2ec3c3;
+  --ts-line: rgba(244, 236, 224, 0.16);
+  --ts-surface: rgba(255, 255, 255, 0.05);
+}
+
+/* The whole page paints from the tokens, so one attribute flip
+   crossfades everything at once. */
+body {
+  background-color: var(--ts-bg);
+  color: var(--ts-ink);
+  transition:
+    background-color var(--ts-duration) var(--ts-ease),
+    color var(--ts-duration) var(--ts-ease);
+}
+
+/* Fixed header. It reads the same tokens as the page, so it adapts to
+   every theme change automatically, no extra wiring. */
+.ts-header {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9rem clamp(1rem, 4vw, 2rem);
+  background-color: var(--ts-bg);
+  color: var(--ts-ink);
+  border-bottom: 1px solid var(--ts-line);
+  transition:
+    background-color var(--ts-duration) var(--ts-ease),
+    color var(--ts-duration) var(--ts-ease),
+    border-color var(--ts-duration) var(--ts-ease);
+}
+
+/* Opt-in helper for anything else painted with the tokens (cards,
+   buttons, inline SVG) so it crossfades in sync with the page. */
+.ts-sync {
+  transition:
+    background-color var(--ts-duration) var(--ts-ease),
+    color var(--ts-duration) var(--ts-ease),
+    border-color var(--ts-duration) var(--ts-ease),
+    fill var(--ts-duration) var(--ts-ease),
+    stroke var(--ts-duration) var(--ts-ease),
+    box-shadow var(--ts-duration) var(--ts-ease);
+}
+
+/* Sections only declare a theme; they stay transparent so the body
+   crossfade reads as one continuous sweep across the page. */
+section[data-theme],
+[data-theme-section] {
+  background: transparent;
+}
+
+/* Reduced motion: switch themes instantly instead of fading. */
+@media (prefers-reduced-motion: reduce) {
+  body,
+  .ts-header,
+  .ts-sync {
+    transition: none;
+  }
+}

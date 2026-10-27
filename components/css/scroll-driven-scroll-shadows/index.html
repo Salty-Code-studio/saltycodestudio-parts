@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CSS Scroll Shadows, minimal usage</title>
+<link rel="stylesheet" href="styles.css" />
+<style>
+  /* Page chrome only, the part itself lives in styles.css. */
+  body { margin: 0; font-family: system-ui, sans-serif; color: #1c2b33; background: #fbf7f0; line-height: 1.6; }
+  main { width: min(90vw, 40rem); margin-inline: auto; padding-block: 2.5rem 4rem; }
+  main > p { max-width: 62ch; }
+  .demo {
+    background: #fff;
+    border: 1px solid #ece0cd;
+    border-radius: 12px;
+    padding: 0 1rem; /* horizontal only, the shadow strips handle the vertical breathing room */
+    margin-block: 1.5rem;
+  }
+</style>
+</head>
+<body>
+<main>
+
+  <h1>CSS Scroll Shadows</h1>
+  <p>Add <code>class="sds-scroller"</code> to any element that scrolls vertically
+     and give it a height or max-height. The shadows wire themselves up purely in
+     CSS: they appear at whichever edge is hiding more content and vanish on
+     containers that cannot scroll at all.</p>
+
+  <!-- 1. A scrollable panel. tabindex + role + label keep the
+          scroll region reachable and announced for keyboard and
+          screen-reader users. -->
+  <div class="sds-scroller demo" style="max-height: 16rem"
+       tabindex="0" role="region" aria-label="Long article">
+    <p>Long content that overflows the panel. Scroll and watch the edges.</p>
+    <p>The top shadow appears the moment a little content hides above you.</p>
+    <p>The bottom shadow is already there, hinting at what is still below.</p>
+    <p>Both fades ride the container's own scroll progress timeline.</p>
+    <p>No scroll listeners, no observers, no resize math anywhere.</p>
+    <p>Resize the window or edit the content, the shadows keep up on their own.</p>
+    <p>Keyboard scrolling, dragging and flinging all stay perfectly in sync.</p>
+    <p>The bottom shadow fades out right here, at the end.</p>
+  </div>
+
+  <!-- 2. A short panel. Same class, but nothing overflows, so the
+          scroll detection keeps both shadows hidden. -->
+  <div class="sds-scroller demo" style="max-height: 16rem">
+    <p>Short content. No overflow, no shadows.</p>
+  </div>
+
+  <!-- 3. Retheme per scroller with custom properties:
+          color channels, strength and strip height. -->
+  <div class="sds-scroller demo"
+       style="max-height: 16rem;
+              --sds-shadow-rgb: 28 43 46;
+              --sds-shadow-alpha: 0.4;
+              --sds-shadow-size: 1rem"
+       tabindex="0" role="region" aria-label="Notes">
+    <p>A stronger, taller ink shadow, set with three inline custom properties.</p>
+    <p><code>--sds-shadow-rgb</code> takes bare color channels, so the gradient
+       can fade the same color to true transparent.</p>
+    <p><code>--sds-shadow-alpha</code> sets how heavy the shadow reads.</p>
+    <p><code>--sds-shadow-size</code> sets the height of each shadow strip.</p>
+    <p>Set them on one scroller, or on any ancestor to retheme a whole section.</p>
+    <p>Scroll to the end and this stronger shadow melts away all the same.</p>
+  </div>
+
+</main>
+</body>
+</html>

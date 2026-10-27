@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Scroll-Driven Carousel Dots · usage example</title>
+<link rel="stylesheet" href="styles.css" />
+<style>
+  /* Tiny page chrome for the example only; the part is styles.css. */
+  body { margin: 0; font-family: system-ui, sans-serif; background: #f4ece0; color: #1c2b33; padding: 2rem 1rem 4rem; }
+  main { max-width: 640px; margin-inline: auto; display: grid; gap: 2.5rem; }
+  h1 { font-size: 1.4rem; }
+  p.hint { color: #4a5d66; font-size: .9rem; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Scroll-Driven Carousel Dots</h1>
+  <p class="hint">Swipe or scroll each carousel sideways. Set the inline
+     <code>--sdc-slides</code> to the slide count and give the rail one
+     <code>.sdc-dot</code> per slide. The indicator is wired up purely in CSS,
+     no scripts. In your project, swap the placeholder SVGs for your own
+     slides (images, cards, anything).</p>
+
+  <!-- Dots flavor (default): a gliding active dot over a rail.
+       The rail sits inside the track but is absolutely positioned,
+       so it stays fixed while the slides scroll underneath it. -->
+  <div class="sdc" style="--sdc-slides: 3">
+    <div class="sdc-track" role="region" aria-label="Demo carousel, 3 slides" tabindex="0">
+      <div class="sdc-dots" aria-hidden="true">
+        <span class="sdc-dot"></span>
+        <span class="sdc-dot"></span>
+        <span class="sdc-dot"></span>
+        <span class="sdc-thumb"></span>
+      </div>
+      <div class="sdc-slide">
+        <svg viewBox="0 0 400 225" role="img" aria-label="Slide one placeholder">
+          <rect width="400" height="225" fill="#1f8a8a" />
+          <text x="200" y="122" text-anchor="middle" font-size="40" font-weight="700" fill="#fbf7f0">1</text>
+        </svg>
+      </div>
+      <div class="sdc-slide">
+        <svg viewBox="0 0 400 225" role="img" aria-label="Slide two placeholder">
+          <rect width="400" height="225" fill="#157676" />
+          <text x="200" y="122" text-anchor="middle" font-size="40" font-weight="700" fill="#fbf7f0">2</text>
+        </svg>
+      </div>
+      <div class="sdc-slide">
+        <svg viewBox="0 0 400 225" role="img" aria-label="Slide three placeholder">
+          <rect width="400" height="225" fill="#0f5c5c" />
+          <text x="200" y="122" text-anchor="middle" font-size="40" font-weight="700" fill="#fbf7f0">3</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bar flavor: the original growing step bar. It starts at 1/N of
+       the width (slide 1 of N) and fills completely on the last slide. -->
+  <div class="sdc" style="--sdc-slides: 2">
+    <div class="sdc-track" role="region" aria-label="Demo carousel, 2 slides" tabindex="0">
+      <div class="sdc-bar" aria-hidden="true"></div>
+      <div class="sdc-slide">
+        <svg viewBox="0 0 400 225" role="img" aria-label="Slide A placeholder">
+          <rect width="400" height="225" fill="#2ec3c3" />
+          <text x="200" y="122" text-anchor="middle" font-size="40" font-weight="700" fill="#0f5c5c">A</text>
+        </svg>
+      </div>
+      <div class="sdc-slide">
+        <svg viewBox="0 0 400 225" role="img" aria-label="Slide B placeholder">
+          <rect width="400" height="225" fill="#36b6ae" />
+          <text x="200" y="122" text-anchor="middle" font-size="40" font-weight="700" fill="#0f5c5c">B</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+</main>
+</body>
+</html>

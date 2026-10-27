@@ -1,0 +1,13 @@
+{
+  "name": "Shrinking Header with Shadow",
+  "slug": "scroll-driven-shrinking-header",
+  "category": "css",
+  "tier": "practical",
+  "tags": ["scroll-driven", "animation-timeline", "header", "shrinking-header", "sticky-header", "shadow", "profile", "no-js", "progressive-enhancement"],
+  "description": "A profile style header that compresses and gains a drop shadow over the first 150px of scroll, scrubbed by animation-timeline: scroll() with a short animation-range. Pure CSS, fully reversible, degrades to a plain sticky header.",
+  "deps": [],
+  "files": ["styles.css", "index.html"],
+  "usage": "Include styles.css, place the .shh-header block as the first element of <body> with your <main> as its direct sibling (it receives the margin compensation when the header goes fixed), then swap in your own name, meta list and avatar. Tune --shh-distance, --shh-height and --shh-height-min on :root to change the feel.",
+  "source": "https://scroll-driven-animations.style/demos/shrinking-header-shadow/css/",
+  "license": "Apache-2.0 (demo by Bramus Van Damme, scroll-driven-animations.style), adapted with credit"
+}

@@ -1,0 +1,13 @@
+{
+  "name": "Reverse-Scrolling Columns",
+  "slug": "scroll-driven-reverse-columns",
+  "category": "css",
+  "tier": "showcase",
+  "tags": ["scroll-driven", "animation-timeline", "scroll", "columns", "reverse-scroll", "gallery", "grid", "no-js", "progressive-enhancement"],
+  "description": "A three column gallery where the outer columns glide upward against the scroll direction, driven entirely by the native CSS animation-timeline scroll() function. No JavaScript, no observers, graceful static fallback.",
+  "deps": [],
+  "files": ["styles.css", "index.html"],
+  "usage": "Include styles.css, wrap three .rsc-column divs in one .rsc-columns container and add .rsc-reverse to the first and third. Fill each column with .rsc-item figures and make every column taller than the viewport so the counter-scroll has room to travel.",
+  "source": "https://scroll-driven-animations.style/demos/reverse-scroll/css/",
+  "license": "Apache-2.0 (demo by Bramus Van Damme, scroll-driven-animations.style), adapted with credit"
+}

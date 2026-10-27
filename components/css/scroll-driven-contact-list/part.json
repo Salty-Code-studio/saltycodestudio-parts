@@ -1,0 +1,13 @@
+{
+  "name": "Fly-In Fly-Out List",
+  "slug": "scroll-driven-contact-list",
+  "category": "css",
+  "tier": "practical",
+  "tags": ["scroll-driven", "animation-timeline", "view", "entry-exit", "list", "contacts", "fly-in", "no-js", "progressive-enhancement"],
+  "description": "Contact-style list rows that slide and fade in as they enter the scrollport and slide back out as they leave, driven by one CSS keyframe set with entry and exit view() timeline ranges. Zero JavaScript.",
+  "deps": [],
+  "files": ["styles.css", "index.html"],
+  "usage": "Include styles.css, then wrap a plain <ul> of rows (each with a .fly-avatar span and a .fly-name span) in <div class=\"fly-list\"> to get a self-scrolling card whose rows fly in and out; set the card height with --fly-height. Add the fly-list--page modifier to let the whole page act as the scrollport instead.",
+  "source": "https://scroll-driven-animations.style/demos/contact-list/css/",
+  "license": "Apache-2.0 (demo by Bramus Van Damme, scroll-driven-animations.style), adapted with credit"
+}

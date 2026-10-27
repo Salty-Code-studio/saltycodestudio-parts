@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Scroll-Driven Image Reveal · Sand &amp; Surf demo</title>
+<style>
+  /* ---- Sand & Surf palette ---- */
+  :root {
+    --sand-1: #fbf7f0;
+    --sand-2: #f4ece0;
+    --sand-3: #ece0cd;
+    --ink: #1c2b33;
+    --ink-soft: #4a5d66;
+    --teal: #1f8a8a;
+    --teal-deep: #0f5c5c;
+    --surf: #2ec3c3;
+    --coral: #ff6f59;
+    --prose: 44rem;
+    --wide: 62rem;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    font-family: "Helvetica Neue", Arial, system-ui, sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(140% 90% at 50% -10%, var(--sand-1), var(--sand-2) 55%, var(--sand-3) 100%);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ============================================================
+     SCROLL-DRIVEN IMAGE REVEAL (the part itself)
+     ============================================================ */
+
+  .imr-reveal {
+    opacity: 1;
+    clip-path: none;
+    --imr-hide-y: 45%;
+    --imr-hide-x: 20%;
+  }
+
+  @keyframes imr-reveal {
+    from {
+      opacity: 0;
+      clip-path: inset(
+        var(--imr-hide-y, 45%)
+        var(--imr-hide-x, 20%)
+        var(--imr-hide-y, 45%)
+        var(--imr-hide-x, 20%)
+      );
+    }
+    to {
+      opacity: 1;
+      clip-path: inset(0% 0% 0% 0%);
+    }
+  }
+
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .imr-reveal {
+        view-timeline-name: --imr-reveal;
+        view-timeline-axis: block;
+        animation: imr-reveal linear both;
+        animation-timeline: --imr-reveal;
+        animation-range: entry 25% cover 50%;
+      }
+    }
+  }
+
+  /* ============================================================
+     DEMO LAYOUT
+     ============================================================ */
+
+  .hero {
+    min-height: 88vh;
+    display: grid;
+    place-content: center;
+    text-align: center;
+    padding: 6rem 1.5rem 4rem;
+  }
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: .32em;
+    font-size: .72rem;
+    font-weight: 700;
+    color: var(--teal-deep);
+    margin: 0 0 1.2rem;
+  }
+  .hero h1 {
+    font-size: clamp(2.5rem, 7vw, 5rem);
+    line-height: 1.02;
+    letter-spacing: -.02em;
+    margin: 0;
+  }
+  .hero h1 em { font-style: normal; color: var(--teal-deep); }
+  .hero .lede {
+    max-width: 46ch;
+    margin: 1.6rem auto 0;
+    color: var(--ink-soft);
+    font-size: 1.12rem;
+  }
+  .scroll-hint {
+    margin-top: 3rem;
+    font-size: .78rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .scroll-hint span {
+    display: block;
+    margin-top: .6rem;
+    font-size: 1.4rem;
+    animation: nudge 1.8s ease-in-out infinite;
+  }
+  @keyframes nudge {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(6px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-hint span { animation: none; }
+  }
+  .note {
+    margin-top: 1.6rem;
+    font-size: .82rem;
+    color: var(--ink-soft);
+    background: rgba(255,255,255,.55);
+    border: 1px dashed rgba(31,138,138,.4);
+    border-radius: 12px;
+    padding: .8rem 1.1rem;
+    display: inline-block;
+  }
+
+  /* editorial column */
+  article {
+    padding-bottom: 3rem;
+  }
+  .prose {
+    max-width: var(--prose);
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+  }
+  .prose h2 {
+    font-size: clamp(1.7rem, 4vw, 2.5rem);
+    letter-spacing: -.015em;
+    line-height: 1.1;
+    margin: clamp(3.5rem, 9vh, 6rem) 0 1rem;
+  }
+  .prose h2::before {
+    content: "";
+    display: block;
+    width: 3rem;
+    height: 4px;
+    border-radius: 2px;
+    margin-bottom: 1.1rem;
+    background: linear-gradient(90deg, var(--teal-deep), var(--surf));
+  }
+  .prose p { margin: 0 0 1.2rem; }
+  .prose .muted { color: var(--ink-soft); }
+  .prose strong { color: var(--teal-deep); }
+
+  /* revealed figures, slightly wider than the prose */
+  .figure {
+    width: min(var(--wide), 100%);
+    margin: clamp(2.5rem, 7vh, 4.5rem) auto;
+    padding-inline: 1.5rem;
+  }
+  .figure svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0 30px 70px -38px rgba(15, 92, 92, 0.6);
+  }
+  .figure figcaption {
+    text-align: center;
+    font-style: italic;
+    font-size: .85rem;
+    color: var(--ink-soft);
+    margin-top: .9rem;
+  }
+  .figure figcaption b {
+    font-style: normal;
+    color: var(--teal-deep);
+  }
+
+  footer {
+    text-align: center;
+    padding: 4rem 1.5rem 6rem;
+    color: var(--ink-soft);
+  }
+  footer .mark { font-weight: 700; color: var(--teal-deep); letter-spacing: -.02em; }
+  footer p { margin: .4rem 0; }
+</style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div>
+      <p class="eyebrow">Sand &amp; Surf · Scroll-driven CSS</p>
+      <h1>Images that <em>unveil</em><br />themselves</h1>
+      <p class="lede">Each picture below fades in and opens like a curtain as it enters the
+         viewport, a <code>clip-path</code> riding a native CSS view timeline. Zero JavaScript.</p>
+      <p class="scroll-hint">Scroll to reveal<span>↓</span></p>
+      <div><span class="note">Chrome/Edge 115+ and Safari 26+. Elsewhere the images simply show, fully visible.</span></div>
+    </div>
+  </header>
+
+  <article>
+
+    <div class="prose">
+      <p><strong>Field notes from the shoreline.</strong> Some mornings the sea hands you
+         everything at once: light, glass, a set that stacks up exactly where you hoped it
+         would. Most mornings it makes you wait. The waiting is the part nobody photographs,
+         which is a shame, because that is where you learn to read the water.</p>
+      <p class="muted">Keep scrolling. Every image on this page carries the same
+         <code>.imr-reveal</code> class, and the browser does the rest.</p>
+    </div>
+
+    <!-- FIGURE 1: first light over the break -->
+    <figure class="figure">
+      <svg class="imr-reveal" viewBox="0 0 1080 720" role="img" aria-label="Stylized illustration of a coral sun rising over layered teal waves at first light" xmlns="http://www.w3.org/2000/svg">
+        <title>First light over the break</title>
+        <defs>
+          <linearGradient id="s1-sky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#fbf7f0" />
+            <stop offset=".7" stop-color="#f4ece0" />
+            <stop offset="1" stop-color="#d9ecec" />
+          </linearGradient>
+          <linearGradient id="s1-deep" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#0f5c5c" />
+            <stop offset="1" stop-color="#0a3d40" />
+          </linearGradient>
+        </defs>
+        <rect width="1080" height="720" fill="url(#s1-sky)" />
+        <circle cx="770" cy="330" r="92" fill="#ff6f59" />
+        <circle cx="770" cy="330" r="126" fill="#ff6f59" opacity=".18" />
+        <path d="M0,430 C180,398 360,462 540,432 C720,402 900,462 1080,430 L1080,720 L0,720 Z" fill="#2ec3c3" />
+        <path d="M0,488 C200,456 400,516 600,486 C800,456 980,510 1080,488 L1080,720 L0,720 Z" fill="#1f8a8a" />
+        <path d="M0,556 C220,524 420,584 640,554 C840,527 980,576 1080,556 L1080,720 L0,720 Z" fill="url(#s1-deep)" />
+        <path d="M0,432 C180,400 360,464 540,434 C720,404 900,464 1080,432" fill="none" stroke="#fbf7f0" stroke-width="5" stroke-linecap="round" opacity=".85" />
+        <path d="M60,300 q14,-14 28,0 q14,-14 28,0" fill="none" stroke="#1c2b33" stroke-width="4" stroke-linecap="round" opacity=".55" />
+        <path d="M150,258 q11,-11 22,0 q11,-11 22,0" fill="none" stroke="#1c2b33" stroke-width="4" stroke-linecap="round" opacity=".4" />
+      </svg>
+      <figcaption><b>First light over the break.</b> Default curtain: a 45% letterbox that opens from the middle out.</figcaption>
+    </figure>
+
+    <div class="prose">
+      <h2>Reading the water</h2>
+      <p>Swell arrives in families. Count the seconds between crests and you know how far
+         the storm that sent them has travelled; watch where the foam folds first and you
+         know what the bottom is doing underneath. None of it is mystical. It is just
+         attention, applied daily, until the sea becomes legible.</p>
+      <p>The reveal works the same way. The element's own journey through the viewport
+         <em>is</em> the timeline. There is no duration, no delay, no easing curve fighting
+         your scroll speed. You scrub the animation with your thumb, and if you scroll back
+         up, the curtain politely closes again.</p>
+    </div>
+
+    <!-- FIGURE 2: dune lines -->
+    <figure class="figure">
+      <svg class="imr-reveal" style="--imr-hide-y: 28%; --imr-hide-x: 38%" viewBox="0 0 1080 720" role="img" aria-label="Stylized illustration of layered sand dunes with beach grass and distant birds" xmlns="http://www.w3.org/2000/svg">
+        <title>Dune lines</title>
+        <defs>
+          <linearGradient id="s2-sky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#fbf7f0" />
+            <stop offset="1" stop-color="#eee9db" />
+          </linearGradient>
+        </defs>
+        <rect width="1080" height="720" fill="url(#s2-sky)" />
+        <circle cx="270" cy="200" r="70" fill="#f4ece0" stroke="#e4d5ba" stroke-width="3" />
+        <path d="M0,420 C260,340 520,470 780,400 C920,364 1010,384 1080,372 L1080,720 L0,720 Z" fill="#ece0cd" />
+        <path d="M0,520 C240,450 480,560 720,500 C880,462 1000,492 1080,478 L1080,720 L0,720 Z" fill="#e0d0b3" />
+        <path d="M0,630 C300,560 560,660 820,606 C940,582 1020,600 1080,592 L1080,720 L0,720 Z" fill="#d2bf9d" />
+        <g stroke="#0f5c5c" stroke-width="4" stroke-linecap="round" fill="none" opacity=".7">
+          <path d="M210,585 q-6,-38 -18,-54" />
+          <path d="M222,585 q2,-42 -2,-62" />
+          <path d="M234,585 q10,-36 22,-50" />
+          <path d="M860,530 q-5,-32 -15,-45" />
+          <path d="M871,530 q1,-36 -1,-52" />
+          <path d="M882,530 q9,-30 19,-42" />
+        </g>
+        <path d="M640,180 q13,-13 26,0 q13,-13 26,0" fill="none" stroke="#1c2b33" stroke-width="4" stroke-linecap="round" opacity=".5" />
+        <path d="M730,140 q10,-10 20,0 q10,-10 20,0" fill="none" stroke="#1c2b33" stroke-width="4" stroke-linecap="round" opacity=".38" />
+      </svg>
+      <figcaption><b>Dune lines.</b> A wider slit here: <code>--imr-hide-y: 28%</code>, <code>--imr-hide-x: 38%</code>, so it opens sideways like double doors.</figcaption>
+    </figure>
+
+    <div class="prose">
+      <h2>Between tides</h2>
+      <p>Slack water is the quiet hinge between ebb and flood, ten or twenty minutes when
+         the sea seems to hold its breath. Fishermen love it, photographers love it more.
+         Everything goes still and reflective, and colors you never see at noon float up
+         to the surface.</p>
+      <p>Under the hood this whole effect is one keyframe rule and one timeline binding.
+         The animation range, <code>entry 25% cover 50%</code>, means the unveiling starts
+         once a quarter of the image has entered and completes as it reaches the middle of
+         your screen. Two lines to tune, nothing to configure.</p>
+    </div>
+
+    <!-- FIGURE 3: slack tide, evening -->
+    <figure class="figure">
+      <svg class="imr-reveal" style="--imr-hide-y: 47%; --imr-hide-x: 6%" viewBox="0 0 1080 720" role="img" aria-label="Stylized illustration of a pale sun setting over a dark evening sea with bright reflections" xmlns="http://www.w3.org/2000/svg">
+        <title>Slack tide, evening</title>
+        <defs>
+          <linearGradient id="s3-sky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#1c2b33" />
+            <stop offset=".72" stop-color="#134f52" />
+            <stop offset="1" stop-color="#1f8a8a" />
+          </linearGradient>
+          <linearGradient id="s3-sea" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#0e3d40" />
+            <stop offset="1" stop-color="#0b1e24" />
+          </linearGradient>
+        </defs>
+        <rect width="1080" height="440" fill="url(#s3-sky)" />
+        <g fill="#fbf7f0">
+          <circle cx="150" cy="90" r="3" opacity=".8" />
+          <circle cx="320" cy="60" r="2" opacity=".6" />
+          <circle cx="520" cy="110" r="2.5" opacity=".7" />
+          <circle cx="900" cy="70" r="3" opacity=".8" />
+          <circle cx="990" cy="150" r="2" opacity=".55" />
+          <circle cx="720" cy="50" r="2" opacity=".5" />
+        </g>
+        <circle cx="540" cy="440" r="86" fill="#fbf7f0" opacity=".95" />
+        <circle cx="540" cy="440" r="120" fill="#fbf7f0" opacity=".14" />
+        <rect y="440" width="1080" height="280" fill="url(#s3-sea)" />
+        <g stroke-linecap="round">
+          <path d="M420,470 H660" stroke="#fbf7f0" stroke-width="7" opacity=".85" />
+          <path d="M460,500 H620" stroke="#f4ece0" stroke-width="6" opacity=".6" />
+          <path d="M400,532 H560" stroke="#2ec3c3" stroke-width="6" opacity=".55" />
+          <path d="M540,566 H700" stroke="#2ec3c3" stroke-width="5" opacity=".4" />
+          <path d="M450,604 H590" stroke="#2ec3c3" stroke-width="5" opacity=".3" />
+          <path d="M520,646 H640" stroke="#f4ece0" stroke-width="4" opacity=".25" />
+          <path d="M120,520 H220" stroke="#2ec3c3" stroke-width="4" opacity=".18" />
+          <path d="M840,560 H960" stroke="#2ec3c3" stroke-width="4" opacity=".18" />
+        </g>
+      </svg>
+      <figcaption><b>Slack tide.</b> A cinematic letterbox: <code>--imr-hide-y: 47%</code>, <code>--imr-hide-x: 6%</code>, so it opens mostly top-to-bottom.</figcaption>
+    </figure>
+
+    <div class="prose">
+      <h2>Mapping the reef</h2>
+      <p>Every home break gets a hand-drawn map eventually. Not an accurate one, a useful
+         one: where the channel runs, which coral heads bite at low tide, the lineup marks
+         you triangulate from the beach. It lives on the back of an envelope and it is
+         worth more than any chart.</p>
+      <p>Consider this part the same kind of map. Copy the stylesheet, drop the class on
+         your images, and adjust two custom properties until the reveal feels like yours.
+         Browsers that do not speak view timelines yet simply show the finished picture,
+         and readers who prefer reduced motion never see the curtain at all.</p>
+    </div>
+
+    <!-- FIGURE 4: the reef, mapped -->
+    <figure class="figure">
+      <svg class="imr-reveal" viewBox="0 0 1080 720" role="img" aria-label="Stylized nautical chart with dashed depth rings, scattered coral marks and a route line" xmlns="http://www.w3.org/2000/svg">
+        <title>The reef, mapped</title>
+        <rect width="1080" height="720" fill="#fbf7f0" />
+        <g stroke="#ece0cd" stroke-width="2">
+          <path d="M0,180 H1080" /><path d="M0,360 H1080" /><path d="M0,540 H1080" />
+          <path d="M270,0 V720" /><path d="M540,0 V720" /><path d="M810,0 V720" />
+        </g>
+        <g fill="none" stroke="#1f8a8a" stroke-dasharray="14 12" stroke-width="4">
+          <circle cx="760" cy="330" r="110" />
+          <circle cx="760" cy="330" r="200" opacity=".7" />
+          <circle cx="760" cy="330" r="295" opacity=".45" />
+        </g>
+        <path d="M110,620 C260,560 330,430 470,420 C610,410 640,360 700,330" fill="none" stroke="#2ec3c3" stroke-width="6" stroke-linecap="round" stroke-dasharray="2 20" />
+        <g fill="#1f8a8a">
+          <circle cx="300" cy="240" r="10" />
+          <circle cx="430" cy="560" r="8" />
+          <circle cx="200" cy="440" r="7" />
+          <circle cx="620" cy="180" r="8" />
+          <circle cx="920" cy="560" r="9" />
+        </g>
+        <g stroke="#4a5d66" stroke-width="4" stroke-linecap="round" opacity=".7">
+          <path d="M150,150 l20,20 M170,150 l-20,20" />
+          <path d="M540,640 l18,18 M558,640 l-18,18" />
+          <path d="M960,140 l18,18 M978,140 l-18,18" />
+        </g>
+        <circle cx="760" cy="330" r="16" fill="#ff6f59" />
+        <circle cx="760" cy="330" r="30" fill="none" stroke="#ff6f59" stroke-width="4" opacity=".5" />
+        <text x="110" y="100" font-family="Helvetica Neue, Arial, sans-serif" font-size="34" font-weight="700" fill="#0f5c5c" letter-spacing="6">THE HOME BREAK</text>
+        <text x="110" y="140" font-family="Helvetica Neue, Arial, sans-serif" font-size="20" fill="#4a5d66" letter-spacing="3">soundings in fathoms · trust the pelicans</text>
+      </svg>
+      <figcaption><b>The reef, mapped.</b> Back to the default curtain. Any block reveals, inline SVG included.</figcaption>
+    </figure>
+
+  </article>
+
+  <footer>
+    <p><span class="mark">saltycodestudio</span> · Sand &amp; Surf parts library</p>
+    <p>Adapted with credit from the Image Reveal demo by Bramus Van Damme, scroll-driven-animations.style (Apache-2.0).</p>
+  </footer>
+
+</body>
+</html>

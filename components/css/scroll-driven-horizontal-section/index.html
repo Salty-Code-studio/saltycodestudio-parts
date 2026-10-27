@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CSS Horizontal Scroll Section, usage example</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+
+  <!-- ============================================================
+       Minimal usage example for CSS Horizontal Scroll Section
+       Pair with styles.css. Three nested layers do all the work:
+       .shs-section stretches tall to create scroll room,
+       .shs-sticky pins the visible window to the top,
+       .shs-track slides sideways as you scroll down.
+       ============================================================ -->
+
+  <!-- Content above the ride scrolls normally -->
+  <section>
+    <h1>Intro section</h1>
+    <p>Scroll down to enter the horizontal ride.</p>
+  </section>
+
+  <!-- The horizontal scroll section -->
+  <section class="shs-section" aria-label="Horizontal showcase">
+    <div class="shs-sticky">
+      <div class="shs-track">
+
+        <!-- Every direct child is one stop on the ride -->
+        <div>
+          <h2>Panel one</h2>
+          <p>Vertical scroll in, horizontal motion out.</p>
+        </div>
+
+        <figure>
+          <!-- artwork, image, card, anything -->
+          <figcaption>Panel two</figcaption>
+        </figure>
+
+        <div>
+          <h2>Panel three</h2>
+          <p>The strip parks with its right edge against the viewport.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Content below resumes normal vertical scrolling -->
+  <section>
+    <h2>Outro section</h2>
+  </section>
+
+</body>
+</html>

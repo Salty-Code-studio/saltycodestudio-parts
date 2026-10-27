@@ -1,0 +1,13 @@
+{
+  "name": "Cover Card to Fixed Header",
+  "slug": "scroll-driven-cover-header",
+  "category": "css",
+  "tier": "showcase",
+  "tags": ["scroll-driven", "animation-timeline", "fixed-header", "hero", "cover", "shrink", "parallax", "no-js", "progressive-enhancement"],
+  "description": "A full-viewport cover hero that shrinks, darkens and docks into a fixed page header as you scroll, driven entirely by the native CSS animation-timeline: scroll() function with zero JavaScript.",
+  "deps": [],
+  "files": ["styles.css", "index.html"],
+  "usage": "Include styles.css, make your hero a <header class=\"cvh-cover\"> containing a .cvh-cover-inner with an h1.cvh-title and an optional p.cvh-sub tagline, then wrap everything that follows in <main class=\"cvh-content\">. The cover collapses from 100vh to a fixed 10vh header over the first 90vh of scroll; tune the docked height via --cvh-docked on .cvh-cover.",
+  "source": "https://scroll-driven-animations.style/demos/cover-to-fixed-header/css/",
+  "license": "Apache-2.0 (demo by Bramus Van Damme, scroll-driven-animations.style), adapted with credit"
+}

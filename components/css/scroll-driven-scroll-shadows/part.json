@@ -1,0 +1,13 @@
+{
+  "name": "CSS Scroll Shadows",
+  "slug": "scroll-driven-scroll-shadows",
+  "category": "css",
+  "tier": "practical",
+  "tags": ["scroll-driven", "scroll-shadows", "overflow", "affordance", "scroll-timeline", "animation-timeline", "sticky", "no-js", "progressive-enhancement"],
+  "description": "Scrollable containers that show soft affordance shadows at their top and bottom edges, only while more content hides in that direction. A native CSS Scroll Progress Timeline fades each shadow in and out, and a scroll-detection trick hides them entirely on containers that cannot scroll. Zero JavaScript.",
+  "deps": [],
+  "files": ["styles.css", "index.html"],
+  "usage": "Include styles.css, add class=\"sds-scroller\" to any vertically scrolling element and give it a height or max-height. The shadows appear and fade on their own; retheme per scroller with the --sds-shadow-rgb, --sds-shadow-alpha and --sds-shadow-size custom properties.",
+  "source": "https://scroll-driven-animations.style/demos/scroll-shadows/css/",
+  "license": "Apache-2.0 (demo by Bramus Van Damme, scroll-driven-animations.style), adapted with credit"
+}

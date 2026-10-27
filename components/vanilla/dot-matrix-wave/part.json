@@ -1,0 +1,22 @@
+{
+  "name": "Dot Matrix Wave",
+  "slug": "dot-matrix-wave",
+  "category": "vanilla",
+  "tier": "showcase",
+  "tags": [
+    "canvas",
+    "wave",
+    "dots",
+    "interactive",
+    "background",
+    "pointer-repel"
+  ],
+  "description": "A canvas-2D dot grid driven by a traveling sine-wave field that ripples in coastal Sand & Surf colors and dents away from the pointer.",
+  "deps": [],
+  "files": [
+    "dot-matrix-wave.js"
+  ],
+  "usage": "Add a full-bleed <canvas>, then call initDotMatrixWave(canvas, opts) once; it handles DPR, resize, pointer repel and reduced-motion automatically.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
+}

@@ -1,0 +1,112 @@
+/* ============================================================
+   Scroll-Driven Image Reveal
+   Images fade in and open like a curtain as they enter the
+   viewport, powered by a named CSS view timeline. Zero JS.
+
+   Adapted from the "Image Reveal" demo by Bramus Van Damme,
+   https://scroll-driven-animations.style/demos/image-reveal/css/
+   (Apache-2.0), reworked for the saltycodestudio parts library.
+   ============================================================ */
+
+/* ---- Sand & Surf palette as tokens (used only by the optional
+        frame styles below, safe to swap for your own) ---- */
+:root {
+  --sand-1: #fbf7f0;
+  --sand-2: #f4ece0;
+  --sand-3: #ece0cd;
+  --ink: #1c2b33;
+  --ink-soft: #4a5d66;
+  --teal: #1f8a8a;
+  --teal-deep: #0f5c5c;
+  --surf: #2ec3c3;
+}
+
+/* ============================================================
+   1. The reveal target. It defaults to the settled, fully
+      visible state, so browsers without scroll-driven
+      animation support simply render the finished layout.
+   ============================================================ */
+.imr-reveal {
+  opacity: 1;
+  clip-path: none;
+
+  /* Starting curtain shape. Bigger values mean a narrower
+     slit at the start of the reveal. Override per element
+     with an inline style if you want variety. */
+  --imr-hide-y: 45%;
+  --imr-hide-x: 20%;
+}
+
+/* ============================================================
+   2. Keyframes. The reveal is two effects in one:
+      a fade (opacity) and an opening-curtain wipe
+      (clip-path inset from a letterboxed slit to nothing).
+   ============================================================ */
+@keyframes imr-reveal {
+  from {
+    opacity: 0;
+    clip-path: inset(
+      var(--imr-hide-y, 45%)
+      var(--imr-hide-x, 20%)
+      var(--imr-hide-y, 45%)
+      var(--imr-hide-x, 20%)
+    );
+  }
+  to {
+    opacity: 1;
+    clip-path: inset(0% 0% 0% 0%);
+  }
+}
+
+/* ============================================================
+   3. Progressive enhancement. Each element creates its own
+      view timeline (tracking its journey through the
+      viewport) and the animation is linked to that timeline.
+      Only activates when the browser supports scroll-driven
+      animations and the user welcomes motion.
+   ============================================================ */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .imr-reveal {
+      /* Create the view timeline. The same name on several
+         elements is fine, each element resolves to its own. */
+      view-timeline-name: --imr-reveal;
+      view-timeline-axis: block;
+
+      /* Attach the animation, linked to that timeline */
+      animation: imr-reveal linear both;
+      animation-timeline: --imr-reveal;
+
+      /* Play from "a quarter of the box has entered" until
+         the box reaches the middle of the viewport */
+      animation-range: entry 25% cover 50%;
+    }
+  }
+}
+
+/* ============================================================
+   4. Optional Sand & Surf media frame. Purely cosmetic
+      polish for the demo, delete freely if your project
+      already styles its figures.
+   ============================================================ */
+.imr-frame {
+  margin: 0;
+}
+
+.imr-frame > .imr-reveal,
+.imr-frame > img,
+.imr-frame > svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 20px;
+  box-shadow: 0 26px 60px -34px rgba(15, 92, 92, 0.55);
+}
+
+.imr-caption {
+  text-align: center;
+  font-style: italic;
+  font-size: 0.85em;
+  color: var(--ink-soft);
+  margin-top: 0.8rem;
+}

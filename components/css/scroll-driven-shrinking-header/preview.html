@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Shrinking Header with Shadow, Sand &amp; Surf demo</title>
+<style>
+  /* ==========================================================================
+     PART CSS: Shrinking Header with Shadow (scroll-driven-shrinking-header)
+     Adapted from "Shadow on header after scroll" by Bramus Van Damme, part of
+     the scroll-driven-animations.style demo collection (Apache-2.0). The full
+     source link lives in this part's README.md and part.json. Restyled for
+     the saltycodestudio Sand & Surf palette.
+     ========================================================================== */
+
+  :root {
+    --shh-distance: 150px;     /* scroll distance over which the header shrinks */
+    --shh-height: 12rem;       /* expanded height of the identity block */
+    --shh-height-min: 4.75rem; /* compressed height once fully scrolled */
+  }
+
+  .shh-header {
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: #ffffff;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif;
+    box-shadow: 0 5px 5px -3px rgba(14, 58, 64, 0.26);
+  }
+
+  .shh-inner {
+    position: relative;
+    width: min(90vw, 1100px);
+    margin-inline: auto;
+  }
+
+  .shh-bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+    background: linear-gradient(to bottom, rgba(46, 195, 195, 0) 35%, rgba(46, 195, 195, 0.12));
+  }
+
+  .shh-bg svg {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 70%;
+  }
+
+  .shh-info {
+    display: grid;
+    grid-template-columns: 8em 1fr;
+    gap: 2rem;
+    align-items: end;
+    height: var(--shh-height);
+  }
+
+  .shh-info > div {
+    min-width: 0;
+  }
+
+  .shh-avatar {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border: 0.3rem solid #ffffff;
+    overflow: hidden;
+    background: #2ec3c3;
+    box-shadow: 0 12px 26px -16px rgba(15, 92, 92, 0.65);
+  }
+
+  .shh-avatar svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .shh-name {
+    margin: 0;
+    font-size: 2rem;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    color: #1c2b33;
+  }
+
+  .shh-meta {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin: 0.35rem 0 0;
+    padding: 0 0 0.75rem;
+    font-style: italic;
+    font-size: 0.92rem;
+    color: #4a5d66;
+  }
+
+  .shh-meta li:not(:first-child)::before {
+    content: "\00B7";
+    margin-right: 0.75rem;
+    opacity: 0.6;
+  }
+
+  .shh-action {
+    position: absolute;
+    right: 1.25rem;
+    bottom: 0;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    display: grid;
+    place-content: center;
+    font-size: 1.25rem;
+    text-decoration: none;
+    color: #ffffff;
+    background: #1f8a8a;
+    box-shadow: 0 10px 20px -12px rgba(15, 92, 92, 0.8);
+  }
+
+  .shh-action:hover {
+    background: #0f5c5c;
+  }
+
+  .shh-action:focus-visible {
+    outline: 2px solid #1f8a8a;
+    outline-offset: 2px;
+  }
+
+  @keyframes shh-compress-info {
+    to {
+      grid-template-columns: 4em 1fr;
+      gap: 1rem;
+      height: var(--shh-height-min);
+    }
+  }
+
+  @keyframes shh-shrink-name {
+    to { font-size: 1.5rem; }
+  }
+
+  @keyframes shh-add-shadow {
+    to { box-shadow: 0 5px 5px -3px rgba(14, 58, 64, 0.26); }
+  }
+
+  @keyframes shh-tuck-action {
+    to { translate: 0% 40%; }
+  }
+
+  @keyframes shh-fade-bg {
+    to {
+      translate: 0% -6%;
+      scale: 0.96;
+      opacity: 0.3;
+    }
+  }
+
+  @supports (animation-timeline: scroll()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .shh-header {
+        position: fixed;
+        box-shadow: none;
+        animation: shh-add-shadow linear both;
+      }
+
+      .shh-header + * {
+        margin-top: calc(var(--shh-height) + 2rem);
+      }
+
+      .shh-info   { animation: shh-compress-info linear both; }
+      .shh-name   { animation: shh-shrink-name linear both; }
+      .shh-action { animation: shh-tuck-action linear both; }
+      .shh-bg     { animation: shh-fade-bg linear both; }
+
+      /* Must stay after the animation shorthands above */
+      .shh-header,
+      .shh-info,
+      .shh-name,
+      .shh-action,
+      .shh-bg {
+        animation-timeline: scroll();
+        animation-range: 0 var(--shh-distance, 150px);
+      }
+    }
+  }
+
+  @media (max-width: 600px) {
+    :root { --shh-height: 9.5rem; }
+    .shh-info { grid-template-columns: 6em 1fr; gap: 1.25rem; }
+    .shh-name { font-size: 1.6rem; }
+    .shh-meta { gap: 0.5rem; }
+    .shh-meta li:not(:first-child)::before { margin-right: 0.5rem; }
+  }
+
+  /* ==========================================================================
+     DEMO PAGE, Sand & Surf
+     ========================================================================== */
+
+  :root {
+    --sand-1: #fbf7f0;
+    --sand-2: #f4ece0;
+    --sand-3: #ece0cd;
+    --ink: #1c2b33;
+    --ink-soft: #4a5d66;
+    --teal: #1f8a8a;
+    --teal-deep: #0f5c5c;
+    --surf: #2ec3c3;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(140% 90% at 50% -10%, var(--sand-1), var(--sand-2) 55%, var(--sand-3) 100%);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  main {
+    width: min(90vw, 1100px);
+    margin-inline: auto;
+    padding-bottom: 4rem;
+  }
+
+  .intro {
+    padding-block: 2.25rem 1rem;
+  }
+
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.32em;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--teal-deep);
+    margin: 0 0 0.8rem;
+  }
+
+  .intro h2 {
+    font-size: clamp(1.9rem, 4.5vw, 3rem);
+    letter-spacing: -0.015em;
+    line-height: 1.08;
+    margin: 0 0 0.8rem;
+  }
+
+  .intro > p {
+    max-width: 62ch;
+    color: var(--ink-soft);
+    font-size: 1.08rem;
+    margin: 0;
+  }
+
+  .note {
+    margin-top: 1.25rem;
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+    background: rgba(255, 255, 255, 0.55);
+    border: 1px dashed rgba(31, 138, 138, 0.4);
+    border-radius: 12px;
+    padding: 0.8rem 1rem;
+    display: inline-block;
+  }
+
+  section {
+    padding-block: clamp(2.5rem, 7vh, 5rem);
+  }
+
+  section h3 {
+    font-size: clamp(1.4rem, 3vw, 1.9rem);
+    letter-spacing: -0.01em;
+    margin: 0 0 1.2rem;
+  }
+
+  section > p {
+    max-width: 62ch;
+    color: var(--ink-soft);
+    margin: 0 0 0.9rem;
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .card {
+    background: rgba(255, 255, 255, 0.66);
+    border: 1px solid rgba(28, 43, 51, 0.08);
+    border-radius: 18px;
+    padding: 1.7rem 1.5rem;
+    box-shadow: 0 18px 40px -28px rgba(15, 92, 92, 0.5);
+  }
+
+  .card .num {
+    display: inline-grid;
+    place-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--teal), var(--surf));
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 0.9rem;
+  }
+
+  .card h4 { margin: 0 0 0.45rem; font-size: 1.12rem; }
+  .card p  { margin: 0; color: var(--ink-soft); font-size: 0.95rem; }
+
+  .rows { display: grid; gap: 1rem; }
+
+  .row {
+    display: flex;
+    align-items: center;
+    gap: 1.1rem;
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(28, 43, 51, 0.08);
+    border-radius: 14px;
+    padding: 1.1rem 1.4rem;
+  }
+
+  .row .dot {
+    flex: none;
+    width: 0.9rem;
+    height: 0.9rem;
+    border-radius: 50%;
+    background: var(--teal);
+    box-shadow: 0 0 0 4px rgba(46, 195, 195, 0.2);
+  }
+
+  .row strong { display: block; }
+  .row span { color: var(--ink-soft); font-size: 0.92rem; }
+
+  .band {
+    border-radius: 22px;
+    color: #fff;
+    padding: clamp(2rem, 5vw, 3.5rem);
+    background:
+      linear-gradient(120deg, rgba(15, 92, 92, 0.92), rgba(46, 195, 195, 0.85)),
+      repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.06) 0 14px, transparent 14px 28px);
+  }
+
+  .band h3 { margin: 0 0 0.7rem; }
+  .band p { margin: 0; max-width: 56ch; opacity: 0.92; }
+  .band code { background: rgba(255, 255, 255, 0.16); padding: 0.1em 0.35em; border-radius: 6px; }
+
+  footer {
+    text-align: center;
+    padding: 3rem 1.5rem 4rem;
+    color: var(--ink-soft);
+  }
+
+  footer .mark { font-weight: 700; color: var(--teal-deep); letter-spacing: -0.02em; }
+</style>
+</head>
+<body>
+
+  <!-- The part: shrinking profile header -->
+  <header class="shh-header">
+    <div class="shh-inner">
+
+      <div class="shh-bg" aria-hidden="true">
+        <svg viewBox="0 0 1200 160" preserveAspectRatio="none" focusable="false">
+          <path d="M0 96 C150 56 300 136 450 100 C600 64 750 128 900 96 C1000 74 1100 106 1200 84 L1200 160 L0 160 Z" fill="#2ec3c3" opacity="0.25" />
+          <path d="M0 122 C180 90 340 150 520 122 C700 94 860 150 1040 122 C1100 112 1160 118 1200 112 L1200 160 L0 160 Z" fill="#1f8a8a" opacity="0.22" />
+        </svg>
+      </div>
+
+      <div class="shh-info">
+        <span class="shh-avatar" aria-hidden="true">
+          <svg viewBox="0 0 100 100" focusable="false">
+            <defs>
+              <linearGradient id="shh-avatar-sky" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#2ec3c3" />
+                <stop offset="1" stop-color="#1f8a8a" />
+              </linearGradient>
+            </defs>
+            <rect width="100" height="100" fill="url(#shh-avatar-sky)" />
+            <circle cx="50" cy="42" r="16" fill="#f4ece0" />
+            <path d="M0 66 Q12.5 58 25 66 T50 66 T75 66 T100 66 V100 H0 Z" fill="#0f5c5c" opacity="0.85" />
+            <path d="M0 76 Q12.5 68 25 76 T50 76 T75 76 T100 76 V100 H0 Z" fill="#1f8a8a" opacity="0.9" />
+          </svg>
+        </span>
+        <div>
+          <h1 class="shh-name">Mara Costa</h1>
+          <ul class="shh-meta">
+            <li>Studio Lead</li>
+            <li>@maracosta</li>
+            <li>Bonaire</li>
+          </ul>
+        </div>
+      </div>
+
+      <a href="#" class="shh-action" aria-label="Edit profile">&#9998;</a>
+
+    </div>
+  </header>
+
+  <main>
+
+    <div class="intro">
+      <p class="eyebrow">Sand &amp; Surf &middot; Scroll-driven CSS</p>
+      <h2>Shrinking Header with Shadow</h2>
+      <p>Scroll down a little and watch the profile bar above compress, tuck its button, fade its waves and pick up a drop shadow, all within the first 150 pixels of scroll and all in pure CSS.</p>
+      <div><span class="note">Best in Chrome or Edge 115+ and Safari 26+. Elsewhere the header simply stays sticky at full size, and reduced-motion users get the calm static version too.</span></div>
+    </div>
+
+    <section>
+      <h3>What is actually happening</h3>
+      <p>Five tiny keyframe animations run at once: the identity grid compresses, the name shrinks, the shadow fades in, the round button tucks down and the wave art drifts away.</p>
+      <p>Every one of them is attached to the same scroll timeline with a short <em>animation range</em>, so the scrollbar is the playhead. Scroll back up and the header grows again in perfect reverse.</p>
+      <div class="cards">
+        <article class="card">
+          <span class="num">1</span>
+          <h4>scroll()</h4>
+          <p>Hooks each animation to the document scroller, no JavaScript listeners anywhere.</p>
+        </article>
+        <article class="card">
+          <span class="num">2</span>
+          <h4>animation-range</h4>
+          <p>0 to 150px means the whole transformation completes within the first flick of the wheel.</p>
+        </article>
+        <article class="card">
+          <span class="num">3</span>
+          <h4>@supports</h4>
+          <p>Unsupported browsers keep a plain sticky header with a permanent soft shadow.</p>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <div class="band">
+        <h3>Why the header goes fixed</h3>
+        <p>While shrinking, the header must not change the document height, or the very scroll it reacts to would jitter. Inside the <code>@supports</code> block it switches from sticky to fixed, and the next sibling gets a matching <code>margin-top</code> so nothing jumps.</p>
+      </div>
+    </section>
+
+    <section>
+      <h3>Keep scrolling, it stays put</h3>
+      <p>Once the first 150 pixels are behind you, the header rides along in its compact state. The name, the avatar and the edit button remain reachable the whole way down.</p>
+      <div class="rows">
+        <div class="row">
+          <span class="dot"></span>
+          <div><strong>One shared timeline</strong><span>All five animations scrub against the same 150px stretch of scroll.</span></div>
+        </div>
+        <div class="row">
+          <span class="dot"></span>
+          <div><strong>Grid tracks animate</strong><span>The avatar column interpolates from 8em down to 4em as the row height drops.</span></div>
+        </div>
+        <div class="row">
+          <span class="dot"></span>
+          <div><strong>Fully reversible</strong><span>Scroll up and the whole sequence plays backwards, frame for frame.</span></div>
+        </div>
+        <div class="row">
+          <span class="dot"></span>
+          <div><strong>Zero JavaScript</strong><span>No scroll listeners, no rAF loops, no layout thrash on the main thread.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h3>Room to breathe</h3>
+      <p>This section only exists to give the page honest scroll length, the way a real profile page would have activity, posts and settings below the fold.</p>
+      <p>Calm seas, long lines, a slow tide working its way up the sand. The reef keeps its own rhythm and the light keeps changing. By late afternoon the water turns to hammered glass.</p>
+      <p>Nobody hurries here, and neither does this header. It did its whole trick in the first 150 pixels and now it simply keeps you company.</p>
+    </section>
+
+    <footer>
+      <p><span class="mark">saltycodestudio</span> &middot; Sand &amp; Surf parts library</p>
+      <p>Adapted with credit from the scroll-driven-animations.style demo by Bramus Van Damme.</p>
+    </footer>
+
+  </main>
+
+</body>
+</html>

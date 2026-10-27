@@ -1,0 +1,23 @@
+{
+  "name": "Voronoi Cells",
+  "slug": "voronoi-cells",
+  "category": "vanilla",
+  "tier": "showcase",
+  "tags": [
+    "voronoi",
+    "worley-noise",
+    "webgl",
+    "shader",
+    "background",
+    "cellular",
+    "animated"
+  ],
+  "description": "A raw-WebGL fragment shader that paints a slow, drifting Voronoi (Worley) field of soft teal-and-sand cells with crisp ceramic seams and a faint coral glow.",
+  "deps": [],
+  "files": [
+    "voronoi-cells.js"
+  ],
+  "usage": "Drop a full-bleed <canvas> behind your content and call initVoronoiCells(canvas, opts).",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
+}

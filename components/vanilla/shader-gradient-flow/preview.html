@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Shader Gradient Flow — saltycodestudio-parts</title>
+<style>
+  :root {
+    --sand: #F2EBDD;
+    --sand-2: #EAE1CF;
+    --teal: #0E3A40;
+    --sky: #4FA8C9;
+    --coral: #FF6F59;
+    --ink: #1C2B2E;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: "Helvetica Neue", Arial, system-ui, sans-serif;
+    color: var(--sand);
+    background: var(--teal);
+    overflow: hidden;
+  }
+
+  /* full-bleed canvas behind everything */
+  .stage { position: fixed; inset: 0; }
+  #flow { display: block; width: 100%; height: 100%; }
+
+  /* readability scrim so the headline always sits cleanly on the flow */
+  .scrim {
+    position: fixed; inset: 0;
+    background: radial-gradient(120% 90% at 50% 60%,
+      rgba(14,58,64,0) 0%, rgba(14,58,64,0.18) 70%, rgba(28,43,46,0.42) 100%);
+    pointer-events: none;
+  }
+
+  .hero {
+    position: fixed; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 6vw;
+    z-index: 2;
+  }
+  .eyebrow {
+    font-size: clamp(.7rem, 1.4vw, .85rem);
+    letter-spacing: .42em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--sand-2);
+    opacity: .85;
+    margin-bottom: 1.4rem;
+    text-shadow: 0 1px 18px rgba(14,58,64,.5);
+  }
+  h1 {
+    font-size: clamp(2.6rem, 8vw, 6.2rem);
+    line-height: .98;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #fff;
+    max-width: 14ch;
+    text-shadow: 0 2px 40px rgba(14,58,64,.55);
+  }
+  .lead {
+    margin-top: 1.5rem;
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    line-height: 1.5;
+    max-width: 46ch;
+    color: var(--sand);
+    opacity: .92;
+    text-shadow: 0 1px 22px rgba(14,58,64,.5);
+  }
+
+  .presets {
+    margin-top: 2.6rem;
+    display: flex; gap: .75rem; flex-wrap: wrap; justify-content: center;
+    pointer-events: auto;
+  }
+  .presets button {
+    appearance: none;
+    border: 1px solid rgba(242,235,221,.35);
+    background: rgba(242,235,221,.08);
+    color: var(--sand);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: .78rem 1.5rem;
+    border-radius: 999px;
+    font-size: .92rem;
+    font-weight: 600;
+    letter-spacing: .02em;
+    cursor: pointer;
+    transition: transform .18s ease, background .18s ease, border-color .18s ease, color .18s ease;
+  }
+  .presets button:hover { transform: translateY(-2px); background: rgba(242,235,221,.18); }
+  .presets button.active {
+    background: var(--sand);
+    color: var(--teal);
+    border-color: var(--sand);
+  }
+  .presets button.coral.active { background: var(--coral); border-color: var(--coral); color: #fff; }
+
+  .tag {
+    position: fixed; left: 50%; bottom: 1.6rem; transform: translateX(-50%);
+    font-size: .72rem; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--sand-2); opacity: .65; z-index: 2;
+  }
+  .credit { position: fixed; top: 1.4rem; left: 1.6rem; font-size:.72rem; letter-spacing:.18em; text-transform:uppercase; opacity:.6; z-index:2; }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <canvas id="flow"></canvas>
+  </div>
+  <div class="scrim"></div>
+
+  <div class="credit">saltycodestudio · parts</div>
+
+  <section class="hero">
+    <p class="eyebrow">Domain-warped fBm · raw WebGL</p>
+    <h1>Sand &amp; surf, in motion.</h1>
+    <p class="lead">
+      A continuous flow field of ink-like colour drifting through warm sand and
+      ocean teal, driven by domain-warped fractal noise and rendered in a single
+      fragment shader. Move your pointer to nudge the current.
+    </p>
+    <div class="presets">
+      <button id="btnCalm" class="active">Calm tide</button>
+      <button id="btnRip" class="coral">Riptide</button>
+    </div>
+  </section>
+
+  <div class="tag">Original · MIT · 0 dependencies</div>
+
+  <script src="./shader-gradient-flow.js"></script>
+  <script>
+    var canvas = document.getElementById('flow');
+    var btnCalm = document.getElementById('btnCalm');
+    var btnRip = document.getElementById('btnRip');
+
+    // Two presets — same shader, very different feel.
+    var PRESETS = {
+      calm: { speed: 0.45, warp: 0.85, scale: 0.9,  grain: 0.05 },
+      rip:  { speed: 1.35, warp: 1.9,  scale: 1.25, grain: 0.08 }
+    };
+
+    var handle = initGradientFlow(canvas, Object.assign({
+      colors: ['#F2EBDD', '#4FA8C9', '#0E3A40', '#FF6F59'],
+      mouseParallax: true
+    }, PRESETS.calm));
+
+    function apply(name) {
+      // handle.set exists for the WebGL path; the CSS fallback has no .set
+      if (handle && typeof handle.set === 'function') handle.set(PRESETS[name]);
+      btnCalm.classList.toggle('active', name === 'calm');
+      btnRip.classList.toggle('active', name === 'rip');
+    }
+    btnCalm.addEventListener('click', function () { apply('calm'); });
+    btnRip.addEventListener('click', function () { apply('rip'); });
+  </script>
+</body>
+</html>

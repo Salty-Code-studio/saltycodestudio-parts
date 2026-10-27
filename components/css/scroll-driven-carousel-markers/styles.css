@@ -1,0 +1,171 @@
+/* ==========================================================================
+   Scroll-Driven Carousel Markers (sdcm-)
+   --------------------------------------------------------------------------
+   A snap-scrolling carousel whose marker dots light up in sync with the
+   scroll position, wired entirely in CSS. The scroller publishes a named
+   scroll-timeline, timeline-scope hoists it to the component root, and each
+   marker runs a tiny keyframe animation over its own slice of that timeline.
+   No JavaScript at all.
+
+   Theming hooks (set them on .sdcm-carousel or any ancestor):
+     --sdcm-n           number of slides (default 5), keep in sync with markup
+     --sdcm-dot         resting marker color
+     --sdcm-dot-active  active marker color
+     --sdcm-radius      corner radius of the carousel frame
+
+   Adapted from "Carousel with Markers" by Bramus Van Damme,
+   scroll-driven-animations.style (Apache-2.0). See README.md for credit.
+   ========================================================================== */
+
+/* ---- Component frame -------------------------------------------------- */
+
+.sdcm-carousel {
+  --sdcm-n: 5;
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--sdcm-radius, 1.25rem);
+  aspect-ratio: 16 / 10;
+  max-width: 100%;
+}
+
+/* ---- The scroller ------------------------------------------------------ */
+
+.sdcm-entries {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  overflow-x: scroll;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+
+.sdcm-entries::-webkit-scrollbar {
+  display: none;
+}
+
+.sdcm-entries:focus {
+  outline: none;
+}
+
+.sdcm-entries:focus-visible {
+  outline: 2px solid var(--sdcm-dot-active, #1f8a8a);
+  outline-offset: -2px;
+}
+
+/* Smooth marker-click scrolling, only for people who want motion */
+@media (prefers-reduced-motion: no-preference) {
+  .sdcm-entries {
+    scroll-behavior: smooth;
+  }
+}
+
+/* ---- Slides ------------------------------------------------------------ */
+
+.sdcm-entries > li {
+  flex: 1 0 100%;
+  scroll-snap-align: center;
+  display: grid;
+  place-items: center;
+  min-width: 0;
+}
+
+/* ---- Markers ----------------------------------------------------------- */
+
+.sdcm-markers {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  translate: -50% 0;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Each marker learns its own index. Extend or set --i inline past ten. */
+.sdcm-markers li:nth-child(1)  { --i: 1; }
+.sdcm-markers li:nth-child(2)  { --i: 2; }
+.sdcm-markers li:nth-child(3)  { --i: 3; }
+.sdcm-markers li:nth-child(4)  { --i: 4; }
+.sdcm-markers li:nth-child(5)  { --i: 5; }
+.sdcm-markers li:nth-child(6)  { --i: 6; }
+.sdcm-markers li:nth-child(7)  { --i: 7; }
+.sdcm-markers li:nth-child(8)  { --i: 8; }
+.sdcm-markers li:nth-child(9)  { --i: 9; }
+.sdcm-markers li:nth-child(10) { --i: 10; }
+
+.sdcm-markers a {
+  display: block;
+  width: 0.65rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--sdcm-dot, rgba(28, 43, 51, 0.28));
+}
+
+.sdcm-markers a:hover {
+  background: var(--sdcm-dot-active, #1f8a8a);
+}
+
+.sdcm-markers a:focus-visible {
+  outline: 2px solid var(--sdcm-dot-active, #1f8a8a);
+  outline-offset: 3px;
+}
+
+/* Visually hidden marker labels, kept for screen readers */
+.sdcm-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* ---- The scroll-driven part -------------------------------------------
+   Everything below is progressive enhancement. Without support the
+   carousel still scrolls, snaps and the marker links still work, the
+   dots simply stay in their resting color.
+   ------------------------------------------------------------------------ */
+
+@supports (animation-timeline: scroll()) {
+  /* The scroller is not an ancestor of the markers, so the named
+     timeline is hoisted to the component root for them to find. */
+  .sdcm-carousel {
+    timeline-scope: --sdcm;
+  }
+
+  .sdcm-entries {
+    scroll-timeline: --sdcm x;
+  }
+
+  /* Each marker animates only across its own slice of the timeline.
+     With n slides every slice is 100%/n wide; the extra 1px keeps the
+     last dot lit when the scroller rests at exactly 100%. */
+  .sdcm-markers a {
+    animation: sdcm-dot-on linear;
+    animation-timeline: --sdcm;
+    animation-range:
+      calc((var(--i, 1) - 1) * (100% / var(--sdcm-n, 5)))
+      calc(var(--i, 1) * (100% / var(--sdcm-n, 5)) + 1px);
+  }
+}
+
+/* Identical start and end frames mean the dot holds its active look for
+   the whole slice, then releases the moment the slice is left. */
+@keyframes sdcm-dot-on {
+  0%, 100% {
+    background: var(--sdcm-dot-active, #1f8a8a);
+    scale: 1.35;
+  }
+}

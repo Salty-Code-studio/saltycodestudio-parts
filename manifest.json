@@ -1121,6 +1121,64 @@
     "preview": "components/css/difference-blend-cursor/preview.html"
   },
   {
+    "name": "Editorial Index Rows",
+    "slug": "editorial-index-rows",
+    "category": "css",
+    "tier": "practical",
+    "tags": [
+      "nav",
+      "menu",
+      "hover",
+      "editorial",
+      "typography",
+      "background-clip",
+      "arrow",
+      "focus-visible",
+      "index"
+    ],
+    "description": "Oversized editorial nav rows separated by hairline rules. Hovering or focusing a row sweeps the label from muted grey to full ink with a background-clip text fill, slides the trailing arrow in from the left with a spring overshoot, and tints the row background subtly. Pure CSS, keyboard focus mirrors hover.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "index.html"
+    ],
+    "usage": "Include styles.css, then drop a nav with a ul.eir where each li holds an a.eir-row containing span.eir-num, span.eir-label and the span.eir-arrow inline SVG (copy the rows from index.html). Retheme by overriding the --eir-* custom properties on .eir or any ancestor.",
+    "source": "Pattern seen on https://coffee-tech.com (Awwwards SOTD by MAKETHECUT and Or Halevi), implemented from scratch",
+    "license": "MIT (original clean-room implementation by saltycodestudio-parts, visual pattern inspired by coffee-tech.com by MAKETHECUT and Or Halevi, no code or assets copied)",
+    "path": "components/css/editorial-index-rows",
+    "kind": "component",
+    "preview": "components/css/editorial-index-rows/preview.html"
+  },
+  {
+    "name": "Editorial Mega Link",
+    "slug": "editorial-mega-link",
+    "category": "css",
+    "tier": "practical",
+    "tags": [
+      "link",
+      "typography",
+      "editorial",
+      "hover",
+      "arrow",
+      "underline",
+      "cta",
+      "navigation",
+      "focus-visible"
+    ],
+    "description": "A giant editorial link row in clamp() display type with a long inline SVG arrow and a full-width bottom rule. On hover the arrow slides right, a thicker rule redraws from the left, and the text nudges along. Pure CSS, one anchor element, with a dark variant class.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "index.html"
+    ],
+    "usage": "Include styles.css, then paste the anchor from index.html: an <a class=\"mega-link\"> holding a .mega-link__text span and the inline SVG arrow. Add .mega-link--dark on dark backgrounds, and retheme or resize with the --ml-* custom properties.",
+    "source": "Pattern seen on https://coffee-tech.com (Awwwards SOTD by MAKETHECUT and Or Halevi), implemented from scratch",
+    "license": "MIT (original clean-room implementation by saltycodestudio-parts, visual pattern inspired by coffee-tech.com by MAKETHECUT and Or Halevi, no code or assets copied)",
+    "path": "components/css/editorial-mega-link",
+    "kind": "component",
+    "preview": "components/css/editorial-mega-link/preview.html"
+  },
+  {
     "name": "Glassmorphism Card",
     "slug": "glassmorphism-card",
     "category": "css",
@@ -1350,6 +1408,410 @@
     "preview": "components/css/retro-grid-floor/preview.html"
   },
   {
+    "name": "Scroll 3D Object Explorer",
+    "slug": "scroll-driven-3d-explorer",
+    "category": "css",
+    "tier": "showcase",
+    "tags": [
+      "scroll-driven",
+      "view-timeline",
+      "3d",
+      "css-3d",
+      "scroll-snap",
+      "product-showcase",
+      "carousel",
+      "no-js",
+      "progressive-enhancement"
+    ],
+    "description": "A horizontal scroll-snap product explorer where every card carries a pure CSS 3D object (a cuboid box, a hologram cross of SVG planes, a hex tin) that spins 450 degrees as you scroll, driven entirely by named view timelines. Titles wipe in and out and captions fade up near the snap point. Zero JavaScript.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "index.html"
+    ],
+    "usage": "Include styles.css, then add an .s3d-explorer scroller containing one .s3d-card per product; give each card an absolutely placed h2 title, a footer caption, and an .s3d-stage holding an .s3d-object in one of the three variants from index.html (s3d-box, s3d-planes, s3d-hex). Scroll the panel sideways and each object spins on its card's own view timeline.",
+    "source": "https://scroll-driven-animations.style/demos/3d-shoe-explorer/css/",
+    "license": "Apache-2.0 (demo by Bramus Van Damme, scroll-driven-animations.style), adapted with credit",
+    "path": "components/css/scroll-driven-3d-explorer",
+    "kind": "component",
+    "preview": "components/css/scroll-driven-3d-explorer/preview.html"
+  },
+  {
+    "name": "Scroll-Driven Carousel Dots",
+    "slug": "scroll-driven-carousel-dots",
+    "category": "css",
+    "tier": "practical",
+    "tags": [
+      "carousel",
+      "dots",
+      "step-indicator",
+      "scroll-timeline",
+      "scroll-snap",
+      "scroll-driven",
+      "no-js",
+      "gallery",
+      "pagination"
+    ],
+    "description": "Step indicator dots that track a horizontally scroll-snapping carousel through a named CSS scroll progress timeline, with a gliding active dot plus a growing step-bar variant, all with zero JavaScript.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "index.html"
+    ],
+    "usage": "Copy styles.css, wrap your slides in a .sdc > .sdc-track structure, set --sdc-slides on the .sdc wrapper to the slide count, and drop the .sdc-dots rail (one .sdc-dot per slide plus one .sdc-thumb) as the first child of the track. Swap the rail for a single .sdc-bar element to get the growing step-bar flavor instead.",
+    "source": "https://scroll-driven-animations.style/demos/horizontal-carousel/css/",
+    "license": "Apache-2.0 (demo by Bramus Van Damme, scroll-driven-animations.style), adapted with credit",
+    "path": "components/css/scroll-driven-carousel-dots",
+    "kind": "component",
+    "preview": "components/css/scroll-driven-carousel-dots/preview.html"
+  },
+  {
+    "name": "Scroll-Driven Carousel Markers",
+    "slug": "scroll-driven-carousel-markers",
+    "category": "css",
+    "tier": "showcase",
+    "tags": [
+      "carousel",
+      "markers",
+      "dots",
+      "scroll-timeline",
+      "timeline-scope",
+      "scroll-snap",
+      "no-js",
+      "animation-range",
+      "progressive-enhancement"
+    ],
+    "description": "A snap-scrolling carousel whose marker dots light up in sync with the scroll position, using a named CSS scroll-timeline hoisted with timeline-scope so sibling markers can animate over their own slice of it. Zero JavaScript.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "index.html"
+    ],
+    "usage": "Include styles.css, then wrap an .sdcm-entries slide list and an .sdcm-markers dot list in an .sdcm-carousel with --sdcm-n set to your slide count. Give each slide an id and point each marker link at it; the dots sync to scroll automatically in supporting browsers.",
+    "source": "https://scroll-driven-animations.style/demos/carousel-with-markers/css/",
+    "license": "Apache-2.0 (demo by Bramus Van Damme, scroll-driven-animations.style), adapted with credit",
+    "path": "components/css/scroll-driven-carousel-markers",
+    "kind": "component",
+    "preview": "components/css/scroll-driven-carousel-markers/preview.html"
+  },
+  {
+    "name": "Fly-In Fly-Out List",
+    "slug": "scroll-driven-contact-list",
+    "category": "css",
+    "tier": "practical",
+    "tags": [
+      "scroll-driven",
+      "animation-timeline",
+      "view",
+      "entry-exit",
+      "list",
+      "contacts",
+      "fly-in",
+      "no-js",
+      "progressive-enhancement"
+    ],
+    "description": "Contact-style list rows that slide and fade in as they enter the scrollport and slide back out as they leave, driven by one CSS keyframe set with entry and exit view() timeline ranges. Zero JavaScript.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "index.html"
+    ],
+    "usage": "Include styles.css, then wrap a plain <ul> of rows (each with a .fly-avatar span and a .fly-name span) in <div class=\"fly-list\"> to get a self-scrolling card whose rows fly in and out; set the card height with --fly-height. Add the fly-list--page modifier to let the whole page act as the scrollport instead.",
+    "source": "https://scroll-driven-animations.style/demos/contact-list/css/",
+    "license": "Apache-2.0 (demo by Bramus Van Damme, scroll-driven-animations.style), adapted with credit",
+    "path": "components/css/scroll-driven-contact-list",
+    "kind": "component",
+    "preview": "components/css/scroll-driven-contact-list/preview.html"
+  },
+  {
+    "name": "CSS Cover Flow",
+    "slug": "scroll-driven-cover-flow",
+    "category": "css",
+    "tier": "showcase",
+    "tags": [
+      "cover-flow",
+      "scroll-driven",
+      "animation-timeline",
+      "view",
+      "3d",
+      "carousel",
+      "scroll-snap",
+      "gallery",
+      "no-js"
+    ],
+    "description": "The classic iTunes-style 3D cover flow rebuilt with zero JavaScript: a horizontal snap scroller where each cover rides its own animation-timeline view(inline), rotating sideways off-center and popping forward at dead center, with a CSS box-reflect sheen below.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "index.html"
+    ],
+    "usage": "Include styles.css, then add a <div class=\"scf\" role=\"region\" tabindex=\"0\"> wrapping a <ul class=\"scf-covers\"> where every <li> holds one square .scf-cover (an img, inline svg, or styled div). Tune the shelf with --scf-cover-size and --scf-span on the .scf element.",
+    "source": "https://scroll-driven-animations.style/demos/cover-flow/css/",
+    "license": "Apache-2.0 (demo by Bramus Van Damme, scroll-driven-animations.style), adapted with credit",
+    "path": "components/css/scroll-driven-cover-flow",
+    "kind": "component",
+    "preview": "components/css/scroll-driven-cover-flow/preview.html"
+  },
+  {
+    "name": "Cover Card to Fixed Header",
+    "slug": "scroll-driven-cover-header",
+    "category": "css",
+    "tier": "showcase",
+    "tags": [
+      "scroll-driven",
+      "animation-timeline",
+      "fixed-header",
+      "hero",
+      "cover",
+      "shrink",
+      "parallax",
+      "no-js",
+      "progressive-enhancement"
+    ],
+    "description": "A full-viewport cover hero that shrinks, darkens and docks into a fixed page header as you scroll, driven entirely by the native CSS animation-timeline: scroll() function with zero JavaScript.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "index.html"
+    ],
+    "usage": "Include styles.css, make your hero a <header class=\"cvh-cover\"> containing a .cvh-cover-inner with an h1.cvh-title and an optional p.cvh-sub tagline, then wrap everything that follows in <main class=\"cvh-content\">. The cover collapses from 100vh to a fixed 10vh header over the first 90vh of scroll; tune the docked height via --cvh-docked on .cvh-cover.",
+    "source": "https://scroll-driven-animations.style/demos/cover-to-fixed-header/css/",
+    "license": "Apache-2.0 (demo by Bramus Van Damme, scroll-driven-animations.style), adapted with credit",
+    "path": "components/css/scroll-driven-cover-header",
+    "kind": "component",
+    "preview": "components/css/scroll-driven-cover-header/preview.html"
+  },
+  {
+    "name": "CSS Horizontal Scroll Section",
+    "slug": "scroll-driven-horizontal-section",
+    "category": "css",
+    "tier": "showcase",
+    "tags": [
+      "scroll-driven",
+      "horizontal-scroll",
+      "view-timeline",
+      "sticky",
+      "pin",
+      "animation-timeline",
+      "no-js",
+      "progressive-enhancement"
+    ],
+    "description": "A section that scrolls horizontally while the page scrolls vertically, pure CSS: a tall wrapper creates scroll room, a sticky inner pins the viewport, and a view() timeline drives the sideways translate of a wide strip.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "index.html"
+    ],
+    "usage": "Include styles.css, then wrap your panels in the three-layer shell: <section class=\"shs-section\"><div class=\"shs-sticky\"><div class=\"shs-track\">panels</div></div></section>. Every direct child of .shs-track is one stop on the ride; tune ride length with the shs-scroll-length custom property and strip width with shs-track-width (set it to max-content to fit the panels exactly).",
+    "source": "https://scroll-driven-animations.style/demos/horizontal-section/css/",
+    "license": "Apache-2.0 (demo by Bramus Van Damme, scroll-driven-animations.style), adapted with credit",
+    "path": "components/css/scroll-driven-horizontal-section",
+    "kind": "component",
+    "preview": "components/css/scroll-driven-horizontal-section/preview.html"
+  },
+  {
+    "name": "Scroll-Driven Image Reveal",
+    "slug": "scroll-driven-image-reveal",
+    "category": "css",
+    "tier": "showcase",
+    "tags": [
+      "scroll-driven",
+      "view-timeline",
+      "clip-path",
+      "image",
+      "reveal",
+      "curtain",
+      "no-js",
+      "progressive-enhancement"
+    ],
+    "description": "Images fade in and open like a curtain as they enter the viewport, a clip-path inset interpolated along a named CSS view timeline. Pure CSS, zero JavaScript, with a fully visible fallback for unsupported browsers.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "index.html"
+    ],
+    "usage": "Include styles.css and add class imr-reveal to any img, inline SVG, video or media block you want unveiled on scroll. Tune the starting slit per element with inline --imr-hide-y and --imr-hide-x custom properties, and adjust the timing window via the animation-range in styles.css.",
+    "source": "https://scroll-driven-animations.style/demos/image-reveal/css/",
+    "license": "Apache-2.0 (demo by Bramus Van Damme, scroll-driven-animations.style), adapted with credit",
+    "path": "components/css/scroll-driven-image-reveal",
+    "kind": "component",
+    "preview": "components/css/scroll-driven-image-reveal/preview.html"
+  },
+  {
+    "name": "Scroll-Driven Progress Bar",
+    "slug": "scroll-driven-progress-bar",
+    "category": "css",
+    "tier": "practical",
+    "tags": [
+      "scroll-driven",
+      "progress-bar",
+      "reading-progress",
+      "animation-timeline",
+      "scroll-timeline",
+      "indicator",
+      "no-js",
+      "fixed",
+      "progressive-enhancement"
+    ],
+    "description": "A fixed reading-progress bar at the top of the page that fills from left to right as the document scrolls, driven entirely by a native CSS Scroll Progress Timeline. Composited transform, zero JavaScript.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "index.html"
+    ],
+    "usage": "Include styles.css, then drop a single <div class=\"sdp-bar\" aria-hidden=\"true\"></div> right after the opening <body> tag of any long page. Retheme per page with the --sdp-height, --sdp-fill and --sdp-z custom properties.",
+    "source": "https://scroll-driven-animations.style/demos/progress-bar/css/",
+    "license": "Apache-2.0 (demo by Bramus Van Damme, scroll-driven-animations.style), adapted with credit",
+    "path": "components/css/scroll-driven-progress-bar",
+    "kind": "component",
+    "preview": "components/css/scroll-driven-progress-bar/preview.html"
+  },
+  {
+    "name": "Reverse-Scrolling Columns",
+    "slug": "scroll-driven-reverse-columns",
+    "category": "css",
+    "tier": "showcase",
+    "tags": [
+      "scroll-driven",
+      "animation-timeline",
+      "scroll",
+      "columns",
+      "reverse-scroll",
+      "gallery",
+      "grid",
+      "no-js",
+      "progressive-enhancement"
+    ],
+    "description": "A three column gallery where the outer columns glide upward against the scroll direction, driven entirely by the native CSS animation-timeline scroll() function. No JavaScript, no observers, graceful static fallback.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "index.html"
+    ],
+    "usage": "Include styles.css, wrap three .rsc-column divs in one .rsc-columns container and add .rsc-reverse to the first and third. Fill each column with .rsc-item figures and make every column taller than the viewport so the counter-scroll has room to travel.",
+    "source": "https://scroll-driven-animations.style/demos/reverse-scroll/css/",
+    "license": "Apache-2.0 (demo by Bramus Van Damme, scroll-driven-animations.style), adapted with credit",
+    "path": "components/css/scroll-driven-reverse-columns",
+    "kind": "component",
+    "preview": "components/css/scroll-driven-reverse-columns/preview.html"
+  },
+  {
+    "name": "CSS Scroll Shadows",
+    "slug": "scroll-driven-scroll-shadows",
+    "category": "css",
+    "tier": "practical",
+    "tags": [
+      "scroll-driven",
+      "scroll-shadows",
+      "overflow",
+      "affordance",
+      "scroll-timeline",
+      "animation-timeline",
+      "sticky",
+      "no-js",
+      "progressive-enhancement"
+    ],
+    "description": "Scrollable containers that show soft affordance shadows at their top and bottom edges, only while more content hides in that direction. A native CSS Scroll Progress Timeline fades each shadow in and out, and a scroll-detection trick hides them entirely on containers that cannot scroll. Zero JavaScript.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "index.html"
+    ],
+    "usage": "Include styles.css, add class=\"sds-scroller\" to any vertically scrolling element and give it a height or max-height. The shadows appear and fade on their own; retheme per scroller with the --sds-shadow-rgb, --sds-shadow-alpha and --sds-shadow-size custom properties.",
+    "source": "https://scroll-driven-animations.style/demos/scroll-shadows/css/",
+    "license": "Apache-2.0 (demo by Bramus Van Damme, scroll-driven-animations.style), adapted with credit",
+    "path": "components/css/scroll-driven-scroll-shadows",
+    "kind": "component",
+    "preview": "components/css/scroll-driven-scroll-shadows/preview.html"
+  },
+  {
+    "name": "Shrinking Header with Shadow",
+    "slug": "scroll-driven-shrinking-header",
+    "category": "css",
+    "tier": "practical",
+    "tags": [
+      "scroll-driven",
+      "animation-timeline",
+      "header",
+      "shrinking-header",
+      "sticky-header",
+      "shadow",
+      "profile",
+      "no-js",
+      "progressive-enhancement"
+    ],
+    "description": "A profile style header that compresses and gains a drop shadow over the first 150px of scroll, scrubbed by animation-timeline: scroll() with a short animation-range. Pure CSS, fully reversible, degrades to a plain sticky header.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "index.html"
+    ],
+    "usage": "Include styles.css, place the .shh-header block as the first element of <body> with your <main> as its direct sibling (it receives the margin compensation when the header goes fixed), then swap in your own name, meta list and avatar. Tune --shh-distance, --shh-height and --shh-height-min on :root to change the feel.",
+    "source": "https://scroll-driven-animations.style/demos/shrinking-header-shadow/css/",
+    "license": "Apache-2.0 (demo by Bramus Van Damme, scroll-driven-animations.style), adapted with credit",
+    "path": "components/css/scroll-driven-shrinking-header",
+    "kind": "component",
+    "preview": "components/css/scroll-driven-shrinking-header/preview.html"
+  },
+  {
+    "name": "CSS Stacking Cards",
+    "slug": "scroll-driven-stacking-cards",
+    "category": "css",
+    "tier": "showcase",
+    "tags": [
+      "scroll-driven",
+      "stacking",
+      "cards",
+      "sticky",
+      "view-timeline",
+      "exit-crossing",
+      "animation-range",
+      "no-js",
+      "progressive-enhancement"
+    ],
+    "description": "Sticky cards that pile up on scroll, each one pinning and scaling back as the next slides over it, powered entirely by a named CSS view timeline with exit-crossing animation ranges. Zero JavaScript.",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "index.html"
+    ],
+    "usage": "Include styles.css, then add a <ul class=\"sdc-cards\"> with one <li class=\"sdc-card\"> per card, each wrapping a <div class=\"sdc-card__content\"> (text plus optional .sdc-card__art figure). Set --sdc-numcards on the wrapper to match your card count; positions 1 to 6 are indexed automatically and the knobs (--sdc-card-height, --sdc-gap, --sdc-top-offset, --sdc-scale-step) are plain custom properties on the wrapper.",
+    "source": "https://scroll-driven-animations.style/demos/stacking-cards/css/",
+    "license": "Apache-2.0 (demo by Bramus Van Damme, scroll-driven-animations.style), adapted with credit",
+    "path": "components/css/scroll-driven-stacking-cards",
+    "kind": "component",
+    "preview": "components/css/scroll-driven-stacking-cards/preview.html"
+  },
+  {
+    "name": "Window Parallax Carousel",
+    "slug": "scroll-driven-window-carousel",
+    "category": "css",
+    "tier": "showcase",
+    "tags": [
+      "carousel",
+      "parallax",
+      "scroll-driven",
+      "animation-timeline",
+      "view-timeline",
+      "scroll-snap",
+      "object-position",
+      "horizontal-scroll",
+      "no-js"
+    ],
+    "description": "Horizontal scroll-snap carousel where each slide's landscape artwork pans sideways inside its portrait frame as it crosses the scrollport, a pure CSS window parallax driven by animation-timeline: view(x).",
+    "deps": [],
+    "files": [
+      "styles.css",
+      "index.html"
+    ],
+    "usage": "Include styles.css, then add a <ul class=\"wpc-slides\"> of <li class=\"wpc-slide\"> items, each holding one landscape <img> and an optional <span class=\"wpc-tag\"> label; the strip scroll-snaps sideways and every image pans inside its frame as it crosses the scrollport. Tune --wpc-slide-w, --wpc-gap and --wpc-radius on the list to fit your layout.",
+    "source": "https://scroll-driven-animations.style/demos/parallax-carousel/css/",
+    "license": "Apache-2.0 (demo by Bramus Van Damme, scroll-driven-animations.style), adapted with credit",
+    "path": "components/css/scroll-driven-window-carousel",
+    "kind": "component",
+    "preview": "components/css/scroll-driven-window-carousel/preview.html"
+  },
+  {
     "name": "CSS-Only Snap Carousel",
     "slug": "scroll-snap-carousel",
     "category": "css",
@@ -1426,6 +1888,63 @@
     "preview": "components/css/tilt-card-3d/preview.html"
   },
   {
+    "name": "ASCII Shader",
+    "slug": "ascii-shader",
+    "category": "vanilla",
+    "tier": "showcase",
+    "tags": [
+      "ascii",
+      "canvas",
+      "shader",
+      "background",
+      "generative",
+      "noise",
+      "terminal"
+    ],
+    "description": "A flowing grayscale intensity field rendered live as ASCII art on a single 2D canvas, coloured along the Sand & Surf ramp with a pointer-driven bulge.",
+    "deps": [],
+    "files": [
+      "ascii-shader.js"
+    ],
+    "usage": "Add a sized <canvas>, then call initAsciiShader(canvasEl, opts) and keep the returned handle to destroy() on teardown.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
+    "path": "components/vanilla/ascii-shader",
+    "kind": "component",
+    "preview": "components/vanilla/ascii-shader/preview.html"
+  },
+  {
+    "name": "Brand Loader Reveal",
+    "slug": "brand-loader-reveal",
+    "category": "vanilla",
+    "tier": "showcase",
+    "tags": [
+      "loader",
+      "preloader",
+      "curtain",
+      "reveal",
+      "clip-path",
+      "stagger",
+      "hero",
+      "intro",
+      "page-load",
+      "overlay"
+    ],
+    "description": "A full-screen brand-color loader with a centered logo mark that lifts away like a curtain once the page has loaded, then staggers the hero content in with small fade-and-rise steps.",
+    "deps": [],
+    "files": [
+      "script.js",
+      "styles.css",
+      "index.html"
+    ],
+    "usage": "Paste the .blr-loader overlay as the first child of <body>, add .blr-stagger plus one of .blr-d1 to .blr-d6 to each hero element, link styles.css and script.js, then call initLoaderReveal({ minTime: 1200, onRevealed: fn }).",
+    "source": "Pattern seen on https://coffee-tech.com (Awwwards SOTD by MAKETHECUT and Or Halevi), implemented from scratch",
+    "license": "MIT (original clean-room implementation by saltycodestudio-parts, visual pattern inspired by coffee-tech.com by MAKETHECUT and Or Halevi, no code or assets copied)",
+    "path": "components/vanilla/brand-loader-reveal",
+    "kind": "component",
+    "preview": "components/vanilla/brand-loader-reveal/preview.html"
+  },
+  {
     "name": "Copy to Clipboard",
     "slug": "copy-to-clipboard",
     "category": "vanilla",
@@ -1475,6 +1994,31 @@
     "preview": "components/vanilla/custom-cursor/preview.html"
   },
   {
+    "name": "Dot Matrix Wave",
+    "slug": "dot-matrix-wave",
+    "category": "vanilla",
+    "tier": "showcase",
+    "tags": [
+      "canvas",
+      "wave",
+      "dots",
+      "interactive",
+      "background",
+      "pointer-repel"
+    ],
+    "description": "A canvas-2D dot grid driven by a traveling sine-wave field that ripples in coastal Sand & Surf colors and dents away from the pointer.",
+    "deps": [],
+    "files": [
+      "dot-matrix-wave.js"
+    ],
+    "usage": "Add a full-bleed <canvas>, then call initDotMatrixWave(canvas, opts) once; it handles DPR, resize, pointer repel and reduced-motion automatically.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
+    "path": "components/vanilla/dot-matrix-wave",
+    "kind": "component",
+    "preview": "components/vanilla/dot-matrix-wave/preview.html"
+  },
+  {
     "name": "Form Validation",
     "slug": "form-validation",
     "category": "vanilla",
@@ -1500,6 +2044,60 @@
     "path": "components/vanilla/form-validation",
     "kind": "component",
     "preview": "components/vanilla/form-validation/preview.html"
+  },
+  {
+    "name": "Glass Refraction Panel",
+    "slug": "glass-refraction-panel",
+    "category": "vanilla",
+    "tier": "showcase",
+    "tags": [
+      "glass",
+      "refraction",
+      "webgl",
+      "shader",
+      "background",
+      "chromatic-aberration",
+      "frosted-glass",
+      "draggable"
+    ],
+    "description": "A real refractive frosted-glass card rendered in raw WebGL over an animated Sand & Surf background, with chromatic aberration, frost blur, a specular edge highlight, and a draggable panel that refracts the background live.",
+    "deps": [],
+    "files": [
+      "glass-refraction-panel.js"
+    ],
+    "usage": "Add a full-bleed <canvas>, then call initGlassRefraction(canvas, opts) and drag the glass; it returns { set, destroy }.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
+    "path": "components/vanilla/glass-refraction-panel",
+    "kind": "component",
+    "preview": "components/vanilla/glass-refraction-panel/preview.html"
+  },
+  {
+    "name": "Iridescent Foil",
+    "slug": "iridescent-foil",
+    "category": "vanilla",
+    "tier": "showcase",
+    "tags": [
+      "webgl",
+      "shader",
+      "background",
+      "iridescence",
+      "holographic",
+      "thin-film",
+      "foil",
+      "interactive"
+    ],
+    "description": "A raw-WebGL thin-film iridescence surface: holographic foil and oil-on-water sheen tuned to a coastal Sand & Surf palette, whose hue band visibly travels as the pointer moves.",
+    "deps": [],
+    "files": [
+      "iridescent-foil.js"
+    ],
+    "usage": "Add a <canvas>, then call initIridescentFoil(canvas, opts) to paint a full-bleed holographic foil background that reacts to the pointer.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
+    "path": "components/vanilla/iridescent-foil",
+    "kind": "component",
+    "preview": "components/vanilla/iridescent-foil/preview.html"
   },
   {
     "name": "Modal Dialog",
@@ -1552,6 +2150,35 @@
     "preview": "components/vanilla/preloader/preview.html"
   },
   {
+    "name": "Scroll Theme Switch",
+    "slug": "scroll-theme-switch",
+    "category": "vanilla",
+    "tier": "showcase",
+    "tags": [
+      "theme",
+      "dark-mode",
+      "scroll",
+      "intersection-observer",
+      "crossfade",
+      "css-variables",
+      "data-theme",
+      "sections"
+    ],
+    "description": "Sections declare data-theme=\"dark\" or \"light\" and a tiny IntersectionObserver script mirrors whichever section dominates the viewport onto the html element, so CSS custom properties crossfade the whole page (fixed header included) between a bone-light and a near-black theme as you scroll.",
+    "deps": [],
+    "files": [
+      "script.js",
+      "styles.css",
+      "index.html"
+    ],
+    "usage": "Link styles.css, give each full-width section data-theme=\"dark\" or data-theme=\"light\", paint your page with the --ts-* tokens, and load script.js (it auto-runs, or call initThemeSwitch() yourself). Any number of sections works, and without JS the page stays in the light theme.",
+    "source": "Pattern seen on https://coffee-tech.com (Awwwards SOTD by MAKETHECUT and Or Halevi), implemented from scratch",
+    "license": "MIT (original clean-room implementation by saltycodestudio-parts, visual pattern inspired by coffee-tech.com by MAKETHECUT and Or Halevi, no code or assets copied)",
+    "path": "components/vanilla/scroll-theme-switch",
+    "kind": "component",
+    "preview": "components/vanilla/scroll-theme-switch/preview.html"
+  },
+  {
     "name": "Scrollspy Nav",
     "slug": "scrollspy-nav",
     "category": "vanilla",
@@ -1575,6 +2202,33 @@
     "path": "components/vanilla/scrollspy-nav",
     "kind": "component",
     "preview": "components/vanilla/scrollspy-nav/preview.html"
+  },
+  {
+    "name": "Shader Gradient Flow",
+    "slug": "shader-gradient-flow",
+    "category": "vanilla",
+    "tier": "showcase",
+    "tags": [
+      "shader",
+      "webgl",
+      "background",
+      "gradient",
+      "fbm",
+      "domain-warp",
+      "animation",
+      "hero"
+    ],
+    "description": "A full-bleed raw-WebGL fragment-shader background of silky, slowly flowing colour, driven by domain-warped fractal Brownian motion through a Sand & Surf ramp.",
+    "deps": [],
+    "files": [
+      "shader-gradient-flow.js"
+    ],
+    "usage": "Drop a <canvas> in your hero, link shader-gradient-flow.js, then call initGradientFlow(canvas, opts); it returns { set, destroy }.",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
+    "path": "components/vanilla/shader-gradient-flow",
+    "kind": "component",
+    "preview": "components/vanilla/shader-gradient-flow/preview.html"
   },
   {
     "name": "Smooth Scroll",
@@ -1650,6 +2304,32 @@
     "path": "components/vanilla/theme-switcher",
     "kind": "component",
     "preview": "components/vanilla/theme-switcher/preview.html"
+  },
+  {
+    "name": "Voronoi Cells",
+    "slug": "voronoi-cells",
+    "category": "vanilla",
+    "tier": "showcase",
+    "tags": [
+      "voronoi",
+      "worley-noise",
+      "webgl",
+      "shader",
+      "background",
+      "cellular",
+      "animated"
+    ],
+    "description": "A raw-WebGL fragment shader that paints a slow, drifting Voronoi (Worley) field of soft teal-and-sand cells with crisp ceramic seams and a faint coral glow.",
+    "deps": [],
+    "files": [
+      "voronoi-cells.js"
+    ],
+    "usage": "Drop a full-bleed <canvas> behind your content and call initVoronoiCells(canvas, opts).",
+    "source": "saltycodestudio-parts (original)",
+    "license": "MIT",
+    "path": "components/vanilla/voronoi-cells",
+    "kind": "component",
+    "preview": "components/vanilla/voronoi-cells/preview.html"
   },
   {
     "name": "Gravity Mouse Trail",
@@ -1860,6 +2540,38 @@
     "preview": "components/motion/parallax-layers/preview.html"
   },
   {
+    "name": "Pinned Numbered Testimonials",
+    "slug": "pinned-numbered-testimonials",
+    "category": "motion",
+    "tier": "showcase",
+    "tags": [
+      "testimonials",
+      "quotes",
+      "pin",
+      "gsap",
+      "scrolltrigger",
+      "scrub",
+      "snap",
+      "numerals",
+      "crossfade"
+    ],
+    "description": "A pinned testimonial stage where giant numerals 01, 02, 03 crossfade in sequence as you scroll, each paired with a large quote and author that slide-fade through, scrubbed by GSAP ScrollTrigger with snap to every testimonial and a progress hairline on the side.",
+    "deps": [
+      "gsap",
+      "gsap/ScrollTrigger"
+    ],
+    "files": [
+      "animation.js",
+      "styles.css"
+    ],
+    "usage": "Copy styles.css and animation.js, add a .pnt-section containing a .pnt-inner with the .pnt-rail hairline and one .pnt-item figure (numeral, quote, author) per testimonial, load GSAP plus ScrollTrigger, then call initNumberedTestimonials(). Without JavaScript or with reduced motion the same markup renders as a plain readable list.",
+    "source": "Pattern seen on https://coffee-tech.com (Awwwards SOTD by MAKETHECUT and Or Halevi), implemented from scratch",
+    "license": "MIT (original clean-room implementation by saltycodestudio-parts, visual pattern inspired by coffee-tech.com by MAKETHECUT and Or Halevi, no code or assets copied)",
+    "path": "components/motion/pinned-numbered-testimonials",
+    "kind": "component",
+    "preview": "components/motion/pinned-numbered-testimonials/preview.html"
+  },
+  {
     "name": "Pinned Scroll Section",
     "slug": "pinned-scroll-section",
     "category": "motion",
@@ -1887,6 +2599,39 @@
     "path": "components/motion/pinned-scroll-section",
     "kind": "component",
     "preview": "components/motion/pinned-scroll-section/preview.html"
+  },
+  {
+    "name": "Scroll 360 Turntable",
+    "slug": "scroll-360-turntable",
+    "category": "motion",
+    "tier": "showcase",
+    "tags": [
+      "scroll",
+      "pin",
+      "scrub",
+      "360",
+      "turntable",
+      "product",
+      "rotate",
+      "gsap",
+      "scrolltrigger",
+      "frame-sequence"
+    ],
+    "description": "A pinned hero where a product spins a full 360 degrees as you scroll, with a layered headline that fades and letter-spaces out. Ships a CSS-3D faceted bottle by default plus a frame-sequence mode for real 360 photo shoots.",
+    "deps": [
+      "gsap",
+      "gsap/ScrollTrigger"
+    ],
+    "files": [
+      "animation.js",
+      "styles.css"
+    ],
+    "usage": "Copy the .turntable-section markup from index.html, include styles.css, load GSAP plus ScrollTrigger, then call initTurntable(). For a real 360 shoot call initTurntable({ frames: [urls] }) and the scrub swaps preloaded frames instead of rotating the CSS object.",
+    "source": "Pattern seen on https://coffee-tech.com (Awwwards SOTD by MAKETHECUT and Or Halevi), implemented from scratch",
+    "license": "MIT (original clean-room implementation by saltycodestudio-parts, visual pattern inspired by coffee-tech.com by MAKETHECUT and Or Halevi, no code or assets copied)",
+    "path": "components/motion/scroll-360-turntable",
+    "kind": "component",
+    "preview": "components/motion/scroll-360-turntable/preview.html"
   },
   {
     "name": "Scroll Progress Bar",

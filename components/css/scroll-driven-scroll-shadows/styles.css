@@ -1,0 +1,147 @@
+/* ============================================================
+   CSS Scroll Shadows
+   Scrollable containers that show soft affordance shadows at
+   their top and bottom edges, but only while more content is
+   hiding in that direction. A native CSS Scroll Progress
+   Timeline fades each shadow in and out, and a scroll-detection
+   trick hides them entirely on containers that cannot scroll.
+   Zero JavaScript.
+   Adapted from the scroll-shadows demo by Bramus Van Damme,
+   https://scroll-driven-animations.style (Apache-2.0).
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   1. The scroller. Add .sds-scroller to any element that
+      scrolls vertically and give it a height or max-height so
+      it can actually overflow. Tune the look per scroller (or
+      on any ancestor) with custom properties:
+        --sds-shadow-rgb    shadow color as "r g b" channels
+                            (default 14 58 64, Sand & Surf deep teal)
+        --sds-shadow-alpha  shadow strength      (default 0.28)
+        --sds-shadow-size   shadow strip height  (default 0.75rem)
+   ------------------------------------------------------------ */
+.sds-scroller {
+  --sds-shadow-rgb: 14 58 64;
+  --sds-shadow-alpha: 0.28;
+  --sds-shadow-size: 0.75rem;
+
+  position: relative;
+  overflow-y: auto;
+}
+
+/* ------------------------------------------------------------
+   2. The shadows. Generated content pinned to the top and
+      bottom edges with position: sticky, each painted as a soft
+      radial gradient that fades to fully transparent. They are
+      hidden by default; the guarded block below reveals them
+      only when the container really has scrollable overflow.
+   ------------------------------------------------------------ */
+.sds-scroller::before,
+.sds-scroller::after {
+  content: "";
+  display: block;
+  position: sticky;
+  left: 0;
+  right: 0;
+  height: var(--sds-shadow-size);
+  flex: none; /* holds its shape inside flex-column scrollers */
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.sds-scroller::before {
+  top: 0;
+  background: radial-gradient(
+    farthest-side at 50% 0,
+    rgb(var(--sds-shadow-rgb) / var(--sds-shadow-alpha)),
+    rgb(var(--sds-shadow-rgb) / 0)
+  );
+}
+
+.sds-scroller::after {
+  bottom: 0;
+  background: radial-gradient(
+    farthest-side at 50% 100%,
+    rgb(var(--sds-shadow-rgb) / var(--sds-shadow-alpha)),
+    rgb(var(--sds-shadow-rgb) / 0)
+  );
+}
+
+/* The shadow strips are in-flow, so they double as top and
+   bottom breathing room. Trim the first and last child margins
+   so content sits flush against them. */
+.sds-scroller > :first-child { margin-top: 0; }
+.sds-scroller > :last-child  { margin-bottom: 0; }
+
+/* ------------------------------------------------------------
+   3. Keyframes.
+
+      sds-reveal fades a shadow strip from invisible to fully
+      opaque along the container's scroll progress.
+
+      sds-detect-scroll is a "space toggle": scroll-driven
+      animations only run when there is scrollable overflow, so
+      while this no-op animation is active it sets
+      --sds-can-scroll to a single space, which flips the
+      visibility switch in section 4. On containers that cannot
+      scroll the animation never activates, the property stays
+      unset, and the shadows stay hidden.
+      Technique described at https://brm.us/css-can-scroll
+      (keep the lone space after the colon, it is the value).
+   ------------------------------------------------------------ */
+@keyframes sds-reveal {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes sds-detect-scroll {
+  from, to { --sds-can-scroll: ; }
+}
+
+/* ------------------------------------------------------------
+   4. Progressive enhancement. Each scroller publishes its own
+      named Scroll Progress Timeline, runs the detection
+      animation on itself, and drives both shadow fades from the
+      same timeline. Only browsers that support scroll-driven
+      animations (and users who have not asked for reduced
+      motion) turn any of this on.
+   ------------------------------------------------------------ */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+
+    .sds-scroller {
+      scroll-timeline: --sds-timeline y;
+      /* Shorthand first, then the timeline longhand: the
+         shorthand would otherwise reset it back to "auto". */
+      animation: sds-detect-scroll;
+      animation-timeline: --sds-timeline;
+      animation-fill-mode: none;
+    }
+
+    .sds-scroller::before,
+    .sds-scroller::after {
+      /* Space toggle: resolves to "visible" only when the
+         detection animation above is active. */
+      --sds-visible-if-can-scroll: var(--sds-can-scroll) visible;
+      visibility: var(--sds-visible-if-can-scroll, hidden);
+
+      animation-name: sds-reveal;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: --sds-timeline;
+    }
+
+    /* Top shadow: fades in across the first bit of scrolling,
+       so it only shows once content is hidden above. */
+    .sds-scroller::before {
+      animation-range: 1em 2em;
+    }
+
+    /* Bottom shadow: same fade played in reverse across the
+       last bit, so it disappears when you reach the end. */
+    .sds-scroller::after {
+      animation-direction: reverse;
+      animation-range: calc(100% - 2em) calc(100% - 1em);
+    }
+  }
+}

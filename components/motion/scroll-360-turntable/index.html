@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Scroll 360 Turntable · usage example</title>
+<link rel="stylesheet" href="styles.css" />
+<style>
+  /* Page chrome only; everything turntable-related lives in styles.css */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; background: #fbf7f0; color: #1c2b33; }
+  .after { min-height: 90vh; display: grid; place-items: center; text-align: center; padding: 2rem; color: #4a5d66; }
+</style>
+</head>
+<body>
+
+  <section class="turntable-section">
+    <div class="turntable-headline">
+      <p class="turntable-kicker">Eau de parfum · No. 01</p>
+      <h1>Saltwater</h1>
+    </div>
+
+    <div class="turntable-scene" aria-hidden="true">
+      <div class="turntable-shadow"></div>
+      <div class="turntable-tilt">
+        <div class="turntable-object">
+          <div class="turntable-body">
+            <div class="turntable-face turntable-face--label">
+              <div class="turntable-label">
+                <svg viewBox="0 0 48 20" fill="none" aria-hidden="true">
+                  <path d="M2 14 C8 4 16 4 22 12 S38 20 46 8" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+                </svg>
+                <strong>SALTWATER</strong>
+                <span>No. 01 · 50 ml</span>
+              </div>
+            </div>
+            <div class="turntable-face"></div>
+            <div class="turntable-face"></div>
+            <div class="turntable-face"></div>
+            <div class="turntable-face"></div>
+            <div class="turntable-face"></div>
+            <div class="turntable-face"></div>
+            <div class="turntable-face"></div>
+          </div>
+          <div class="turntable-lid turntable-lid--body"></div>
+          <div class="turntable-cap">
+            <div class="turntable-face"></div>
+            <div class="turntable-face"></div>
+            <div class="turntable-face"></div>
+            <div class="turntable-face"></div>
+            <div class="turntable-face"></div>
+            <div class="turntable-face"></div>
+            <div class="turntable-face"></div>
+            <div class="turntable-face"></div>
+            <div class="turntable-lid turntable-lid--cap"></div>
+          </div>
+          <div class="turntable-disc"></div>
+        </div>
+      </div>
+    </div>
+
+    <p class="turntable-caption" aria-hidden="true">Scroll · one full turn</p>
+  </section>
+
+  <section class="after">
+    <p>The section above pins while the product spins a full 360 degrees.<br />
+       The rest of the page scrolls normally.</p>
+  </section>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script type="module">
+    /* ES modules need a local server (for example: npx serve). */
+    import { initTurntable } from './animation.js';
+    initTurntable();
+    /* Real 360 shoot instead of the CSS object:
+       initTurntable({ frames: ['shot-000.webp', 'shot-001.webp'] }); */
+  </script>
+
+</body>
+</html>

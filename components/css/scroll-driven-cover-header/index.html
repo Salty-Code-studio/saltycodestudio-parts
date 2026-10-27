@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cover Card to Fixed Header, minimal usage</title>
+<link rel="stylesheet" href="styles.css" />
+<style>
+  body { margin: 0; font-family: system-ui, sans-serif; color: #1c2b33; background: #fbf7f0; line-height: 1.6; }
+  /* Demo-only: guarantees enough scroll distance for the full 90vh dock,
+     even on tall screens where the sample text alone would run short. */
+  main.cvh-content { min-height: 120vh; }
+</style>
+</head>
+<body>
+
+  <!-- 1. The cover. Renders full-viewport, then shrinks and docks
+          into a fixed header as the page scrolls. -->
+  <header class="cvh-cover">
+    <div class="cvh-cover-inner">
+      <h1 class="cvh-title">Salty Cove</h1>
+      <p class="cvh-sub">The cover card docks into the header as you scroll</p>
+    </div>
+  </header>
+
+  <!-- 2. Everything after the cover lives inside .cvh-content, so
+          the page keeps its scroll height once the cover is fixed. -->
+  <main class="cvh-content">
+    <h2>The article starts here</h2>
+    <p>Scroll down and watch the cover above collapse into a slim fixed header. The shrink is scrubbed by the scroll position itself, so scrolling back up replays it in reverse.</p>
+    <p>In browsers without scroll-driven animation support, the cover simply stays a normal full-height hero and this content follows it in the regular document flow.</p>
+    <p>Give the page enough content to scroll. The docking plays out over the first 90vh of scroll distance, so anything beyond roughly two viewport heights already shows the full effect.</p>
+    <p>Filler paragraph one. Calm seas, long lines, a slow tide working its way up the sand.</p>
+    <p>Filler paragraph two. The reef keeps its own rhythm and the light keeps changing.</p>
+    <p>Filler paragraph three. By late afternoon the water turns to hammered glass.</p>
+    <p>Filler paragraph four. Nobody hurries here, and neither does this header.</p>
+    <p>Filler paragraph five. End of the minimal example.</p>
+  </main>
+
+</body>
+</html>

@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Scroll 3D Object Explorer, Sand &amp; Surf demo</title>
+<style>
+  /* ---- Sand & Surf page chrome ---- */
+  :root {
+    --sand-1: #fbf7f0;
+    --sand-2: #f4ece0;
+    --sand-3: #ece0cd;
+    --ink: #1c2b33;
+    --ink-soft: #4a5d66;
+    --teal: #1f8a8a;
+    --teal-deep: #0f5c5c;
+    --surf: #2ec3c3;
+    --maxw: 1080px;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    font-family: "Helvetica Neue", Arial, system-ui, sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(140% 90% at 50% -10%, var(--sand-1), var(--sand-2) 55%, var(--sand-3) 100%);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: var(--maxw); margin-inline: auto; padding-inline: 1.5rem; }
+
+  .hero {
+    min-height: 88vh;
+    display: grid;
+    place-content: center;
+    text-align: center;
+    padding: 6rem 1.5rem 3rem;
+  }
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.32em;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--teal-deep);
+    margin: 0 0 1.2rem;
+  }
+  .hero h1 {
+    font-size: clamp(2.4rem, 6.5vw, 4.8rem);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    margin: 0;
+  }
+  .hero h1 em { font-style: normal; color: var(--teal-deep); }
+  .hero p {
+    max-width: 46ch;
+    margin: 1.6rem auto 0;
+    color: var(--ink-soft);
+    font-size: 1.12rem;
+  }
+  .note {
+    margin-top: 1.6rem;
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+    background: rgba(255, 255, 255, 0.55);
+    border: 1px dashed rgba(31, 138, 138, 0.4);
+    border-radius: 12px;
+    padding: 0.8rem 1rem;
+    display: inline-block;
+  }
+  .down-hint {
+    margin-top: 2.6rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .down-hint span { display: block; margin-top: 0.5rem; font-size: 1.3rem; }
+  @media (prefers-reduced-motion: no-preference) {
+    .down-hint span { animation: bob 1.8s ease-in-out infinite; }
+  }
+  @keyframes bob {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(6px); }
+  }
+
+  .stage-section {
+    min-height: 100vh;
+    display: grid;
+    place-content: center;
+    padding: 3rem 1rem 5rem;
+  }
+  .stage-caption {
+    text-align: center;
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+    margin: 1.4rem 0 0;
+  }
+  .stage-caption code {
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 6px;
+    padding: 0.1em 0.4em;
+    font-size: 0.92em;
+  }
+
+  section.how { padding-block: clamp(4rem, 10vh, 8rem); }
+  .how h2 {
+    text-align: center;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    letter-spacing: -0.015em;
+    margin: 0 0 2.4rem;
+  }
+  .cards3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.25rem;
+  }
+  .card {
+    background: rgba(255, 255, 255, 0.66);
+    border: 1px solid rgba(28, 43, 51, 0.08);
+    border-radius: 18px;
+    padding: 1.8rem 1.6rem;
+    box-shadow: 0 18px 40px -28px rgba(15, 92, 92, 0.5);
+  }
+  .card .num {
+    display: inline-grid;
+    place-content: center;
+    width: 2.6rem;
+    height: 2.6rem;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--teal), var(--surf));
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+  .card h3 { margin: 0 0 0.5rem; font-size: 1.15rem; }
+  .card p { margin: 0; color: var(--ink-soft); font-size: 0.95rem; }
+  .card code {
+    background: rgba(236, 224, 205, 0.55);
+    border-radius: 6px;
+    padding: 0.08em 0.35em;
+    font-size: 0.9em;
+  }
+
+  footer.site {
+    text-align: center;
+    padding: 4rem 1.5rem 5rem;
+    color: var(--ink-soft);
+    font-size: 0.92rem;
+  }
+  footer.site .mark { font-weight: 700; color: var(--teal-deep); }
+  footer.site a { color: var(--teal-deep); }
+
+  /* ==========================================================================
+     Scroll 3D Object Explorer  (prefix: s3d-)
+     Pure CSS 3D objects spun by named view timelines in a scroll-snap
+     scroller. Adapted from the "3D Shoe Explorer" demo by Bramus Van Damme,
+     found at scroll-driven-animations.style/demos/3d-shoe-explorer/css/
+     (Apache-2.0).
+     ========================================================================== */
+
+  .s3d-explorer {
+    --s3d-sand: #fbf7f0;
+    --s3d-sand-2: #f4ece0;
+    --s3d-sand-3: #ece0cd;
+    --s3d-ink: #1c2b33;
+    --s3d-ink-soft: #4a5d66;
+    --s3d-teal: #1f8a8a;
+    --s3d-teal-deep: #0f5c5c;
+    --s3d-surf: #2ec3c3;
+
+    width: min(92vmin, 42rem);
+    aspect-ratio: 1 / 1;
+    margin-inline: auto;
+
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+
+    border-radius: 1.5rem;
+    border: 1px solid rgba(28, 43, 51, 0.08);
+    background:
+      radial-gradient(120% 90% at 50% 0%, var(--s3d-sand), var(--s3d-sand-2) 60%, var(--s3d-sand-3));
+    box-shadow: 0 30px 70px -40px rgba(15, 92, 92, 0.55);
+    scrollbar-color: var(--s3d-teal) transparent;
+    color: var(--s3d-ink);
+  }
+
+  .s3d-explorer:focus-visible {
+    outline: 3px solid var(--s3d-surf);
+    outline-offset: 3px;
+  }
+
+  .s3d-explorer::after {
+    content: var(--s3d-fin, "fin.");
+    flex: 0 0 100%;
+    scroll-snap-align: center;
+    display: grid;
+    place-content: center;
+    font-style: italic;
+    color: var(--s3d-ink-soft);
+  }
+
+  .s3d-card {
+    flex: 0 0 100%;
+    height: 100%;
+    scroll-snap-align: center;
+    position: relative;
+    display: grid;
+    place-content: center;
+    text-align: center;
+    view-timeline: --s3d-card inline;
+  }
+
+  .s3d-card h1,
+  .s3d-card h2 {
+    margin: 0;
+    display: inline-block;
+    background: var(--s3d-ink);
+    color: var(--s3d-sand);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+
+  .s3d-card h1 {
+    font-size: clamp(1.6rem, 5vmin + 0.6rem, 3.1rem);
+    border-radius: 1rem;
+    padding: clamp(0.6rem, 2vmin + 0.3rem, 1.2rem) clamp(1rem, 3vmin + 0.4rem, 1.8rem);
+  }
+
+  .s3d-card h2 {
+    position: absolute;
+    left: 1.1rem;
+    top: 1.1rem;
+    z-index: 2;
+    font-size: clamp(1rem, 1.6vmin + 0.7rem, 1.55rem);
+    border-radius: 0.55rem;
+    padding: 0.45em 0.85em;
+  }
+
+  .s3d-card footer {
+    position: absolute;
+    left: 1rem;
+    right: 1rem;
+    bottom: 0.9rem;
+    z-index: 2;
+    font-size: 0.82rem;
+    color: var(--s3d-ink-soft);
+  }
+
+  .s3d-card footer p { margin: 0; }
+
+  .s3d-hint {
+    display: block;
+    margin-top: 1.5rem;
+    font-style: normal;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--s3d-ink-soft);
+  }
+
+  .s3d-hint b {
+    display: block;
+    margin-top: 0.4rem;
+    font-size: 1.4rem;
+    font-weight: 400;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .s3d-hint b { animation: s3d-nudge 1.8s ease-in-out infinite; }
+  }
+
+  @keyframes s3d-nudge {
+    0%, 100% { transform: translateX(-6px); }
+    50%      { transform: translateX(6px); }
+  }
+
+  .s3d-stage {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    perspective: 1300px;
+    perspective-origin: 50% 38%;
+    pointer-events: none;
+    font-size: clamp(0.62rem, 1.6vmin + 0.28rem, 1rem);
+  }
+
+  .s3d-stage::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 13%;
+    width: 46%;
+    height: 7%;
+    transform: translateX(-50%);
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(15, 92, 92, 0.26), transparent 72%);
+  }
+
+  .s3d-object {
+    position: relative;
+    transform-style: preserve-3d;
+    transform: rotateX(-8deg) rotateY(-32deg);
+  }
+
+  .s3d-box {
+    --s3d-w: 10.5em;
+    --s3d-h: 13.5em;
+    --s3d-d: 5em;
+    width: var(--s3d-w);
+    height: var(--s3d-h);
+  }
+
+  .s3d-box .s3d-face {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    display: grid;
+    place-content: center;
+    gap: 0.9em;
+    border-radius: 0.3em;
+  }
+
+  .s3d-face--front {
+    width: var(--s3d-w);
+    height: var(--s3d-h);
+    transform: translate(-50%, -50%) translateZ(calc(var(--s3d-d) / 2));
+    background: linear-gradient(165deg, #fffdf8, var(--s3d-sand-2) 75%);
+  }
+
+  .s3d-face--back {
+    width: var(--s3d-w);
+    height: var(--s3d-h);
+    transform: translate(-50%, -50%) rotateY(180deg) translateZ(calc(var(--s3d-d) / 2));
+    background: linear-gradient(165deg, var(--s3d-sand-2), var(--s3d-sand-3));
+  }
+
+  .s3d-face--left {
+    width: var(--s3d-d);
+    height: var(--s3d-h);
+    transform: translate(-50%, -50%) rotateY(-90deg) translateZ(calc(var(--s3d-w) / 2));
+    background: linear-gradient(180deg, var(--s3d-teal), var(--s3d-teal-deep));
+  }
+
+  .s3d-face--right {
+    width: var(--s3d-d);
+    height: var(--s3d-h);
+    transform: translate(-50%, -50%) rotateY(90deg) translateZ(calc(var(--s3d-w) / 2));
+    background: linear-gradient(180deg, var(--s3d-surf), var(--s3d-teal));
+  }
+
+  .s3d-face--top {
+    width: var(--s3d-w);
+    height: var(--s3d-d);
+    transform: translate(-50%, -50%) rotateX(90deg) translateZ(calc(var(--s3d-h) / 2));
+    background: #fffdf8;
+  }
+
+  .s3d-face--bottom {
+    width: var(--s3d-w);
+    height: var(--s3d-d);
+    transform: translate(-50%, -50%) rotateX(-90deg) translateZ(calc(var(--s3d-h) / 2));
+    background: var(--s3d-teal-deep);
+  }
+
+  .s3d-face-label {
+    font-size: 0.82em;
+    font-weight: 700;
+    letter-spacing: 0.32em;
+    text-indent: 0.32em;
+    text-transform: uppercase;
+    color: var(--s3d-teal-deep);
+  }
+
+  .s3d-face--front svg {
+    width: 4.6em;
+    height: auto;
+    margin-inline: auto;
+  }
+
+  .s3d-planes {
+    width: 8.5em;
+    height: 15.5em;
+  }
+
+  .s3d-plane {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    transform: rotateY(calc(var(--s3d-i, 0) * 60deg));
+  }
+
+  .s3d-plane svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .s3d-hex {
+    --s3d-side: 4.4em;
+    --s3d-hh: 11.5em;
+    width: calc(var(--s3d-side) * 2);
+    height: var(--s3d-hh);
+  }
+
+  .s3d-hex .s3d-face {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: calc(var(--s3d-side) + 1px);
+    height: var(--s3d-hh);
+    transform:
+      translate(-50%, -50%)
+      rotateY(calc(var(--s3d-i, 0) * 60deg))
+      translateZ(calc(var(--s3d-side) * 0.866));
+    background: linear-gradient(
+      180deg,
+      #fffdf8 0 8%,
+      var(--s3d-teal-deep) 8% 20%,
+      var(--s3d-sand) 20% 26%,
+      var(--s3d-teal) 26% 62%,
+      var(--s3d-sand-2) 62% 92%,
+      var(--s3d-teal-deep) 92% 100%
+    );
+  }
+
+  .s3d-hex .s3d-face:nth-child(even) {
+    filter: brightness(0.92);
+  }
+
+  .s3d-hex .s3d-face--lid {
+    width: calc(var(--s3d-side) * 2);
+    height: calc(var(--s3d-side) * 1.732);
+    clip-path: polygon(0% 50%, 25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%);
+    transform:
+      translate(-50%, -50%)
+      rotateX(90deg)
+      translateZ(calc(var(--s3d-hh) / 2));
+    background: radial-gradient(circle at 50% 40%, #fffdf8, var(--s3d-sand-2) 80%);
+    filter: none;
+  }
+
+  @keyframes s3d-spin {
+    from { transform: rotateX(-8deg) rotateY(225deg); }
+    to   { transform: rotateX(-8deg) rotateY(-225deg); }
+  }
+
+  @keyframes s3d-clip-in {
+    from { clip-path: inset(0% 0% 0% 100%); }
+    to   { clip-path: inset(0% 0% 0% 0%); }
+  }
+
+  @keyframes s3d-clip-out {
+    from { clip-path: inset(0% 0% 0% 0%); }
+    to   { clip-path: inset(0% 100% 0% 0%); }
+  }
+
+  @keyframes s3d-fade-in {
+    from { opacity: 0; }
+  }
+
+  @keyframes s3d-fade-out {
+    to { opacity: 0; }
+  }
+
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .s3d-object {
+        animation: s3d-spin linear both;
+        animation-timeline: --s3d-card;
+      }
+      .s3d-card h2 {
+        animation: s3d-clip-in linear backwards, s3d-clip-out linear forwards;
+        animation-timeline: --s3d-card;
+        animation-range: entry 50% entry 100%, exit 0% exit 50%;
+      }
+      .s3d-card footer {
+        animation: s3d-fade-in linear both, s3d-fade-out linear both;
+        animation-timeline: --s3d-card;
+        animation-range: cover 40% cover 50%, cover 50% cover 60%;
+      }
+    }
+  }
+</style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div>
+      <p class="eyebrow">Sand &amp; Surf · Scroll-driven CSS</p>
+      <h1>Spin the shelf,<br />one <em>scroll</em> at a time</h1>
+      <p>A horizontal product explorer where every object is pure CSS 3D and every
+         rotation is driven by the card's own view timeline. No JavaScript anywhere.</p>
+      <div><span class="note">Needs Chrome or Edge 115+, or Safari 26+. Elsewhere you get a calm static pose.</span></div>
+      <p class="down-hint">Head to the shelf<span>&#8595;</span></p>
+    </div>
+  </header>
+
+  <!-- THE EXPLORER -->
+  <div class="stage-section">
+    <section class="s3d-explorer" tabindex="0" role="region"
+             aria-label="Product explorer, scrolls horizontally">
+
+      <div class="s3d-card">
+        <h1>Object Explorer</h1>
+        <em class="s3d-hint">Scroll sideways<b>&#8596;</b></em>
+      </div>
+
+      <div class="s3d-card">
+        <h2>Del Mar Crate</h2>
+        <div class="s3d-stage" aria-hidden="true">
+          <div class="s3d-object s3d-box">
+            <div class="s3d-face s3d-face--front">
+              <svg viewBox="0 0 72 44" aria-hidden="true">
+                <g fill="none" stroke-width="3.4" stroke-linecap="round">
+                  <path d="M6 10 c5 -7 13 -7 18 0 c5 7 13 7 18 0 c5 -7 13 -7 18 0" stroke="#0f5c5c" />
+                  <path d="M6 21 c5 -7 13 -7 18 0 c5 7 13 7 18 0 c5 -7 13 -7 18 0" stroke="#1f8a8a" />
+                  <path d="M6 32 c5 -7 13 -7 18 0 c5 7 13 7 18 0 c5 -7 13 -7 18 0" stroke="#2ec3c3" />
+                </g>
+              </svg>
+              <span class="s3d-face-label">Del Mar</span>
+            </div>
+            <div class="s3d-face s3d-face--back"></div>
+            <div class="s3d-face s3d-face--left"></div>
+            <div class="s3d-face s3d-face--right"></div>
+            <div class="s3d-face s3d-face--top"></div>
+            <div class="s3d-face s3d-face--bottom"></div>
+          </div>
+        </div>
+        <footer><p>A six face CSS cuboid, spun by the card's view timeline.</p></footer>
+      </div>
+
+      <div class="s3d-card">
+        <h2>North Swell Board</h2>
+        <div class="s3d-stage" aria-hidden="true">
+          <div class="s3d-object s3d-planes">
+            <div class="s3d-plane" style="--s3d-i: 0">
+              <svg viewBox="0 0 120 260" aria-hidden="true">
+                <defs>
+                  <linearGradient id="s3d-board-a" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0" stop-color="#2ec3c3" />
+                    <stop offset="1" stop-color="#0f5c5c" />
+                  </linearGradient>
+                </defs>
+                <path d="M60 8 C94 58 100 170 60 252 C20 170 26 58 60 8 Z" fill="url(#s3d-board-a)" opacity="0.92" />
+                <path d="M60 18 V242" stroke="#fbf7f0" stroke-width="3" opacity="0.7" />
+              </svg>
+            </div>
+            <div class="s3d-plane" style="--s3d-i: 1">
+              <svg viewBox="0 0 120 260" aria-hidden="true">
+                <defs>
+                  <linearGradient id="s3d-board-b" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0" stop-color="#2ec3c3" />
+                    <stop offset="1" stop-color="#0f5c5c" />
+                  </linearGradient>
+                </defs>
+                <path d="M60 8 C94 58 100 170 60 252 C20 170 26 58 60 8 Z" fill="url(#s3d-board-b)" opacity="0.92" />
+                <path d="M60 18 V242" stroke="#fbf7f0" stroke-width="3" opacity="0.7" />
+              </svg>
+            </div>
+            <div class="s3d-plane" style="--s3d-i: 2">
+              <svg viewBox="0 0 120 260" aria-hidden="true">
+                <defs>
+                  <linearGradient id="s3d-board-c" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0" stop-color="#2ec3c3" />
+                    <stop offset="1" stop-color="#0f5c5c" />
+                  </linearGradient>
+                </defs>
+                <path d="M60 8 C94 58 100 170 60 252 C20 170 26 58 60 8 Z" fill="url(#s3d-board-c)" opacity="0.92" />
+                <path d="M60 18 V242" stroke="#fbf7f0" stroke-width="3" opacity="0.7" />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <footer><p>Three intersecting SVG planes, reading as a hologram in motion.</p></footer>
+      </div>
+
+      <div class="s3d-card">
+        <h2>Salt Tin No. 3</h2>
+        <div class="s3d-stage" aria-hidden="true">
+          <div class="s3d-object s3d-hex">
+            <div class="s3d-face" style="--s3d-i: 0"></div>
+            <div class="s3d-face" style="--s3d-i: 1"></div>
+            <div class="s3d-face" style="--s3d-i: 2"></div>
+            <div class="s3d-face" style="--s3d-i: 3"></div>
+            <div class="s3d-face" style="--s3d-i: 4"></div>
+            <div class="s3d-face" style="--s3d-i: 5"></div>
+            <div class="s3d-face s3d-face--lid"></div>
+          </div>
+        </div>
+        <footer><p>A hex prism with a striped label that wraps as it turns.</p></footer>
+      </div>
+
+    </section>
+    <p class="stage-caption">Drag, swipe, or shift-scroll inside the panel. Each card snaps
+       and publishes its own <code>view-timeline</code> on the inline axis.</p>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <section class="how wrap">
+    <h2>How the trick works</h2>
+    <div class="cards3">
+      <article class="card">
+        <span class="num">1</span>
+        <h3>A timeline per card</h3>
+        <p>Every card declares <code>view-timeline: --s3d-card inline</code>, so its
+           progress through the horizontal scroller becomes an animation clock.</p>
+      </article>
+      <article class="card">
+        <span class="num">2</span>
+        <h3>CSS 3D does the modeling</h3>
+        <p>The box, the hologram cross and the hex tin are plain divs and inline SVG
+           under <code>preserve-3d</code>. A single keyframe spins them 450 degrees.</p>
+      </article>
+      <article class="card">
+        <span class="num">3</span>
+        <h3>Choreographed captions</h3>
+        <p>Titles clip in on entry and out on exit, captions fade up only near the
+           snap point. All ranges, no listeners, no script.</p>
+      </article>
+    </div>
+  </section>
+
+  <footer class="site">
+    <p><span class="mark">saltycodestudio</span> · Sand &amp; Surf parts library</p>
+    <p>Adapted from the "3D Shoe Explorer" demo by Bramus Van Damme,
+       scroll-driven-animations.style (Apache-2.0), rebuilt with CSS objects instead of glTF models.</p>
+  </footer>
+
+</body>
+</html>

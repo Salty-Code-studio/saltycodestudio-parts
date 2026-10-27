@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Scroll-Driven Image Reveal, usage example</title>
+<link rel="stylesheet" href="styles.css" />
+<style>
+  /* Tiny demo-only layout so the page has scroll room.
+     Everything the part needs lives in styles.css. */
+  body {
+    margin: 0 auto;
+    max-width: 44rem;
+    padding: 60vh 1.5rem 40vh;
+    font-family: system-ui, sans-serif;
+    background: #fbf7f0;
+    color: #1c2b33;
+  }
+  .imr-frame { margin-block: 45vh; }
+  .imr-demo-block { margin-top: 45vh; }
+</style>
+</head>
+<body>
+
+  <p>Scroll down. Each media block below carries the <code>imr-reveal</code> class
+     and unveils itself as it enters the viewport, pure CSS.</p>
+
+  <!-- 1. The basic reveal: fade + opening curtain.
+          Works on <img> too; inline SVG keeps this example self-contained. -->
+  <figure class="imr-frame">
+    <svg class="imr-reveal" viewBox="0 0 1080 720" role="img"
+         aria-label="Stylized coral sun over layered teal waves">
+      <rect width="1080" height="720" fill="#f4ece0" />
+      <circle cx="740" cy="300" r="90" fill="#ff6f59" />
+      <path d="M0,440 C180,408 360,472 540,442 C720,412 900,472 1080,440 L1080,720 L0,720 Z" fill="#2ec3c3" />
+      <path d="M0,540 C220,508 420,568 640,538 C840,511 980,560 1080,540 L1080,720 L0,720 Z" fill="#0f5c5c" />
+    </svg>
+    <figcaption class="imr-caption">
+      This image opens like a curtain as it scrolls into view.
+    </figcaption>
+  </figure>
+
+  <!-- 2. Tune the starting slit per element with custom properties.
+          Bigger values start more hidden. -->
+  <figure class="imr-frame">
+    <svg class="imr-reveal" style="--imr-hide-y: 30%; --imr-hide-x: 35%"
+         viewBox="0 0 1080 720" role="img"
+         aria-label="Stylized layered sand dunes">
+      <rect width="1080" height="720" fill="#fbf7f0" />
+      <path d="M0,420 C260,340 520,470 780,400 C920,364 1010,384 1080,372 L1080,720 L0,720 Z" fill="#ece0cd" />
+      <path d="M0,560 C300,490 560,600 820,546 C940,522 1020,540 1080,532 L1080,720 L0,720 Z" fill="#d2bf9d" />
+    </svg>
+    <figcaption class="imr-caption">
+      A wider slit here, so it opens sideways like double doors.
+    </figcaption>
+  </figure>
+
+  <!-- 3. Works on any block, not just images. A gradient card,
+          a video, anything you want unveiled. -->
+  <div class="imr-reveal imr-demo-block"
+       style="--imr-hide-y: 40%; --imr-hide-x: 10%;
+              height: 14rem; border-radius: 20px;
+              background: linear-gradient(120deg, #1f8a8a, #2ec3c3);">
+  </div>
+
+</body>
+</html>

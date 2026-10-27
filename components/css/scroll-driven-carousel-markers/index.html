@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Scroll-Driven Carousel Markers, usage example</title>
+<link rel="stylesheet" href="styles.css" />
+<style>
+  /* Demo-only sizing and slide tints so the snapping is visible.
+     None of this is required by the part. */
+  body { margin: 2rem auto; max-width: 640px; padding-inline: 1rem; font-family: system-ui, sans-serif; }
+  .sdcm-entries > li:nth-child(odd)  { background: #f4ece0; }
+  .sdcm-entries > li:nth-child(even) { background: #e9f4f1; }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     Markup for Scroll-Driven Carousel Markers
+     Pair with styles.css. The scroller publishes a scroll
+     timeline and each marker dot animates over its own slice
+     of it, all in CSS, no JavaScript.
+     ============================================================ -->
+
+<!-- Set --sdcm-n to your slide count so the marker math stays right.
+     Size the carousel however you like; it defaults to 16 / 10. -->
+<div class="sdcm-carousel" style="--sdcm-n: 5">
+
+  <!-- 1. The scroller. tabindex lets keyboard users scroll it. -->
+  <ul class="sdcm-entries" tabindex="0" aria-label="Featured slides">
+    <li id="slide-1"><h3>Slide one</h3></li>
+    <li id="slide-2"><h3>Slide two</h3></li>
+    <li id="slide-3"><h3>Slide three</h3></li>
+    <li id="slide-4"><h3>Slide four</h3></li>
+    <li id="slide-5"><h3>Slide five</h3></li>
+  </ul>
+
+  <!-- 2. The markers. One per slide, in the same order.
+          The links double as click-to-jump navigation. -->
+  <ul class="sdcm-markers">
+    <li><a href="#slide-1"><span class="sdcm-sr-only">Slide 1</span></a></li>
+    <li><a href="#slide-2"><span class="sdcm-sr-only">Slide 2</span></a></li>
+    <li><a href="#slide-3"><span class="sdcm-sr-only">Slide 3</span></a></li>
+    <li><a href="#slide-4"><span class="sdcm-sr-only">Slide 4</span></a></li>
+    <li><a href="#slide-5"><span class="sdcm-sr-only">Slide 5</span></a></li>
+  </ul>
+
+</div>
+
+<!-- More than ten slides? The stylesheet indexes the first ten via
+     nth-child; give later markers their index inline:
+     <li style="--i: 11"><a href="#slide-11">…</a></li> -->
+
+</body>
+</html>

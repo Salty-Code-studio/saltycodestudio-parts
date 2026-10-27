@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Scroll Theme Switch · Sand &amp; Surf demo</title>
+<style>
+  /* ============================================================
+     THE PART: theme tokens + crossfade (styles.css, inlined)
+     ============================================================ */
+
+  :root {
+    --ts-duration: 0.6s;
+    --ts-ease: ease;
+
+    /* Bone-light theme (default, also the no-JS fallback) */
+    --ts-bg: #fbf7f0;
+    --ts-ink: #1c2b33;
+    --ts-muted: #4a5d66;
+    --ts-accent: #0f5c5c;
+    --ts-accent-bright: #1f8a8a;
+    --ts-line: rgba(28, 43, 51, 0.14);
+    --ts-surface: rgba(255, 255, 255, 0.62);
+  }
+
+  :root[data-theme="dark"] {
+    /* Near-black "night ocean" theme */
+    --ts-bg: #0e171c;
+    --ts-ink: #f4ece0;
+    --ts-muted: #9fb3ba;
+    --ts-accent: #2ec3c3;
+    --ts-accent-bright: #7fe3e3;
+    --ts-line: rgba(244, 236, 224, 0.16);
+    --ts-surface: rgba(255, 255, 255, 0.05);
+  }
+
+  body {
+    background-color: var(--ts-bg);
+    color: var(--ts-ink);
+    transition:
+      background-color var(--ts-duration) var(--ts-ease),
+      color var(--ts-duration) var(--ts-ease);
+  }
+
+  .ts-header {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.9rem clamp(1rem, 4vw, 2rem);
+    background-color: var(--ts-bg);
+    color: var(--ts-ink);
+    border-bottom: 1px solid var(--ts-line);
+    transition:
+      background-color var(--ts-duration) var(--ts-ease),
+      color var(--ts-duration) var(--ts-ease),
+      border-color var(--ts-duration) var(--ts-ease);
+  }
+
+  .ts-sync {
+    transition:
+      background-color var(--ts-duration) var(--ts-ease),
+      color var(--ts-duration) var(--ts-ease),
+      border-color var(--ts-duration) var(--ts-ease),
+      fill var(--ts-duration) var(--ts-ease),
+      stroke var(--ts-duration) var(--ts-ease),
+      box-shadow var(--ts-duration) var(--ts-ease);
+  }
+
+  section[data-theme] { background: transparent; }
+
+  @media (prefers-reduced-motion: reduce) {
+    body, .ts-header, .ts-sync { transition: none; }
+  }
+
+  /* ============================================================
+     DEMO LAYOUT (Sand & Surf)
+     ============================================================ */
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: "Helvetica Neue", Arial, system-ui, sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 1080px; margin-inline: auto; padding-inline: clamp(1.2rem, 4vw, 2rem); }
+
+  /* Header contents */
+  .mark {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    display: flex;
+    align-items: baseline;
+    gap: 0.55rem;
+    font-size: 1rem;
+  }
+  .mark .tilde { color: var(--ts-accent); font-size: 1.15rem; }
+  .mark small { font-weight: 500; color: var(--ts-muted); letter-spacing: 0.04em; }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ts-muted);
+    border: 1px solid var(--ts-line);
+    border-radius: 999px;
+    padding: 0.4rem 0.9rem;
+    background: var(--ts-surface);
+  }
+  .pill .dot {
+    width: 0.55rem; height: 0.55rem;
+    border-radius: 50%;
+    background: var(--ts-accent);
+    box-shadow: 0 0 0 4px var(--ts-surface);
+  }
+  .pill::after { content: "light"; }
+  :root[data-theme="dark"] .pill::after { content: "dark"; }
+
+  /* Sections */
+  section {
+    min-height: 100vh;
+    display: grid;
+    align-content: center;
+    padding-block: clamp(5rem, 14vh, 9rem);
+  }
+
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.32em;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--ts-accent);
+    margin: 0 0 1.2rem;
+  }
+
+  h1 {
+    font-size: clamp(2.6rem, 7vw, 5.4rem);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    margin: 0;
+  }
+  h1 em { font-style: normal; color: var(--ts-accent); }
+
+  h2 {
+    font-size: clamp(1.9rem, 4.8vw, 3.2rem);
+    line-height: 1.06;
+    letter-spacing: -0.015em;
+    margin: 0 0 1rem;
+  }
+
+  .lede {
+    max-width: 52ch;
+    color: var(--ts-muted);
+    font-size: 1.12rem;
+    margin: 1.4rem 0 0;
+  }
+
+  .hero { text-align: center; }
+  .hero .lede { margin-inline: auto; }
+
+  .scroll-hint {
+    margin-top: 3rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ts-muted);
+  }
+  .scroll-hint span {
+    display: block;
+    margin-top: 0.6rem;
+    font-size: 1.4rem;
+    animation: nudge 1.8s ease-in-out infinite;
+  }
+  @keyframes nudge {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(6px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-hint span { animation: none; }
+  }
+
+  /* Cards */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 1.25rem;
+    margin-top: 3rem;
+  }
+  .card {
+    background: var(--ts-surface);
+    border: 1px solid var(--ts-line);
+    border-radius: 18px;
+    padding: 1.8rem 1.6rem;
+  }
+  .card .glyph { font-size: 1.6rem; display: block; margin-bottom: 0.9rem; }
+  .card h3 { margin: 0 0 0.5rem; font-size: 1.15rem; }
+  .card p  { margin: 0; color: var(--ts-muted); font-size: 0.95rem; }
+  .card code { color: var(--ts-accent); font-size: 0.88em; }
+
+  /* Split */
+  .split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(1.5rem, 4vw, 3.5rem);
+    align-items: center;
+  }
+  @media (max-width: 720px) { .split { grid-template-columns: 1fr; } }
+
+  .figure {
+    aspect-ratio: 4 / 3;
+    border-radius: 20px;
+    display: grid;
+    place-content: center;
+    font-size: 3.4rem;
+    background:
+      radial-gradient(120% 120% at 22% 12%, var(--ts-accent-bright), var(--ts-accent) 72%);
+    color: rgba(255, 255, 255, 0.92);
+    box-shadow: 0 26px 60px -34px var(--ts-accent);
+  }
+
+  .steps { list-style: none; padding: 0; margin: 1.6rem 0 0; display: grid; gap: 1rem; }
+  .steps li {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.1rem;
+    background: var(--ts-surface);
+    border: 1px solid var(--ts-line);
+    border-radius: 14px;
+    padding: 1.1rem 1.4rem;
+  }
+  .steps .num {
+    flex: none;
+    display: grid;
+    place-content: center;
+    width: 1.9rem; height: 1.9rem;
+    border-radius: 9px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    background: var(--ts-accent);
+    color: var(--ts-bg);
+  }
+  .steps strong { display: block; }
+  .steps span { color: var(--ts-muted); font-size: 0.92rem; }
+  .steps code { color: var(--ts-accent); font-size: 0.88em; }
+
+  /* Big statement */
+  .statement {
+    text-align: center;
+  }
+  .statement h2 {
+    font-size: clamp(2.4rem, 8vw, 5rem);
+    letter-spacing: -0.02em;
+  }
+  .statement .lede { margin-inline: auto; }
+
+  .chip {
+    display: inline-block;
+    margin-top: 2.2rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.86rem;
+    color: var(--ts-accent-bright);
+    background: var(--ts-surface);
+    border: 1px solid var(--ts-line);
+    border-radius: 12px;
+    padding: 0.8rem 1.2rem;
+  }
+
+  footer {
+    text-align: center;
+    padding: 4rem 1.5rem 5rem;
+    color: var(--ts-muted);
+  }
+  footer .brand { font-weight: 700; color: var(--ts-accent); letter-spacing: -0.02em; }
+</style>
+</head>
+<body>
+
+  <!-- Fixed header: same tokens as the page, adapts by itself -->
+  <header class="ts-header">
+    <span class="mark"><span class="tilde">~&lt;</span> saltycodestudio <small>parts</small></span>
+    <span class="pill ts-sync"><span class="dot ts-sync"></span></span>
+  </header>
+
+  <!-- LIGHT: hero -->
+  <section data-theme="light" class="hero">
+    <div class="wrap">
+      <p class="eyebrow">Sand &amp; Surf · Scroll Theme Switch</p>
+      <h1>One page,<br />two <em>moods</em></h1>
+      <p class="lede">Each section below votes dark or light. As it takes over the
+        viewport, the whole page (fixed header included) crossfades to match.</p>
+      <p class="scroll-hint">Scroll to flip<span>↓</span></p>
+    </div>
+  </section>
+
+  <!-- DARK: how it works -->
+  <section data-theme="dark">
+    <div class="wrap">
+      <p class="eyebrow">Lights off</p>
+      <h2>Welcome to the night ocean</h2>
+      <p class="lede">No screenshot trickery. The moment this section dominated your
+        viewport, one attribute flipped on the html element and every token
+        glided to its dark value in about 0.6 seconds.</p>
+      <div class="cards">
+        <article class="card ts-sync">
+          <span class="glyph">👁️</span>
+          <h3>Observe</h3>
+          <p>An <code>IntersectionObserver</code> watches every themed section and
+             measures which one covers the most viewport pixels.</p>
+        </article>
+        <article class="card ts-sync">
+          <span class="glyph">🌓</span>
+          <h3>Flip</h3>
+          <p>The winner's <code>data-theme</code> is mirrored onto
+             <code>&lt;html&gt;</code>. One attribute, whole-page reach.</p>
+        </article>
+        <article class="card ts-sync">
+          <span class="glyph">🎨</span>
+          <h3>Crossfade</h3>
+          <p>CSS custom properties for background and ink transition together,
+             so the switch reads as one smooth fade.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- LIGHT: paste-in steps -->
+  <section data-theme="light">
+    <div class="wrap split">
+      <div class="figure ts-sync">☀️</div>
+      <div>
+        <p class="eyebrow">Lights on</p>
+        <h2>Back to the bone-light morning</h2>
+        <p class="lede">Wiring it up takes three moves, and it works with any
+          number of sections.</p>
+        <ul class="steps">
+          <li class="ts-sync">
+            <span class="num ts-sync">1</span>
+            <div><strong>Tag your sections</strong>
+              <span>Give each one <code>data-theme="dark"</code> or <code>"light"</code>.</span></div>
+          </li>
+          <li class="ts-sync">
+            <span class="num ts-sync">2</span>
+            <div><strong>Paint with the tokens</strong>
+              <span>Backgrounds and text read <code>--ts-bg</code> and <code>--ts-ink</code>.</span></div>
+          </li>
+          <li class="ts-sync">
+            <span class="num ts-sync">3</span>
+            <div><strong>Load the script</strong>
+              <span>It auto-runs, or call <code>initThemeSwitch()</code> yourself.</span></div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- DARK: big statement -->
+  <section data-theme="dark" class="statement">
+    <div class="wrap">
+      <p class="eyebrow">The award-site move</p>
+      <h2>Dark, light, dark again 🌊</h2>
+      <p class="lede">The pattern you see on Awwwards winners: the page itself
+        changes mood between chapters. Here it costs one tiny script and a
+        handful of custom properties, no framework, no library.</p>
+      <span class="chip ts-sync">&lt;section data-theme="dark"&gt; … &lt;/section&gt;</span>
+    </div>
+  </section>
+
+  <!-- LIGHT: closing -->
+  <section data-theme="light" class="statement">
+    <div class="wrap">
+      <p class="eyebrow">Graceful by default</p>
+      <h2>And softly back to shore</h2>
+      <p class="lede">Without JavaScript the page simply stays in this light theme,
+        complete and readable. Reduced-motion users get instant switches
+        instead of fades.</p>
+    </div>
+  </section>
+
+  <footer>
+    <p><span class="brand">saltycodestudio</span> · Sand &amp; Surf parts library</p>
+    <p>Watch the pill in the header: it always knows which side it is on.</p>
+  </footer>
+
+<script>
+/* ============================================================
+   THE PART: script.js, inlined
+   ============================================================ */
+(function () {
+  'use strict';
+
+  function initThemeSwitch(options) {
+    var opts = options || {};
+    var target = opts.target || document.documentElement;
+    var selector = opts.selector || 'section[data-theme], [data-theme-section]';
+    var fallback = opts.fallback || 'light';
+
+    var sections = Array.prototype.slice
+      .call(document.querySelectorAll(selector))
+      .filter(function (el) { return el !== target; });
+
+    if (sections.length === 0) return null;
+
+    function apply(theme) {
+      if (target.getAttribute('data-theme') !== theme) {
+        target.setAttribute('data-theme', theme);
+      }
+    }
+
+    if (!('IntersectionObserver' in window)) {
+      apply(fallback);
+      return null;
+    }
+
+    function refresh() {
+      var vh = window.innerHeight || document.documentElement.clientHeight;
+      var best = null;
+      var bestPx = 0;
+      for (var i = 0; i < sections.length; i++) {
+        var r = sections[i].getBoundingClientRect();
+        var visible = Math.min(r.bottom, vh) - Math.max(r.top, 0);
+        if (visible > bestPx) { bestPx = visible; best = sections[i]; }
+      }
+      if (best) {
+        apply(best.getAttribute('data-theme') ||
+              best.getAttribute('data-theme-section') || fallback);
+      }
+    }
+
+    var thresholds = [];
+    for (var t = 0; t <= 20; t++) thresholds.push(t / 20);
+
+    var observer = new IntersectionObserver(refresh, { threshold: thresholds });
+    sections.forEach(function (s) { observer.observe(s); });
+
+    refresh();
+
+    return {
+      refresh: refresh,
+      destroy: function () {
+        observer.disconnect();
+        target.removeAttribute('data-theme');
+      }
+    };
+  }
+
+  function boot() { window.themeSwitch = initThemeSwitch(); }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
+
+  window.initThemeSwitch = initThemeSwitch;
+})();
+</script>
+</body>
+</html>

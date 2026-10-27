@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Scroll-Driven Carousel Dots · Sand &amp; Surf demo</title>
+<style>
+  /* ---- Sand & Surf palette ---- */
+  :root {
+    --sand-1: #fbf7f0;
+    --sand-2: #f4ece0;
+    --sand-3: #ece0cd;
+    --ink: #1c2b33;
+    --ink-soft: #4a5d66;
+    --teal: #1f8a8a;
+    --teal-deep: #0f5c5c;
+    --surf: #2ec3c3;
+    --maxw: 880px;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    font-family: "Helvetica Neue", Arial, system-ui, sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(140% 90% at 50% -10%, var(--sand-1), var(--sand-2) 55%, var(--sand-3) 100%);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: var(--maxw); margin-inline: auto; padding-inline: 1.5rem; }
+
+  /* ============================================================
+     THE PART · Scroll-Driven Carousel Dots (copy of styles.css)
+     ============================================================ */
+
+  .sdc {
+    --sdc-slides: 3;
+    --sdc-dot-size: 0.625rem;
+    --sdc-dot-gap: 0.625rem;
+    --sdc-radius: 1.25rem;
+    --sdc-ink: #1c2b33;
+    --sdc-teal: #1f8a8a;
+    --sdc-teal-deep: #0f5c5c;
+    --sdc-surf: #2ec3c3;
+
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--sdc-radius);
+  }
+
+  .sdc-track {
+    display: flex;
+    overflow-x: scroll;
+    scroll-snap-type: x mandatory;
+    scroll-timeline: --sdc-carousel inline;
+    scrollbar-width: thin;
+  }
+  .sdc-track:focus-visible {
+    outline: 3px solid var(--sdc-surf);
+    outline-offset: -3px;
+  }
+
+  .sdc-slide {
+    flex: 0 0 100%;
+    scroll-snap-align: center;
+  }
+  .sdc-slide img,
+  .sdc-slide svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .sdc-dots {
+    --_pad-x: 0.6rem;
+    --_pad-y: 0.5rem;
+    position: absolute;
+    left: 50%;
+    bottom: 0.9rem;
+    translate: -50% 0;
+    z-index: 1;
+    display: flex;
+    gap: var(--sdc-dot-gap);
+    padding: var(--_pad-y) var(--_pad-x);
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.72);
+    backdrop-filter: blur(6px);
+    box-shadow: 0 4px 14px rgb(28 43 51 / 0.18);
+  }
+  .sdc-dot {
+    width: var(--sdc-dot-size);
+    height: var(--sdc-dot-size);
+    border-radius: 50%;
+    background: rgb(28 43 51 / 0.22);
+  }
+  .sdc-thumb {
+    position: absolute;
+    top: var(--_pad-y);
+    left: var(--_pad-x);
+    width: var(--sdc-dot-size);
+    height: var(--sdc-dot-size);
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--sdc-teal), var(--sdc-surf));
+    box-shadow: 0 0 0 2px rgb(255 255 255 / 0.65);
+    display: none;
+  }
+
+  .sdc-bar {
+    position: absolute;
+    left: 1rem;
+    right: 1rem;
+    bottom: 0.9rem;
+    height: 0.375rem;
+    z-index: 1;
+    border-radius: 999px;
+    transform-origin: 0 50%;
+    transform: scaleX(calc(1 / var(--sdc-slides)));
+    background: linear-gradient(90deg, var(--sdc-teal-deep), var(--sdc-surf));
+    box-shadow: 0 2px 10px rgb(15 92 92 / 0.45);
+    display: none;
+  }
+
+  @keyframes sdc-glide {
+    to {
+      translate: calc((var(--sdc-slides) - 1) * (var(--sdc-dot-size) + var(--sdc-dot-gap))) 0;
+    }
+  }
+  @keyframes sdc-grow {
+    to {
+      transform: scaleX(1);
+    }
+  }
+
+  @supports (animation-timeline: scroll()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .sdc-thumb {
+        display: block;
+        animation: auto sdc-glide linear forwards;
+        animation-timeline: --sdc-carousel;
+      }
+      .sdc-bar {
+        display: block;
+        animation: auto sdc-grow linear forwards;
+        animation-timeline: --sdc-carousel;
+      }
+      .sdc-track {
+        scrollbar-width: none;
+      }
+      .sdc-track::-webkit-scrollbar {
+        display: none;
+      }
+    }
+  }
+
+  /* ============================================================
+     DEMO LAYOUT
+     ============================================================ */
+
+  .hero {
+    min-height: 64vh;
+    display: grid;
+    place-content: center;
+    text-align: center;
+    padding: 5rem 1.5rem 3rem;
+  }
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: .32em;
+    font-size: .72rem;
+    font-weight: 700;
+    color: var(--teal-deep);
+    margin: 0 0 1.2rem;
+  }
+  .hero h1 {
+    font-size: clamp(2.4rem, 6.5vw, 4.6rem);
+    line-height: 1.04;
+    letter-spacing: -.02em;
+    margin: 0;
+    color: var(--ink);
+  }
+  .hero h1 em {
+    font-style: normal;
+    color: var(--teal-deep);
+  }
+  .hero > p.lede {
+    max-width: 52ch;
+    margin: 1.5rem auto 0;
+    color: var(--ink-soft);
+    font-size: 1.12rem;
+  }
+  .scroll-hint {
+    margin-top: 2.6rem;
+    font-size: .8rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .scroll-hint span {
+    display: block;
+    margin-top: .6rem;
+    font-size: 1.4rem;
+    animation: nudge 1.8s ease-in-out infinite;
+  }
+  @keyframes nudge {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(6px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-hint span { animation: none; }
+  }
+  .note {
+    margin-top: 1.4rem;
+    font-size: .82rem;
+    color: var(--ink-soft);
+    background: rgba(255,255,255,.55);
+    border: 1px dashed rgba(31,138,138,.4);
+    border-radius: 12px;
+    padding: .8rem 1rem;
+    display: inline-block;
+    max-width: 46ch;
+  }
+
+  section { padding-block: clamp(3.5rem, 10vh, 7.5rem); }
+
+  .section-head { max-width: 58ch; margin-bottom: 2.2rem; }
+  .section-head h2 {
+    font-size: clamp(1.7rem, 4vw, 2.6rem);
+    letter-spacing: -.015em;
+    line-height: 1.1;
+    margin: 0 0 .8rem;
+  }
+  .section-head p { color: var(--ink-soft); font-size: 1.05rem; margin: 0; }
+  .section-head code, .cards code {
+    background: rgba(31,138,138,.1);
+    border-radius: 6px;
+    padding: .1em .35em;
+    font-size: .92em;
+  }
+
+  .swipe-tip {
+    margin-top: .9rem;
+    font-size: .82rem;
+    color: var(--ink-soft);
+    text-align: center;
+    letter-spacing: .06em;
+  }
+
+  .sdc { box-shadow: 0 26px 60px -34px rgba(15,92,92,.6); }
+
+  /* photo-style slides: gradient scenes with inline SVG art */
+  .scene {
+    aspect-ratio: 16 / 9;
+    position: relative;
+    display: grid;
+  }
+  .scene svg { width: 100%; height: 100%; display: block; }
+  .scene .chip {
+    position: absolute;
+    top: .9rem;
+    left: .9rem;
+    font-size: .74rem;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--teal-deep);
+    background: rgba(255,255,255,.78);
+    border-radius: 999px;
+    padding: .35rem .8rem;
+  }
+  .scene--dawn  { background: linear-gradient(180deg, #2ec3c3, #1f8a8a 70%); }
+  .scene--sail  { background: linear-gradient(180deg, #59d3d3, #157676 75%); }
+  .scene--palm  { background: linear-gradient(180deg, #36b6ae, #0f5c5c 80%); }
+
+  /* content-style slides: numbered step tiles */
+  .tile {
+    aspect-ratio: 16 / 9;
+    display: grid;
+    place-content: center;
+    text-align: center;
+    color: #fff;
+    padding: 2rem;
+  }
+  .tile .n {
+    font-size: clamp(2.6rem, 8vw, 4.4rem);
+    font-weight: 700;
+    letter-spacing: -.03em;
+    line-height: 1;
+    opacity: .95;
+  }
+  .tile h3 { margin: .6rem 0 .3rem; font-size: 1.25rem; letter-spacing: -.01em; }
+  .tile p  { margin: 0; opacity: .88; font-size: .95rem; max-width: 34ch; }
+  .tile--1 { background: linear-gradient(135deg, #1f8a8a, #2ec3c3); }
+  .tile--2 { background: linear-gradient(135deg, #0f5c5c, #1f8a8a); }
+  .tile--3 { background: linear-gradient(135deg, #157676, #59d3d3); }
+  .tile--4 { background: linear-gradient(135deg, #0b4949, #1f8a8a); }
+
+  /* quote slides for the bar variant */
+  .quote {
+    aspect-ratio: 16 / 8;
+    display: grid;
+    place-content: center;
+    text-align: center;
+    padding: 2rem 2.5rem 3rem;
+    background: rgba(255,255,255,.75);
+  }
+  .quote blockquote {
+    margin: 0;
+    font-size: clamp(1.15rem, 2.6vw, 1.55rem);
+    line-height: 1.45;
+    letter-spacing: -.01em;
+    color: var(--ink);
+    max-width: 40ch;
+  }
+  .quote cite {
+    display: block;
+    margin-top: 1rem;
+    font-style: normal;
+    font-size: .85rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--teal-deep);
+    font-weight: 700;
+  }
+
+  /* how-it-works cards */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 1.25rem;
+  }
+  .card {
+    background: rgba(255, 255, 255, 0.66);
+    border: 1px solid rgba(28, 43, 51, 0.08);
+    border-radius: 18px;
+    padding: 1.8rem 1.6rem;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 18px 40px -28px rgba(15, 92, 92, 0.5);
+  }
+  .card .num {
+    display: inline-grid;
+    place-content: center;
+    width: 2.6rem; height: 2.6rem;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--teal), var(--surf));
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+  .card h3 { margin: 0 0 .5rem; font-size: 1.15rem; }
+  .card p  { margin: 0; color: var(--ink-soft); font-size: .95rem; }
+
+  footer {
+    text-align: center;
+    padding: 4rem 1.5rem 5rem;
+    color: var(--ink-soft);
+  }
+  footer .mark { font-weight: 700; color: var(--teal-deep); letter-spacing: -.02em; }
+</style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div>
+      <p class="eyebrow">Sand &amp; Surf · Scroll-driven CSS</p>
+      <h1>Carousel dots that<br /><em>ride the swipe</em></h1>
+      <p class="lede">Step indicator dots that track a scroll-snapping carousel through a
+         named CSS scroll timeline, no JavaScript anywhere on this page.</p>
+      <p class="scroll-hint">Scroll down, then swipe<span>↓</span></p>
+      <div><span class="note">Works in Chrome/Edge 115+ and Safari 26+. Elsewhere the carousels
+        still swipe and snap, with a plain scrollbar as the indicator.</span></div>
+    </div>
+  </header>
+
+  <!-- GALLERY 1 · dots over photo-style slides -->
+  <section class="wrap">
+    <div class="section-head">
+      <h2>The gliding dot</h2>
+      <p>The teal thumb is not stepping between states, it is scrubbing the track's
+         scroll position live. Drag a slide halfway and watch it hover between dots.</p>
+    </div>
+    <div class="sdc" style="--sdc-slides: 3">
+      <div class="sdc-track" role="region" aria-label="Island scenes carousel, 3 slides" tabindex="0">
+        <div class="sdc-dots" aria-hidden="true">
+          <span class="sdc-dot"></span>
+          <span class="sdc-dot"></span>
+          <span class="sdc-dot"></span>
+          <span class="sdc-thumb"></span>
+        </div>
+        <div class="sdc-slide">
+          <figure class="scene scene--dawn" style="margin:0">
+            <svg viewBox="0 0 400 225" role="img" aria-label="Sun over calm water">
+              <circle cx="200" cy="112" r="46" fill="#fbf7f0" opacity=".95"/>
+              <circle cx="200" cy="112" r="66" fill="#fbf7f0" opacity=".18"/>
+              <path d="M0 152 Q 50 140 100 152 T 200 152 T 300 152 T 400 152 V225 H0 Z" fill="#0f5c5c" opacity=".45"/>
+              <path d="M0 172 Q 50 160 100 172 T 200 172 T 300 172 T 400 172 V225 H0 Z" fill="#0f5c5c" opacity=".7"/>
+              <path d="M0 192 Q 50 180 100 192 T 200 192 T 300 192 T 400 192 V225 H0 Z" fill="#0f5c5c"/>
+            </svg>
+            <figcaption class="chip">01 · Dawn</figcaption>
+          </figure>
+        </div>
+        <div class="sdc-slide">
+          <figure class="scene scene--sail" style="margin:0">
+            <svg viewBox="0 0 400 225" role="img" aria-label="Sailboat on the sea">
+              <path d="M192 150 L192 38 L118 150 Z" fill="#fbf7f0"/>
+              <path d="M206 150 L206 66 L266 150 Z" fill="#f4ece0" opacity=".92"/>
+              <path d="M104 160 H296 L268 188 H132 Z" fill="#0f5c5c"/>
+              <path d="M0 196 Q 50 186 100 196 T 200 196 T 300 196 T 400 196 V225 H0 Z" fill="#0f5c5c" opacity=".8"/>
+              <circle cx="330" cy="52" r="22" fill="#fbf7f0" opacity=".85"/>
+            </svg>
+            <figcaption class="chip">02 · Sail</figcaption>
+          </figure>
+        </div>
+        <div class="sdc-slide">
+          <figure class="scene scene--palm" style="margin:0">
+            <svg viewBox="0 0 400 225" role="img" aria-label="Palm tree on a small island">
+              <ellipse cx="200" cy="204" rx="128" ry="26" fill="#0f5c5c"/>
+              <path d="M196 198 C 202 158 190 124 206 94" stroke="#0b4949" stroke-width="11" fill="none" stroke-linecap="round"/>
+              <path d="M206 94 C 172 72 140 74 116 94" stroke="#fbf7f0" stroke-width="9" fill="none" stroke-linecap="round"/>
+              <path d="M206 94 C 240 72 272 74 296 94" stroke="#fbf7f0" stroke-width="9" fill="none" stroke-linecap="round"/>
+              <path d="M206 94 C 188 64 160 52 132 52" stroke="#f4ece0" stroke-width="8" fill="none" stroke-linecap="round"/>
+              <path d="M206 94 C 224 64 252 52 280 52" stroke="#f4ece0" stroke-width="8" fill="none" stroke-linecap="round"/>
+              <circle cx="64" cy="52" r="18" fill="#fbf7f0" opacity=".8"/>
+            </svg>
+            <figcaption class="chip">03 · Shore</figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+    <p class="swipe-tip">Swipe on touch, two-finger scroll on a trackpad, or focus the carousel and use the arrow keys.</p>
+  </section>
+
+  <!-- GALLERY 2 · dots over content tiles -->
+  <section class="wrap">
+    <div class="section-head">
+      <h2>Any slide count, one custom property</h2>
+      <p>This one holds four slides. The rail gets four dots and
+         <code>--sdc-slides: 4</code>, and the thumb's travel distance is computed
+         from the dot size and gap, so it always lands dead center.</p>
+    </div>
+    <div class="sdc" style="--sdc-slides: 4">
+      <div class="sdc-track" role="region" aria-label="Setup steps carousel, 4 slides" tabindex="0">
+        <div class="sdc-dots" aria-hidden="true">
+          <span class="sdc-dot"></span>
+          <span class="sdc-dot"></span>
+          <span class="sdc-dot"></span>
+          <span class="sdc-dot"></span>
+          <span class="sdc-thumb"></span>
+        </div>
+        <div class="sdc-slide">
+          <div class="tile tile--1">
+            <span class="n">01</span>
+            <h3>Copy the CSS</h3>
+            <p>One stylesheet, no dependencies, no build step.</p>
+          </div>
+        </div>
+        <div class="sdc-slide">
+          <div class="tile tile--2">
+            <span class="n">02</span>
+            <h3>Set the slide count</h3>
+            <p>An inline custom property tells the indicator how many stops there are.</p>
+          </div>
+        </div>
+        <div class="sdc-slide">
+          <div class="tile tile--3">
+            <span class="n">03</span>
+            <h3>Add the rail</h3>
+            <p>One dot per slide plus a single thumb element. That is all the markup.</p>
+          </div>
+        </div>
+        <div class="sdc-slide">
+          <div class="tile tile--4">
+            <span class="n">04</span>
+            <h3>Ship it</h3>
+            <p>The browser drives the dots on the compositor. Zero JS shipped.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY 3 · the original bar variant -->
+  <section class="wrap">
+    <div class="section-head">
+      <h2>The original step bar</h2>
+      <p>The source demo's exact mechanic, kept as a variant. The bar starts at a
+         third of the width (slide 1 of 3) and grows to full width as the track
+         reaches its scroll end.</p>
+    </div>
+    <div class="sdc" style="--sdc-slides: 3; border: 1px solid rgba(28,43,51,.1)">
+      <div class="sdc-track" role="region" aria-label="Quotes carousel, 3 slides" tabindex="0">
+        <div class="sdc-bar" aria-hidden="true"></div>
+        <div class="sdc-slide">
+          <div class="quote">
+            <blockquote>"The indicator is absolutely positioned inside the scroller,
+              so it stays put while the slides move under it."</blockquote>
+            <cite>The containing block trick</cite>
+          </div>
+        </div>
+        <div class="sdc-slide">
+          <div class="quote">
+            <blockquote>"An anonymous scroll(nearest) lookup would skip the scroller,
+              which is exactly why this uses a named timeline."</blockquote>
+            <cite>Why scroll-timeline is named</cite>
+          </div>
+        </div>
+        <div class="sdc-slide">
+          <div class="quote">
+            <blockquote>"When the last slide is in view the indicator takes up the
+              full width of the scroller."</blockquote>
+            <cite>From the original demo notes</cite>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="wrap">
+    <div class="section-head">
+      <h2>Three lines carry the whole effect</h2>
+      <p>Everything else is layout. The timeline wiring is guarded by
+         <code>@supports</code> and <code>prefers-reduced-motion</code>.</p>
+    </div>
+    <div class="cards">
+      <article class="card">
+        <span class="num">1</span>
+        <h3>Publish</h3>
+        <p>The snapping track declares <code>scroll-timeline: --sdc-carousel inline</code>,
+           exposing its horizontal progress by name.</p>
+      </article>
+      <article class="card">
+        <span class="num">2</span>
+        <h3>Subscribe</h3>
+        <p>The thumb and the bar set <code>animation-timeline: --sdc-carousel</code>,
+           so their keyframes scrub with the scroll.</p>
+      </article>
+      <article class="card">
+        <span class="num">3</span>
+        <h3>Degrade</h3>
+        <p>Outside the guards the indicators stay hidden and a thin scrollbar
+           appears instead. The carousel keeps working everywhere.</p>
+      </article>
+    </div>
+  </section>
+
+  <footer>
+    <p><span class="mark">saltycodestudio</span> · Sand &amp; Surf parts library</p>
+    <p>Adapted with credit from Bramus Van Damme's horizontal carousel demo
+       at scroll-driven-animations.style (Apache-2.0).</p>
+  </footer>
+
+</body>
+</html>

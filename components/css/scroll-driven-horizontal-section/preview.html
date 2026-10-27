@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CSS Horizontal Scroll Section, Sand &amp; Surf demo</title>
+<style>
+  /* ---- Sand & Surf palette ---- */
+  :root {
+    --sand-1: #fbf7f0;
+    --sand-2: #f4ece0;
+    --sand-3: #ece0cd;
+    --ink: #1c2b33;
+    --ink-soft: #4a5d66;
+    --teal: #1f8a8a;
+    --teal-deep: #0f5c5c;
+    --surf: #2ec3c3;
+    --coral: #ff6f59;
+    --maxw: 1080px;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    font-family: "Helvetica Neue", Arial, system-ui, sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(140% 90% at 50% -10%, var(--sand-1), var(--sand-2) 55%, var(--sand-3) 100%);
+    line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: var(--maxw); margin-inline: auto; padding-inline: 1.5rem; }
+
+  /* ============================================================
+     PART ENGINE (styles.css of the part, inlined)
+     ============================================================ */
+
+  :root {
+    --shs-scroll-length: 500vh;
+    --shs-track-width: 250vmax;
+    --shs-bg: #0f5c5c;
+    --shs-fg: #fbf7f0;
+  }
+
+  .shs-section { position: relative; }
+
+  .shs-sticky {
+    height: 100vh;
+    height: 100dvh;
+    overflow-x: auto;
+    background: var(--shs-bg);
+    color: var(--shs-fg);
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .shs-track {
+    display: flex;
+    align-items: center;
+    height: 100vh;
+    height: 100dvh;
+    width: var(--shs-track-width);
+    min-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .shs-track > * {
+    flex: none;
+    box-sizing: border-box;
+    min-width: 60vmax;
+    padding-inline: 5vmax;
+  }
+
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+
+      @keyframes shs-move {
+        to { transform: translateX(calc(-100% + 100vw)); }
+      }
+
+      .shs-section {
+        height: var(--shs-scroll-length);
+        overflow: visible;
+        view-timeline-name: --shs-ride;
+        view-timeline-axis: block;
+      }
+
+      .shs-sticky {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        height: 100dvh;
+        overflow-x: hidden;
+      }
+
+      .shs-track {
+        will-change: transform;
+        animation: shs-move linear forwards;
+        animation-timeline: --shs-ride;
+        animation-range: contain 0% contain 100%;
+      }
+    }
+  }
+
+  /* ============================================================
+     DEMO LAYOUT
+     ============================================================ */
+
+  /* Hero */
+  .hero {
+    min-height: 92vh;
+    display: grid;
+    place-content: center;
+    text-align: center;
+    padding: 6rem 1.5rem 4rem;
+  }
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: .32em;
+    font-size: .72rem;
+    font-weight: 700;
+    color: var(--teal-deep);
+    margin: 0 0 1.2rem;
+  }
+  .hero h1 {
+    font-size: clamp(2.6rem, 7vw, 5.2rem);
+    line-height: 1.02;
+    letter-spacing: -.02em;
+    margin: 0;
+  }
+  .hero h1 em { font-style: normal; color: var(--teal-deep); }
+  .hero p {
+    max-width: 46ch;
+    margin: 1.6rem auto 0;
+    color: var(--ink-soft);
+    font-size: 1.15rem;
+  }
+  .scroll-hint {
+    margin-top: 3rem;
+    font-size: .8rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .scroll-hint span {
+    display: block;
+    margin-top: .6rem;
+    font-size: 1.4rem;
+    animation: nudge 1.8s ease-in-out infinite;
+  }
+  @keyframes nudge {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(6px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-hint span { animation: none; }
+  }
+  .note {
+    margin-top: 1.5rem;
+    font-size: .82rem;
+    color: var(--ink-soft);
+    background: rgba(255,255,255,.55);
+    border: 1px dashed rgba(31,138,138,.4);
+    border-radius: 12px;
+    padding: .8rem 1rem;
+    display: inline-block;
+  }
+
+  /* ---- The ride: demo panel styling ---- */
+  .ride { --shs-track-width: max-content; }
+
+  .shs-track { gap: clamp(2rem, 5vmax, 5rem); padding-inline: 8vmax; }
+
+  /* Neutralize the engine's generic child sizing for our panels */
+  .shs-track > * { min-width: 0; padding-inline: 0; }
+
+  .panel {
+    width: min(78vw, 560px);
+    display: grid;
+    align-content: center;
+    gap: 1.1rem;
+  }
+  .panel--intro, .panel--outro { width: min(85vw, 660px); }
+
+  .panel--intro h2, .panel--outro h2 {
+    font-size: clamp(2.2rem, 6vw, 4.2rem);
+    line-height: 1.04;
+    letter-spacing: -.02em;
+    margin: 0;
+    color: var(--sand-1);
+  }
+  .panel--intro em, .panel--outro em { font-style: normal; color: var(--surf); }
+  .panel--intro p, .panel--outro p {
+    margin: 0;
+    max-width: 46ch;
+    color: rgba(251,247,240,.78);
+    font-size: 1.1rem;
+  }
+
+  .art {
+    border-radius: 22px;
+    overflow: hidden;
+    box-shadow: 0 30px 70px -35px rgba(3, 26, 26, .9);
+  }
+  .art svg { display: block; width: 100%; height: auto; }
+
+  .panel figcaption {
+    display: flex;
+    align-items: baseline;
+    gap: .8rem;
+    color: rgba(251,247,240,.85);
+  }
+  .panel figcaption .idx {
+    font-size: .78rem;
+    font-weight: 700;
+    letter-spacing: .25em;
+    color: var(--surf);
+  }
+  .panel figcaption .cap { font-size: .95rem; }
+  .panel figure { margin: 0; display: grid; gap: 1rem; }
+
+  /* Outro explainer */
+  section.explain { padding-block: clamp(4rem, 11vh, 9rem); }
+  .section-head { max-width: 56ch; margin-bottom: 3rem; }
+  .section-head h2 {
+    font-size: clamp(1.9rem, 4.5vw, 3rem);
+    letter-spacing: -.015em;
+    line-height: 1.08;
+    margin: 0 0 1rem;
+  }
+  .section-head p { color: var(--ink-soft); font-size: 1.08rem; margin: 0; }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 1.25rem;
+  }
+  .card {
+    background: rgba(255,255,255,.66);
+    border: 1px solid rgba(28,43,51,.08);
+    border-radius: 18px;
+    padding: 1.8rem 1.6rem;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 18px 40px -28px rgba(15,92,92,.5);
+  }
+  .card .num {
+    display: inline-grid;
+    place-content: center;
+    width: 2.6rem; height: 2.6rem;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--teal), var(--surf));
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+  .card h3 { margin: 0 0 .5rem; font-size: 1.2rem; }
+  .card h3 code { font-size: 1rem; }
+  .card p { margin: 0; color: var(--ink-soft); font-size: .96rem; }
+
+  footer {
+    text-align: center;
+    padding: 2rem 1.5rem 6rem;
+    color: var(--ink-soft);
+  }
+  footer .mark { font-weight: 700; color: var(--teal-deep); letter-spacing: -.02em; }
+  footer p { max-width: 60ch; margin: .4rem auto; font-size: .95rem; }
+</style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div>
+      <p class="eyebrow">Sand &amp; Surf · Scroll-driven CSS</p>
+      <h1>Scroll down,<br /><em>glide sideways</em></h1>
+      <p>The next section rides horizontally as you keep scrolling down. No JavaScript,
+         just a sticky wrapper and a CSS <code>view()</code> timeline.</p>
+      <p class="scroll-hint">Keep scrolling<span>↓</span></p>
+      <div><span class="note">Chrome/Edge 115+ and Safari 26+ play the ride. Other browsers get a calm, swipeable strip instead.</span></div>
+    </div>
+  </header>
+
+  <!-- THE HORIZONTAL RIDE -->
+  <section class="shs-section ride" aria-label="Horizontal showcase">
+    <div class="shs-sticky">
+      <div class="shs-track">
+
+        <div class="panel panel--intro">
+          <h2>Ride the <em>tide</em></h2>
+          <p>Vertical scroll in, horizontal motion out. This strip is pinned by a sticky
+             wrapper while a view timeline drives its translate. Keep scrolling down.</p>
+        </div>
+
+        <div class="panel">
+          <figure>
+            <div class="art">
+              <svg viewBox="0 0 640 480" role="img" aria-label="Stylized sunrise over calm water">
+                <defs>
+                  <linearGradient id="shs-sky" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#fbf7f0"/>
+                    <stop offset="65%" stop-color="#cdeeee"/>
+                    <stop offset="100%" stop-color="#2ec3c3"/>
+                  </linearGradient>
+                </defs>
+                <rect width="640" height="480" fill="url(#shs-sky)"/>
+                <circle cx="320" cy="228" r="120" fill="#ff6f59" opacity=".18"/>
+                <circle cx="320" cy="228" r="84" fill="#ff6f59"/>
+                <path d="M0 330 Q 80 302 160 330 T 320 330 T 480 330 T 640 330 V480 H0 Z" fill="#2ec3c3" opacity=".85"/>
+                <path d="M0 372 Q 80 344 160 372 T 320 372 T 480 372 T 640 372 V480 H0 Z" fill="#1f8a8a"/>
+                <path d="M0 416 Q 80 392 160 416 T 320 416 T 480 416 T 640 416 V480 H0 Z" fill="#0f5c5c"/>
+              </svg>
+            </div>
+            <figcaption><span class="idx">01</span><span class="cap">First light. Each panel is just a flex child of the track.</span></figcaption>
+          </figure>
+        </div>
+
+        <div class="panel">
+          <figure>
+            <div class="art">
+              <svg viewBox="0 0 640 480" role="img" aria-label="Layered rolling waves">
+                <rect width="640" height="480" fill="#f4ece0"/>
+                <path d="M0 140 C 120 100, 220 180, 340 140 S 560 100, 640 140 V480 H0 Z" fill="#7fe3e3" opacity=".55"/>
+                <path d="M0 220 C 120 180, 220 260, 340 220 S 560 180, 640 220 V480 H0 Z" fill="#2ec3c3" opacity=".85"/>
+                <path d="M0 305 C 120 265, 220 345, 340 305 S 560 265, 640 305 V480 H0 Z" fill="#1f8a8a"/>
+                <path d="M0 392 C 120 352, 220 432, 340 392 S 560 352, 640 392 V480 H0 Z" fill="#0f5c5c"/>
+                <g fill="#fbf7f0" opacity=".85">
+                  <circle cx="150" cy="243" r="6"/><circle cx="180" cy="230" r="4"/>
+                  <circle cx="468" cy="330" r="6"/><circle cx="498" cy="318" r="4"/>
+                </g>
+              </svg>
+            </div>
+            <figcaption><span class="idx">02</span><span class="cap">Open swell. The animation range is contain 0% to contain 100%.</span></figcaption>
+          </figure>
+        </div>
+
+        <div class="panel">
+          <figure>
+            <div class="art">
+              <svg viewBox="0 0 640 480" role="img" aria-label="Sand dunes with beach grass under a teal sun">
+                <rect width="640" height="480" fill="#fbf7f0"/>
+                <circle cx="470" cy="142" r="64" fill="#2ec3c3"/>
+                <path d="M0 300 Q 200 212 420 290 T 640 280 V480 H0 Z" fill="#ece0cd"/>
+                <path d="M0 368 Q 180 300 360 358 T 640 350 V480 H0 Z" fill="#e0d0b4"/>
+                <path d="M0 430 Q 220 382 440 424 T 640 420 V480 H0 Z" fill="#d2bd99"/>
+                <g stroke="#1c2b33" stroke-width="4" stroke-linecap="round" opacity=".55" fill="none">
+                  <path d="M140 330 q 6 -26 2 -40"/>
+                  <path d="M152 332 q 14 -20 24 -28"/>
+                  <path d="M130 334 q -12 -18 -20 -24"/>
+                </g>
+              </svg>
+            </div>
+            <figcaption><span class="idx">03</span><span class="cap">Dunes. All artwork here is inline SVG, no assets to load.</span></figcaption>
+          </figure>
+        </div>
+
+        <div class="panel panel--outro">
+          <h2>All <em>CSS.</em></h2>
+          <p>The strip parks with its right edge against the viewport, then the page
+             releases and vertical scrolling resumes below.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPLAINER -->
+  <section class="explain wrap">
+    <div class="section-head">
+      <h2>Three layers, one ride</h2>
+      <p>The whole effect is a tall wrapper, a sticky window, and one keyframe
+         bound to a view timeline.</p>
+    </div>
+    <div class="cards">
+      <article class="card">
+        <span class="num">1</span>
+        <h3><code>.shs-section</code></h3>
+        <p>Stretched to 500vh to create scroll room, and tracked by a named view timeline as it crosses the scrollport.</p>
+      </article>
+      <article class="card">
+        <span class="num">2</span>
+        <h3><code>.shs-sticky</code></h3>
+        <p>Sticks to the top of the viewport for the whole ride and hides the horizontal overflow.</p>
+      </article>
+      <article class="card">
+        <span class="num">3</span>
+        <h3><code>.shs-track</code></h3>
+        <p>Translates to calc(-100% + 100vw), so the strip ends with its right edge exactly against the viewport.</p>
+      </article>
+    </div>
+  </section>
+
+  <footer>
+    <p><span class="mark">saltycodestudio</span> · Sand &amp; Surf parts library</p>
+    <p>Technique from the scroll-driven-animations.style demo by Bramus Van Damme
+       (Apache-2.0), adapted from an original by Cameron Knight. Rebuilt here with
+       Sand &amp; Surf artwork and progressive-enhancement guards.</p>
+  </footer>
+
+</body>
+</html>

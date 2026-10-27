@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Editorial Mega Link · Sand &amp; Surf demo</title>
+<style>
+  /* ============================================================
+     Sand & Surf palette
+     ============================================================ */
+  :root {
+    --sand-1: #fbf7f0;
+    --sand-2: #f4ece0;
+    --sand-3: #ece0cd;
+    --ink: #1c2b33;
+    --ink-soft: #4a5d66;
+    --teal: #1f8a8a;
+    --teal-deep: #0f5c5c;
+    --surf: #2ec3c3;
+    --coral: #FF6F59;
+    --night: #0e171c;
+    --night-2: #16242b;
+    --maxw: 1080px;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    font-family: "Helvetica Neue", Arial, system-ui, sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(140% 90% at 50% -10%, var(--sand-1), var(--sand-2) 55%, var(--sand-3) 100%);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: var(--maxw); margin-inline: auto; padding-inline: 1.5rem; }
+
+  /* ============================================================
+     THE PART: Editorial Mega Link
+     ============================================================ */
+  .mega-link {
+    --ml-ink: #1c2b33;
+    --ml-hover: #0f5c5c;
+    --ml-rule: rgba(28, 43, 51, 0.22);
+    --ml-rule-hover: #1f8a8a;
+    --ml-size: clamp(2.25rem, 1.2rem + 5.5vw, 6rem);
+    --ml-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --ml-speed: 420ms;
+
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: clamp(1rem, 4vw, 2.5rem);
+    width: 100%;
+    padding-block: clamp(0.9rem, 3vw, 1.6rem);
+    font-size: var(--ml-size);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--ml-ink);
+    text-decoration: none;
+    transition: color var(--ml-speed) var(--ml-ease);
+  }
+
+  .mega-link::before {
+    content: "";
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 1px;
+    background: var(--ml-rule);
+  }
+
+  .mega-link::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 0.08em;
+    background: var(--ml-rule-hover);
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+    transition: transform var(--ml-speed) var(--ml-ease);
+  }
+
+  .mega-link__text {
+    display: inline-block;
+    transition: transform var(--ml-speed) var(--ml-ease);
+  }
+
+  .mega-link__arrow {
+    flex: none;
+    width: 1.5em;
+    height: 0.5em;
+    transition: transform var(--ml-speed) var(--ml-ease);
+  }
+
+  .mega-link:hover,
+  .mega-link:focus-visible { color: var(--ml-hover); }
+
+  .mega-link:hover::after,
+  .mega-link:focus-visible::after { transform: scaleX(1); }
+
+  .mega-link:hover .mega-link__text,
+  .mega-link:focus-visible .mega-link__text { transform: translateX(0.12em); }
+
+  .mega-link:hover .mega-link__arrow,
+  .mega-link:focus-visible .mega-link__arrow { transform: translateX(0.35em); }
+
+  .mega-link:focus-visible {
+    outline: 3px solid var(--ml-rule-hover);
+    outline-offset: 6px;
+    border-radius: 4px;
+  }
+
+  .mega-link--dark {
+    --ml-ink: #f4ece0;
+    --ml-hover: #7fe3e3;
+    --ml-rule: rgba(244, 236, 224, 0.28);
+    --ml-rule-hover: #2ec3c3;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mega-link,
+    .mega-link::after,
+    .mega-link__text,
+    .mega-link__arrow {
+      transition-duration: 0.01ms;
+    }
+  }
+
+  /* ============================================================
+     DEMO LAYOUT
+     ============================================================ */
+  .hero {
+    min-height: 72vh;
+    display: grid;
+    place-content: center;
+    text-align: center;
+    padding: 6rem 1.5rem 3rem;
+  }
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: .32em;
+    font-size: .72rem;
+    font-weight: 700;
+    color: var(--teal-deep);
+    margin: 0 0 1.2rem;
+  }
+  .hero h1 {
+    font-size: clamp(2.6rem, 7vw, 5.2rem);
+    line-height: 1.02;
+    letter-spacing: -.02em;
+    margin: 0;
+  }
+  .hero h1 em { font-style: normal; color: var(--teal-deep); }
+  .hero p {
+    max-width: 46ch;
+    margin: 1.6rem auto 0;
+    color: var(--ink-soft);
+    font-size: 1.15rem;
+  }
+  .scroll-hint {
+    margin-top: 3rem;
+    font-size: .8rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .scroll-hint span {
+    display: block;
+    margin-top: .6rem;
+    font-size: 1.4rem;
+    animation: nudge 1.8s ease-in-out infinite;
+  }
+  @keyframes nudge {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(6px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-hint span { animation: none; }
+  }
+
+  section { padding-block: clamp(4rem, 11vh, 9rem); }
+
+  .section-head { max-width: 58ch; margin-bottom: clamp(2rem, 6vh, 4rem); }
+  .section-head h2 {
+    font-size: clamp(1.7rem, 4vw, 2.6rem);
+    letter-spacing: -.015em;
+    line-height: 1.08;
+    margin: 0 0 .8rem;
+  }
+  .section-head p { color: var(--ink-soft); font-size: 1.05rem; margin: 0; }
+  .section-head code {
+    background: rgba(31, 138, 138, 0.1);
+    border-radius: 6px;
+    padding: .1em .35em;
+    font-size: .92em;
+  }
+
+  .index-label {
+    text-transform: uppercase;
+    letter-spacing: .28em;
+    font-size: .7rem;
+    font-weight: 700;
+    color: var(--ink-soft);
+    margin: 0 0 .4rem;
+  }
+
+  .mega-list { display: block; }
+
+  /* ============================================================
+     Dark band section
+     ============================================================ */
+  .night {
+    background:
+      radial-gradient(120% 100% at 50% 0%, var(--night-2), var(--night) 70%);
+    color: var(--sand-2);
+  }
+  .night .section-head h2 { color: var(--sand-1); }
+  .night .section-head p { color: #9fb3ba; }
+  .night .index-label { color: #9fb3ba; }
+  .night .section-head code {
+    background: rgba(46, 195, 195, 0.14);
+    color: #7fe3e3;
+  }
+
+  /* ============================================================
+     Footer
+     ============================================================ */
+  footer {
+    text-align: center;
+    padding: 5rem 1.5rem 6rem;
+    color: var(--ink-soft);
+  }
+  footer .mark { font-weight: 700; color: var(--teal-deep); letter-spacing: -.02em; }
+
+  .note {
+    margin-top: 1.5rem;
+    font-size: .82rem;
+    color: var(--ink-soft);
+    background: rgba(255,255,255,.55);
+    border: 1px dashed rgba(31,138,138,.4);
+    border-radius: 12px;
+    padding: .8rem 1rem;
+    display: inline-block;
+  }
+</style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div>
+      <p class="eyebrow">Sand &amp; Surf · Pure CSS</p>
+      <h1>The <em>mega link</em><br />earns the whole row</h1>
+      <p>One anchor, one inline SVG arrow, zero JavaScript. Hover any row below:
+         the arrow slides, a thick rule redraws from the left, the words nudge along.</p>
+      <p class="scroll-hint">Scroll to the index<span>↓</span></p>
+      <div><span class="note">Try tabbing through the links too. Keyboard focus gets the full treatment plus a visible ring.</span></div>
+    </div>
+  </header>
+
+  <!-- LIGHT INDEX -->
+  <section class="wrap">
+    <div class="section-head">
+      <h2>The editorial index</h2>
+      <p>Stack the links in a <code>&lt;nav&gt;</code> and you get the classic
+         magazine table of contents. Each row is the whole component, no wrappers needed.</p>
+    </div>
+    <p class="index-label">Index · 01 to 04</p>
+    <nav class="mega-list" aria-label="Site index">
+      <a class="mega-link" href="#products">
+        <span class="mega-link__text">See all products</span>
+        <svg class="mega-link__arrow" viewBox="0 0 72 24" fill="none" aria-hidden="true" focusable="false">
+          <path d="M1.5 12h64" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+          <path d="M56 2.5 65.5 12 56 21.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </a>
+      <a class="mega-link" href="#journal">
+        <span class="mega-link__text">Read the journal</span>
+        <svg class="mega-link__arrow" viewBox="0 0 72 24" fill="none" aria-hidden="true" focusable="false">
+          <path d="M1.5 12h64" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+          <path d="M56 2.5 65.5 12 56 21.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </a>
+      <a class="mega-link" href="#studio">
+        <span class="mega-link__text">Inside the studio</span>
+        <svg class="mega-link__arrow" viewBox="0 0 72 24" fill="none" aria-hidden="true" focusable="false">
+          <path d="M1.5 12h64" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+          <path d="M56 2.5 65.5 12 56 21.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </a>
+      <a class="mega-link" href="#contact">
+        <span class="mega-link__text">Start a project</span>
+        <svg class="mega-link__arrow" viewBox="0 0 72 24" fill="none" aria-hidden="true" focusable="false">
+          <path d="M1.5 12h64" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+          <path d="M56 2.5 65.5 12 56 21.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </a>
+    </nav>
+  </section>
+
+  <!-- DARK BAND -->
+  <section class="night">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Same anchor, night mode</h2>
+        <p>Add <code>.mega-link--dark</code> and the custom properties flip to
+           warm sand and surf glow. Nothing structural changes.</p>
+      </div>
+      <p class="index-label">After dark · 05 to 06</p>
+      <nav class="mega-list" aria-label="Night index">
+        <a class="mega-link mega-link--dark" href="#collection">
+          <span class="mega-link__text">Night collection</span>
+          <svg class="mega-link__arrow" viewBox="0 0 72 24" fill="none" aria-hidden="true" focusable="false">
+            <path d="M1.5 12h64" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+            <path d="M56 2.5 65.5 12 56 21.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </a>
+        <a class="mega-link mega-link--dark" href="#archive">
+          <span class="mega-link__text">Browse the archive</span>
+          <svg class="mega-link__arrow" viewBox="0 0 72 24" fill="none" aria-hidden="true" focusable="false">
+            <path d="M1.5 12h64" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+            <path d="M56 2.5 65.5 12 56 21.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </a>
+      </nav>
+    </div>
+  </section>
+
+  <!-- TUNED VARIANTS -->
+  <section class="wrap">
+    <div class="section-head">
+      <h2>Tune it per instance</h2>
+      <p>Every knob is a custom property, so a smaller size or a coral rule is
+         one inline <code>style</code> attribute away.</p>
+    </div>
+    <p class="index-label">Custom · size and color</p>
+    <nav class="mega-list" aria-label="Tuned examples">
+      <a class="mega-link" href="#coral"
+         style="--ml-rule-hover: #FF6F59; --ml-hover: #b23c28;">
+        <span class="mega-link__text">Coral rule instead</span>
+        <svg class="mega-link__arrow" viewBox="0 0 72 24" fill="none" aria-hidden="true" focusable="false">
+          <path d="M1.5 12h64" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+          <path d="M56 2.5 65.5 12 56 21.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </a>
+      <a class="mega-link" href="#smaller"
+         style="--ml-size: clamp(1.5rem, 1rem + 2.6vw, 2.6rem);">
+        <span class="mega-link__text">A calmer, smaller row for footers</span>
+        <svg class="mega-link__arrow" viewBox="0 0 72 24" fill="none" aria-hidden="true" focusable="false">
+          <path d="M1.5 12h64" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+          <path d="M56 2.5 65.5 12 56 21.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </a>
+      <a class="mega-link" href="#slower"
+         style="--ml-speed: 700ms;">
+        <span class="mega-link__text">Slower, more cinematic</span>
+        <svg class="mega-link__arrow" viewBox="0 0 72 24" fill="none" aria-hidden="true" focusable="false">
+          <path d="M1.5 12h64" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+          <path d="M56 2.5 65.5 12 56 21.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </a>
+    </nav>
+  </section>
+
+  <footer>
+    <p><span class="mark">saltycodestudio</span> · Sand &amp; Surf parts library</p>
+    <p>Pattern seen on coffee-tech.com by MAKETHECUT and Or Halevi, rebuilt from scratch in house style.</p>
+  </footer>
+
+</body>
+</html>

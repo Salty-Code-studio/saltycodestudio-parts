@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Reverse-Scrolling Columns, Sand &amp; Surf demo</title>
+<style>
+  /* ==== Sand & Surf palette ==== */
+  :root {
+    --sand-1: #fbf7f0;
+    --sand-2: #f4ece0;
+    --sand-3: #ece0cd;
+    --ink: #1c2b33;
+    --ink-soft: #4a5d66;
+    --teal: #1f8a8a;
+    --teal-deep: #0f5c5c;
+    --surf: #2ec3c3;
+    --coral: #ff6f59;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: "Helvetica Neue", Arial, system-ui, sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(140% 90% at 50% -10%, var(--sand-1), var(--sand-2) 55%, var(--sand-3) 100%);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ============================================================
+     THE COMPONENT (styles.css, inlined for a standalone preview)
+     ============================================================ */
+
+  .rsc-columns {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--rsc-gap, clamp(0.75rem, 2.5vw, 1.75rem));
+    width: 100%;
+    max-width: var(--rsc-maxw, 80rem);
+    margin-inline: auto;
+    padding-inline: var(--rsc-gutter, clamp(0.75rem, 3vw, 2rem));
+  }
+
+  .rsc-column {
+    display: flex;
+    flex-direction: column;
+    gap: var(--rsc-gap, clamp(0.75rem, 2.5vw, 1.75rem));
+    padding-block: var(--rsc-column-offset, 10vh);
+  }
+
+  .rsc-item { margin: 0; }
+
+  .rsc-art {
+    aspect-ratio: var(--rsc-art-ratio, 3 / 4);
+    border-radius: var(--rsc-radius, 1rem);
+    overflow: hidden;
+    background: var(--rsc-art-bg, #ece0cd);
+  }
+
+  .rsc-art > img,
+  .rsc-art > svg,
+  .rsc-art > video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .rsc-caption {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.5rem 0.25rem 0;
+    font-size: 0.85rem;
+    color: var(--rsc-caption-color, inherit);
+  }
+
+  @supports (animation-timeline: scroll()) {
+    @media (prefers-reduced-motion: no-preference) {
+
+      /* Content is about to be translated out of the wrapper, so clip it */
+      .rsc-columns {
+        overflow-y: hidden;
+      }
+
+      /* Reversed columns travel bottom-up, so flip their item order too */
+      .rsc-reverse {
+        flex-direction: column-reverse;
+      }
+
+      /* Start: column shifted up by its own height, held by one viewport.
+         End: the mirror image, shifted down but held by one viewport. */
+      @keyframes rsc-adjust-position {
+        from { transform: translateY(calc(-100% + 100vh)); }
+        to   { transform: translateY(calc(100% - 100vh)); }
+      }
+
+      /* scroll(root block) links the animation to the page scroll */
+      .rsc-reverse {
+        animation: rsc-adjust-position linear forwards;
+        animation-timeline: scroll(root block);
+      }
+    }
+  }
+
+  /* ============================================================
+     DEMO CHROME (fixed, stays out of the scroll math)
+     ============================================================ */
+
+  .topbar {
+    position: fixed;
+    inset: 1rem 1rem auto 1rem;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+  }
+  .topbar .pill {
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    max-width: 46rem;
+    padding: 0.7rem 1.2rem;
+    border-radius: 999px;
+    background: rgba(251, 247, 240, 0.82);
+    border: 1px solid rgba(28, 43, 51, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 14px 34px -22px rgba(15, 92, 92, 0.55);
+  }
+  .topbar .wave {
+    flex: none;
+    width: 2.1rem;
+    height: 2.1rem;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--teal), var(--surf));
+    display: grid;
+    place-content: center;
+  }
+  .topbar h1 {
+    margin: 0;
+    font-size: 0.98rem;
+    letter-spacing: -0.01em;
+  }
+  .topbar p {
+    margin: 0.1rem 0 0;
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+  }
+  @media (max-width: 640px) {
+    .topbar p { display: none; }
+  }
+
+  .credit {
+    position: fixed;
+    right: 1rem;
+    bottom: 1rem;
+    z-index: 10;
+    font-size: 0.72rem;
+    color: var(--ink-soft);
+    background: rgba(251, 247, 240, 0.82);
+    border: 1px solid rgba(28, 43, 51, 0.1);
+    border-radius: 999px;
+    padding: 0.4rem 0.85rem;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  .credit strong { color: var(--teal-deep); font-weight: 700; }
+
+  /* ============================================================
+     DEMO ART, pure CSS gradient tiles in the palette
+     ============================================================ */
+
+  .rsc-art {
+    box-shadow: 0 22px 48px -30px rgba(15, 92, 92, 0.6);
+  }
+  .rsc-caption span:last-child { color: var(--ink-soft); }
+
+  /* Sunrise: surf disc over a sand horizon */
+  .art-sunrise {
+    background:
+      radial-gradient(circle 5.5rem at 50% 38%, var(--surf) 97%, transparent 100%),
+      linear-gradient(to bottom, var(--sand-1) 0 62%, var(--teal-deep) 62%);
+  }
+  /* Tide: layered teal stripes */
+  .art-tide {
+    background:
+      repeating-linear-gradient(-8deg,
+        rgba(251, 247, 240, 0.14) 0 0.6rem, transparent 0.6rem 2.2rem),
+      linear-gradient(175deg, var(--surf), var(--teal) 45%, var(--teal-deep));
+  }
+  /* Dune: soft overlapping sand mounds */
+  .art-dune {
+    background:
+      radial-gradient(90% 55% at 18% 108%, var(--sand-3) 60%, transparent 61%),
+      radial-gradient(110% 62% at 88% 112%, #dcc9a8 55%, transparent 56%),
+      linear-gradient(to bottom, var(--sand-1), var(--sand-2));
+  }
+  /* Reef: conic swirl of teals */
+  .art-reef {
+    background:
+      radial-gradient(circle at 50% 50%, rgba(251, 247, 240, 0.16) 0 18%, transparent 19%),
+      conic-gradient(from 210deg at 60% 40%,
+        var(--teal-deep), var(--teal), var(--surf), var(--teal-deep));
+  }
+  /* Buoy: the single coral accent of the page */
+  .art-buoy {
+    background:
+      radial-gradient(circle 3.6rem at 68% 30%, var(--coral) 97%, transparent 100%),
+      linear-gradient(200deg, var(--sand-1), var(--sand-3) 70%);
+  }
+  /* Night swim: surf glow rising out of ink */
+  .art-night {
+    background:
+      radial-gradient(120% 85% at 50% 115%, rgba(46, 195, 195, 0.75), transparent 62%),
+      linear-gradient(to bottom, var(--ink), #12333c);
+  }
+</style>
+</head>
+<body>
+
+  <!-- Fixed title, kept out of the document flow so the columns own the scroll -->
+  <header class="topbar">
+    <div class="pill">
+      <span class="wave" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+          <path d="M1 11c2.6 0 2.6-3 5.2-3s2.6 3 5.2 3 2.6-3 5.6-3" stroke="#fbf7f0" stroke-width="1.8" stroke-linecap="round"/>
+          <path d="M1 15c2.6 0 2.6-3 5.2-3s2.6 3 5.2 3 2.6-3 5.6-3" stroke="#fbf7f0" stroke-width="1.8" stroke-linecap="round" opacity=".55"/>
+        </svg>
+      </span>
+      <div>
+        <h1>Reverse-Scrolling Columns</h1>
+        <p>The outer columns glide against your scroll, pure CSS scroll() timeline, zero JavaScript. Best in Chrome 115+ or Safari 26+.</p>
+      </div>
+    </div>
+  </header>
+
+  <!-- THE PART: three columns, outer two reversed -->
+  <div class="rsc-columns">
+
+    <div class="rsc-column rsc-reverse">
+      <figure class="rsc-item">
+        <div class="rsc-art art-sunrise"></div>
+        <figcaption class="rsc-caption"><span>First Light</span> <span>2019</span></figcaption>
+      </figure>
+      <figure class="rsc-item">
+        <div class="rsc-art art-tide"></div>
+        <figcaption class="rsc-caption"><span>Tide Lines</span> <span>2020</span></figcaption>
+      </figure>
+      <figure class="rsc-item">
+        <div class="rsc-art art-night"></div>
+        <figcaption class="rsc-caption"><span>Night Swim</span> <span>2021</span></figcaption>
+      </figure>
+      <figure class="rsc-item">
+        <div class="rsc-art art-dune"></div>
+        <figcaption class="rsc-caption"><span>Dune Walk</span> <span>2022</span></figcaption>
+      </figure>
+      <figure class="rsc-item">
+        <div class="rsc-art art-reef"></div>
+        <figcaption class="rsc-caption"><span>Reef Turn</span> <span>2023</span></figcaption>
+      </figure>
+      <figure class="rsc-item">
+        <div class="rsc-art art-buoy"></div>
+        <figcaption class="rsc-caption"><span>Buoy Nine</span> <span>2024</span></figcaption>
+      </figure>
+      <figure class="rsc-item">
+        <div class="rsc-art art-tide"></div>
+        <figcaption class="rsc-caption"><span>Undertow</span> <span>2025</span></figcaption>
+      </figure>
+      <figure class="rsc-item">
+        <div class="rsc-art art-sunrise"></div>
+        <figcaption class="rsc-caption"><span>Slack Water</span> <span>2026</span></figcaption>
+      </figure>
+    </div>
+
+    <div class="rsc-column">
+      <figure class="rsc-item">
+        <div class="rsc-art art-night"></div>
+        <figcaption class="rsc-caption"><span>Deep End</span> <span>2019</span></figcaption>
+      </figure>
+      <figure class="rsc-item">
+        <div class="rsc-art art-dune"></div>
+        <figcaption class="rsc-caption"><span>Salt Flats</span> <span>2020</span></figcaption>
+      </figure>
+      <figure class="rsc-item">
+        <div class="rsc-art art-sunrise"></div>
+        <figcaption class="rsc-caption"><span>Shore Break</span> <span>2021</span></figcaption>
+      </figure>
+      <figure class="rsc-item">
+        <div class="rsc-art art-reef"></div>
+        <figcaption class="rsc-caption"><span>Blue Hour</span> <span>2022</span></figcaption>
+      </figure>
+      <figure class="rsc-item">
+        <div class="rsc-art art-tide"></div>
+        <figcaption class="rsc-caption"><span>Swell Map</span> <span>2023</span></figcaption>
+      </figure>
+      <figure class="rsc-item">
+        <div class="rsc-art art-night"></div>
+        <figcaption class="rsc-caption"><span>Moon Pool</span> <span>2024</span></figcaption>
+      </figure>
+      <figure class="rsc-item">
+        <div class="rsc-art art-dune"></div>
+        <figcaption class="rsc-caption"><span>Backshore</span> <span>2025</span></figcaption>
+      </figure>
+      <figure class="rsc-item">
+        <div class="rsc-art art-reef"></div>
+        <figcaption class="rsc-caption"><span>Still Reef</span> <span>2026</span></figcaption>
+      </figure>
+    </div>
+
+    <div class="rsc-column rsc-reverse">
+      <figure class="rsc-item">
+        <div class="rsc-art art-reef"></div>
+        <figcaption class="rsc-caption"><span>Current</span> <span>2019</span></figcaption>
+      </figure>
+      <figure class="rsc-item">
+        <div class="rsc-art art-dune"></div>
+        <figcaption class="rsc-caption"><span>Warm Sand</span> <span>2020</span></figcaption>
+      </figure>
+      <figure class="rsc-item">
+        <div class="rsc-art art-sunrise"></div>
+        <figcaption class="rsc-caption"><span>Horizon</span> <span>2021</span></figcaption>
+      </figure>
+      <figure class="rsc-item">
+        <div class="rsc-art art-night"></div>
+        <figcaption class="rsc-caption"><span>Ink Water</span> <span>2022</span></figcaption>
+      </figure>
+      <figure class="rsc-item">
+        <div class="rsc-art art-tide"></div>
+        <figcaption class="rsc-caption"><span>Cross Sea</span> <span>2023</span></figcaption>
+      </figure>
+      <figure class="rsc-item">
+        <div class="rsc-art art-sunrise"></div>
+        <figcaption class="rsc-caption"><span>Low Sun</span> <span>2024</span></figcaption>
+      </figure>
+      <figure class="rsc-item">
+        <div class="rsc-art art-night"></div>
+        <figcaption class="rsc-caption"><span>Last Lap</span> <span>2025</span></figcaption>
+      </figure>
+      <figure class="rsc-item">
+        <div class="rsc-art art-dune"></div>
+        <figcaption class="rsc-caption"><span>Ebb</span> <span>2026</span></figcaption>
+      </figure>
+    </div>
+
+  </div>
+
+  <div class="credit"><strong>saltycodestudio</strong> parts, after Bramus Van Damme</div>
+
+</body>
+</html>

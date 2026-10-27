@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brand Loader Reveal, usage example</title>
+  <link rel="stylesheet" href="styles.css" />
+  <noscript>
+    <style>
+      /* Without JS the 4 second CSS failsafe already reveals the page.
+         This just makes the no-JS path instant. */
+      .blr-loader { display: none; }
+      .blr-stagger { opacity: 1; transform: none; }
+    </style>
+  </noscript>
+</head>
+<body>
+
+  <!-- Loader overlay: keep it as the first child of <body>. -->
+  <div class="blr-loader" role="status" aria-label="Loading">
+    <!-- Inline SVG placeholder mark. Swap in your own logo. -->
+    <svg class="blr-loader__mark" viewBox="0 0 96 96" fill="none" aria-hidden="true">
+      <circle cx="48" cy="48" r="44" stroke="currentColor" stroke-width="4" />
+      <path d="M24 56c8-10 16-10 24 0s16 10 24 0"
+            stroke="currentColor" stroke-width="5" stroke-linecap="round" />
+    </svg>
+  </div>
+
+  <main>
+    <header>
+      <p class="blr-stagger blr-d1">Eyebrow line</p>
+      <h1 class="blr-stagger blr-d2">Your headline arrives after the curtain</h1>
+      <p class="blr-stagger blr-d3">Supporting copy fades and rises a beat later.</p>
+      <a class="blr-stagger blr-d4" href="#more">Call to action</a>
+    </header>
+
+    <section id="more">
+      <h2>Regular content</h2>
+      <p>Anything without the stagger classes renders normally.
+         It was simply covered by the overlay while the page loaded.</p>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+  <script>
+    initLoaderReveal({
+      minTime: 1200,
+      onRevealed: function () {
+        // The overlay is gone and the hero is staggering in.
+      }
+    });
+  </script>
+
+</body>
+</html>

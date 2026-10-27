@@ -1,0 +1,256 @@
+/* ==========================================================================
+   Shrinking Header with Shadow (scroll-driven-shrinking-header)
+
+   A profile style page header that compresses and picks up a drop shadow
+   over the first 150px of scroll. Everything is scrubbed by the native CSS
+   animation-timeline: scroll() function, so scrolling back up replays it in
+   reverse. No JavaScript, no observers, no listeners.
+
+   Adapted from "Shadow on header after scroll" by Bramus Van Damme, part of
+   the scroll-driven-animations.style demo collection (Apache-2.0). The full
+   source link lives in this part's README.md and part.json. Restyled for the
+   saltycodestudio Sand & Surf palette.
+
+   Tune the three custom properties below to change the feel.
+   ========================================================================== */
+
+:root {
+  --shh-distance: 150px;     /* scroll distance over which the header shrinks */
+  --shh-height: 12rem;       /* expanded height of the identity block */
+  --shh-height-min: 4.75rem; /* compressed height once fully scrolled */
+}
+
+/* ---- Base header (this is also the graceful fallback look) ---- */
+
+.shh-header {
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: #ffffff;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif;
+  /* Browsers without scroll-driven animations keep a permanent soft shadow,
+     so the sticky bar still separates cleanly from the content below it. */
+  box-shadow: 0 5px 5px -3px rgba(14, 58, 64, 0.26);
+}
+
+.shh-inner {
+  position: relative;
+  width: min(90vw, 1100px);
+  margin-inline: auto;
+}
+
+/* Decorative wave art pinned to the bottom of the header. It drifts up,
+   scales back and fades as the header compresses. */
+.shh-bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgba(46, 195, 195, 0) 35%, rgba(46, 195, 195, 0.12));
+}
+
+.shh-bg svg {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 70%;
+}
+
+/* Identity block: avatar column + text column, bottom aligned. */
+.shh-info {
+  display: grid;
+  grid-template-columns: 8em 1fr;
+  gap: 2rem;
+  align-items: end;
+  height: var(--shh-height);
+}
+
+.shh-info > div {
+  min-width: 0;
+}
+
+.shh-avatar {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 0.3rem solid #ffffff;
+  overflow: hidden;
+  background: #2ec3c3;
+  box-shadow: 0 12px 26px -16px rgba(15, 92, 92, 0.65);
+}
+
+.shh-avatar svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.shh-name {
+  margin: 0;
+  font-size: 2rem;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: #1c2b33;
+}
+
+.shh-meta {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 0.35rem 0 0;
+  padding: 0 0 0.75rem;
+  font-style: italic;
+  font-size: 0.92rem;
+  color: #4a5d66;
+}
+
+.shh-meta li:not(:first-child)::before {
+  content: "\00B7";
+  margin-right: 0.75rem;
+  opacity: 0.6;
+}
+
+/* Round action button. Tucks downward slightly as the bar compresses. */
+.shh-action {
+  position: absolute;
+  right: 1.25rem;
+  bottom: 0;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  display: grid;
+  place-content: center;
+  font-size: 1.25rem;
+  text-decoration: none;
+  color: #ffffff;
+  background: #1f8a8a;
+  box-shadow: 0 10px 20px -12px rgba(15, 92, 92, 0.8);
+}
+
+.shh-action:hover {
+  background: #0f5c5c;
+}
+
+.shh-action:focus-visible {
+  outline: 2px solid #1f8a8a;
+  outline-offset: 2px;
+}
+
+/* ---- Keyframes (each element gets its own tiny animation) ---- */
+
+@keyframes shh-compress-info {
+  to {
+    grid-template-columns: 4em 1fr;
+    gap: 1rem;
+    height: var(--shh-height-min);
+  }
+}
+
+@keyframes shh-shrink-name {
+  to {
+    font-size: 1.5rem;
+  }
+}
+
+@keyframes shh-add-shadow {
+  to {
+    box-shadow: 0 5px 5px -3px rgba(14, 58, 64, 0.26);
+  }
+}
+
+@keyframes shh-tuck-action {
+  to {
+    translate: 0% 40%;
+  }
+}
+
+@keyframes shh-fade-bg {
+  to {
+    translate: 0% -6%;
+    scale: 0.96;
+    opacity: 0.3;
+  }
+}
+
+/* ---- Scroll-driven wiring (progressive enhancement) ----
+   Only browsers that support animation-timeline get the shrinking behavior,
+   and only for users who have not asked for reduced motion. Everyone else
+   keeps the sticky header with its permanent shadow from the base rules. */
+
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .shh-header {
+      /* Fixed instead of sticky, so the shrinking header never changes the
+         document height while the very scroll it reacts to is happening. */
+      position: fixed;
+      box-shadow: none;
+      animation: shh-add-shadow linear both;
+    }
+
+    /* The header leaves the normal flow, so push the next sibling down by
+       the expanded header height to compensate. */
+    .shh-header + * {
+      margin-top: calc(var(--shh-height) + 2rem);
+    }
+
+    .shh-info {
+      animation: shh-compress-info linear both;
+    }
+
+    .shh-name {
+      animation: shh-shrink-name linear both;
+    }
+
+    .shh-action {
+      animation: shh-tuck-action linear both;
+    }
+
+    .shh-bg {
+      animation: shh-fade-bg linear both;
+    }
+
+    /* The animation shorthand above resets animation-timeline, so this
+       timeline hookup must stay AFTER every animation declaration. All five
+       animations run over the same short stretch of page scroll. */
+    .shh-header,
+    .shh-info,
+    .shh-name,
+    .shh-action,
+    .shh-bg {
+      animation-timeline: scroll();
+      animation-range: 0 var(--shh-distance, 150px);
+    }
+  }
+}
+
+/* ---- Small screens: start from a slightly tighter expanded state ---- */
+
+@media (max-width: 600px) {
+  :root {
+    --shh-height: 9.5rem;
+  }
+
+  .shh-info {
+    grid-template-columns: 6em 1fr;
+    gap: 1.25rem;
+  }
+
+  .shh-name {
+    font-size: 1.6rem;
+  }
+
+  .shh-meta {
+    gap: 0.5rem;
+  }
+
+  .shh-meta li:not(:first-child)::before {
+    margin-right: 0.5rem;
+  }
+}

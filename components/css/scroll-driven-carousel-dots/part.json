@@ -1,0 +1,13 @@
+{
+  "name": "Scroll-Driven Carousel Dots",
+  "slug": "scroll-driven-carousel-dots",
+  "category": "css",
+  "tier": "practical",
+  "tags": ["carousel", "dots", "step-indicator", "scroll-timeline", "scroll-snap", "scroll-driven", "no-js", "gallery", "pagination"],
+  "description": "Step indicator dots that track a horizontally scroll-snapping carousel through a named CSS scroll progress timeline, with a gliding active dot plus a growing step-bar variant, all with zero JavaScript.",
+  "deps": [],
+  "files": ["styles.css", "index.html"],
+  "usage": "Copy styles.css, wrap your slides in a .sdc > .sdc-track structure, set --sdc-slides on the .sdc wrapper to the slide count, and drop the .sdc-dots rail (one .sdc-dot per slide plus one .sdc-thumb) as the first child of the track. Swap the rail for a single .sdc-bar element to get the growing step-bar flavor instead.",
+  "source": "https://scroll-driven-animations.style/demos/horizontal-carousel/css/",
+  "license": "Apache-2.0 (demo by Bramus Van Damme, scroll-driven-animations.style), adapted with credit"
+}

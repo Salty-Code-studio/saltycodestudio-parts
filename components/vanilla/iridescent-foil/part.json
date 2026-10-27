@@ -1,0 +1,24 @@
+{
+  "name": "Iridescent Foil",
+  "slug": "iridescent-foil",
+  "category": "vanilla",
+  "tier": "showcase",
+  "tags": [
+    "webgl",
+    "shader",
+    "background",
+    "iridescence",
+    "holographic",
+    "thin-film",
+    "foil",
+    "interactive"
+  ],
+  "description": "A raw-WebGL thin-film iridescence surface: holographic foil and oil-on-water sheen tuned to a coastal Sand & Surf palette, whose hue band visibly travels as the pointer moves.",
+  "deps": [],
+  "files": [
+    "iridescent-foil.js"
+  ],
+  "usage": "Add a <canvas>, then call initIridescentFoil(canvas, opts) to paint a full-bleed holographic foil background that reacts to the pointer.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
+}

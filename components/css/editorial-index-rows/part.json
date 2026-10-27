@@ -1,0 +1,13 @@
+{
+  "name": "Editorial Index Rows",
+  "slug": "editorial-index-rows",
+  "category": "css",
+  "tier": "practical",
+  "tags": ["nav", "menu", "hover", "editorial", "typography", "background-clip", "arrow", "focus-visible", "index"],
+  "description": "Oversized editorial nav rows separated by hairline rules. Hovering or focusing a row sweeps the label from muted grey to full ink with a background-clip text fill, slides the trailing arrow in from the left with a spring overshoot, and tints the row background subtly. Pure CSS, keyboard focus mirrors hover.",
+  "deps": [],
+  "files": ["styles.css", "index.html"],
+  "usage": "Include styles.css, then drop a nav with a ul.eir where each li holds an a.eir-row containing span.eir-num, span.eir-label and the span.eir-arrow inline SVG (copy the rows from index.html). Retheme by overriding the --eir-* custom properties on .eir or any ancestor.",
+  "source": "Pattern seen on https://coffee-tech.com (Awwwards SOTD by MAKETHECUT and Or Halevi), implemented from scratch",
+  "license": "MIT (original clean-room implementation by saltycodestudio-parts, visual pattern inspired by coffee-tech.com by MAKETHECUT and Or Halevi, no code or assets copied)"
+}

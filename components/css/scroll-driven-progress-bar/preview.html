@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Scroll-Driven Progress Bar · Sand &amp; Surf demo</title>
+<style>
+  /* ---- Sand & Surf palette ---- */
+  :root {
+    --sand-1: #fbf7f0;
+    --sand-2: #f4ece0;
+    --sand-3: #ece0cd;
+    --ink: #1c2b33;
+    --ink-soft: #4a5d66;
+    --teal: #1f8a8a;
+    --teal-deep: #0f5c5c;
+    --surf: #2ec3c3;
+    --coral: #ff6f59;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    font-family: "Helvetica Neue", Arial, system-ui, sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(140% 90% at 50% -10%, var(--sand-1), var(--sand-2) 55%, var(--sand-3) 100%);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ============================================================
+     THE PART: SCROLL-DRIVEN PROGRESS BAR
+     ============================================================ */
+  .sdp-bar {
+    position: fixed;
+    inset: 0 0 auto 0;
+    height: var(--sdp-height, 6px);
+    z-index: var(--sdp-z, 100);
+    background: var(--sdp-fill, linear-gradient(90deg, #0f5c5c, #1f8a8a 55%, #2ec3c3));
+    transform-origin: 0 50%;
+    transform: scaleX(0);
+    pointer-events: none;
+    box-shadow: 0 1px 8px rgba(15, 92, 92, 0.35);
+  }
+
+  @keyframes sdp-grow {
+    from { transform: scaleX(0); }
+    to   { transform: scaleX(1); }
+  }
+
+  @supports (animation-timeline: scroll()) {
+    @media (prefers-reduced-motion: no-preference) {
+      html {
+        scroll-timeline: --sdp-page-scroll block;
+      }
+      .sdp-bar {
+        animation-name: sdp-grow;
+        animation-duration: auto;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: --sdp-page-scroll;
+      }
+    }
+  }
+
+  /* ============================================================
+     DEMO LAYOUT: a long-form coastal essay
+     ============================================================ */
+
+  /* Hero */
+  .hero {
+    min-height: 88vh;
+    display: grid;
+    place-content: center;
+    text-align: center;
+    padding: 6rem 1.5rem 4rem;
+  }
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: .32em;
+    font-size: .72rem;
+    font-weight: 700;
+    color: var(--teal-deep);
+    margin: 0 0 1.2rem;
+  }
+  .hero h1 {
+    font-size: clamp(2.5rem, 6.5vw, 4.8rem);
+    line-height: 1.04;
+    letter-spacing: -.02em;
+    margin: 0;
+  }
+  .hero h1 em {
+    font-style: normal;
+    color: var(--teal-deep);
+  }
+  .hero .lede {
+    max-width: 46ch;
+    margin: 1.6rem auto 0;
+    color: var(--ink-soft);
+    font-size: 1.15rem;
+  }
+  .note {
+    margin-top: 1.6rem;
+    font-size: .82rem;
+    color: var(--ink-soft);
+    background: rgba(255, 255, 255, .55);
+    border: 1px dashed rgba(31, 138, 138, .4);
+    border-radius: 12px;
+    padding: .8rem 1.1rem;
+    display: inline-block;
+  }
+  .scroll-hint {
+    margin-top: 2.6rem;
+    font-size: .78rem;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .scroll-hint span {
+    display: block;
+    margin-top: .5rem;
+    font-size: 1.35rem;
+    animation: nudge 1.8s ease-in-out infinite;
+  }
+  @keyframes nudge {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(6px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-hint span { animation: none; }
+  }
+
+  /* Article */
+  article {
+    max-width: 68ch;
+    margin-inline: auto;
+    padding: 0 1.5rem 3rem;
+  }
+  .chapter { padding-block: clamp(2.5rem, 7vh, 5rem); }
+  .kicker {
+    display: flex;
+    align-items: center;
+    gap: .8rem;
+    font-size: .74rem;
+    font-weight: 700;
+    letter-spacing: .28em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin: 0 0 1rem;
+  }
+  .kicker::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(31, 138, 138, .45), transparent);
+  }
+  .chapter h2 {
+    font-size: clamp(1.7rem, 4vw, 2.4rem);
+    line-height: 1.12;
+    letter-spacing: -.015em;
+    margin: 0 0 1.2rem;
+  }
+  .chapter p { margin: 0 0 1.15rem; color: var(--ink); }
+  .chapter p:last-child { margin-bottom: 0; }
+
+  .chapter--open p:first-of-type::first-letter {
+    float: left;
+    font-size: 3.4em;
+    line-height: .84;
+    padding: .06em .12em 0 0;
+    font-weight: 700;
+    color: var(--teal-deep);
+  }
+
+  /* Figures */
+  figure.art {
+    margin: clamp(2rem, 6vh, 4rem) 0;
+  }
+  figure.art svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0 26px 60px -34px rgba(15, 92, 92, .6);
+  }
+  figure.art figcaption {
+    margin-top: .8rem;
+    font-size: .84rem;
+    color: var(--ink-soft);
+    text-align: center;
+  }
+
+  /* Pull quote */
+  .pull {
+    margin: clamp(2rem, 6vh, 4rem) 0;
+    padding: 1.8rem 2rem;
+    border-left: 4px solid var(--surf);
+    border-radius: 0 18px 18px 0;
+    background: rgba(255, 255, 255, .6);
+    font-size: clamp(1.15rem, 2.6vw, 1.45rem);
+    line-height: 1.45;
+    letter-spacing: -.01em;
+    color: var(--teal-deep);
+    font-weight: 600;
+  }
+  .pull small {
+    display: block;
+    margin-top: .8rem;
+    font-size: .8rem;
+    font-weight: 400;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  /* Wave divider */
+  .divider {
+    display: grid;
+    place-content: center;
+    padding-block: .5rem;
+    color: var(--teal);
+  }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    padding: 5rem 1.5rem 6rem;
+    color: var(--ink-soft);
+  }
+  footer .mark {
+    font-weight: 700;
+    color: var(--teal-deep);
+    letter-spacing: -.02em;
+  }
+  footer p { margin: .4rem 0; }
+</style>
+</head>
+<body>
+
+  <!-- THE PART: one element, wired to the page scroll in CSS -->
+  <div class="sdp-bar" aria-hidden="true"></div>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div>
+      <p class="eyebrow">Sand &amp; Surf · CSS part</p>
+      <h1>Scroll-Driven<br /><em>Progress Bar</em></h1>
+      <p class="lede">The teal bar pinned to the top of this page fills as you read,
+        driven by a native CSS scroll timeline. No JavaScript anywhere.</p>
+      <div><span class="note">Works in Chrome/Edge 115+ and Safari 26+. Elsewhere the bar
+        quietly stays hidden and the page reads exactly the same.</span></div>
+      <p class="scroll-hint">Scroll and watch the top edge<span>↓</span></p>
+    </div>
+  </header>
+
+  <!-- LONG-READ ARTICLE (gives the bar room to work) -->
+  <article>
+
+    <section class="chapter chapter--open">
+      <p class="kicker">Chapter 01</p>
+      <h2>Reading the water</h2>
+      <p>Every surfer learns it eventually: the ocean tells you what it is about
+        to do, long before it does it. A dark band on the horizon, a ripple that
+        runs against the grain, a channel where the foam refuses to settle. None
+        of it is random. The water is a page, and the people who ride it well
+        are simply the ones who learned to read.</p>
+      <p>The same is true of a long page on the web. Readers want to know where
+        they are, how far the shore is, and whether the effort of paddling on
+        is going to pay off. That is the whole job of a reading progress bar.
+        It is a horizon line for a document.</p>
+    </section>
+
+    <figure class="art">
+      <svg viewBox="0 0 800 320" role="img" aria-label="Stylized illustration of layered teal ocean waves under a pale coral sun">
+        <defs>
+          <linearGradient id="pv-sky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#fbf7f0" />
+            <stop offset="1" stop-color="#ece0cd" />
+          </linearGradient>
+        </defs>
+        <rect width="800" height="320" fill="url(#pv-sky)" />
+        <circle cx="620" cy="92" r="52" fill="#ff6f59" opacity=".8" />
+        <circle cx="620" cy="92" r="72" fill="#ff6f59" opacity=".14" />
+        <path d="M0 200 C 90 178, 170 226, 270 210 C 370 194, 430 168, 530 190 C 630 212, 710 232, 800 198 L 800 320 L 0 320 Z"
+              fill="#2ec3c3" opacity=".5" />
+        <path d="M0 234 C 110 210, 190 258, 300 242 C 410 226, 470 204, 570 226 C 670 248, 730 260, 800 236 L 800 320 L 0 320 Z"
+              fill="#1f8a8a" opacity=".8" />
+        <path d="M0 272 C 120 252, 220 292, 330 278 C 440 264, 520 248, 620 266 C 700 280, 760 288, 800 274 L 800 320 L 0 320 Z"
+              fill="#0f5c5c" />
+      </svg>
+      <figcaption>Inline SVG, no image files. Everything on this page ships in one document.</figcaption>
+    </figure>
+
+    <section class="chapter">
+      <p class="kicker">Chapter 02</p>
+      <h2>How the bar rides the scroll</h2>
+      <p>Under the hood there is exactly one moving part. The stylesheet creates
+        a named Scroll Progress Timeline on the root element, then hands that
+        timeline to a two-frame animation on the bar. The browser does the
+        bookkeeping: zero percent scrolled means an empty bar, one hundred
+        percent scrolled means a full one, and every position in between maps
+        straight across.</p>
+      <p>There is no scroll listener throttling to tune, no resize observer to
+        babysit, no layout thrash to worry about. The scroll position is the
+        animation clock. When you stop scrolling, everything simply holds
+        still, costing nothing.</p>
+    </section>
+
+    <blockquote class="pull">
+      "Not the width is being animated, the element is scaled down on the
+      x-axis using a transform, to leverage composited animations."
+      <small>Bramus Van Damme, scroll-driven-animations.style</small>
+    </blockquote>
+
+    <section class="chapter">
+      <p class="kicker">Chapter 03</p>
+      <h2>Why transform beats width</h2>
+      <p>An older version of this pattern would animate the bar's width from a
+        script, forcing the browser through style and layout work on every
+        scroll event. This one scales the bar on the x-axis instead. Transforms
+        are composited, which means the fill can be updated on the compositor
+        thread while the main thread is busy parsing, painting or running your
+        application code.</p>
+      <p>In practice you can throw a heavy page at it, image decoding, hydration,
+        third-party scripts, and the bar keeps gliding at full frame rate. It
+        is the difference between paddling against the current and letting the
+        wave carry you.</p>
+    </section>
+
+    <p class="divider" aria-hidden="true">
+      <svg width="120" height="18" viewBox="0 0 120 18" fill="none">
+        <path d="M2 9 C 12 2, 22 2, 32 9 S 52 16, 62 9 S 82 2, 92 9 S 112 16, 118 9"
+              stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+      </svg>
+    </p>
+
+    <section class="chapter">
+      <p class="kicker">Chapter 04</p>
+      <h2>Built to degrade gracefully</h2>
+      <p>The bar starts life collapsed to zero width, and only the browsers that
+        understand scroll timelines are allowed to stretch it. That guard lives
+        in a single at-rule, so a visitor on an older browser never sees a
+        broken or permanently full bar. They just see this article, complete
+        and readable, with a clean top edge.</p>
+      <p>Reduced-motion preferences get the same respect. If a visitor has asked
+        their system for less movement, the bar stays out of the picture
+        entirely. The content never depends on it, which is exactly how a
+        progress indicator should behave: helpful when present, invisible when
+        absent.</p>
+    </section>
+
+    <section class="chapter">
+      <p class="kicker">Chapter 05</p>
+      <h2>Make it yours in one line</h2>
+      <p>Thickness, color and stacking are all exposed as custom properties on
+        the bar itself. Want a hairline in deep teal under a fixed header? Set
+        the height to two pixels, the fill to a solid color, and raise the
+        z-index above your navigation. A festival site might want eight pixels
+        of coral gradient instead. Same element, same stylesheet, one inline
+        style attribute of difference.</p>
+      <p>And because the whole part is a single div and a handful of
+        declarations, it composes cleanly with everything else in the library.
+        Drop it on a case study, a changelog, documentation, any page long
+        enough to earn a horizon line.</p>
+    </section>
+
+  </article>
+
+  <footer>
+    <p><span class="mark">saltycodestudio</span> · Sand &amp; Surf parts library</p>
+    <p>You made it to the shore. The bar at the very top should be sitting at exactly 100%.</p>
+  </footer>
+
+</body>
+</html>

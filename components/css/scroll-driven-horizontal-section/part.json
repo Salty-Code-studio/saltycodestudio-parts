@@ -1,0 +1,13 @@
+{
+  "name": "CSS Horizontal Scroll Section",
+  "slug": "scroll-driven-horizontal-section",
+  "category": "css",
+  "tier": "showcase",
+  "tags": ["scroll-driven", "horizontal-scroll", "view-timeline", "sticky", "pin", "animation-timeline", "no-js", "progressive-enhancement"],
+  "description": "A section that scrolls horizontally while the page scrolls vertically, pure CSS: a tall wrapper creates scroll room, a sticky inner pins the viewport, and a view() timeline drives the sideways translate of a wide strip.",
+  "deps": [],
+  "files": ["styles.css", "index.html"],
+  "usage": "Include styles.css, then wrap your panels in the three-layer shell: <section class=\"shs-section\"><div class=\"shs-sticky\"><div class=\"shs-track\">panels</div></div></section>. Every direct child of .shs-track is one stop on the ride; tune ride length with the shs-scroll-length custom property and strip width with shs-track-width (set it to max-content to fit the panels exactly).",
+  "source": "https://scroll-driven-animations.style/demos/horizontal-section/css/",
+  "license": "Apache-2.0 (demo by Bramus Van Damme, scroll-driven-animations.style), adapted with credit"
+}

@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Editorial Index Rows · Sand &amp; Surf demo</title>
+<style>
+  /* ==== Sand & Surf palette ==== */
+  :root {
+    --sand-1: #fbf7f0;
+    --sand-2: #f4ece0;
+    --sand-3: #ece0cd;
+    --ink: #1c2b33;
+    --ink-soft: #4a5d66;
+    --teal: #1f8a8a;
+    --teal-deep: #0f5c5c;
+    --surf: #2ec3c3;
+    --maxw: 1080px;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    font-family: "Helvetica Neue", Arial, system-ui, sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(140% 90% at 50% -10%, var(--sand-1), var(--sand-2) 55%, var(--sand-3) 100%);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: var(--maxw); margin-inline: auto; padding-inline: 1.5rem; }
+
+  /* ============================================================
+     THE PART: Editorial Index Rows (styles.css, inlined)
+     ============================================================ */
+
+  .eir {
+    --eir-ink: #1c2b33;
+    --eir-muted: rgba(28, 43, 51, 0.45);
+    --eir-rule: rgba(28, 43, 51, 0.14);
+    --eir-tint: rgba(31, 138, 138, 0.06);
+    --eir-arrow: #0f5c5c;
+    --eir-size: clamp(2.2rem, 6.5vw, 4.6rem);
+    --eir-speed: 480ms;
+    --eir-overshoot: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .eir > li { border-top: 1px solid var(--eir-rule); }
+  .eir > li:last-child { border-bottom: 1px solid var(--eir-rule); }
+
+  .eir-row {
+    display: flex;
+    align-items: center;
+    gap: clamp(1rem, 3vw, 2.25rem);
+    padding-block: clamp(1.1rem, 3.2vw, 2rem);
+    padding-inline: clamp(0.4rem, 2vw, 1.25rem);
+    font-size: var(--eir-size);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    text-decoration: none;
+    color: var(--eir-ink);
+    background-color: transparent;
+    transition: background-color calc(var(--eir-speed) * 0.6) ease;
+  }
+
+  .eir-num {
+    flex: none;
+    font-size: max(0.72rem, 0.2em);
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    font-variant-numeric: tabular-nums;
+    color: var(--eir-muted);
+    transition: color calc(var(--eir-speed) * 0.6) ease;
+  }
+
+  .eir-label {
+    margin-inline-end: auto;
+    color: var(--eir-muted);
+    transition: color calc(var(--eir-speed) * 0.75) ease;
+  }
+
+  .eir-arrow {
+    flex: none;
+    inline-size: 0.62em;
+    color: var(--eir-arrow);
+    transition:
+      transform var(--eir-speed) var(--eir-overshoot),
+      opacity calc(var(--eir-speed) * 0.5) ease-out;
+  }
+  .eir-arrow svg {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .eir-arrow {
+      opacity: 0;
+      transform: translateX(-0.7em);
+    }
+  }
+
+  .eir-row:is(:hover, :focus-visible) {
+    background-color: var(--eir-tint);
+  }
+  .eir-row:is(:hover, :focus-visible) .eir-label {
+    color: var(--eir-ink);
+  }
+  .eir-row:is(:hover, :focus-visible) .eir-num {
+    color: var(--eir-arrow);
+  }
+  .eir-row:is(:hover, :focus-visible) .eir-arrow {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .eir-row:focus-visible {
+    outline: 2px solid var(--eir-arrow);
+    outline-offset: -2px;
+  }
+
+  @supports ((-webkit-background-clip: text) or (background-clip: text)) {
+    .eir-label {
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+      background-image: linear-gradient(
+        to right,
+        var(--eir-ink) 0%,
+        var(--eir-ink) 50%,
+        var(--eir-muted) 56%,
+        var(--eir-muted) 100%
+      );
+      background-size: 240% 100%;
+      background-position: 100% 0;
+      background-repeat: no-repeat;
+      -webkit-background-clip: text;
+      background-clip: text;
+      transition: background-position var(--eir-speed) cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .eir-row:is(:hover, :focus-visible) .eir-label {
+      background-position: 0% 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .eir-row,
+    .eir-num,
+    .eir-label,
+    .eir-arrow {
+      transition-duration: 0.01ms;
+    }
+  }
+
+  /* ============================================================
+     DEMO LAYOUT
+     ============================================================ */
+
+  /* Hero */
+  .hero {
+    min-height: 82vh;
+    display: grid;
+    place-content: center;
+    text-align: center;
+    padding: 6rem 1.5rem 4rem;
+  }
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: .32em;
+    font-size: .72rem;
+    font-weight: 700;
+    color: var(--teal-deep);
+    margin: 0 0 1.2rem;
+  }
+  .hero h1 {
+    font-size: clamp(2.6rem, 7vw, 5rem);
+    line-height: 1.02;
+    letter-spacing: -.02em;
+    margin: 0;
+  }
+  .hero h1 em {
+    font-style: normal;
+    color: var(--teal-deep);
+  }
+  .hero p {
+    max-width: 46ch;
+    margin: 1.6rem auto 0;
+    color: var(--ink-soft);
+    font-size: 1.15rem;
+  }
+  .hint {
+    display: inline-block;
+    margin-top: 2.4rem;
+    font-size: .8rem;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--teal-deep);
+    background: rgba(255, 255, 255, .6);
+    border: 1px dashed rgba(31, 138, 138, .45);
+    border-radius: 999px;
+    padding: .65rem 1.3rem;
+  }
+
+  section { padding-block: clamp(4rem, 10vh, 8rem); }
+
+  .section-head { max-width: 58ch; margin-bottom: 2.6rem; }
+  .section-head .kicker {
+    text-transform: uppercase;
+    letter-spacing: .28em;
+    font-size: .7rem;
+    font-weight: 700;
+    color: var(--teal-deep);
+    margin: 0 0 .8rem;
+  }
+  .section-head h2 {
+    font-size: clamp(1.8rem, 4.2vw, 2.8rem);
+    letter-spacing: -.015em;
+    line-height: 1.08;
+    margin: 0 0 .9rem;
+  }
+  .section-head p { color: var(--ink-soft); font-size: 1.05rem; margin: 0; }
+
+  /* Dark band variant */
+  .band-dark {
+    background:
+      linear-gradient(160deg, #14242c, #0e171c 70%);
+    border-radius: 26px;
+    padding: clamp(2rem, 5vw, 4rem);
+    box-shadow: 0 30px 70px -40px rgba(15, 92, 92, .8);
+  }
+  .band-dark .section-head h2 { color: var(--sand-2); }
+  .band-dark .section-head .kicker { color: var(--surf); }
+  .band-dark .section-head p { color: rgba(244, 236, 224, .65); }
+  .band-dark .eir {
+    --eir-ink: #f4ece0;
+    --eir-muted: rgba(244, 236, 224, 0.35);
+    --eir-rule: rgba(244, 236, 224, 0.16);
+    --eir-tint: rgba(46, 195, 195, 0.08);
+    --eir-arrow: #2ec3c3;
+  }
+
+  /* How-it-works cards */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.25rem;
+  }
+  .card {
+    background: rgba(255, 255, 255, 0.66);
+    border: 1px solid rgba(28, 43, 51, 0.08);
+    border-radius: 18px;
+    padding: 1.8rem 1.6rem;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 18px 40px -28px rgba(15, 92, 92, 0.5);
+  }
+  .card .glyph {
+    display: inline-grid;
+    place-content: center;
+    width: 2.6rem; height: 2.6rem;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--teal), var(--surf));
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+  }
+  .card h3 { margin: 0 0 .5rem; font-size: 1.15rem; }
+  .card p  { margin: 0; color: var(--ink-soft); font-size: .95rem; }
+  .card code {
+    font-size: .85em;
+    background: rgba(31, 138, 138, .1);
+    border-radius: 6px;
+    padding: .1em .35em;
+  }
+
+  footer {
+    text-align: center;
+    padding: 4rem 1.5rem 6rem;
+    color: var(--ink-soft);
+  }
+  footer .mark { font-weight: 700; color: var(--teal-deep); letter-spacing: -.02em; }
+</style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div>
+      <p class="eyebrow">Sand &amp; Surf · Pure CSS · No JavaScript</p>
+      <h1>An index that <em>fills with ink</em></h1>
+      <p>Oversized editorial nav rows: hover or focus a row and the label sweeps
+         from muted grey to full ink while the arrow springs in from the left.</p>
+      <span class="hint">Hover a row below, or press Tab</span>
+    </div>
+  </header>
+
+  <!-- MAIN DEMO -->
+  <section class="wrap" aria-labelledby="demo-title">
+    <div class="section-head">
+      <p class="kicker">The part</p>
+      <h2 id="demo-title">Five rows, three moves</h2>
+      <p>Each row runs the ink sweep, the overshoot arrow, and a whisper of teal
+         behind the whole line. Keyboard focus mirrors hover exactly, plus a ring.</p>
+    </div>
+
+    <nav aria-label="Site index">
+      <ul class="eir">
+        <li>
+          <a class="eir-row" href="#technology">
+            <span class="eir-num" aria-hidden="true">01</span>
+            <span class="eir-label">Technology</span>
+            <span class="eir-arrow" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h17" /><path d="M13 5l7 7-7 7" /></svg>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="eir-row" href="#efficiency">
+            <span class="eir-num" aria-hidden="true">02</span>
+            <span class="eir-label">Efficiency</span>
+            <span class="eir-arrow" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h17" /><path d="M13 5l7 7-7 7" /></svg>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="eir-row" href="#sustainability">
+            <span class="eir-num" aria-hidden="true">03</span>
+            <span class="eir-label">Sustainability</span>
+            <span class="eir-arrow" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h17" /><path d="M13 5l7 7-7 7" /></svg>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="eir-row" href="#craft">
+            <span class="eir-num" aria-hidden="true">04</span>
+            <span class="eir-label">Craft</span>
+            <span class="eir-arrow" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h17" /><path d="M13 5l7 7-7 7" /></svg>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="eir-row" href="#contact">
+            <span class="eir-num" aria-hidden="true">05</span>
+            <span class="eir-label">Contact</span>
+            <span class="eir-arrow" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h17" /><path d="M13 5l7 7-7 7" /></svg>
+            </span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </section>
+
+  <!-- DARK RETHEME -->
+  <section class="wrap" aria-labelledby="dark-title">
+    <div class="band-dark">
+      <div class="section-head">
+        <p class="kicker">Retheme in five lines</p>
+        <h2 id="dark-title">Same part, night mode</h2>
+        <p>Every color is a custom property on <code>.eir</code>. Override five of
+           them on any ancestor and the whole stack flips.</p>
+      </div>
+
+      <nav aria-label="Studio index">
+        <ul class="eir">
+          <li>
+            <a class="eir-row" href="#work">
+              <span class="eir-num" aria-hidden="true">01</span>
+              <span class="eir-label">Work</span>
+              <span class="eir-arrow" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h17" /><path d="M13 5l7 7-7 7" /></svg>
+              </span>
+            </a>
+          </li>
+          <li>
+            <a class="eir-row" href="#studio">
+              <span class="eir-num" aria-hidden="true">02</span>
+              <span class="eir-label">Studio</span>
+              <span class="eir-arrow" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h17" /><path d="M13 5l7 7-7 7" /></svg>
+              </span>
+            </a>
+          </li>
+          <li>
+            <a class="eir-row" href="#journal">
+              <span class="eir-num" aria-hidden="true">03</span>
+              <span class="eir-label">Journal</span>
+              <span class="eir-arrow" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h17" /><path d="M13 5l7 7-7 7" /></svg>
+              </span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="wrap" aria-labelledby="how-title">
+    <div class="section-head">
+      <p class="kicker">Under the hood</p>
+      <h2 id="how-title">Three moves, zero scripts</h2>
+      <p>The whole effect is transitions on custom properties. No observers,
+         no listeners, nothing to initialize.</p>
+    </div>
+    <div class="cards">
+      <article class="card">
+        <span class="glyph">1</span>
+        <h3>Ink sweep</h3>
+        <p>The label is clipped to a 240% wide gradient with
+           <code>background-clip: text</code>. Sliding
+           <code>background-position</code> pulls full ink across the glyphs.
+           Browsers without support get a clean color crossfade instead.</p>
+      </article>
+      <article class="card">
+        <span class="glyph">2</span>
+        <h3>Overshoot arrow</h3>
+        <p>The arrow rests at <code>translateX(-0.7em)</code> and springs to zero
+           through a bouncy <code>cubic-bezier</code>, so it lands with a small,
+           satisfying overshoot.</p>
+      </article>
+      <article class="card">
+        <span class="glyph">3</span>
+        <h3>Focus mirrors hover</h3>
+        <p>Every state rides <code>:is(:hover, :focus-visible)</code>, so keyboard
+           users get the identical show plus a visible ring. Touch screens keep
+           the arrows on screen at all times.</p>
+      </article>
+    </div>
+  </section>
+
+  <footer>
+    <p><span class="mark">saltycodestudio</span> · Sand &amp; Surf parts library</p>
+    <p>Pattern seen on coffee-tech.com, rebuilt from scratch in pure CSS.</p>
+  </footer>
+
+</body>
+</html>

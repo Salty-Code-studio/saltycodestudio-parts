@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CSS Stacking Cards &middot; Sand &amp; Surf demo</title>
+<style>
+  /* ---- Sand & Surf palette ---- */
+  :root {
+    --sand-1: #fbf7f0;
+    --sand-2: #f4ece0;
+    --sand-3: #ece0cd;
+    --ink: #1c2b33;
+    --ink-soft: #4a5d66;
+    --teal: #1f8a8a;
+    --teal-deep: #0f5c5c;
+    --surf: #2ec3c3;
+    --maxw: 1040px;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: "Helvetica Neue", Arial, system-ui, sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(140% 90% at 50% -10%, var(--sand-1), var(--sand-2) 55%, var(--sand-3) 100%);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: var(--maxw); margin-inline: auto; padding-inline: 1.5rem; }
+
+  /* ============================================================
+     CSS STACKING CARDS, the component (styles.css inlined)
+     ============================================================ */
+
+  .sdc-cards {
+    --sdc-numcards: 4;
+    --sdc-card-height: clamp(26rem, 45vw, 36rem);
+    --sdc-gap: 4vw;
+    --sdc-top-offset: 1.25em;
+    --sdc-scale-step: 0.08;
+
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(var(--sdc-numcards), var(--sdc-card-height));
+    gap: var(--sdc-gap);
+    padding: 0 0 calc(var(--sdc-numcards) * var(--sdc-top-offset));
+    margin: 0 0 var(--sdc-gap);
+  }
+
+  .sdc-card:nth-child(1) { --sdc-index: 1; }
+  .sdc-card:nth-child(2) { --sdc-index: 2; }
+  .sdc-card:nth-child(3) { --sdc-index: 3; }
+  .sdc-card:nth-child(4) { --sdc-index: 4; }
+  .sdc-card:nth-child(5) { --sdc-index: 5; }
+  .sdc-card:nth-child(6) { --sdc-index: 6; }
+
+  .sdc-card {
+    position: sticky;
+    top: 0;
+    padding-top: calc(var(--sdc-index) * var(--sdc-top-offset));
+  }
+
+  .sdc-card__content {
+    --sdc-card-bg: #ffffff;
+    --sdc-card-fg: #1c2b33;
+
+    height: 100%;
+    border-radius: 1.25rem;
+    overflow: hidden;
+    background: var(--sdc-card-bg);
+    color: var(--sdc-card-fg);
+    box-shadow:
+      0 0.2em 1em rgba(28, 43, 51, 0.08),
+      0 1em 2em rgba(28, 43, 51, 0.12);
+
+    display: grid;
+    grid-template-areas: "text art";
+    grid-template-columns: 1fr 1fr;
+    align-items: stretch;
+
+    transform-origin: 50% 0%;
+    will-change: transform;
+  }
+
+  .sdc-card__text {
+    grid-area: text;
+    align-self: center;
+    padding: clamp(1.5rem, 4vw, 3rem);
+    display: grid;
+    gap: 1rem;
+    justify-items: start;
+  }
+
+  .sdc-card__art {
+    grid-area: art;
+    margin: 0;
+    overflow: hidden;
+  }
+
+  .sdc-card__art > img,
+  .sdc-card__art > svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @media (max-width: 640px) {
+    .sdc-card__content {
+      grid-template-areas: "art" "text";
+      grid-template-columns: 1fr;
+      grid-template-rows: 2fr 3fr;
+    }
+  }
+
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+
+      .sdc-cards {
+        view-timeline-name: --sdc-cards-scroll;
+      }
+
+      .sdc-card {
+        --sdc-index0: calc(var(--sdc-index) - 1);
+        --sdc-reverse-index: calc(var(--sdc-numcards) - var(--sdc-index0));
+      }
+
+      .sdc-card__content {
+        --sdc-start-range: calc(var(--sdc-index0) / var(--sdc-numcards) * 100%);
+        --sdc-end-range: calc(var(--sdc-index) / var(--sdc-numcards) * 100%);
+
+        animation: sdc-scale linear forwards;
+        animation-timeline: --sdc-cards-scroll;
+        animation-range:
+          exit-crossing var(--sdc-start-range)
+          exit-crossing var(--sdc-end-range);
+      }
+
+      @keyframes sdc-scale {
+        to {
+          transform: scale(calc(
+            1 + var(--sdc-scale-step)
+              - var(--sdc-scale-step) * var(--sdc-reverse-index)
+          ));
+        }
+      }
+
+    }
+  }
+
+  /* ============================================================
+     DEMO LAYOUT
+     ============================================================ */
+
+  /* Hero */
+  .hero {
+    min-height: 92vh;
+    display: grid;
+    place-content: center;
+    text-align: center;
+    padding: 6rem 1.5rem 4rem;
+  }
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: .32em;
+    font-size: .72rem;
+    font-weight: 700;
+    color: var(--teal-deep);
+    margin: 0 0 1.2rem;
+  }
+  .hero h1 {
+    font-size: clamp(2.6rem, 7vw, 5.2rem);
+    line-height: 1.02;
+    letter-spacing: -.02em;
+    margin: 0;
+    color: var(--ink);
+  }
+  .hero h1 em { font-style: normal; color: var(--teal-deep); }
+  .hero p {
+    max-width: 46ch;
+    margin: 1.6rem auto 0;
+    color: var(--ink-soft);
+    font-size: 1.15rem;
+  }
+  .scroll-hint {
+    margin-top: 3rem;
+    font-size: .8rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .scroll-hint span {
+    display: block;
+    margin-top: .6rem;
+    font-size: 1.4rem;
+    animation: nudge 1.8s ease-in-out infinite;
+  }
+  @keyframes nudge {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(6px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-hint span { animation: none; }
+  }
+
+  .note {
+    margin-top: 1.5rem;
+    font-size: .82rem;
+    color: var(--ink-soft);
+    background: rgba(255,255,255,.55);
+    border: 1px dashed rgba(31,138,138,.4);
+    border-radius: 12px;
+    padding: .8rem 1rem;
+    display: inline-block;
+  }
+
+  /* Card interior styling for the demo */
+  .kicker {
+    display: inline-grid;
+    place-content: center;
+    width: 2.6rem; height: 2.6rem;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--teal), var(--surf));
+    color: #fff;
+    font-weight: 700;
+  }
+  .sdc-card__text h2 {
+    margin: 0;
+    font-size: clamp(1.5rem, 3.4vw, 2.4rem);
+    letter-spacing: -.02em;
+    line-height: 1.1;
+  }
+  .sdc-card__text p { margin: 0; color: var(--ink-soft); }
+  .btn {
+    display: inline-block;
+    background: var(--teal-deep);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: .95rem;
+    padding: .6em 1.2em;
+    border-radius: .6em;
+  }
+  .btn:hover { background: var(--teal); }
+  .btn:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+
+  /* Outro */
+  .outro { padding-block: clamp(4rem, 11vh, 9rem); }
+  .band {
+    border-radius: 22px;
+    overflow: hidden;
+    color: #fff;
+    padding: clamp(2.2rem, 6vw, 4.5rem);
+    background:
+      linear-gradient(120deg, rgba(15,92,92,.92), rgba(46,195,195,.85)),
+      repeating-linear-gradient(45deg, rgba(255,255,255,.06) 0 14px, transparent 14px 28px);
+  }
+  .band h2 { font-size: clamp(1.8rem, 5vw, 3.2rem); margin: 0 0 .8rem; letter-spacing: -.02em; }
+  .band p  { margin: 0 0 .8rem; max-width: 58ch; opacity: .92; font-size: 1.08rem; }
+  .band p:last-child { margin-bottom: 0; }
+  .band code {
+    background: rgba(255,255,255,.16);
+    border-radius: .35em;
+    padding: .1em .4em;
+    font-size: .92em;
+  }
+
+  footer {
+    text-align: center;
+    padding: 3rem 1.5rem 6rem;
+    color: var(--ink-soft);
+  }
+  footer .mark { font-weight: 700; color: var(--teal-deep); letter-spacing: -.02em; }
+</style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div>
+      <p class="eyebrow">Sand &amp; Surf &middot; Scroll-driven CSS</p>
+      <h1>Cards that stack<br />as you <em>scroll</em></h1>
+      <p>Four sticky cards pin, pile up and scale back as the next one covers them,
+         driven entirely by a CSS view timeline. Not a single line of JavaScript.</p>
+      <p class="scroll-hint">Scroll to stack<span>&darr;</span></p>
+      <div><span class="note">Best in Chrome or Edge 115+ and Safari 26+. Elsewhere the cards still stack, they just skip the scale-back.</span></div>
+    </div>
+  </header>
+
+  <!-- THE STACK -->
+  <main class="wrap">
+    <ul class="sdc-cards" style="--sdc-numcards: 4">
+
+      <li class="sdc-card">
+        <div class="sdc-card__content">
+          <div class="sdc-card__text">
+            <span class="kicker">1</span>
+            <h2>Pin with sticky</h2>
+            <p>Each card is <code>position: sticky</code> with a small top-offset
+               staircase, so a slim lip of every buried card stays visible.</p>
+            <a class="btn" href="#how">How it works</a>
+          </div>
+          <figure class="sdc-card__art">
+            <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Stylized sun rising over calm surf">
+              <defs>
+                <linearGradient id="sdcg-sky1" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#2ec3c3"/>
+                  <stop offset="1" stop-color="#1f8a8a"/>
+                </linearGradient>
+              </defs>
+              <rect width="400" height="300" fill="url(#sdcg-sky1)"/>
+              <circle cx="200" cy="128" r="58" fill="#fbf7f0"/>
+              <circle cx="200" cy="128" r="82" fill="none" stroke="#fbf7f0" stroke-opacity=".35" stroke-width="3"/>
+              <path d="M0 208 Q 50 190 100 208 T 200 208 T 300 208 T 400 208 V300 H0 Z" fill="#0f5c5c"/>
+              <path d="M0 232 Q 50 216 100 232 T 200 232 T 300 232 T 400 232 V300 H0 Z" fill="#0b4a4a" opacity=".9"/>
+              <path d="M0 260 Q 50 246 100 260 T 200 260 T 300 260 T 400 260 V300 H0 Z" fill="#083b3b"/>
+            </svg>
+          </figure>
+        </div>
+      </li>
+
+      <li class="sdc-card">
+        <div class="sdc-card__content">
+          <div class="sdc-card__text">
+            <span class="kicker">2</span>
+            <h2>One shared timeline</h2>
+            <p>The wrapper exposes a named <code>view-timeline</code>, and every
+               card reads its progress from that single scroll track.</p>
+            <a class="btn" href="#how">How it works</a>
+          </div>
+          <figure class="sdc-card__art">
+            <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Stylized sand dunes under a teal sky">
+              <defs>
+                <linearGradient id="sdcg-sky2" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#7fe3e3"/>
+                  <stop offset="1" stop-color="#2ec3c3"/>
+                </linearGradient>
+              </defs>
+              <rect width="400" height="300" fill="url(#sdcg-sky2)"/>
+              <circle cx="318" cy="66" r="34" fill="#fbf7f0"/>
+              <path d="M0 190 Q 110 120 240 178 T 400 168 V300 H0 Z" fill="#ece0cd"/>
+              <path d="M0 232 Q 140 172 280 226 T 400 214 V300 H0 Z" fill="#e0d0b4"/>
+              <path d="M0 272 Q 120 232 260 268 T 400 258 V300 H0 Z" fill="#d3bf9d"/>
+              <path d="M96 208 q 22 -8 44 0" stroke="#c9b48d" stroke-width="3" fill="none" stroke-linecap="round"/>
+              <path d="M210 250 q 22 -8 44 0" stroke="#bfa87e" stroke-width="3" fill="none" stroke-linecap="round"/>
+            </svg>
+          </figure>
+        </div>
+      </li>
+
+      <li class="sdc-card">
+        <div class="sdc-card__content">
+          <div class="sdc-card__text">
+            <span class="kicker">3</span>
+            <h2>Sliced exit-crossing</h2>
+            <p>With four cards, each one animates over its own 25% slice of the
+               <code>exit-crossing</code> range. Pure CSS math with two custom properties.</p>
+            <a class="btn" href="#how">How it works</a>
+          </div>
+          <figure class="sdc-card__art">
+            <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Stylized sailboat on open water">
+              <defs>
+                <linearGradient id="sdcg-sea3" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#fbf7f0"/>
+                  <stop offset="1" stop-color="#f4ece0"/>
+                </linearGradient>
+              </defs>
+              <rect width="400" height="300" fill="url(#sdcg-sea3)"/>
+              <circle cx="86" cy="70" r="30" fill="#2ec3c3" opacity=".8"/>
+              <path d="M206 62 L206 176 L128 176 Z" fill="#1f8a8a"/>
+              <path d="M218 84 L218 176 L282 176 Z" fill="#0f5c5c"/>
+              <path d="M112 190 h182 l-24 30 h-134 Z" fill="#1c2b33"/>
+              <path d="M0 212 Q 50 198 100 212 T 200 212 T 300 212 T 400 212 V300 H0 Z" fill="#2ec3c3"/>
+              <path d="M0 244 Q 50 230 100 244 T 200 244 T 300 244 T 400 244 V300 H0 Z" fill="#1f8a8a"/>
+              <path d="M0 274 Q 50 262 100 274 T 200 274 T 300 274 T 400 274 V300 H0 Z" fill="#0f5c5c"/>
+            </svg>
+          </figure>
+        </div>
+      </li>
+
+      <li class="sdc-card">
+        <div class="sdc-card__content">
+          <div class="sdc-card__text">
+            <span class="kicker">4</span>
+            <h2>Content does the work</h2>
+            <p>Only the inner content scales, never the card row itself, so the
+               wrapper height and your scroll distance stay rock steady.</p>
+            <a class="btn" href="#how">How it works</a>
+          </div>
+          <figure class="sdc-card__art">
+            <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Stylized moon over night surf">
+              <defs>
+                <linearGradient id="sdcg-sky4" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#0f5c5c"/>
+                  <stop offset="1" stop-color="#083b3b"/>
+                </linearGradient>
+              </defs>
+              <rect width="400" height="300" fill="url(#sdcg-sky4)"/>
+              <circle cx="290" cy="86" r="42" fill="#fbf7f0"/>
+              <circle cx="272" cy="76" r="38" fill="#0f5c5c" opacity=".55"/>
+              <circle cx="96" cy="56" r="3" fill="#fbf7f0" opacity=".9"/>
+              <circle cx="150" cy="96" r="2" fill="#fbf7f0" opacity=".7"/>
+              <circle cx="60" cy="130" r="2.5" fill="#fbf7f0" opacity=".8"/>
+              <circle cx="196" cy="46" r="2" fill="#fbf7f0" opacity=".6"/>
+              <path d="M0 216 Q 50 202 100 216 T 200 216 T 300 216 T 400 216" stroke="#2ec3c3" stroke-width="4" fill="none" opacity=".9"/>
+              <path d="M0 244 Q 50 232 100 244 T 200 244 T 300 244 T 400 244" stroke="#2ec3c3" stroke-width="3" fill="none" opacity=".55"/>
+              <path d="M0 270 Q 50 260 100 270 T 200 270 T 300 270 T 400 270" stroke="#2ec3c3" stroke-width="2" fill="none" opacity=".3"/>
+            </svg>
+          </figure>
+        </div>
+      </li>
+
+    </ul>
+  </main>
+
+  <!-- OUTRO -->
+  <section class="wrap outro" id="how">
+    <div class="band">
+      <h2>No JavaScript, honest</h2>
+      <p>The stack you just scrolled through is <code>position: sticky</code> plus the
+         native scroll-driven animations API. The wrapper carries
+         <code>view-timeline-name</code>, and each card's content owns one slice of the
+         <code>exit-crossing</code> animation range, calculated from its index.</p>
+      <p>Everything is wrapped in <code>@supports (animation-timeline: view())</code> and a
+         reduced-motion query, so older browsers and motion-sensitive visitors get a calm,
+         fully readable sticky stack instead.</p>
+    </div>
+  </section>
+
+  <footer>
+    <p><span class="mark">saltycodestudio</span> &middot; Sand &amp; Surf parts library</p>
+    <p>Technique adapted with credit from the Stacking Cards demo by Bramus Van Damme.</p>
+  </footer>
+
+</body>
+</html>

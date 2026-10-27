@@ -1,0 +1,13 @@
+{
+  "name": "Window Parallax Carousel",
+  "slug": "scroll-driven-window-carousel",
+  "category": "css",
+  "tier": "showcase",
+  "tags": ["carousel", "parallax", "scroll-driven", "animation-timeline", "view-timeline", "scroll-snap", "object-position", "horizontal-scroll", "no-js"],
+  "description": "Horizontal scroll-snap carousel where each slide's landscape artwork pans sideways inside its portrait frame as it crosses the scrollport, a pure CSS window parallax driven by animation-timeline: view(x).",
+  "deps": [],
+  "files": ["styles.css", "index.html"],
+  "usage": "Include styles.css, then add a <ul class=\"wpc-slides\"> of <li class=\"wpc-slide\"> items, each holding one landscape <img> and an optional <span class=\"wpc-tag\"> label; the strip scroll-snaps sideways and every image pans inside its frame as it crosses the scrollport. Tune --wpc-slide-w, --wpc-gap and --wpc-radius on the list to fit your layout.",
+  "source": "https://scroll-driven-animations.style/demos/parallax-carousel/css/",
+  "license": "Apache-2.0 (demo by Bramus Van Damme, scroll-driven-animations.style), adapted with credit"
+}

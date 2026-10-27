@@ -1,0 +1,26 @@
+{
+  "name": "Scroll Theme Switch",
+  "slug": "scroll-theme-switch",
+  "category": "vanilla",
+  "tier": "showcase",
+  "tags": [
+    "theme",
+    "dark-mode",
+    "scroll",
+    "intersection-observer",
+    "crossfade",
+    "css-variables",
+    "data-theme",
+    "sections"
+  ],
+  "description": "Sections declare data-theme=\"dark\" or \"light\" and a tiny IntersectionObserver script mirrors whichever section dominates the viewport onto the html element, so CSS custom properties crossfade the whole page (fixed header included) between a bone-light and a near-black theme as you scroll.",
+  "deps": [],
+  "files": [
+    "script.js",
+    "styles.css",
+    "index.html"
+  ],
+  "usage": "Link styles.css, give each full-width section data-theme=\"dark\" or data-theme=\"light\", paint your page with the --ts-* tokens, and load script.js (it auto-runs, or call initThemeSwitch() yourself). Any number of sections works, and without JS the page stays in the light theme.",
+  "source": "Pattern seen on https://coffee-tech.com (Awwwards SOTD by MAKETHECUT and Or Halevi), implemented from scratch",
+  "license": "MIT (original clean-room implementation by saltycodestudio-parts, visual pattern inspired by coffee-tech.com by MAKETHECUT and Or Halevi, no code or assets copied)"
+}

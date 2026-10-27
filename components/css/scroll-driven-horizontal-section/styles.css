@@ -1,0 +1,109 @@
+/* ============================================================
+   CSS Horizontal Scroll Section
+   Vertical scrolling drives a horizontal translate through a
+   tall sticky section. Pure CSS via the native scroll-driven
+   animations API (view-timeline plus animation-timeline).
+
+   Adapted with credit from the scroll-driven-animations.style
+   demo by Bramus Van Damme (Apache-2.0), itself based on a
+   CodePen by Cameron Knight.
+   ============================================================ */
+
+/* ---- Tunable knobs plus Sand & Surf band colors ---- */
+:root {
+  /* Vertical scroll room that powers the ride. Taller = slower. */
+  --shs-scroll-length: 500vh;
+
+  /* Total width of the horizontal strip. Set it to max-content
+     to make the strip exactly fit its panels. */
+  --shs-track-width: 250vmax;
+
+  --shs-bg: #0f5c5c; /* deep teal band */
+  --shs-fg: #fbf7f0; /* cream text on the band */
+}
+
+/* ============================================================
+   1. Base layout, which is also the graceful fallback.
+      Without scroll-driven animation support the section is a
+      normal full-height band and the strip stays reachable as
+      a manual horizontal swipe.
+   ============================================================ */
+.shs-section {
+  position: relative;
+}
+
+.shs-sticky {
+  height: 100vh;
+  height: 100dvh;
+  overflow-x: auto;
+  background: var(--shs-bg);
+  color: var(--shs-fg);
+  -webkit-overflow-scrolling: touch;
+}
+
+.shs-track {
+  display: flex;
+  align-items: center;
+  height: 100vh;
+  height: 100dvh;
+  width: var(--shs-track-width);
+  min-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Every direct child of the track becomes one stop on the ride. */
+.shs-track > * {
+  flex: none;
+  box-sizing: border-box;
+  min-width: 60vmax;
+  padding-inline: 5vmax;
+}
+
+/* ============================================================
+   2. The ride. Activated only when the browser supports
+      scroll-driven animations AND the user has not asked
+      for reduced motion.
+   ============================================================ */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+
+    @keyframes shs-move {
+      to {
+        /* Slide left until the strip's right edge meets the
+           right edge of the viewport. Without adding 100vw the
+           strip would slide entirely out of view. */
+        transform: translateX(calc(-100% + 100vw));
+      }
+    }
+
+    .shs-section {
+      /* Stretch tall to create the scroll room for the ride. */
+      height: var(--shs-scroll-length);
+      overflow: visible; /* keeps position: sticky working */
+
+      /* Track this element as it crosses the scrollport. */
+      view-timeline-name: --shs-ride;
+      view-timeline-axis: block;
+    }
+
+    .shs-sticky {
+      /* Pin the visible window while the tall section scrolls by. */
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      height: 100dvh;
+      overflow-x: hidden;
+    }
+
+    .shs-track {
+      /* Bind the horizontal translate to the section's timeline. */
+      will-change: transform;
+      animation: shs-move linear forwards;
+      animation-timeline: --shs-ride;
+
+      /* Play exactly while the stretched section fully covers
+         the scrollport. */
+      animation-range: contain 0% contain 100%;
+    }
+  }
+}

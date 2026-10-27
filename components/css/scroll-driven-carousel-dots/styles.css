@@ -1,0 +1,160 @@
+/* =====================================================================
+   Scroll-Driven Carousel Dots  ·  saltycodestudio-parts
+   ---------------------------------------------------------------------
+   Step indicator dots that track a horizontally scroll-snapping
+   carousel, powered by a named CSS Scroll Progress Timeline. Zero JS.
+
+   Core technique:
+     1. The track scroll-snaps horizontally and publishes its scroll
+        progress as a named timeline:
+          scroll-timeline: --sdc-carousel inline;
+     2. The indicator sits INSIDE the track but is absolutely
+        positioned, so its containing block is the .sdc wrapper
+        (position: relative). It stays put while slides scroll under it.
+     3. The gliding dot (and the bar variant) subscribe to the named
+        timeline with: animation-timeline: --sdc-carousel;
+
+   Why a NAMED timeline instead of scroll(nearest inline): anonymous
+   lookups walk the containing block chain, and because the indicator
+   is absolutely positioned that chain skips the scroller entirely and
+   lands on the wrapper. A named timeline walks the element tree, so it
+   finds the track. (Insight from Bramus Van Damme's original demo.)
+
+   Progressive enhancement: where scroll-driven animations are not
+   supported the indicators stay hidden, a thin native scrollbar shows
+   instead, and the carousel remains a fully usable snap scroller.
+   ===================================================================== */
+
+.sdc {
+  /* --- tunable knobs ------------------------------------------------ */
+  --sdc-slides: 3;          /* MUST match the number of .sdc-slide items */
+  --sdc-dot-size: 0.625rem; /* diameter of each dot and of the thumb     */
+  --sdc-dot-gap: 0.625rem;  /* space between dots                        */
+  --sdc-radius: 1.25rem;    /* corner rounding of the whole carousel     */
+  --sdc-ink: #1c2b33;
+  --sdc-teal: #1f8a8a;
+  --sdc-teal-deep: #0f5c5c;
+  --sdc-surf: #2ec3c3;
+
+  position: relative;       /* containing block for the indicators      */
+  overflow: hidden;
+  border-radius: var(--sdc-radius);
+}
+
+/* --- the scroll-snapping track -------------------------------------- */
+.sdc-track {
+  display: flex;
+  overflow-x: scroll;
+  scroll-snap-type: x mandatory;
+  /* The heart of the part: publish this scroller's horizontal progress
+     as a named timeline that the indicators can subscribe to. */
+  scroll-timeline: --sdc-carousel inline;
+  scrollbar-width: thin;    /* visible fallback affordance */
+}
+.sdc-track:focus-visible {
+  outline: 3px solid var(--sdc-surf);
+  outline-offset: -3px;
+}
+
+.sdc-slide {
+  flex: 0 0 100%;
+  scroll-snap-align: center;
+}
+.sdc-slide img,
+.sdc-slide svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* --- dots rail (default indicator) ----------------------------------
+   Absolutely positioned, so its containing block is .sdc, not the
+   scrolling track it lives in. That is the whole trick. */
+.sdc-dots {
+  --_pad-x: 0.6rem;
+  --_pad-y: 0.5rem;
+  position: absolute;
+  left: 50%;
+  bottom: 0.9rem;
+  translate: -50% 0;
+  z-index: 1;
+  display: flex;
+  gap: var(--sdc-dot-gap);
+  padding: var(--_pad-y) var(--_pad-x);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.72);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 4px 14px rgb(28 43 51 / 0.18);
+}
+.sdc-dot {
+  width: var(--sdc-dot-size);
+  height: var(--sdc-dot-size);
+  border-radius: 50%;
+  background: rgb(28 43 51 / 0.22);
+}
+.sdc-thumb {
+  position: absolute;
+  top: var(--_pad-y);
+  left: var(--_pad-x);
+  width: var(--sdc-dot-size);
+  height: var(--sdc-dot-size);
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--sdc-teal), var(--sdc-surf));
+  box-shadow: 0 0 0 2px rgb(255 255 255 / 0.65);
+  display: none;            /* revealed only when timelines work */
+}
+
+/* --- bar variant (the original demo's exact mechanic) ----------------
+   Starts at 1/N of the rail width to say "slide 1 of N", then grows to
+   the full width as the track reaches its scroll end. */
+.sdc-bar {
+  position: absolute;
+  left: 1rem;
+  right: 1rem;
+  bottom: 0.9rem;
+  height: 0.375rem;
+  z-index: 1;
+  border-radius: 999px;
+  transform-origin: 0 50%;
+  transform: scaleX(calc(1 / var(--sdc-slides)));
+  background: linear-gradient(90deg, var(--sdc-teal-deep), var(--sdc-surf));
+  box-shadow: 0 2px 10px rgb(15 92 92 / 0.45);
+  display: none;            /* revealed only when timelines work */
+}
+
+/* --- keyframes -------------------------------------------------------
+   Custom properties resolve on the animating element, so the same two
+   keyframe blocks serve every carousel instance on the page. */
+@keyframes sdc-glide {
+  to {
+    translate: calc((var(--sdc-slides) - 1) * (var(--sdc-dot-size) + var(--sdc-dot-gap))) 0;
+  }
+}
+@keyframes sdc-grow {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* --- wire it up, guarded -------------------------------------------- */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .sdc-thumb {
+      display: block;
+      animation: auto sdc-glide linear forwards;
+      animation-timeline: --sdc-carousel;
+    }
+    .sdc-bar {
+      display: block;
+      animation: auto sdc-grow linear forwards;
+      animation-timeline: --sdc-carousel;
+    }
+    /* The dots take over as the affordance, retire the scrollbar. */
+    .sdc-track {
+      scrollbar-width: none;
+    }
+    .sdc-track::-webkit-scrollbar {
+      display: none;
+    }
+  }
+}

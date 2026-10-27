@@ -1,0 +1,24 @@
+{
+  "name": "Shader Gradient Flow",
+  "slug": "shader-gradient-flow",
+  "category": "vanilla",
+  "tier": "showcase",
+  "tags": [
+    "shader",
+    "webgl",
+    "background",
+    "gradient",
+    "fbm",
+    "domain-warp",
+    "animation",
+    "hero"
+  ],
+  "description": "A full-bleed raw-WebGL fragment-shader background of silky, slowly flowing colour, driven by domain-warped fractal Brownian motion through a Sand & Surf ramp.",
+  "deps": [],
+  "files": [
+    "shader-gradient-flow.js"
+  ],
+  "usage": "Drop a <canvas> in your hero, link shader-gradient-flow.js, then call initGradientFlow(canvas, opts); it returns { set, destroy }.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
+}

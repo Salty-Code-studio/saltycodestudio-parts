@@ -1,0 +1,13 @@
+{
+  "name": "Scroll-Driven Image Reveal",
+  "slug": "scroll-driven-image-reveal",
+  "category": "css",
+  "tier": "showcase",
+  "tags": ["scroll-driven", "view-timeline", "clip-path", "image", "reveal", "curtain", "no-js", "progressive-enhancement"],
+  "description": "Images fade in and open like a curtain as they enter the viewport, a clip-path inset interpolated along a named CSS view timeline. Pure CSS, zero JavaScript, with a fully visible fallback for unsupported browsers.",
+  "deps": [],
+  "files": ["styles.css", "index.html"],
+  "usage": "Include styles.css and add class imr-reveal to any img, inline SVG, video or media block you want unveiled on scroll. Tune the starting slit per element with inline --imr-hide-y and --imr-hide-x custom properties, and adjust the timing window via the animation-range in styles.css.",
+  "source": "https://scroll-driven-animations.style/demos/image-reveal/css/",
+  "license": "Apache-2.0 (demo by Bramus Van Damme, scroll-driven-animations.style), adapted with credit"
+}

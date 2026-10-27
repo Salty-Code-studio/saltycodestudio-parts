@@ -1,0 +1,13 @@
+{
+  "name": "Scroll-Driven Progress Bar",
+  "slug": "scroll-driven-progress-bar",
+  "category": "css",
+  "tier": "practical",
+  "tags": ["scroll-driven", "progress-bar", "reading-progress", "animation-timeline", "scroll-timeline", "indicator", "no-js", "fixed", "progressive-enhancement"],
+  "description": "A fixed reading-progress bar at the top of the page that fills from left to right as the document scrolls, driven entirely by a native CSS Scroll Progress Timeline. Composited transform, zero JavaScript.",
+  "deps": [],
+  "files": ["styles.css", "index.html"],
+  "usage": "Include styles.css, then drop a single <div class=\"sdp-bar\" aria-hidden=\"true\"></div> right after the opening <body> tag of any long page. Retheme per page with the --sdp-height, --sdp-fill and --sdp-z custom properties.",
+  "source": "https://scroll-driven-animations.style/demos/progress-bar/css/",
+  "license": "Apache-2.0 (demo by Bramus Van Damme, scroll-driven-animations.style), adapted with credit"
+}

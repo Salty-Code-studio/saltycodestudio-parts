@@ -1,0 +1,116 @@
+/* ==========================================================================
+   Reverse-Scrolling Columns  (.rsc-)
+   ==========================================================================
+   Three content columns. The middle one follows the page scroll while the
+   outer two glide the opposite way, driven by a native CSS scroll() timeline.
+   Zero JavaScript.
+
+   Markup:
+     <div class="rsc-columns">
+       <div class="rsc-column rsc-reverse"> ...items... </div>
+       <div class="rsc-column">             ...items... </div>
+       <div class="rsc-column rsc-reverse"> ...items... </div>
+     </div>
+
+   Each column should be taller than the viewport, otherwise the counter
+   scroll has no distance to travel.
+
+   Adapted from the "Reverse scroll" demo by Bramus Van Damme on
+   scroll-driven-animations.style, Apache-2.0, with credit. The full demo
+   link lives in README.md.
+   ========================================================================== */
+
+/* ==== Base layout (works everywhere, no animation required) =============== */
+
+.rsc-columns {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--rsc-gap, clamp(0.75rem, 2.5vw, 1.75rem));
+  width: 100%;
+  max-width: var(--rsc-maxw, 80rem);
+  margin-inline: auto;
+  padding-inline: var(--rsc-gutter, clamp(0.75rem, 3vw, 2rem));
+}
+
+/* Inside one column, stack the items in column direction */
+.rsc-column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rsc-gap, clamp(0.75rem, 2.5vw, 1.75rem));
+  /* Vertical offset so the first and last tiles peek in from off-screen */
+  padding-block: var(--rsc-column-offset, 10vh);
+}
+
+/* One tile: art area plus caption */
+.rsc-item {
+  margin: 0;
+}
+
+.rsc-art {
+  aspect-ratio: var(--rsc-art-ratio, 3 / 4);
+  border-radius: var(--rsc-radius, 1rem);
+  overflow: hidden;
+  background: var(--rsc-art-bg, #ece0cd);
+}
+
+/* Real images or inline SVG drop straight in */
+.rsc-art > img,
+.rsc-art > svg,
+.rsc-art > video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.rsc-caption {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.5rem 0.25rem 0;
+  font-size: 0.85rem;
+  color: var(--rsc-caption-color, inherit);
+}
+
+/* ==== Scroll-driven engine (progressive enhancement) ====================== */
+/* Everything motion related lives inside the guards below. Browsers without
+   scroll-driven animations, and users who prefer reduced motion, simply get
+   a normal three column grid that scrolls with the page. */
+
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+
+    /* The reversed columns are about to be translated out of the wrapper,
+       so the wrapper must hide its vertical overflow */
+    .rsc-columns {
+      overflow-y: hidden;
+    }
+
+    /* The reversed columns travel bottom-up, so flip their item order too.
+       That way the first item sits at the bottom and is read first. */
+    .rsc-reverse {
+      flex-direction: column-reverse;
+    }
+
+    /* Start: the whole column is shifted up by its own height, then pulled
+       back down by one viewport so its bottom edge stays on-screen.
+       End: the mirror image, shifted down but held by one viewport. */
+    @keyframes rsc-adjust-position {
+      from {
+        transform: translateY(calc(-100% + 100vh));
+      }
+      to {
+        transform: translateY(calc(100% - 100vh));
+      }
+    }
+
+    /* Attach the animation to the root scroller, block direction.
+       scroll(root block) creates an anonymous scroll timeline, so the
+       animation progresses with the page scroll instead of with time. */
+    .rsc-reverse {
+      animation: rsc-adjust-position linear forwards;
+      animation-timeline: scroll(root block);
+    }
+  }
+}

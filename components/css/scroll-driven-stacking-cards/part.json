@@ -1,0 +1,13 @@
+{
+  "name": "CSS Stacking Cards",
+  "slug": "scroll-driven-stacking-cards",
+  "category": "css",
+  "tier": "showcase",
+  "tags": ["scroll-driven", "stacking", "cards", "sticky", "view-timeline", "exit-crossing", "animation-range", "no-js", "progressive-enhancement"],
+  "description": "Sticky cards that pile up on scroll, each one pinning and scaling back as the next slides over it, powered entirely by a named CSS view timeline with exit-crossing animation ranges. Zero JavaScript.",
+  "deps": [],
+  "files": ["styles.css", "index.html"],
+  "usage": "Include styles.css, then add a <ul class=\"sdc-cards\"> with one <li class=\"sdc-card\"> per card, each wrapping a <div class=\"sdc-card__content\"> (text plus optional .sdc-card__art figure). Set --sdc-numcards on the wrapper to match your card count; positions 1 to 6 are indexed automatically and the knobs (--sdc-card-height, --sdc-gap, --sdc-top-offset, --sdc-scale-step) are plain custom properties on the wrapper.",
+  "source": "https://scroll-driven-animations.style/demos/stacking-cards/css/",
+  "license": "Apache-2.0 (demo by Bramus Van Damme, scroll-driven-animations.style), adapted with credit"
+}

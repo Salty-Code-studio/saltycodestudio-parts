@@ -1,0 +1,24 @@
+{
+  "name": "Glass Refraction Panel",
+  "slug": "glass-refraction-panel",
+  "category": "vanilla",
+  "tier": "showcase",
+  "tags": [
+    "glass",
+    "refraction",
+    "webgl",
+    "shader",
+    "background",
+    "chromatic-aberration",
+    "frosted-glass",
+    "draggable"
+  ],
+  "description": "A real refractive frosted-glass card rendered in raw WebGL over an animated Sand & Surf background, with chromatic aberration, frost blur, a specular edge highlight, and a draggable panel that refracts the background live.",
+  "deps": [],
+  "files": [
+    "glass-refraction-panel.js"
+  ],
+  "usage": "Add a full-bleed <canvas>, then call initGlassRefraction(canvas, opts) and drag the glass; it returns { set, destroy }.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
+}

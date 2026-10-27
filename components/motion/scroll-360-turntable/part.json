@@ -1,0 +1,30 @@
+{
+  "name": "Scroll 360 Turntable",
+  "slug": "scroll-360-turntable",
+  "category": "motion",
+  "tier": "showcase",
+  "tags": [
+    "scroll",
+    "pin",
+    "scrub",
+    "360",
+    "turntable",
+    "product",
+    "rotate",
+    "gsap",
+    "scrolltrigger",
+    "frame-sequence"
+  ],
+  "description": "A pinned hero where a product spins a full 360 degrees as you scroll, with a layered headline that fades and letter-spaces out. Ships a CSS-3D faceted bottle by default plus a frame-sequence mode for real 360 photo shoots.",
+  "deps": [
+    "gsap",
+    "gsap/ScrollTrigger"
+  ],
+  "files": [
+    "animation.js",
+    "styles.css"
+  ],
+  "usage": "Copy the .turntable-section markup from index.html, include styles.css, load GSAP plus ScrollTrigger, then call initTurntable(). For a real 360 shoot call initTurntable({ frames: [urls] }) and the scrub swaps preloaded frames instead of rotating the CSS object.",
+  "source": "Pattern seen on https://coffee-tech.com (Awwwards SOTD by MAKETHECUT and Or Halevi), implemented from scratch",
+  "license": "MIT (original clean-room implementation by saltycodestudio-parts, visual pattern inspired by coffee-tech.com by MAKETHECUT and Or Halevi, no code or assets copied)"
+}

@@ -1,0 +1,158 @@
+/* ============================================================
+   Cover Card to Fixed Header
+   A full-viewport cover hero that shrinks and docks into a
+   fixed page header as you scroll, driven entirely by the
+   native CSS animation-timeline: scroll() function. No JS.
+
+   Adapted from the CSS demo by Bramus Van Damme
+   (scroll-driven-animations.style, Apache-2.0), restyled for
+   the Sand & Surf palette with inline SVG art.
+   ============================================================ */
+
+/* ---- Sand & Surf palette as tokens ---- */
+:root {
+  --cvh-sand-1: #fbf7f0;
+  --cvh-ink: #1c2b33;
+  --cvh-teal: #1f8a8a;
+  --cvh-teal-deep: #0f5c5c;
+  --cvh-surf: #2ec3c3;
+  --cvh-abyss: #082227; /* the docked header settles on this */
+}
+
+/* ============================================================
+   1. The cover, fallback-first.
+      Without scroll-driven animation support (or with reduced
+      motion) this is simply a handsome full-height hero at the
+      top of the page. Nothing breaks, nothing overlaps.
+   ============================================================ */
+.cvh-cover {
+  /* Height of the docked header. Tune freely. */
+  --cvh-docked: 10vh;
+
+  height: 100vh;
+  width: 100%;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  color: #fff;
+
+  /* The title tracks this size, so animating it here shrinks
+     the type along with the card. */
+  font-size: clamp(2.2rem, 4vw + 1rem, 4.4rem);
+
+  /* Inline SVG seascape as a data URI (no external images).
+     The artwork is much taller than wide, so animating
+     background-position pans it vertically: that is the
+     parallax you see while the card shrinks. */
+  background-color: var(--cvh-teal);
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201200%202000'%3E%3Cdefs%3E%3ClinearGradient%20id='g'%20x1='0'%20y1='0'%20x2='0'%20y2='1'%3E%3Cstop%20offset='0'%20stop-color='%233ec2c2'/%3E%3Cstop%20offset='.35'%20stop-color='%231f8a8a'/%3E%3Cstop%20offset='.7'%20stop-color='%230f5c5c'/%3E%3Cstop%20offset='1'%20stop-color='%23082227'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width='1200'%20height='2000'%20fill='url(%23g)'/%3E%3Ccircle%20cx='880'%20cy='310'%20r='150'%20fill='%23ff6f59'%20opacity='.9'/%3E%3Cpath%20d='M0%20500%20C200%20460%20400%20540%20600%20500%20S1000%20460%201200%20500%20V560%20C1000%20600%20800%20520%20600%20560%20S200%20600%200%20560%20Z'%20fill='%23fbf7f0'%20opacity='.18'/%3E%3Cpath%20d='M0%20830%20C200%20790%20400%20870%20600%20830%20S1000%20790%201200%20830%20V880%20C1000%20920%20800%20840%20600%20880%20S200%20920%200%20880%20Z'%20fill='%237fe3e3'%20opacity='.22'/%3E%3Cpath%20d='M0%201160%20C200%201120%20400%201200%20600%201160%20S1000%201120%201200%201160%20V1205%20C1000%201245%20800%201165%20600%201205%20S200%201245%200%201205%20Z'%20fill='%23fbf7f0'%20opacity='.12'/%3E%3Cpath%20d='M0%201480%20C200%201440%20400%201520%20600%201480%20S1000%201440%201200%201480%20V1520%20C1000%201560%20800%201480%20600%201520%20S200%201560%200%201520%20Z'%20fill='%232ec3c3'%20opacity='.16'/%3E%3Cpath%20d='M0%201790%20C200%201750%20400%201830%20600%201790%20S1000%201750%201200%201790%20V1825%20C1000%201865%20800%201785%20600%201825%20S200%201865%200%201825%20Z'%20fill='%237fe3e3'%20opacity='.1'/%3E%3C/svg%3E");
+  background-size: cover;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+
+  /* Lets the animated background-color tint the artwork as it
+     darkens toward the docked state, same trick as the
+     original demo. */
+  background-blend-mode: soft-light;
+}
+
+.cvh-cover-inner {
+  padding-inline: 1.25rem;
+}
+
+.cvh-title {
+  margin: 0;
+  font-size: 1em; /* rides the cover's animated font-size */
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  text-shadow: 0 2px 24px rgba(8, 34, 39, 0.45);
+}
+
+.cvh-sub {
+  margin: 0.9em 0 0;
+  font-size: 0.35em; /* scales with the cover, fades out early */
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  opacity: 0.92;
+  text-shadow: 0 1px 12px rgba(8, 34, 39, 0.45);
+}
+
+/* ============================================================
+   2. The page content that follows the cover.
+      Keep everything after the cover inside this wrapper so it
+      can be offset once the cover leaves the normal flow.
+   ============================================================ */
+.cvh-content {
+  width: min(85vw, 60rem);
+  margin-inline: auto;
+  padding-block: 2rem;
+}
+
+/* ============================================================
+   3. Keyframes.
+      cvh-dock is scrubbed by the document scroll position:
+      the card pans its artwork, darkens, and collapses from
+      100vh down to the docked height while the type shrinks.
+   ============================================================ */
+@keyframes cvh-dock {
+  from {
+    background-position: 50% 0%;
+  }
+  to {
+    background-position: 50% 100%;
+    background-color: var(--cvh-abyss);
+    height: var(--cvh-docked);
+    font-size: 1.3rem;
+    box-shadow: 0 8px 24px rgba(8, 34, 39, 0.35);
+  }
+}
+
+/* The tagline gets out of the way before the header docks.
+   It also collapses to zero size so the docked bar centers
+   just the title, with no ghost space left behind. */
+@keyframes cvh-sub-fade {
+  to {
+    opacity: 0;
+    visibility: hidden;
+    font-size: 0px;
+    margin: 0;
+  }
+}
+
+/* ============================================================
+   4. Progressive enhancement.
+      Only pin the cover and bind the timelines when the
+      browser supports scroll-driven animations AND the user
+      has not asked for reduced motion. Everyone else keeps
+      the static full-height hero from section 1.
+   ============================================================ */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+
+    /* position: sticky will not work here: shrinking the
+       cover's height would shrink the whole document and eat
+       the scroll distance mid-animation. So the cover is
+       fixed, and the content below is padded down by the
+       cover's original height to stop the page jumping. */
+    .cvh-cover {
+      position: fixed;
+      inset: 0 0 auto 0;
+      z-index: 200;
+
+      animation: cvh-dock linear forwards;
+      animation-timeline: scroll(root block);
+      /* The whole shrink plays over the first 90vh of scroll. */
+      animation-range: 0vh 90vh;
+    }
+
+    .cvh-content {
+      padding-top: 100vh;
+    }
+
+    .cvh-sub {
+      animation: cvh-sub-fade linear forwards;
+      animation-timeline: scroll(root block);
+      animation-range: 0vh 35vh;
+    }
+  }
+}

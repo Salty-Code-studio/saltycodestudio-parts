@@ -1,0 +1,13 @@
+{
+  "name": "Editorial Mega Link",
+  "slug": "editorial-mega-link",
+  "category": "css",
+  "tier": "practical",
+  "tags": ["link", "typography", "editorial", "hover", "arrow", "underline", "cta", "navigation", "focus-visible"],
+  "description": "A giant editorial link row in clamp() display type with a long inline SVG arrow and a full-width bottom rule. On hover the arrow slides right, a thicker rule redraws from the left, and the text nudges along. Pure CSS, one anchor element, with a dark variant class.",
+  "deps": [],
+  "files": ["styles.css", "index.html"],
+  "usage": "Include styles.css, then paste the anchor from index.html: an <a class=\"mega-link\"> holding a .mega-link__text span and the inline SVG arrow. Add .mega-link--dark on dark backgrounds, and retheme or resize with the --ml-* custom properties.",
+  "source": "Pattern seen on https://coffee-tech.com (Awwwards SOTD by MAKETHECUT and Or Halevi), implemented from scratch",
+  "license": "MIT (original clean-room implementation by saltycodestudio-parts, visual pattern inspired by coffee-tech.com by MAKETHECUT and Or Halevi, no code or assets copied)"
+}

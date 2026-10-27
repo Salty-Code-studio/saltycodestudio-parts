@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Brand Loader Reveal · Sand &amp; Surf demo</title>
+<style>
+  /* ---- Sand & Surf palette ---- */
+  :root {
+    --sand-1: #fbf7f0;
+    --sand-2: #f4ece0;
+    --sand-3: #ece0cd;
+    --ink: #1c2b33;
+    --ink-soft: #4a5d66;
+    --teal: #1f8a8a;
+    --teal-deep: #0f5c5c;
+    --surf: #2ec3c3;
+    --maxw: 1080px;
+
+    /* Brand Loader Reveal tuned to the palette */
+    --blr-bg: var(--teal-deep);
+    --blr-fg: var(--sand-1);
+    --blr-z: 9999;
+    --blr-ease: cubic-bezier(0.76, 0, 0.24, 1);
+    --blr-curtain: 900ms;
+    --blr-rise: 18px;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    font-family: "Helvetica Neue", Arial, system-ui, sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(140% 90% at 50% -10%, var(--sand-1), var(--sand-2) 55%, var(--sand-3) 100%);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: var(--maxw); margin-inline: auto; padding-inline: 1.5rem; }
+
+  /* ============================================================
+     BRAND LOADER REVEAL ENGINE (the part itself)
+     ============================================================ */
+
+  .blr-loader {
+    position: fixed;
+    inset: 0;
+    z-index: var(--blr-z);
+    display: grid;
+    place-items: center;
+    background: var(--blr-bg);
+    color: var(--blr-fg);
+    clip-path: inset(0 0 0 0);
+    transition:
+      clip-path var(--blr-curtain) var(--blr-ease),
+      visibility 0s linear var(--blr-curtain);
+  }
+  .blr-loader.is-revealing {
+    clip-path: inset(0 0 100% 0);
+    visibility: hidden;
+    pointer-events: none;
+  }
+  .blr-loader__mark {
+    width: clamp(72px, 12vw, 120px);
+    height: auto;
+    animation: blr-pulse 1.8s ease-in-out infinite;
+  }
+  .blr-loader.is-revealing .blr-loader__mark {
+    animation: none;
+    opacity: 0;
+    transform: translateY(-14px) scale(0.94);
+    transition: opacity 240ms ease, transform 240ms ease;
+  }
+  @keyframes blr-pulse {
+    0%, 100% { opacity: 0.85; transform: scale(1); }
+    50%      { opacity: 1;    transform: scale(1.05); }
+  }
+  body.blr-lock { overflow: hidden; }
+
+  @supports not (clip-path: inset(0 0 100% 0)) {
+    .blr-loader {
+      transition:
+        opacity var(--blr-curtain) ease,
+        visibility 0s linear var(--blr-curtain);
+    }
+    .blr-loader.is-revealing { opacity: 0; }
+  }
+
+  .blr-stagger {
+    opacity: 0;
+    transform: translateY(var(--blr-rise));
+    transition:
+      opacity 700ms var(--blr-ease),
+      transform 700ms var(--blr-ease);
+  }
+  html.blr-revealed .blr-stagger {
+    opacity: 1;
+    transform: none;
+  }
+  .blr-d1 { transition-delay: 480ms; }
+  .blr-d2 { transition-delay: 590ms; }
+  .blr-d3 { transition-delay: 700ms; }
+  .blr-d4 { transition-delay: 810ms; }
+  .blr-d5 { transition-delay: 920ms; }
+  .blr-d6 { transition-delay: 1030ms; }
+
+  /* No-JS failsafe: the page reveals itself after 4s even without script.js */
+  @keyframes blr-failsafe-out { to { opacity: 0; visibility: hidden; } }
+  @keyframes blr-failsafe-in  { to { opacity: 1; transform: none; } }
+  .blr-loader  { animation: blr-failsafe-out 500ms ease 4s forwards; }
+  .blr-stagger { animation: blr-failsafe-in 500ms ease 4.2s forwards; }
+  html.blr-js .blr-loader  { animation: none; }
+  html.blr-js .blr-stagger { animation: none; }
+
+  /* Reduced motion: quick fade, no rise, no stagger */
+  @media (prefers-reduced-motion: reduce) {
+    .blr-loader {
+      transition: opacity 200ms linear, visibility 0s linear 200ms;
+    }
+    .blr-loader.is-revealing { clip-path: none; opacity: 0; }
+    .blr-loader__mark { animation: none; }
+    .blr-loader.is-revealing .blr-loader__mark { transition: none; }
+    .blr-stagger {
+      transform: none;
+      transition: opacity 150ms linear;
+      transition-delay: 0s;
+    }
+  }
+
+  /* ============================================================
+     DEMO LAYOUT
+     ============================================================ */
+
+  /* Hero */
+  .hero {
+    min-height: 92vh;
+    display: grid;
+    place-content: center;
+    text-align: center;
+    padding: 6rem 1.5rem 4rem;
+  }
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: .32em;
+    font-size: .72rem;
+    font-weight: 700;
+    color: var(--teal-deep);
+    margin: 0 0 1.2rem;
+  }
+  .hero h1 {
+    font-size: clamp(2.6rem, 7vw, 5.2rem);
+    line-height: 1.02;
+    letter-spacing: -.02em;
+    margin: 0;
+    color: var(--ink);
+  }
+  .hero h1 em {
+    font-style: normal;
+    color: var(--teal-deep);
+  }
+  .hero > .lede {
+    max-width: 48ch;
+    margin: 1.6rem auto 0;
+    color: var(--ink-soft);
+    font-size: 1.15rem;
+  }
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: .9rem;
+    margin-top: 2.2rem;
+  }
+  .btn {
+    display: inline-block;
+    padding: .85rem 1.7rem;
+    border-radius: 999px;
+    font: inherit;
+    font-weight: 700;
+    font-size: .95rem;
+    letter-spacing: .01em;
+    cursor: pointer;
+    text-decoration: none;
+    border: 2px solid transparent;
+    transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--teal), var(--surf));
+    color: #fff;
+    box-shadow: 0 14px 30px -18px rgba(15, 92, 92, .8);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 18px 36px -18px rgba(15, 92, 92, .9); }
+  .btn-primary:disabled { opacity: .55; cursor: wait; transform: none; }
+  .btn-ghost {
+    background: transparent;
+    color: var(--teal-deep);
+    border-color: rgba(15, 92, 92, .35);
+  }
+  .btn-ghost:hover { background: rgba(46, 195, 195, .12); }
+  .btn:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+
+  .hook-note {
+    margin-top: 1.4rem;
+    font-size: .82rem;
+    color: var(--ink-soft);
+    background: rgba(255, 255, 255, .55);
+    border: 1px dashed rgba(31, 138, 138, .4);
+    border-radius: 12px;
+    padding: .7rem 1rem;
+    display: inline-block;
+  }
+  .hook-note code { color: var(--teal-deep); }
+
+  .scroll-hint {
+    margin-top: 2.6rem;
+    font-size: .8rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .scroll-hint span {
+    display: block;
+    margin-top: .6rem;
+    font-size: 1.4rem;
+    animation: nudge 1.8s ease-in-out infinite;
+  }
+  @keyframes nudge {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(6px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-hint span { animation: none; }
+  }
+
+  section { padding-block: clamp(4rem, 11vh, 9rem); }
+
+  .section-head { max-width: 56ch; margin-bottom: 3rem; }
+  .section-head h2 {
+    font-size: clamp(1.9rem, 4.5vw, 3rem);
+    letter-spacing: -.015em;
+    line-height: 1.08;
+    margin: 0 0 1rem;
+  }
+  .section-head p { color: var(--ink-soft); font-size: 1.08rem; margin: 0; }
+
+  /* choreography cards */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 1.25rem;
+  }
+  .card {
+    background: rgba(255, 255, 255, 0.66);
+    border: 1px solid rgba(28, 43, 51, 0.08);
+    border-radius: 18px;
+    padding: 1.8rem 1.6rem;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 18px 40px -28px rgba(15, 92, 92, 0.5);
+  }
+  .card .num {
+    display: inline-grid;
+    place-content: center;
+    width: 2.6rem; height: 2.6rem;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--teal), var(--surf));
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+  .card h3 { margin: 0 0 .5rem; font-size: 1.2rem; }
+  .card p  { margin: 0; color: var(--ink-soft); font-size: .96rem; }
+
+  /* safety band */
+  .band {
+    border-radius: 22px;
+    overflow: hidden;
+    color: #fff;
+    padding: clamp(2.2rem, 6vw, 4.5rem);
+    background:
+      linear-gradient(120deg, rgba(15, 92, 92, .92), rgba(46, 195, 195, .85)),
+      repeating-linear-gradient(45deg, rgba(255, 255, 255, .06) 0 14px, transparent 14px 28px);
+  }
+  .band h2 { font-size: clamp(1.8rem, 5vw, 3.2rem); margin: 0 0 .8rem; letter-spacing: -.02em; }
+  .band > p { margin: 0 0 1.6rem; max-width: 52ch; opacity: .92; font-size: 1.1rem; }
+  .band ol {
+    margin: 0; padding: 0;
+    list-style: none;
+    display: grid;
+    gap: .7rem;
+    max-width: 60ch;
+  }
+  .band li {
+    display: flex;
+    gap: .8rem;
+    align-items: baseline;
+    background: rgba(255, 255, 255, .1);
+    border-radius: 12px;
+    padding: .8rem 1.1rem;
+    font-size: .98rem;
+  }
+  .band li b { flex: none; opacity: .8; }
+
+  /* split: figure + options */
+  .split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(1.5rem, 4vw, 3.5rem);
+    align-items: center;
+  }
+  @media (max-width: 720px) { .split { grid-template-columns: 1fr; } }
+  .figure {
+    aspect-ratio: 4 / 3;
+    border-radius: 20px;
+    overflow: hidden;
+    background: radial-gradient(120% 120% at 20% 10%, var(--teal), var(--teal-deep) 70%);
+    display: grid;
+    place-content: center;
+    color: var(--sand-1);
+    box-shadow: 0 26px 60px -34px rgba(15, 92, 92, .7);
+  }
+  .figure svg { width: clamp(80px, 14vw, 130px); height: auto; opacity: .95; }
+  .split h2 { font-size: clamp(1.7rem, 4vw, 2.6rem); margin: 0 0 1rem; letter-spacing: -.015em; }
+  .split > div > p { color: var(--ink-soft); margin: 0 0 1.4rem; }
+  .opts { list-style: none; margin: 0; padding: 0; display: grid; gap: .7rem; }
+  .opts li {
+    display: flex;
+    gap: 1rem;
+    align-items: baseline;
+    background: rgba(255, 255, 255, .6);
+    border: 1px solid rgba(28, 43, 51, .08);
+    border-radius: 12px;
+    padding: .8rem 1.1rem;
+    font-size: .95rem;
+  }
+  .opts code {
+    flex: none;
+    font-weight: 700;
+    color: var(--teal-deep);
+    background: rgba(46, 195, 195, .14);
+    border-radius: 6px;
+    padding: .1rem .45rem;
+  }
+  .opts span { color: var(--ink-soft); }
+
+  /* paste-in steps */
+  .steps { list-style: none; padding: 0; margin: 0; display: grid; gap: 1rem; }
+  .steps li {
+    display: flex;
+    align-items: center;
+    gap: 1.1rem;
+    background: rgba(255, 255, 255, .6);
+    border: 1px solid rgba(28, 43, 51, .08);
+    border-radius: 14px;
+    padding: 1.1rem 1.4rem;
+  }
+  .steps .dot {
+    flex: none;
+    width: .9rem; height: .9rem; border-radius: 50%;
+    background: var(--teal);
+    box-shadow: 0 0 0 4px rgba(46, 195, 195, .2);
+  }
+  .steps strong { display: block; }
+  .steps span { color: var(--ink-soft); font-size: .92rem; }
+  .steps code { color: var(--teal-deep); }
+
+  /* footer */
+  footer {
+    text-align: center;
+    padding: 5rem 1.5rem 6rem;
+    color: var(--ink-soft);
+  }
+  footer .mark { font-weight: 700; color: var(--teal-deep); letter-spacing: -.02em; }
+</style>
+</head>
+<body>
+
+  <!-- BRAND LOADER OVERLAY: first child of <body> -->
+  <div class="blr-loader" id="brand-loader" role="status" aria-label="Loading">
+    <svg class="blr-loader__mark" viewBox="0 0 96 96" fill="none" aria-hidden="true">
+      <circle cx="48" cy="48" r="44" stroke="currentColor" stroke-width="4" />
+      <path d="M24 56c8-10 16-10 24 0s16 10 24 0"
+            stroke="currentColor" stroke-width="5" stroke-linecap="round" />
+      <path d="M30 42c6-7 12-7 18 0s12 7 18 0"
+            stroke="currentColor" stroke-width="4" stroke-linecap="round" opacity=".55" />
+    </svg>
+  </div>
+
+  <!-- HERO (staggers in after the curtain) -->
+  <header class="hero">
+    <div>
+      <p class="eyebrow blr-stagger blr-d1">Sand &amp; Surf · Vanilla part</p>
+      <h1 class="blr-stagger blr-d2">Brand <em>Loader</em> Reveal</h1>
+      <p class="lede blr-stagger blr-d3">
+        A single brand color holds the screen while the page loads, then lifts
+        away like a curtain and the hero staggers in, exactly what you just watched.
+      </p>
+      <div class="hero-actions blr-stagger blr-d4">
+        <button class="btn btn-primary" id="replay" type="button">Replay the intro</button>
+        <a class="btn btn-ghost" href="#how">How it works</a>
+      </div>
+      <p class="hook-note blr-stagger blr-d5" id="hook-note">
+        Waiting for the <code>onRevealed</code> hook…
+      </p>
+      <p class="scroll-hint blr-stagger blr-d6">Scroll for the details<span>↓</span></p>
+    </div>
+  </header>
+
+  <!-- CHOREOGRAPHY -->
+  <section class="wrap" id="how">
+    <div class="section-head">
+      <h2>Three beats, one entrance</h2>
+      <p>The whole effect is a fixed overlay, one clip-path transition, and a
+         handful of transition-delay classes. No library, no bundle.</p>
+    </div>
+    <div class="cards">
+      <article class="card">
+        <span class="num">1</span>
+        <h3>Hold</h3>
+        <p>The overlay covers the page in one brand color, the logo mark pulses,
+           and body scroll stays locked while assets load.</p>
+      </article>
+      <article class="card">
+        <span class="num">2</span>
+        <h3>Lift</h3>
+        <p>On window load, after a minimum display time of 1.2s, the curtain
+           wipes upward with a strong cubic-bezier ease and removes itself.</p>
+      </article>
+      <article class="card">
+        <span class="num">3</span>
+        <h3>Arrive</h3>
+        <p>Hero elements fade in and rise a few pixels, each one a beat later
+           via the .blr-d1 to .blr-d6 delay classes.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- SAFETY BAND -->
+  <section class="wrap">
+    <div class="band">
+      <h2>Your content is never trapped</h2>
+      <p>Loaders are only charming when they always end. This one resolves in
+         layers, so the page shows up no matter what goes wrong.</p>
+      <ol>
+        <li><b>01</b> window load fires the reveal in the normal case, after the minimum display time.</li>
+        <li><b>02</b> an 8s safety net reveals anyway if some asset hangs forever.</li>
+        <li><b>03</b> if the script never runs at all, a pure CSS failsafe lifts the overlay after 4s.</li>
+        <li><b>04</b> reduced-motion users get a quick fade and the content simply appears, no stagger.</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- SPLIT: MARK + OPTIONS -->
+  <section class="wrap">
+    <div class="split">
+      <div class="figure" aria-hidden="true">
+        <svg viewBox="0 0 96 96" fill="none">
+          <circle cx="48" cy="48" r="44" stroke="currentColor" stroke-width="4" />
+          <path d="M24 56c8-10 16-10 24 0s16 10 24 0"
+                stroke="currentColor" stroke-width="5" stroke-linecap="round" />
+          <path d="M30 42c6-7 12-7 18 0s12 7 18 0"
+                stroke="currentColor" stroke-width="4" stroke-linecap="round" opacity=".55" />
+        </svg>
+      </div>
+      <div>
+        <h2>One call, four options</h2>
+        <p>Everything runs through <code>initLoaderReveal(options)</code>.
+           Swap the inline SVG for your own mark and you are done.</p>
+        <ul class="opts">
+          <li><code>minTime</code><span>minimum overlay time in ms, 1200 by default</span></li>
+          <li><code>onRevealed</code><span>callback fired once the overlay is removed</span></li>
+          <li><code>maxWait</code><span>safety net that reveals even if load hangs</span></li>
+          <li><code>loader</code><span>selector or element, defaults to .blr-loader</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- PASTE-IN STEPS -->
+  <section class="wrap">
+    <div class="section-head">
+      <h2>Paste it in, four steps</h2>
+      <p>The part is two small files plus a few classes on your hero.</p>
+    </div>
+    <ul class="steps">
+      <li>
+        <span class="dot"></span>
+        <div><strong>Drop the overlay</strong><span>Put the <code>.blr-loader</code> div (with your logo SVG) as the first child of body.</span></div>
+      </li>
+      <li>
+        <span class="dot"></span>
+        <div><strong>Tag the hero</strong><span>Add <code>.blr-stagger</code> plus a <code>.blr-d1</code> to <code>.blr-d6</code> delay class per element.</span></div>
+      </li>
+      <li>
+        <span class="dot"></span>
+        <div><strong>Link the files</strong><span>styles.css in the head, script.js before your init call.</span></div>
+      </li>
+      <li>
+        <span class="dot"></span>
+        <div><strong>Initialize</strong><span>Call <code>initLoaderReveal({ minTime: 1200 })</code> and ship it.</span></div>
+      </li>
+    </ul>
+  </section>
+
+  <footer>
+    <p><span class="mark">saltycodestudio</span> · Sand &amp; Surf parts library</p>
+    <p>Hit “Replay the intro” at the top to watch the curtain again.</p>
+  </footer>
+
+  <script>
+  /* Brand Loader Reveal, saltycodestudio (inlined for this standalone demo) */
+  (function (global) {
+    'use strict';
+
+    function initLoaderReveal(options) {
+      var opts = options || {};
+      var minTime = typeof opts.minTime === 'number' ? opts.minTime : 1200;
+      var maxWait = typeof opts.maxWait === 'number' ? opts.maxWait : 8000;
+      var onRevealed = typeof opts.onRevealed === 'function' ? opts.onRevealed : null;
+
+      var docEl = document.documentElement;
+      var loader = typeof opts.loader === 'string'
+        ? document.querySelector(opts.loader)
+        : (opts.loader || document.querySelector('.blr-loader'));
+
+      docEl.classList.add('blr-js');
+
+      if (!loader) {
+        docEl.classList.add('blr-revealed');
+        if (onRevealed) onRevealed();
+        return;
+      }
+
+      var reduceMotion = global.matchMedia &&
+        global.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduceMotion) minTime = 0;
+
+      document.body.classList.add('blr-lock');
+
+      var start = Date.now();
+      var revealed = false;
+
+      function finish() {
+        if (loader.parentNode) loader.parentNode.removeChild(loader);
+        document.dispatchEvent(new CustomEvent('blr:revealed'));
+        if (onRevealed) onRevealed();
+      }
+
+      function reveal() {
+        if (revealed) return;
+        revealed = true;
+
+        loader.classList.add('is-revealing');
+        docEl.classList.add('blr-revealed');
+        document.body.classList.remove('blr-lock');
+
+        var done = false;
+        function onEnd() {
+          if (done) return;
+          done = true;
+          loader.removeEventListener('transitionend', onTransitionEnd);
+          finish();
+        }
+        function onTransitionEnd(e) {
+          if (e && e.target !== loader) return;
+          onEnd();
+        }
+        loader.addEventListener('transitionend', onTransitionEnd);
+        setTimeout(onEnd, reduceMotion ? 500 : 1600);
+      }
+
+      function onLoaded() {
+        var wait = Math.max(0, minTime - (Date.now() - start));
+        setTimeout(reveal, wait);
+      }
+
+      if (document.readyState === 'complete') {
+        onLoaded();
+      } else {
+        global.addEventListener('load', onLoaded, { once: true });
+      }
+
+      setTimeout(reveal, maxWait);
+    }
+
+    global.initLoaderReveal = initLoaderReveal;
+  })(window);
+
+  /* ---- Demo wiring: first run + replay button + hook readout ---- */
+  (function () {
+    'use strict';
+
+    var loaderHTML = document.getElementById('brand-loader').outerHTML;
+    var replayBtn = document.getElementById('replay');
+    var note = document.getElementById('hook-note');
+    var runs = 0;
+
+    function onRevealed() {
+      runs += 1;
+      if (note) {
+        note.innerHTML = '<code>onRevealed</code> hook fired · reveal #' + runs;
+      }
+      if (replayBtn) replayBtn.disabled = false;
+    }
+
+    initLoaderReveal({ minTime: 1200, onRevealed: onRevealed });
+
+    if (replayBtn) {
+      replayBtn.addEventListener('click', function () {
+        replayBtn.disabled = true;
+        window.scrollTo({ top: 0, behavior: 'auto' });
+        // Re-insert the overlay, hide the hero behind it, run it again.
+        document.body.insertAdjacentHTML('afterbegin', loaderHTML);
+        document.documentElement.classList.remove('blr-revealed');
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () {
+            initLoaderReveal({ minTime: 1200, onRevealed: onRevealed });
+          });
+        });
+      });
+    }
+  })();
+  </script>
+
+</body>
+</html>

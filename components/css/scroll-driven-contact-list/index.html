@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fly-In Fly-Out List, usage example</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* Tiny demo shell only, not part of the component. */
+    body {
+      margin: 0;
+      padding: 2rem 1.5rem 40vh;
+      font-family: system-ui, sans-serif;
+      background: #f4ece0;
+    }
+    main { max-width: 560px; margin-inline: auto; display: grid; gap: 3rem; }
+  </style>
+</head>
+<body>
+<main>
+
+  <!-- ============================================================
+       Markup for Fly-In Fly-Out List. Pair with styles.css.
+       The .fly-list card is its own scrollport, so view() tracks
+       each row against the card. Scroll the list: rows fly in at
+       the bottom, out at the top.
+       ============================================================ -->
+
+  <!-- 1. Default: self-scrolling contact card (set the height per instance) -->
+  <div class="fly-list" style="--fly-height: 70vh">
+    <ul>
+      <li>
+        <span class="fly-avatar" aria-hidden="true">AD</span>
+        <span class="fly-name">Ava Delmar
+          <small class="fly-note">Surf coach</small>
+        </span>
+      </li>
+      <li>
+        <span class="fly-avatar" aria-hidden="true">BV</span>
+        <span class="fly-name">Bo Vandergrift
+          <small class="fly-note">Boat captain</small>
+        </span>
+      </li>
+      <li>
+        <span class="fly-avatar" aria-hidden="true">CR</span>
+        <span class="fly-name">Cala Reyes
+          <small class="fly-note">Dive instructor</small>
+        </span>
+      </li>
+      <li>
+        <span class="fly-avatar" aria-hidden="true">ES</span>
+        <span class="fly-name">Elin Strand
+          <small class="fly-note">Kite school</small>
+        </span>
+      </li>
+      <li>
+        <span class="fly-avatar" aria-hidden="true">FB</span>
+        <span class="fly-name">Finn Baywater
+          <small class="fly-note">Fishing charters</small>
+        </span>
+      </li>
+      <li>
+        <span class="fly-avatar" aria-hidden="true">IM</span>
+        <span class="fly-name">Isla Moreno
+          <small class="fly-note">Yoga on the pier</small>
+        </span>
+      </li>
+      <li>
+        <span class="fly-avatar" aria-hidden="true">KO</span>
+        <span class="fly-name">Kai Ostend
+          <small class="fly-note">Windsurf coach</small>
+        </span>
+      </li>
+      <li>
+        <span class="fly-avatar" aria-hidden="true">RS</span>
+        <span class="fly-name">Rio Salinas
+          <small class="fly-note">Surf shop</small>
+        </span>
+      </li>
+    </ul>
+  </div>
+
+  <!-- 2. Page variant: the document scrolls, rows animate against the
+       viewport. Add fly-list--numbered for the optional #n row index. -->
+  <div class="fly-list fly-list--page fly-list--numbered">
+    <ul>
+      <li>
+        <span class="fly-avatar" aria-hidden="true">AS</span>
+        <span class="fly-name">Amara Solis
+          <small class="fly-note">Sunset sailing</small>
+        </span>
+      </li>
+      <li>
+        <span class="fly-avatar" aria-hidden="true">BO</span>
+        <span class="fly-name">Bram Oosterdok
+          <small class="fly-note">Harbor master</small>
+        </span>
+      </li>
+      <li>
+        <span class="fly-avatar" aria-hidden="true">CF</span>
+        <span class="fly-name">Cleo Fontaine
+          <small class="fly-note">Beach club</small>
+        </span>
+      </li>
+    </ul>
+  </div>
+
+</main>
+</body>
+</html>

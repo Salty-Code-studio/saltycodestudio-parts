@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scroll-Driven Progress Bar, usage example</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- THE PART: one element, placed once, right after the opening
+       <body> tag. Decorative, so hide it from assistive tech.
+       The fill is wired to the document scroll purely in CSS,
+       so there is nothing to initialize. -->
+  <div class="sdp-bar" aria-hidden="true"></div>
+
+  <!-- Optional: retheme per page with the custom properties.
+       <div class="sdp-bar" aria-hidden="true"
+            style="--sdp-height: 4px; --sdp-fill: #0f5c5c"></div>
+  -->
+
+  <main style="max-width: 60ch; margin-inline: auto; padding: 2rem 1.5rem; font-family: system-ui, sans-serif; line-height: 1.6;">
+    <h1>Any long page</h1>
+    <p>As this document scrolls, the bar above fills from empty at the
+       top of the page to full at the very bottom.</p>
+
+    <!-- Tall spacer so this bare example has room to scroll.
+         In a real page your own content provides the height. -->
+    <section style="min-height: 250vh; display: grid; align-content: space-between;" aria-label="Scroll room">
+      <p>Keep scrolling, the bar tracks you the whole way down.</p>
+      <p>Halfway there. The bar should be sitting near fifty percent.</p>
+      <p>The end. The bar at the top is now full width.</p>
+    </section>
+  </main>
+
+</body>
+</html>

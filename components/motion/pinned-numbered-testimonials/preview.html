@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Pinned Numbered Testimonials, Sand &amp; Surf demo</title>
+<style>
+  /* ==== Sand & Surf palette ==== */
+  :root {
+    --sand-1: #fbf7f0;
+    --sand-2: #f4ece0;
+    --sand-3: #ece0cd;
+    --ink: #1c2b33;
+    --ink-soft: #4a5d66;
+    --teal: #1f8a8a;
+    --teal-deep: #0f5c5c;
+    --surf: #2ec3c3;
+
+    --pnt-accent: var(--teal);
+    --pnt-num-ink: rgba(31, 138, 138, 0.2);
+    --pnt-rail-track: rgba(28, 43, 51, 0.14);
+    --pnt-muted: var(--ink-soft);
+    --pnt-num-size: clamp(5.5rem, 24vw, 19rem);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: "Helvetica Neue", Arial, system-ui, sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(140% 90% at 50% -10%, var(--sand-1), var(--sand-2) 55%, var(--sand-3) 100%);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ==== Hero ==== */
+  .hero {
+    min-height: 92vh;
+    display: grid;
+    place-content: center;
+    text-align: center;
+    padding: 6rem 1.5rem 4rem;
+  }
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.32em;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--teal-deep);
+    margin-bottom: 1.2rem;
+  }
+  .hero h1 {
+    font-size: clamp(2.4rem, 7vw, 4.8rem);
+    line-height: 1.04;
+    letter-spacing: -0.02em;
+  }
+  .hero h1 em {
+    font-style: normal;
+    color: var(--teal-deep);
+  }
+  .hero > p {
+    max-width: 52ch;
+    margin: 1.6rem auto 0;
+    color: var(--ink-soft);
+    font-size: 1.12rem;
+  }
+  .scroll-hint {
+    margin-top: 3rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .scroll-hint span {
+    display: block;
+    margin-top: 0.6rem;
+    font-size: 1.4rem;
+    animation: nudge 1.8s ease-in-out infinite;
+  }
+  @keyframes nudge {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(6px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-hint span { animation: none; }
+  }
+  .note {
+    margin-top: 1.6rem;
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+    background: rgba(255, 255, 255, 0.55);
+    border: 1px dashed rgba(31, 138, 138, 0.4);
+    border-radius: 12px;
+    padding: 0.8rem 1rem;
+    display: inline-block;
+  }
+
+  /* ============================================================
+     PINNED NUMBERED TESTIMONIALS (the part's styles.css)
+     ============================================================ */
+
+  .pnt-section { position: relative; }
+
+  .pnt-inner { position: relative; }
+
+  .pnt-item {
+    margin: 0;
+    display: grid;
+    row-gap: 1.4rem;
+    column-gap: clamp(1.5rem, 4vw, 3.5rem);
+    align-items: center;
+    padding-block: clamp(2.5rem, 8vh, 5rem);
+  }
+
+  @media (min-width: 768px) {
+    .pnt-item {
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+      row-gap: 1.1rem;
+    }
+    .pnt-num { grid-row: 1 / span 2; }
+    .pnt-quote { align-self: end; }
+    .pnt-author { align-self: start; }
+  }
+
+  .pnt-num {
+    font-size: var(--pnt-num-size);
+    font-weight: 800;
+    line-height: 0.85;
+    letter-spacing: -0.05em;
+    color: var(--pnt-num-ink);
+    user-select: none;
+  }
+
+  .pnt-quote {
+    margin: 0;
+    font-size: clamp(1.35rem, 3vw, 2.3rem);
+    font-weight: 600;
+    line-height: 1.3;
+    letter-spacing: -0.015em;
+    max-width: 26ch;
+  }
+
+  .pnt-author { margin: 0; font-size: 1rem; }
+  .pnt-author strong { display: block; letter-spacing: 0.01em; }
+  .pnt-author span { color: var(--pnt-muted); font-size: 0.9rem; }
+
+  .pnt-section:not(.pnt-is-live) .pnt-item + .pnt-item {
+    border-top: 1px solid var(--pnt-rail-track);
+  }
+
+  .pnt-rail { display: none; }
+
+  .pnt-is-live .pnt-inner {
+    min-height: 100vh;
+    min-height: 100svh;
+    display: grid;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .pnt-is-live .pnt-stage {
+    display: grid;
+    width: min(100% - clamp(2rem, 8vw, 6rem), 1080px);
+    margin-inline: auto;
+  }
+
+  .pnt-is-live .pnt-item {
+    grid-area: 1 / 1;
+    padding-block: 0;
+  }
+
+  .pnt-is-live .pnt-num,
+  .pnt-is-live .pnt-quote,
+  .pnt-is-live .pnt-author {
+    will-change: transform, opacity;
+  }
+
+  .pnt-is-live .pnt-rail {
+    display: block;
+    position: absolute;
+    right: clamp(1.1rem, 4vw, 2.75rem);
+    top: 50%;
+    transform: translateY(-50%);
+    width: 2px;
+    height: min(38vh, 300px);
+    border-radius: 999px;
+    background: var(--pnt-rail-track);
+  }
+
+  .pnt-rail-fill {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--pnt-accent);
+    transform: scaleY(0);
+    transform-origin: top center;
+  }
+
+  /* ==== Static-mode comfort: give the fallback list side padding ==== */
+  .pnt-section:not(.pnt-is-live) .pnt-stage {
+    width: min(100% - clamp(2rem, 8vw, 6rem), 1080px);
+    margin-inline: auto;
+  }
+
+  /* ==== Outro ==== */
+  .outro {
+    min-height: 85vh;
+    display: grid;
+    place-content: center;
+    text-align: center;
+    padding: 2rem 1.5rem;
+  }
+  .outro h2 {
+    font-size: clamp(1.9rem, 5vw, 3.4rem);
+    letter-spacing: -0.02em;
+    color: var(--teal-deep);
+  }
+  .outro p {
+    margin-top: 1rem;
+    color: var(--ink-soft);
+    font-size: 1.08rem;
+  }
+  .outro .mark {
+    margin-top: 3.5rem;
+    font-weight: 700;
+    color: var(--teal-deep);
+    letter-spacing: -0.02em;
+  }
+</style>
+</head>
+<body>
+
+  <header class="hero">
+    <div>
+      <p class="eyebrow">saltycodestudio parts &middot; motion</p>
+      <h1>Pinned Numbered<br /><em>Testimonials</em></h1>
+      <p>Giant numerals crossfade in sequence while each quote takes the stage,
+         scrubbed by GSAP ScrollTrigger and snapped to every testimonial.</p>
+      <p class="scroll-hint">Scroll to begin<span>&darr;</span></p>
+      <div><span class="note">Watch the hairline on the right fill as the quotes hand over. Falls back to a plain list for reduced motion or when JavaScript is off.</span></div>
+    </div>
+  </header>
+
+  <section class="pnt-section" aria-label="What clients say">
+    <div class="pnt-inner">
+      <div class="pnt-rail" aria-hidden="true"><span class="pnt-rail-fill"></span></div>
+      <div class="pnt-stage">
+
+        <figure class="pnt-item">
+          <span class="pnt-num" aria-hidden="true">01</span>
+          <blockquote class="pnt-quote">&ldquo;The new site feels like our shop on a good morning. Warm, quick, easy to walk into.&rdquo;</blockquote>
+          <figcaption class="pnt-author"><strong>Lena Maduro</strong><span>Owner, Boca Sami Dive Shop</span></figcaption>
+        </figure>
+
+        <figure class="pnt-item">
+          <span class="pnt-num" aria-hidden="true">02</span>
+          <blockquote class="pnt-quote">&ldquo;Bookings doubled in one season. No ad budget, just a site that finally works on a phone.&rdquo;</blockquote>
+          <figcaption class="pnt-author"><strong>Ruben Winklaar</strong><span>Manager, Palm &amp; Tide Rentals</span></figcaption>
+        </figure>
+
+        <figure class="pnt-item">
+          <span class="pnt-num" aria-hidden="true">03</span>
+          <blockquote class="pnt-quote">&ldquo;Straight answers, same day, every time. They speak human first and code second.&rdquo;</blockquote>
+          <figcaption class="pnt-author"><strong>Anouk de Vries</strong><span>Founder, Driftwood Interiors</span></figcaption>
+        </figure>
+
+      </div>
+    </div>
+  </section>
+
+  <footer class="outro">
+    <div>
+      <h2>The rail is full.</h2>
+      <p>Three quotes, one pin, zero jump cuts. Snap lands on a settled testimonial every time.</p>
+      <p class="mark">saltycodestudio, Sand &amp; Surf parts library</p>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script>
+    /* Inline copy of animation.js so this preview stays a single file. */
+    function initNumberedTestimonials(root) {
+      root = root || document;
+      var sections = root.querySelectorAll('.pnt-section');
+      if (!sections.length) return;
+
+      if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
+        console.warn('[pinned-numbered-testimonials] GSAP + ScrollTrigger not found, keeping the static list.');
+        sections.forEach(function (section) { section.classList.add('pnt-static'); });
+        return;
+      }
+      gsap.registerPlugin(ScrollTrigger);
+
+      var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      sections.forEach(function (section) {
+        var inner = section.querySelector('.pnt-inner');
+        var items = gsap.utils.toArray(section.querySelectorAll('.pnt-item'));
+
+        if (prefersReduced || !inner || items.length < 2) {
+          section.classList.add('pnt-static');
+          return;
+        }
+
+        section.classList.add('pnt-is-live');
+
+        var parts = items.map(function (item) {
+          return {
+            num: item.querySelector('.pnt-num'),
+            copy: gsap.utils.toArray(item.querySelectorAll('.pnt-quote, .pnt-author'))
+          };
+        });
+
+        parts.forEach(function (part, i) {
+          var shown = i === 0;
+          gsap.set(part.num, {
+            autoAlpha: shown ? 1 : 0,
+            yPercent: shown ? 0 : 24,
+            scale: shown ? 1 : 0.94
+          });
+          gsap.set(part.copy, { autoAlpha: shown ? 1 : 0, y: shown ? 0 : 40 });
+        });
+
+        var count = items.length;
+        var steps = count - 1;
+
+        var tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: section,
+            start: 'top top',
+            end: function () { return '+=' + window.innerHeight * count; },
+            pin: inner,
+            scrub: 0.75,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+            snap: {
+              snapTo: 1 / steps,
+              duration: { min: 0.2, max: 0.6 },
+              delay: 0.05,
+              ease: 'power1.inOut'
+            }
+          }
+        });
+
+        for (var i = 1; i < count; i += 1) {
+          var prev = parts[i - 1];
+          var next = parts[i];
+          var at = i - 0.5;
+
+          tl.to(prev.num, { autoAlpha: 0, yPercent: -24, scale: 1.05, duration: 0.22, ease: 'power2.in' }, at)
+            .to(prev.copy, { autoAlpha: 0, y: -36, duration: 0.2, stagger: 0.04, ease: 'power2.in' }, at)
+            .to(next.num, { autoAlpha: 1, yPercent: 0, scale: 1, duration: 0.26, ease: 'power2.out' }, at + 0.18)
+            .to(next.copy, { autoAlpha: 1, y: 0, duration: 0.24, stagger: 0.06, ease: 'power2.out' }, at + 0.2);
+        }
+
+        var fill = section.querySelector('.pnt-rail-fill');
+        if (fill) {
+          gsap.set(fill, { scaleY: 0, transformOrigin: 'top center' });
+          tl.to(fill, { scaleY: 1, duration: steps, ease: 'none' }, 0);
+        }
+      });
+    }
+
+    initNumberedTestimonials();
+  </script>
+
+</body>
+</html>

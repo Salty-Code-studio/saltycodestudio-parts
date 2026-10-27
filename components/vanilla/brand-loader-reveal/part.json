@@ -1,0 +1,28 @@
+{
+  "name": "Brand Loader Reveal",
+  "slug": "brand-loader-reveal",
+  "category": "vanilla",
+  "tier": "showcase",
+  "tags": [
+    "loader",
+    "preloader",
+    "curtain",
+    "reveal",
+    "clip-path",
+    "stagger",
+    "hero",
+    "intro",
+    "page-load",
+    "overlay"
+  ],
+  "description": "A full-screen brand-color loader with a centered logo mark that lifts away like a curtain once the page has loaded, then staggers the hero content in with small fade-and-rise steps.",
+  "deps": [],
+  "files": [
+    "script.js",
+    "styles.css",
+    "index.html"
+  ],
+  "usage": "Paste the .blr-loader overlay as the first child of <body>, add .blr-stagger plus one of .blr-d1 to .blr-d6 to each hero element, link styles.css and script.js, then call initLoaderReveal({ minTime: 1200, onRevealed: fn }).",
+  "source": "Pattern seen on https://coffee-tech.com (Awwwards SOTD by MAKETHECUT and Or Halevi), implemented from scratch",
+  "license": "MIT (original clean-room implementation by saltycodestudio-parts, visual pattern inspired by coffee-tech.com by MAKETHECUT and Or Halevi, no code or assets copied)"
+}

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Editorial Index Rows · usage example</title>
+<link rel="stylesheet" href="styles.css" />
+<style>
+  /* Page scaffolding only. The part itself lives in styles.css. */
+  body { margin: 0; font-family: system-ui, sans-serif; }
+  main > section { padding: 3rem clamp(1rem, 5vw, 3rem); }
+  .dark-section { background: #0e171c; }
+  .dark-section .eir {
+    --eir-ink: #f4ece0;
+    --eir-muted: rgba(244, 236, 224, 0.35);
+    --eir-rule: rgba(244, 236, 224, 0.16);
+    --eir-tint: rgba(46, 195, 195, 0.08);
+    --eir-arrow: #2ec3c3;
+  }
+</style>
+</head>
+<body>
+<main>
+
+  <!-- 1. The part: a nav of oversized link rows. Each row holds a small
+       index number, the big label, and the trailing arrow. Every state
+       (hover, focus, touch fallback) is wired up purely in CSS. -->
+  <section>
+    <nav aria-label="Site index">
+      <ul class="eir">
+
+        <li>
+          <a class="eir-row" href="#technology">
+            <span class="eir-num" aria-hidden="true">01</span>
+            <span class="eir-label">Technology</span>
+            <span class="eir-arrow" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 12h17" />
+                <path d="M13 5l7 7-7 7" />
+              </svg>
+            </span>
+          </a>
+        </li>
+
+        <li>
+          <a class="eir-row" href="#efficiency">
+            <span class="eir-num" aria-hidden="true">02</span>
+            <span class="eir-label">Efficiency</span>
+            <span class="eir-arrow" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 12h17" />
+                <path d="M13 5l7 7-7 7" />
+              </svg>
+            </span>
+          </a>
+        </li>
+
+        <li>
+          <a class="eir-row" href="#sustainability">
+            <span class="eir-num" aria-hidden="true">03</span>
+            <span class="eir-label">Sustainability</span>
+            <span class="eir-arrow" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 12h17" />
+                <path d="M13 5l7 7-7 7" />
+              </svg>
+            </span>
+          </a>
+        </li>
+
+      </ul>
+    </nav>
+  </section>
+
+  <!-- 2. Dark retheme: override the --eir-* custom properties on .eir
+       or any ancestor (see the .dark-section rules in <head>). -->
+  <section class="dark-section">
+    <nav aria-label="Studio index">
+      <ul class="eir">
+
+        <li>
+          <a class="eir-row" href="#work">
+            <span class="eir-num" aria-hidden="true">01</span>
+            <span class="eir-label">Work</span>
+            <span class="eir-arrow" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 12h17" />
+                <path d="M13 5l7 7-7 7" />
+              </svg>
+            </span>
+          </a>
+        </li>
+
+        <li>
+          <a class="eir-row" href="#journal">
+            <span class="eir-num" aria-hidden="true">02</span>
+            <span class="eir-label">Journal</span>
+            <span class="eir-arrow" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 12h17" />
+                <path d="M13 5l7 7-7 7" />
+              </svg>
+            </span>
+          </a>
+        </li>
+
+      </ul>
+    </nav>
+  </section>
+
+</main>
+</body>
+</html>

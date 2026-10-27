@@ -1,0 +1,138 @@
+/* ============================================================
+   CSS Cover Flow  (scroll-driven-cover-flow)
+   saltycodestudio parts library
+   ============================================================
+   The classic 3D cover-flow shelf, driven entirely by native
+   CSS scroll-driven animations. Each cover carries its own
+   animation-timeline: view(inline), so it rotates sideways
+   while off-center and faces forward (popped toward you) the
+   moment it snaps to the middle of the shelf. Zero JavaScript.
+
+   Adapted from the Cover Flow demo by Bramus Van Damme,
+   https://scroll-driven-animations.style/demos/cover-flow/css/
+   (Apache-2.0), adapted with credit.
+
+   Markup contract:
+
+     <div class="scf" role="region" aria-label="Cover shelf" tabindex="0">
+       <ul class="scf-covers">
+         <li><img class="scf-cover" src="cover1.jpg" alt="..." /></li>
+         <li><svg class="scf-cover" viewBox="0 0 120 120">...</svg></li>
+         <li><div class="scf-cover"></div></li>
+       </ul>
+     </div>
+
+   Key trick from the original demo: the transforms live on the
+   .scf-cover child, never on the <li>. Transforming the <li>
+   would change the scroller's total scroll distance and cause
+   flicker. The <li> boxes stay put; only the art rotates.
+   ============================================================ */
+
+/* The shelf: a horizontal scroller that is also the 3D stage. */
+.scf {
+  /* Square cover edge length. Everything scales from this. */
+  --scf-cover-size: 15rem;
+  /* How many cover widths the visible shelf spans. */
+  --scf-span: 6;
+
+  width: calc(var(--scf-cover-size) * var(--scf-span));
+  max-width: 100%;
+  margin-inline: auto;
+  /* Headroom for the 1.5x center pop and the reflection below. */
+  padding-block: calc(var(--scf-cover-size) * 2 / 3);
+
+  overflow-x: scroll;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+
+  /* Keep the scrollbar visible for discoverability, but slim.
+     Tint it to your backdrop with scrollbar-color if you like. */
+  scrollbar-width: thin;
+
+  /* The 3D stage. */
+  perspective: 40em;
+}
+
+.scf:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+}
+
+@media (max-width: 1024px) {
+  .scf { --scf-cover-size: 9rem; }
+}
+
+@media (max-width: 600px) {
+  .scf { --scf-cover-size: 6rem; }
+}
+
+.scf-covers {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  white-space: nowrap;
+  transform-style: preserve-3d;
+}
+
+.scf-covers li {
+  display: inline-block;
+  width: var(--scf-cover-size);
+  height: var(--scf-cover-size);
+  scroll-snap-align: center;
+  transform-style: preserve-3d;
+}
+
+/* Let the first and last cover reach the center of the shelf. */
+.scf-covers li:first-child {
+  margin-left: calc(50% - (var(--scf-cover-size) / 2));
+}
+
+.scf-covers li:last-child {
+  margin-right: calc(50% - (var(--scf-cover-size) / 2));
+}
+
+/* The cover art itself: an <img>, an inline <svg>, or a <div>. */
+.scf-cover {
+  display: block;
+  width: 100%;
+  height: 100%;
+  user-select: none;
+  -webkit-user-drag: none;
+
+  /* Glassy reflection under each cover. WebKit and Blink only;
+     Firefox simply shows no reflection, which reads fine. */
+  -webkit-box-reflect: below 0.5em
+    linear-gradient(rgb(0 0 0 / 0), rgb(0 0 0 / 0.25));
+}
+
+/* ============================================================
+   The scroll-driven part. Guarded by @supports plus a
+   reduced-motion check, so browsers without the feature (and
+   users who prefer calm) get a plain, perfectly usable
+   horizontal shelf with snapping intact.
+   ============================================================ */
+
+/* One keyframe track choreographs the whole trip across the
+   scrollport: enter rotated, straighten and pop at dead center
+   (the 50% mark), then rotate away and leave. */
+@keyframes scf-rotate-cover {
+  0%   { transform: translateX(-100%) rotateY(-45deg); }
+  35%  { transform: translateX(0) rotateY(-45deg); }
+  50%  { transform: rotateY(0deg) translateZ(1em) scale(1.5); }
+  65%  { transform: translateX(0) rotateY(45deg); }
+  100% { transform: translateX(100%) rotateY(45deg); }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .scf-cover {
+      /* Progress comes from this cover's own journey across the
+         scrollport, tracked on the inline (horizontal) axis. */
+      animation: scf-rotate-cover linear both;
+      animation-timeline: view(inline);
+      transform-style: preserve-3d;
+      will-change: transform;
+      position: relative;
+    }
+  }
+}

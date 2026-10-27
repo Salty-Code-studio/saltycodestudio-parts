@@ -1,0 +1,155 @@
+/* ==========================================================================
+   Brand Loader Reveal, saltycodestudio parts
+   ==========================================================================
+   A full-screen overlay in a single brand color with a centered logo mark.
+   On window load (after a minimum display time) script.js adds .is-revealing
+   to the overlay and .blr-revealed to <html>. The overlay wipes upward like
+   a curtain via a clip-path transition, then every element marked
+   .blr-stagger rises and fades in, sequenced by the .blr-d1 to .blr-d6
+   delay classes.
+
+   Safety: if script.js never runs, a pure CSS failsafe fades the overlay
+   out after 4 seconds and shows the content, so the page is never trapped.
+   script.js adds .blr-js to <html>, which cancels that failsafe.
+   ========================================================================== */
+
+:root {
+  --blr-bg: #0e3a40;                            /* the single brand color   */
+  --blr-fg: #f2ebdd;                            /* logo mark color          */
+  --blr-z: 9999;                                /* overlay stacking level   */
+  --blr-ease: cubic-bezier(0.76, 0, 0.24, 1);   /* strong curtain ease      */
+  --blr-curtain: 900ms;                         /* curtain wipe duration    */
+  --blr-rise: 18px;                             /* stagger rise distance    */
+}
+
+/* ==========================================================================
+   1. The overlay
+   ========================================================================== */
+
+.blr-loader {
+  position: fixed;
+  inset: 0;
+  z-index: var(--blr-z);
+  display: grid;
+  place-items: center;
+  background: var(--blr-bg);
+  color: var(--blr-fg);
+  clip-path: inset(0 0 0 0);
+  transition:
+    clip-path var(--blr-curtain) var(--blr-ease),
+    visibility 0s linear var(--blr-curtain);
+}
+
+/* Curtain up: the bottom edge of the overlay lifts to the top. */
+.blr-loader.is-revealing {
+  clip-path: inset(0 0 100% 0);
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* The logo mark idles with a gentle pulse while the page loads,
+   then dips away just as the curtain starts to lift. */
+.blr-loader__mark {
+  width: clamp(72px, 12vw, 120px);
+  height: auto;
+  animation: blr-pulse 1.8s ease-in-out infinite;
+}
+.blr-loader.is-revealing .blr-loader__mark {
+  animation: none;
+  opacity: 0;
+  transform: translateY(-14px) scale(0.94);
+  transition: opacity 240ms ease, transform 240ms ease;
+}
+
+@keyframes blr-pulse {
+  0%, 100% { opacity: 0.85; transform: scale(1); }
+  50%      { opacity: 1;    transform: scale(1.05); }
+}
+
+/* Scroll lock while the loader is up (script.js toggles this class). */
+body.blr-lock { overflow: hidden; }
+
+/* Very old browsers without clip-path get a plain fade instead. */
+@supports not (clip-path: inset(0 0 100% 0)) {
+  .blr-loader {
+    transition:
+      opacity var(--blr-curtain) ease,
+      visibility 0s linear var(--blr-curtain);
+  }
+  .blr-loader.is-revealing { opacity: 0; }
+}
+
+/* ==========================================================================
+   2. Hero stagger
+   ==========================================================================
+   Elements start slightly low and transparent. When <html> gains
+   .blr-revealed they transition to their settled state, each one offset
+   by its delay class so the group arrives as a sequence.
+   ========================================================================== */
+
+.blr-stagger {
+  opacity: 0;
+  transform: translateY(var(--blr-rise));
+  transition:
+    opacity 700ms var(--blr-ease),
+    transform 700ms var(--blr-ease);
+}
+html.blr-revealed .blr-stagger {
+  opacity: 1;
+  transform: none;
+}
+
+/* Delay steps. The first waits for the curtain to be mostly open. */
+.blr-d1 { transition-delay: 480ms; }
+.blr-d2 { transition-delay: 590ms; }
+.blr-d3 { transition-delay: 700ms; }
+.blr-d4 { transition-delay: 810ms; }
+.blr-d5 { transition-delay: 920ms; }
+.blr-d6 { transition-delay: 1030ms; }
+
+/* ==========================================================================
+   3. No-JS failsafe (4 seconds)
+   ==========================================================================
+   If script.js never executes (blocked, 404, disabled) these animations
+   fade the overlay out and bring the content in on their own. The script
+   announces itself by adding .blr-js to <html>, which cancels them.
+   ========================================================================== */
+
+@keyframes blr-failsafe-out {
+  to { opacity: 0; visibility: hidden; }
+}
+@keyframes blr-failsafe-in {
+  to { opacity: 1; transform: none; }
+}
+
+.blr-loader  { animation: blr-failsafe-out 500ms ease 4s forwards; }
+.blr-stagger { animation: blr-failsafe-in 500ms ease 4.2s forwards; }
+
+html.blr-js .blr-loader  { animation: none; }
+html.blr-js .blr-stagger { animation: none; }
+
+/* ==========================================================================
+   4. Reduced motion
+   ==========================================================================
+   The overlay simply fades out fast and the content appears in place,
+   with no rise and no stagger. The failsafe above still applies.
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .blr-loader {
+    transition:
+      opacity 200ms linear,
+      visibility 0s linear 200ms;
+  }
+  .blr-loader.is-revealing {
+    clip-path: none;
+    opacity: 0;
+  }
+  .blr-loader__mark { animation: none; }
+  .blr-loader.is-revealing .blr-loader__mark { transition: none; }
+  .blr-stagger {
+    transform: none;
+    transition: opacity 150ms linear;
+    transition-delay: 0s;
+  }
+}

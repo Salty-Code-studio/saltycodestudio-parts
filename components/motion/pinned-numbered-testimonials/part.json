@@ -1,0 +1,29 @@
+{
+  "name": "Pinned Numbered Testimonials",
+  "slug": "pinned-numbered-testimonials",
+  "category": "motion",
+  "tier": "showcase",
+  "tags": [
+    "testimonials",
+    "quotes",
+    "pin",
+    "gsap",
+    "scrolltrigger",
+    "scrub",
+    "snap",
+    "numerals",
+    "crossfade"
+  ],
+  "description": "A pinned testimonial stage where giant numerals 01, 02, 03 crossfade in sequence as you scroll, each paired with a large quote and author that slide-fade through, scrubbed by GSAP ScrollTrigger with snap to every testimonial and a progress hairline on the side.",
+  "deps": [
+    "gsap",
+    "gsap/ScrollTrigger"
+  ],
+  "files": [
+    "animation.js",
+    "styles.css"
+  ],
+  "usage": "Copy styles.css and animation.js, add a .pnt-section containing a .pnt-inner with the .pnt-rail hairline and one .pnt-item figure (numeral, quote, author) per testimonial, load GSAP plus ScrollTrigger, then call initNumberedTestimonials(). Without JavaScript or with reduced motion the same markup renders as a plain readable list.",
+  "source": "Pattern seen on https://coffee-tech.com (Awwwards SOTD by MAKETHECUT and Or Halevi), implemented from scratch",
+  "license": "MIT (original clean-room implementation by saltycodestudio-parts, visual pattern inspired by coffee-tech.com by MAKETHECUT and Or Halevi, no code or assets copied)"
+}

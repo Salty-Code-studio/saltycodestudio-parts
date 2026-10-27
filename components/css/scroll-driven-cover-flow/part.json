@@ -1,0 +1,13 @@
+{
+  "name": "CSS Cover Flow",
+  "slug": "scroll-driven-cover-flow",
+  "category": "css",
+  "tier": "showcase",
+  "tags": ["cover-flow", "scroll-driven", "animation-timeline", "view", "3d", "carousel", "scroll-snap", "gallery", "no-js"],
+  "description": "The classic iTunes-style 3D cover flow rebuilt with zero JavaScript: a horizontal snap scroller where each cover rides its own animation-timeline view(inline), rotating sideways off-center and popping forward at dead center, with a CSS box-reflect sheen below.",
+  "deps": [],
+  "files": ["styles.css", "index.html"],
+  "usage": "Include styles.css, then add a <div class=\"scf\" role=\"region\" tabindex=\"0\"> wrapping a <ul class=\"scf-covers\"> where every <li> holds one square .scf-cover (an img, inline svg, or styled div). Tune the shelf with --scf-cover-size and --scf-span on the .scf element.",
+  "source": "https://scroll-driven-animations.style/demos/cover-flow/css/",
+  "license": "Apache-2.0 (demo by Bramus Van Damme, scroll-driven-animations.style), adapted with credit"
+}

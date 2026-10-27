@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Scroll-Driven Carousel Markers &middot; Sand &amp; Surf demo</title>
+<style>
+  /* ---- Sand & Surf palette ---- */
+  :root {
+    --sand-1: #fbf7f0;
+    --sand-2: #f4ece0;
+    --sand-3: #ece0cd;
+    --ink: #1c2b33;
+    --ink-soft: #4a5d66;
+    --teal: #1f8a8a;
+    --teal-deep: #0f5c5c;
+    --surf: #2ec3c3;
+    --coral: #ff6f59;
+    --maxw: 1080px;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: "Helvetica Neue", Arial, system-ui, sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(140% 90% at 50% -10%, var(--sand-1), var(--sand-2) 55%, var(--sand-3) 100%);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: var(--maxw); margin-inline: auto; padding-inline: 1.5rem; }
+
+  /* ============================================================
+     THE PART: Scroll-Driven Carousel Markers (sdcm-)
+     Identical to styles.css, inlined so this page is standalone.
+     ============================================================ */
+
+  .sdcm-carousel {
+    --sdcm-n: 5;
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--sdcm-radius, 1.25rem);
+    aspect-ratio: 16 / 10;
+    max-width: 100%;
+  }
+
+  .sdcm-entries {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    overflow-x: scroll;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+  }
+
+  .sdcm-entries::-webkit-scrollbar { display: none; }
+
+  .sdcm-entries:focus { outline: none; }
+
+  .sdcm-entries:focus-visible {
+    outline: 2px solid var(--sdcm-dot-active, #1f8a8a);
+    outline-offset: -2px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .sdcm-entries { scroll-behavior: smooth; }
+  }
+
+  .sdcm-entries > li {
+    flex: 1 0 100%;
+    scroll-snap-align: center;
+    display: grid;
+    place-items: center;
+    min-width: 0;
+  }
+
+  .sdcm-markers {
+    position: absolute;
+    bottom: 1rem;
+    left: 50%;
+    translate: -50% 0;
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .sdcm-markers li:nth-child(1)  { --i: 1; }
+  .sdcm-markers li:nth-child(2)  { --i: 2; }
+  .sdcm-markers li:nth-child(3)  { --i: 3; }
+  .sdcm-markers li:nth-child(4)  { --i: 4; }
+  .sdcm-markers li:nth-child(5)  { --i: 5; }
+  .sdcm-markers li:nth-child(6)  { --i: 6; }
+  .sdcm-markers li:nth-child(7)  { --i: 7; }
+  .sdcm-markers li:nth-child(8)  { --i: 8; }
+  .sdcm-markers li:nth-child(9)  { --i: 9; }
+  .sdcm-markers li:nth-child(10) { --i: 10; }
+
+  .sdcm-markers a {
+    display: block;
+    width: 0.65rem;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--sdcm-dot, rgba(28, 43, 51, 0.28));
+  }
+
+  .sdcm-markers a:hover {
+    background: var(--sdcm-dot-active, #1f8a8a);
+  }
+
+  .sdcm-markers a:focus-visible {
+    outline: 2px solid var(--sdcm-dot-active, #1f8a8a);
+    outline-offset: 3px;
+  }
+
+  .sdcm-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  @supports (animation-timeline: scroll()) {
+    .sdcm-carousel { timeline-scope: --sdcm; }
+
+    .sdcm-entries { scroll-timeline: --sdcm x; }
+
+    .sdcm-markers a {
+      animation: sdcm-dot-on linear;
+      animation-timeline: --sdcm;
+      animation-range:
+        calc((var(--i, 1) - 1) * (100% / var(--sdcm-n, 5)))
+        calc(var(--i, 1) * (100% / var(--sdcm-n, 5)) + 1px);
+    }
+  }
+
+  @keyframes sdcm-dot-on {
+    0%, 100% {
+      background: var(--sdcm-dot-active, #1f8a8a);
+      scale: 1.35;
+    }
+  }
+
+  /* ============================================================
+     DEMO LAYOUT (preview-only styling)
+     ============================================================ */
+
+  .hero {
+    min-height: 55vh;
+    display: grid;
+    place-content: center;
+    text-align: center;
+    padding: 5rem 1.5rem 2.5rem;
+  }
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: .32em;
+    font-size: .72rem;
+    font-weight: 700;
+    color: var(--teal-deep);
+    margin: 0 0 1.2rem;
+  }
+  .hero h1 {
+    font-size: clamp(2.4rem, 6.5vw, 4.6rem);
+    line-height: 1.04;
+    letter-spacing: -.02em;
+    margin: 0;
+  }
+  .hero h1 em { font-style: normal; color: var(--teal-deep); }
+  .hero p {
+    max-width: 46ch;
+    margin: 1.5rem auto 0;
+    color: var(--ink-soft);
+    font-size: 1.12rem;
+  }
+  .note {
+    margin-top: 1.5rem;
+    font-size: .82rem;
+    color: var(--ink-soft);
+    background: rgba(255,255,255,.55);
+    border: 1px dashed rgba(31,138,138,.4);
+    border-radius: 12px;
+    padding: .8rem 1rem;
+    display: inline-block;
+  }
+
+  /* the showcase carousel */
+  .stage { padding-block: 1rem 3rem; }
+  .stage .sdcm-carousel {
+    max-width: 760px;
+    margin-inline: auto;
+    border: 1px solid rgba(28, 43, 51, 0.1);
+    box-shadow: 0 30px 70px -38px rgba(15, 92, 92, 0.55);
+    background: var(--sand-1);
+  }
+  /* frosted pill so the dots read on every slide background */
+  .stage .sdcm-markers {
+    padding: .55rem .8rem;
+    border-radius: 999px;
+    background: rgba(251, 247, 240, 0.82);
+    backdrop-filter: blur(6px);
+    box-shadow: 0 6px 18px -10px rgba(15, 92, 92, 0.5);
+  }
+  .swipe-hint {
+    text-align: center;
+    margin-top: 1.4rem;
+    font-size: .8rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  /* slide scenes */
+  .scene {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    position: relative;
+  }
+  .scene svg {
+    width: min(56%, 320px);
+    height: auto;
+    display: block;
+  }
+  .scene .caption {
+    position: absolute;
+    top: 1.1rem;
+    left: 1.3rem;
+    margin: 0;
+    font-size: .74rem;
+    font-weight: 700;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+  }
+  .scene-1 { background: linear-gradient(160deg, #fdf9f1, #f3e8d4); color: var(--teal-deep); }
+  .scene-2 { background: linear-gradient(160deg, #e9f4f1, #d3e9e4); color: var(--teal-deep); }
+  .scene-3 { background: linear-gradient(155deg, #10484d, #0b3236); color: #bfe8e4; }
+  .scene-4 { background: linear-gradient(160deg, #f6efe1, #ecdfc7); color: var(--teal-deep); }
+  .scene-5 { background: linear-gradient(155deg, #17323b, #0e1f26); color: #b9d8dc; }
+
+  /* explanation sections */
+  section.wrap { padding-block: clamp(3.5rem, 9vh, 7rem); }
+  .section-head { max-width: 58ch; margin-bottom: 2.6rem; }
+  .section-head h2 {
+    font-size: clamp(1.8rem, 4.2vw, 2.8rem);
+    letter-spacing: -.015em;
+    line-height: 1.1;
+    margin: 0 0 1rem;
+  }
+  .section-head p { color: var(--ink-soft); font-size: 1.06rem; margin: 0; }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.25rem;
+  }
+  .card {
+    background: rgba(255, 255, 255, 0.66);
+    border: 1px solid rgba(28, 43, 51, 0.08);
+    border-radius: 18px;
+    padding: 1.8rem 1.6rem;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 18px 40px -28px rgba(15, 92, 92, 0.5);
+  }
+  .card .num {
+    display: inline-grid;
+    place-content: center;
+    width: 2.6rem;
+    height: 2.6rem;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--teal), var(--surf));
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+  .card h3 { margin: 0 0 .5rem; font-size: 1.15rem; }
+  .card p { margin: 0; color: var(--ink-soft); font-size: .95rem; }
+  .card code {
+    background: rgba(31, 138, 138, 0.1);
+    border-radius: 6px;
+    padding: .1em .35em;
+    font-size: .88em;
+  }
+
+  /* degradation band */
+  .band {
+    border-radius: 22px;
+    color: #fff;
+    padding: clamp(2.2rem, 6vw, 4rem);
+    background:
+      linear-gradient(120deg, rgba(15,92,92,.94), rgba(46,195,195,.86)),
+      repeating-linear-gradient(45deg, rgba(255,255,255,.06) 0 14px, transparent 14px 28px);
+  }
+  .band h2 { font-size: clamp(1.7rem, 4.5vw, 2.8rem); margin: 0 0 .8rem; letter-spacing: -.02em; }
+  .band p { margin: 0 0 .6rem; max-width: 56ch; opacity: .93; font-size: 1.06rem; }
+  .band p:last-child { margin-bottom: 0; }
+  .band code { background: rgba(255,255,255,.16); border-radius: 6px; padding: .1em .35em; }
+
+  footer {
+    text-align: center;
+    padding: 4rem 1.5rem 5rem;
+    color: var(--ink-soft);
+  }
+  footer .mark { font-weight: 700; color: var(--teal-deep); letter-spacing: -.02em; }
+  footer p { margin: .3rem 0; }
+  footer small { font-size: .8rem; }
+</style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div>
+      <p class="eyebrow">Sand &amp; Surf &middot; Scroll-driven CSS</p>
+      <h1>Markers that ride the<br /><em>carousel timeline</em></h1>
+      <p>Swipe the carousel below and watch the dots light up in perfect sync,
+         powered by a named <code>scroll-timeline</code> and zero JavaScript.</p>
+      <div><span class="note">Needs Chrome or Edge 115+, or Safari 26+. Elsewhere the carousel still scrolls and snaps, the dots just stay quiet.</span></div>
+    </div>
+  </header>
+
+  <!-- THE CAROUSEL -->
+  <div class="stage wrap">
+    <div class="sdcm-carousel" style="--sdcm-n: 5">
+      <ul class="sdcm-entries" tabindex="0" aria-label="Beach day, five scenes">
+
+        <li id="scene-sunrise">
+          <div class="scene scene-1">
+            <p class="caption">01 &middot; Sunrise</p>
+            <svg viewBox="0 0 240 170" role="img" aria-label="Sun rising over calm water">
+              <circle cx="120" cy="74" r="34" fill="#ff6f59" />
+              <circle cx="120" cy="74" r="46" fill="none" stroke="#ff6f59" stroke-opacity=".3" stroke-width="3" />
+              <path d="M10 112 Q 40 100 70 112 T 130 112 T 190 112 T 250 112" fill="none" stroke="#1f8a8a" stroke-width="5" stroke-linecap="round" />
+              <path d="M-10 132 Q 20 121 50 132 T 110 132 T 170 132 T 230 132" fill="none" stroke="#2ec3c3" stroke-width="5" stroke-linecap="round" />
+              <path d="M20 152 Q 50 142 80 152 T 140 152 T 200 152" fill="none" stroke="#0f5c5c" stroke-width="5" stroke-linecap="round" />
+            </svg>
+          </div>
+        </li>
+
+        <li id="scene-palm">
+          <div class="scene scene-2">
+            <p class="caption">02 &middot; Palm</p>
+            <svg viewBox="0 0 240 170" role="img" aria-label="Palm tree on a sandy mound">
+              <ellipse cx="120" cy="150" rx="80" ry="14" fill="#ece0cd" />
+              <path d="M118 148 C 112 110 116 84 128 62" fill="none" stroke="#0f5c5c" stroke-width="8" stroke-linecap="round" />
+              <path d="M128 62 C 108 48 84 48 66 60" fill="none" stroke="#1f8a8a" stroke-width="7" stroke-linecap="round" />
+              <path d="M128 62 C 118 40 98 30 76 32" fill="none" stroke="#1f8a8a" stroke-width="7" stroke-linecap="round" />
+              <path d="M128 62 C 138 38 158 28 180 32" fill="none" stroke="#2ec3c3" stroke-width="7" stroke-linecap="round" />
+              <path d="M128 62 C 148 48 172 46 190 58" fill="none" stroke="#2ec3c3" stroke-width="7" stroke-linecap="round" />
+              <circle cx="124" cy="66" r="6" fill="#0f5c5c" />
+              <circle cx="136" cy="70" r="6" fill="#0f5c5c" />
+            </svg>
+          </div>
+        </li>
+
+        <li id="scene-sail">
+          <div class="scene scene-3">
+            <p class="caption">03 &middot; Set sail</p>
+            <svg viewBox="0 0 240 170" role="img" aria-label="Sailboat on night water">
+              <path d="M118 24 L 118 108 L 62 108 Z" fill="#fbf7f0" />
+              <path d="M126 40 L 126 108 L 170 108 Z" fill="#2ec3c3" />
+              <path d="M52 118 L 188 118 L 168 140 L 72 140 Z" fill="#0f5c5c" />
+              <path d="M20 152 Q 50 143 80 152 T 140 152 T 200 152" fill="none" stroke="#2ec3c3" stroke-opacity=".65" stroke-width="4" stroke-linecap="round" />
+              <circle cx="204" cy="30" r="10" fill="#fbf7f0" fill-opacity=".85" />
+            </svg>
+          </div>
+        </li>
+
+        <li id="scene-shell">
+          <div class="scene scene-4">
+            <p class="caption">04 &middot; Shell</p>
+            <svg viewBox="0 0 240 170" role="img" aria-label="Spiral seashell">
+              <path d="M120 85 m 0 -50 a 50 50 0 1 1 -50 50 a 40 40 0 1 0 40 -40 a 30 30 0 1 1 -30 30 a 20 20 0 1 0 20 -20 a 11 11 0 1 1 -11 11"
+                    fill="none" stroke="#0f5c5c" stroke-width="7" stroke-linecap="round" />
+              <path d="M60 142 Q 90 132 120 142 T 180 142" fill="none" stroke="#2ec3c3" stroke-opacity=".5" stroke-width="4" stroke-linecap="round" />
+            </svg>
+          </div>
+        </li>
+
+        <li id="scene-lighthouse">
+          <div class="scene scene-5">
+            <p class="caption">05 &middot; Lighthouse</p>
+            <svg viewBox="0 0 240 170" role="img" aria-label="Lighthouse at dusk">
+              <path d="M104 140 L 112 52 L 128 52 L 136 140 Z" fill="#fbf7f0" />
+              <path d="M107 112 L 133 112 L 134.5 126 L 105.5 126 Z" fill="#1f8a8a" />
+              <path d="M110 76 L 130 76 L 131.5 90 L 108.5 90 Z" fill="#1f8a8a" />
+              <rect x="110" y="36" width="20" height="16" rx="3" fill="#ff6f59" />
+              <path d="M108 34 L 132 34 L 120 20 Z" fill="#0f5c5c" />
+              <path d="M106 40 L 58 28 L 58 52 Z" fill="#ff6f59" fill-opacity=".28" />
+              <path d="M134 40 L 182 28 L 182 52 Z" fill="#ff6f59" fill-opacity=".28" />
+              <path d="M60 152 Q 90 143 120 152 T 180 152" fill="none" stroke="#2ec3c3" stroke-opacity=".55" stroke-width="4" stroke-linecap="round" />
+            </svg>
+          </div>
+        </li>
+
+      </ul>
+
+      <ul class="sdcm-markers">
+        <li><a href="#scene-sunrise"><span class="sdcm-sr-only">Scene 1, sunrise</span></a></li>
+        <li><a href="#scene-palm"><span class="sdcm-sr-only">Scene 2, palm</span></a></li>
+        <li><a href="#scene-sail"><span class="sdcm-sr-only">Scene 3, sailboat</span></a></li>
+        <li><a href="#scene-shell"><span class="sdcm-sr-only">Scene 4, shell</span></a></li>
+        <li><a href="#scene-lighthouse"><span class="sdcm-sr-only">Scene 5, lighthouse</span></a></li>
+      </ul>
+    </div>
+
+    <p class="swipe-hint">Swipe, drag or shift-scroll sideways &middot; or click a dot</p>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <section class="wrap">
+    <div class="section-head">
+      <h2>Three declarations, zero scripts</h2>
+      <p>The browser links each marker to the scroller's live position. No scroll
+         listeners, no IntersectionObserver, no state to keep in sync.</p>
+    </div>
+    <div class="cards">
+      <article class="card">
+        <span class="num">1</span>
+        <h3>Publish the timeline</h3>
+        <p>The scroller declares <code>scroll-timeline: --sdcm x</code>, turning its
+           horizontal scroll position into a named, reusable progress value.</p>
+      </article>
+      <article class="card">
+        <span class="num">2</span>
+        <h3>Hoist the scope</h3>
+        <p>Timelines only resolve up the ancestor tree, and the markers are siblings
+           of the scroller. <code>timeline-scope</code> on the component root lifts the
+           name so they can reach it.</p>
+      </article>
+      <article class="card">
+        <span class="num">3</span>
+        <h3>Slice the range</h3>
+        <p>Each dot's <code>animation-range</code> covers just its slice of the scroll,
+           sized as 100% divided by the slide count. While its slide is in view, the
+           dot holds its lit keyframe.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- DEGRADATION BAND -->
+  <section class="wrap">
+    <div class="band">
+      <h2>Built to degrade gracefully</h2>
+      <p>All the timeline wiring sits inside <code>@supports (animation-timeline: scroll())</code>.
+         Browsers without it still get a fully working snap carousel with clickable
+         marker links, the dots simply keep their resting color.</p>
+      <p>Smooth marker-click scrolling is reserved for visitors without a
+         reduced-motion preference, and every marker keeps a screen-reader label.</p>
+    </div>
+  </section>
+
+  <footer>
+    <p><span class="mark">saltycodestudio</span> &middot; Sand &amp; Surf parts library</p>
+    <p><small>Technique adapted from "Carousel with Markers" by Bramus Van Damme,
+       scroll-driven-animations.style (Apache-2.0).</small></p>
+  </footer>
+
+</body>
+</html>

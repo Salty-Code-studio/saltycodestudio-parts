@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Scroll 3D Object Explorer</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- ============================================================
+     Scroll 3D Object Explorer, usage reference.
+     One .s3d-explorer scroller, one .s3d-card per product.
+     Scroll it sideways: every object spins on its card's own
+     view timeline, wired up purely in CSS.
+     ============================================================ -->
+
+<section class="s3d-explorer" tabindex="0" role="region"
+         aria-label="Product explorer, scrolls horizontally">
+
+  <!-- Intro card -->
+  <div class="s3d-card">
+    <h1>Object Explorer</h1>
+    <em class="s3d-hint">Scroll sideways<b>&#8596;</b></em>
+  </div>
+
+  <!-- Product 1: cuboid box (6 faces) -->
+  <div class="s3d-card">
+    <h2>Del Mar Crate</h2>
+    <div class="s3d-stage" aria-hidden="true">
+      <div class="s3d-object s3d-box">
+        <div class="s3d-face s3d-face--front">
+          <svg viewBox="0 0 72 44" aria-hidden="true">
+            <g fill="none" stroke-width="3.4" stroke-linecap="round">
+              <path d="M6 10 c5 -7 13 -7 18 0 c5 7 13 7 18 0 c5 -7 13 -7 18 0" stroke="#0f5c5c" />
+              <path d="M6 21 c5 -7 13 -7 18 0 c5 7 13 7 18 0 c5 -7 13 -7 18 0" stroke="#1f8a8a" />
+              <path d="M6 32 c5 -7 13 -7 18 0 c5 7 13 7 18 0 c5 -7 13 -7 18 0" stroke="#2ec3c3" />
+            </g>
+          </svg>
+          <span class="s3d-face-label">Del Mar</span>
+        </div>
+        <div class="s3d-face s3d-face--back"></div>
+        <div class="s3d-face s3d-face--left"></div>
+        <div class="s3d-face s3d-face--right"></div>
+        <div class="s3d-face s3d-face--top"></div>
+        <div class="s3d-face s3d-face--bottom"></div>
+      </div>
+    </div>
+    <footer><p>A six face CSS cuboid, spun by the card's view timeline.</p></footer>
+  </div>
+
+  <!-- Product 2: hologram cross of SVG planes -->
+  <div class="s3d-card">
+    <h2>North Swell Board</h2>
+    <div class="s3d-stage" aria-hidden="true">
+      <div class="s3d-object s3d-planes">
+        <div class="s3d-plane" style="--s3d-i: 0">
+          <svg viewBox="0 0 120 260" aria-hidden="true">
+            <defs>
+              <linearGradient id="s3d-board-a" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#2ec3c3" />
+                <stop offset="1" stop-color="#0f5c5c" />
+              </linearGradient>
+            </defs>
+            <path d="M60 8 C94 58 100 170 60 252 C20 170 26 58 60 8 Z" fill="url(#s3d-board-a)" opacity="0.92" />
+            <path d="M60 18 V242" stroke="#fbf7f0" stroke-width="3" opacity="0.7" />
+          </svg>
+        </div>
+        <div class="s3d-plane" style="--s3d-i: 1">
+          <svg viewBox="0 0 120 260" aria-hidden="true">
+            <defs>
+              <linearGradient id="s3d-board-b" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#2ec3c3" />
+                <stop offset="1" stop-color="#0f5c5c" />
+              </linearGradient>
+            </defs>
+            <path d="M60 8 C94 58 100 170 60 252 C20 170 26 58 60 8 Z" fill="url(#s3d-board-b)" opacity="0.92" />
+            <path d="M60 18 V242" stroke="#fbf7f0" stroke-width="3" opacity="0.7" />
+          </svg>
+        </div>
+        <div class="s3d-plane" style="--s3d-i: 2">
+          <svg viewBox="0 0 120 260" aria-hidden="true">
+            <defs>
+              <linearGradient id="s3d-board-c" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#2ec3c3" />
+                <stop offset="1" stop-color="#0f5c5c" />
+              </linearGradient>
+            </defs>
+            <path d="M60 8 C94 58 100 170 60 252 C20 170 26 58 60 8 Z" fill="url(#s3d-board-c)" opacity="0.92" />
+            <path d="M60 18 V242" stroke="#fbf7f0" stroke-width="3" opacity="0.7" />
+          </svg>
+        </div>
+      </div>
+    </div>
+    <footer><p>Three intersecting SVG planes, reading as a hologram in motion.</p></footer>
+  </div>
+
+  <!-- Product 3: hexagonal tin (6 label faces + lid) -->
+  <div class="s3d-card">
+    <h2>Salt Tin No. 3</h2>
+    <div class="s3d-stage" aria-hidden="true">
+      <div class="s3d-object s3d-hex">
+        <div class="s3d-face" style="--s3d-i: 0"></div>
+        <div class="s3d-face" style="--s3d-i: 1"></div>
+        <div class="s3d-face" style="--s3d-i: 2"></div>
+        <div class="s3d-face" style="--s3d-i: 3"></div>
+        <div class="s3d-face" style="--s3d-i: 4"></div>
+        <div class="s3d-face" style="--s3d-i: 5"></div>
+        <div class="s3d-face s3d-face--lid"></div>
+      </div>
+    </div>
+    <footer><p>A hex prism with a striped label that wraps as it turns.</p></footer>
+  </div>
+
+</section>
+
+</body>
+</html>

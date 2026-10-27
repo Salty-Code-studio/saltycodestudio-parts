@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Voronoi Cells — saltycodestudio-parts</title>
+<style>
+  :root {
+    --sand: #F2EBDD;
+    --sand-2: #EAE1CF;
+    --teal: #0E3A40;
+    --sky: #4FA8C9;
+    --coral: #FF6F59;
+    --ink: #1C2B2E;
+    --white: #FFFFFF;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--sand);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .stage {
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+  }
+  #cells {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* readable content over the field */
+  .overlay {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 6vw;
+    pointer-events: none;
+  }
+  .kicker {
+    pointer-events: auto;
+    font-size: 12px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--white);
+    background: rgba(28, 43, 46, 0.42);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    padding: 8px 16px;
+    border-radius: 999px;
+    margin-bottom: 26px;
+  }
+  h1 {
+    pointer-events: auto;
+    font-size: clamp(3rem, 12vw, 9rem);
+    line-height: 0.92;
+    margin: 0 0 18px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--white);
+    text-shadow: 0 8px 40px rgba(14, 58, 64, 0.55);
+  }
+  p.lead {
+    pointer-events: auto;
+    max-width: 46ch;
+    font-size: clamp(1rem, 2.2vw, 1.25rem);
+    line-height: 1.55;
+    color: rgba(255, 255, 255, 0.92);
+    margin: 0 0 30px;
+    text-shadow: 0 2px 18px rgba(14, 58, 64, 0.55);
+  }
+
+  .presets {
+    pointer-events: auto;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .presets button {
+    font: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: var(--ink);
+    background: rgba(242, 235, 221, 0.92);
+    border: 1px solid rgba(28, 43, 46, 0.12);
+    border-radius: 999px;
+    padding: 11px 22px;
+    cursor: pointer;
+    transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+    box-shadow: 0 6px 22px rgba(14, 58, 64, 0.22);
+  }
+  .presets button:hover { transform: translateY(-2px); }
+  .presets button[aria-pressed="true"] {
+    background: var(--coral);
+    color: var(--white);
+    box-shadow: 0 8px 26px rgba(255, 111, 89, 0.45);
+  }
+
+  .credit {
+    position: absolute;
+    z-index: 2;
+    left: 24px;
+    bottom: 20px;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: rgba(255, 255, 255, 0.82);
+    text-shadow: 0 2px 10px rgba(14, 58, 64, 0.6);
+  }
+  .credit b { font-weight: 700; }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <canvas id="cells" aria-hidden="true"></canvas>
+    <div class="overlay">
+      <span class="kicker">Voronoi Cells</span>
+      <h1>Sea glass.</h1>
+      <p class="lead">
+        An animated Worley-noise field rendered in a single fragment shader. Soft teal
+        and sand tiles drift apart along crisp ceramic seams, with the odd cell catching
+        a slow coral light. Move your cursor to lift the cells nearby.
+      </p>
+      <div class="presets" role="group" aria-label="Field presets">
+        <button id="p-tide" aria-pressed="true">Tide pools</button>
+        <button id="p-mosaic" aria-pressed="false">Mosaic</button>
+      </div>
+    </div>
+    <div class="credit"><b>saltycodestudio-parts</b> — original, MIT</div>
+  </div>
+
+  <script src="./voronoi-cells.js"></script>
+  <script>
+    var canvas = document.getElementById('cells');
+    var instance = null;
+
+    // Two presets: soft large cells vs dense crisp cells.
+    var PRESETS = {
+      tide: {
+        density: 4.5,
+        speed: 0.85,
+        edgeWidth: 0.085,
+        glow: 0.55,
+        mouse: true
+      },
+      mosaic: {
+        density: 11,
+        speed: 1.25,
+        edgeWidth: 0.035,
+        glow: 0.4,
+        mouse: true
+      }
+    };
+
+    function start(name) {
+      if (instance) { instance.destroy(); instance = null; }
+      instance = initVoronoiCells(canvas, PRESETS[name]);
+    }
+
+    var btnTide = document.getElementById('p-tide');
+    var btnMosaic = document.getElementById('p-mosaic');
+
+    function setPressed(active) {
+      btnTide.setAttribute('aria-pressed', String(active === 'tide'));
+      btnMosaic.setAttribute('aria-pressed', String(active === 'mosaic'));
+    }
+
+    btnTide.addEventListener('click', function () { setPressed('tide'); start('tide'); });
+    btnMosaic.addEventListener('click', function () { setPressed('mosaic'); start('mosaic'); });
+
+    // boot
+    setPressed('tide');
+    start('tide');
+
+    window.addEventListener('beforeunload', function () {
+      if (instance) instance.destroy();
+    });
+  </script>
+</body>
+</html>

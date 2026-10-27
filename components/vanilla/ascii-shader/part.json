@@ -1,0 +1,21 @@
+{
+  "name": "ASCII Shader",
+  "slug": "ascii-shader",
+  "category": "vanilla",
+  "tier": "showcase",
+  "tags": [
+    "ascii",
+    "canvas",
+    "shader",
+    "background",
+    "generative",
+    "noise",
+    "terminal"
+  ],
+  "description": "A flowing grayscale intensity field rendered live as ASCII art on a single 2D canvas, coloured along the Sand & Surf ramp with a pointer-driven bulge.",
+  "deps": [],
+  "files": ["ascii-shader.js"],
+  "usage": "Add a sized <canvas>, then call initAsciiShader(canvasEl, opts) and keep the returned handle to destroy() on teardown.",
+  "source": "saltycodestudio-parts (original)",
+  "license": "MIT"
+}

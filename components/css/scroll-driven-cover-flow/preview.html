@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CSS Cover Flow, Sand &amp; Surf demo</title>
+<style>
+  /* ---- Sand & Surf palette ---- */
+  :root {
+    --sand-1: #fbf7f0;
+    --sand-2: #f4ece0;
+    --sand-3: #ece0cd;
+    --ink: #1c2b33;
+    --ink-soft: #4a5d66;
+    --teal: #1f8a8a;
+    --teal-deep: #0f5c5c;
+    --surf: #2ec3c3;
+    --coral: #ff6f59;
+    --maxw: 1080px;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    font-family: "Helvetica Neue", Arial, system-ui, sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(140% 90% at 50% -10%, var(--sand-1), var(--sand-2) 55%, var(--sand-3) 100%);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: var(--maxw); margin-inline: auto; padding-inline: 1.5rem; }
+
+  /* ============================================================
+     THE PART: CSS Cover Flow (scroll-driven-cover-flow)
+     ============================================================ */
+
+  .scf {
+    --scf-cover-size: 15rem;
+    --scf-span: 6;
+
+    width: calc(var(--scf-cover-size) * var(--scf-span));
+    max-width: 100%;
+    margin-inline: auto;
+    padding-block: calc(var(--scf-cover-size) * 2 / 3);
+
+    overflow-x: scroll;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+
+    perspective: 40em;
+  }
+
+  .scf:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 4px;
+  }
+
+  @media (max-width: 1024px) {
+    .scf { --scf-cover-size: 9rem; }
+  }
+
+  @media (max-width: 600px) {
+    .scf { --scf-cover-size: 6rem; }
+  }
+
+  .scf-covers {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    white-space: nowrap;
+    transform-style: preserve-3d;
+  }
+
+  .scf-covers li {
+    display: inline-block;
+    width: var(--scf-cover-size);
+    height: var(--scf-cover-size);
+    scroll-snap-align: center;
+    transform-style: preserve-3d;
+  }
+
+  .scf-covers li:first-child {
+    margin-left: calc(50% - (var(--scf-cover-size) / 2));
+  }
+
+  .scf-covers li:last-child {
+    margin-right: calc(50% - (var(--scf-cover-size) / 2));
+  }
+
+  .scf-cover {
+    display: block;
+    width: 100%;
+    height: 100%;
+    user-select: none;
+    -webkit-user-drag: none;
+    -webkit-box-reflect: below 0.5em
+      linear-gradient(rgb(0 0 0 / 0), rgb(0 0 0 / 0.25));
+  }
+
+  @keyframes scf-rotate-cover {
+    0%   { transform: translateX(-100%) rotateY(-45deg); }
+    35%  { transform: translateX(0) rotateY(-45deg); }
+    50%  { transform: rotateY(0deg) translateZ(1em) scale(1.5); }
+    65%  { transform: translateX(0) rotateY(45deg); }
+    100% { transform: translateX(100%) rotateY(45deg); }
+  }
+
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .scf-cover {
+        animation: scf-rotate-cover linear both;
+        animation-timeline: view(inline);
+        transform-style: preserve-3d;
+        will-change: transform;
+        position: relative;
+      }
+    }
+  }
+
+  /* ============================================================
+     DEMO LAYOUT
+     ============================================================ */
+
+  .hero {
+    min-height: 72vh;
+    display: grid;
+    place-content: center;
+    text-align: center;
+    padding: 6rem 1.5rem 3rem;
+  }
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: .32em;
+    font-size: .72rem;
+    font-weight: 700;
+    color: var(--teal-deep);
+    margin: 0 0 1.2rem;
+  }
+  .hero h1 {
+    font-size: clamp(2.6rem, 7vw, 5.2rem);
+    line-height: 1.02;
+    letter-spacing: -.02em;
+    margin: 0;
+    color: var(--ink);
+  }
+  .hero h1 em {
+    font-style: normal;
+    color: var(--teal-deep);
+  }
+  .hero p.lede {
+    max-width: 46ch;
+    margin: 1.6rem auto 0;
+    color: var(--ink-soft);
+    font-size: 1.15rem;
+  }
+  .scroll-hint {
+    margin-top: 2.6rem;
+    font-size: .8rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .note {
+    margin-top: 1.4rem;
+    font-size: .82rem;
+    color: var(--ink-soft);
+    background: rgba(255, 255, 255, .55);
+    border: 1px dashed rgba(31, 138, 138, .4);
+    border-radius: 12px;
+    padding: .8rem 1rem;
+    display: inline-block;
+  }
+
+  /* The dark jukebox band that hosts the shelf */
+  .shelf-band {
+    background: linear-gradient(180deg, #12232b, #0e171c 60%, #0b1216);
+    color: #f4ece0;
+    padding: clamp(2.5rem, 7vh, 5rem) 0 clamp(3rem, 8vh, 6rem);
+  }
+  .shelf-band .scf {
+    scrollbar-color: rgba(244, 236, 224, .4) rgba(244, 236, 224, .08);
+  }
+  .shelf-band .caption {
+    text-align: center;
+    margin: 2.4rem auto 0;
+    max-width: 60ch;
+    padding-inline: 1.5rem;
+    color: #9fb3ba;
+    font-size: .95rem;
+  }
+  .shelf-band kbd {
+    font-family: inherit;
+    font-size: .85em;
+    background: rgba(244, 236, 224, .12);
+    border: 1px solid rgba(244, 236, 224, .25);
+    border-radius: 6px;
+    padding: .1em .45em;
+  }
+  .fallback-note { display: none; }
+  @supports not (animation-timeline: view()) {
+    .fallback-note {
+      display: block;
+      margin-top: .8rem;
+      color: #e8b98f;
+    }
+  }
+
+  section.explain { padding-block: clamp(4rem, 11vh, 8rem); }
+
+  .section-head { max-width: 56ch; margin-bottom: 3rem; }
+  .section-head h2 {
+    font-size: clamp(1.9rem, 4.5vw, 3rem);
+    letter-spacing: -.015em;
+    line-height: 1.08;
+    margin: 0 0 1rem;
+  }
+  .section-head p { color: var(--ink-soft); font-size: 1.08rem; margin: 0; }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 1.25rem;
+  }
+  .card {
+    background: rgba(255, 255, 255, .66);
+    border: 1px solid rgba(28, 43, 51, .08);
+    border-radius: 18px;
+    padding: 1.8rem 1.6rem;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 18px 40px -28px rgba(15, 92, 92, .5);
+  }
+  .card .num {
+    display: inline-grid;
+    place-content: center;
+    width: 2.6rem; height: 2.6rem;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--teal), var(--surf));
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+  .card h3 { margin: 0 0 .5rem; font-size: 1.2rem; }
+  .card p  { margin: 0; color: var(--ink-soft); font-size: .96rem; }
+  .card code {
+    font-size: .88em;
+    background: rgba(15, 92, 92, .08);
+    border-radius: 6px;
+    padding: .08em .35em;
+  }
+
+  .band {
+    border-radius: 22px;
+    overflow: hidden;
+    color: #fff;
+    padding: clamp(2.2rem, 6vw, 4.5rem);
+    background:
+      linear-gradient(120deg, rgba(15, 92, 92, .92), rgba(46, 195, 195, .85)),
+      repeating-linear-gradient(45deg, rgba(255, 255, 255, .06) 0 14px, transparent 14px 28px);
+  }
+  .band h2 { font-size: clamp(1.8rem, 5vw, 3.2rem); margin: 0 0 .8rem; letter-spacing: -.02em; }
+  .band p  { margin: 0 0 .6rem; max-width: 58ch; opacity: .94; font-size: 1.08rem; }
+  .band p:last-child { margin-bottom: 0; }
+  .band code {
+    background: rgba(255, 255, 255, .16);
+    border-radius: 6px;
+    padding: .08em .35em;
+    font-size: .9em;
+  }
+
+  footer {
+    text-align: center;
+    padding: 4.5rem 1.5rem 5.5rem;
+    color: var(--ink-soft);
+  }
+  footer .mark { font-weight: 700; color: var(--teal-deep); letter-spacing: -.02em; }
+  footer p { margin: .4rem 0; }
+  footer .credit { font-size: .85rem; }
+</style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div>
+      <p class="eyebrow">Sand &amp; Surf &middot; Scroll-driven CSS</p>
+      <h1>Cover Flow,<br /><em>pure CSS</em></h1>
+      <p class="lede">The iconic album shelf, rebuilt with zero JavaScript. Each cover rides its own
+        <code>view(inline)</code> timeline: rotated while off-center, face-forward the moment it snaps to the middle.</p>
+      <p class="scroll-hint">The shelf below scrolls sideways &darr;</p>
+      <div><span class="note">Best in Chrome, Edge 115+ or Safari 26+. Elsewhere you get a clean flat shelf, and reduced-motion users do too.</span></div>
+    </div>
+  </header>
+
+  <!-- THE SHELF -->
+  <div class="shelf-band">
+    <div class="scf" role="region" aria-label="Album cover shelf" tabindex="0">
+      <ul class="scf-covers">
+        <li>
+          <svg class="scf-cover" viewBox="0 0 120 120" role="img" aria-label="Album cover: High Tide">
+            <defs><linearGradient id="cfg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0f5c5c"/><stop offset="1" stop-color="#2ec3c3"/></linearGradient></defs>
+            <rect width="120" height="120" fill="url(#cfg1)"/>
+            <path d="M0 74 Q15 66 30 74 T60 74 T90 74 T120 74 V120 H0 Z" fill="#fbf7f0" opacity=".25"/>
+            <path d="M0 88 Q15 80 30 88 T60 88 T90 88 T120 88 V120 H0 Z" fill="#fbf7f0" opacity=".45"/>
+            <text x="12" y="26" font-family="system-ui, sans-serif" font-size="8.5" letter-spacing="2.4" fill="#fbf7f0">HIGH TIDE</text>
+          </svg>
+        </li>
+        <li>
+          <svg class="scf-cover" viewBox="0 0 120 120" role="img" aria-label="Album cover: Dune Song">
+            <defs><linearGradient id="cfg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fbf7f0"/><stop offset="1" stop-color="#ece0cd"/></linearGradient></defs>
+            <rect width="120" height="120" fill="url(#cfg2)"/>
+            <circle cx="86" cy="40" r="16" fill="#ff6f59"/>
+            <path d="M0 92 Q30 70 60 88 T120 82 V120 H0 Z" fill="#e0d2b8"/>
+            <path d="M0 104 Q40 86 78 100 T120 98 V120 H0 Z" fill="#1c2b33" opacity=".85"/>
+            <text x="12" y="26" font-family="system-ui, sans-serif" font-size="8.5" letter-spacing="2.4" fill="#1c2b33">DUNE SONG</text>
+          </svg>
+        </li>
+        <li>
+          <svg class="scf-cover" viewBox="0 0 120 120" role="img" aria-label="Album cover: Midnight Reef">
+            <defs><linearGradient id="cfg3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1c2b33"/><stop offset="1" stop-color="#0e171c"/></linearGradient></defs>
+            <rect width="120" height="120" fill="url(#cfg3)"/>
+            <circle cx="60" cy="68" r="34" fill="none" stroke="#2ec3c3" stroke-width="1.5" opacity=".9"/>
+            <circle cx="60" cy="68" r="24" fill="none" stroke="#2ec3c3" stroke-width="1.5" opacity=".6"/>
+            <circle cx="60" cy="68" r="14" fill="none" stroke="#2ec3c3" stroke-width="1.5" opacity=".35"/>
+            <circle cx="60" cy="68" r="4" fill="#2ec3c3"/>
+            <text x="12" y="24" font-family="system-ui, sans-serif" font-size="8" letter-spacing="2" fill="#f4ece0">MIDNIGHT REEF</text>
+          </svg>
+        </li>
+        <li>
+          <svg class="scf-cover" viewBox="0 0 120 120" role="img" aria-label="Album cover: Salt and Foam">
+            <rect width="120" height="120" fill="#f4ece0"/>
+            <circle cx="30" cy="58" r="10" fill="#1f8a8a" opacity=".8"/>
+            <circle cx="62" cy="80" r="16" fill="#0f5c5c" opacity=".85"/>
+            <circle cx="90" cy="50" r="7" fill="#2ec3c3"/>
+            <circle cx="46" cy="36" r="5" fill="#2ec3c3" opacity=".7"/>
+            <circle cx="94" cy="92" r="9" fill="#1f8a8a" opacity=".5"/>
+            <text x="12" y="24" font-family="system-ui, sans-serif" font-size="8" letter-spacing="2" fill="#1c2b33">SALT &amp; FOAM</text>
+          </svg>
+        </li>
+        <li>
+          <svg class="scf-cover" viewBox="0 0 120 120" role="img" aria-label="Album cover: Long Swell">
+            <rect width="120" height="120" fill="#0f5c5c"/>
+            <rect y="52" width="120" height="18" fill="#1f8a8a"/>
+            <rect y="70" width="120" height="14" fill="#2ec3c3"/>
+            <rect y="84" width="120" height="36" fill="#f4ece0"/>
+            <text x="12" y="26" font-family="system-ui, sans-serif" font-size="8.5" letter-spacing="2.4" fill="#fbf7f0">LONG SWELL</text>
+          </svg>
+        </li>
+        <li>
+          <svg class="scf-cover" viewBox="0 0 120 120" role="img" aria-label="Album cover: B Sides">
+            <rect width="120" height="120" fill="#1c2b33"/>
+            <circle cx="60" cy="62" r="44" fill="#0e171c"/>
+            <circle cx="60" cy="62" r="36" fill="none" stroke="#4a5d66" stroke-width="1" opacity=".8"/>
+            <circle cx="60" cy="62" r="28" fill="none" stroke="#4a5d66" stroke-width="1" opacity=".6"/>
+            <circle cx="60" cy="62" r="20" fill="none" stroke="#4a5d66" stroke-width="1" opacity=".4"/>
+            <circle cx="60" cy="62" r="13" fill="#ff6f59"/>
+            <circle cx="60" cy="62" r="3" fill="#1c2b33"/>
+            <text x="12" y="20" font-family="system-ui, sans-serif" font-size="8.5" letter-spacing="2.4" fill="#f4ece0">B SIDES</text>
+          </svg>
+        </li>
+        <li>
+          <svg class="scf-cover" viewBox="0 0 120 120" role="img" aria-label="Album cover: Palm Theory">
+            <rect width="120" height="120" fill="#0f5c5c"/>
+            <path d="M62 108 C60 84 60 70 64 56" stroke="#fbf7f0" stroke-width="3" fill="none"/>
+            <path d="M64 56 C50 48 38 48 28 54" stroke="#fbf7f0" stroke-width="2.5" fill="none"/>
+            <path d="M64 56 C56 44 46 38 34 36" stroke="#fbf7f0" stroke-width="2.5" fill="none"/>
+            <path d="M64 56 C66 42 62 32 54 24" stroke="#fbf7f0" stroke-width="2.5" fill="none"/>
+            <path d="M64 56 C74 44 84 40 96 40" stroke="#fbf7f0" stroke-width="2.5" fill="none"/>
+            <path d="M64 56 C78 50 90 52 98 60" stroke="#fbf7f0" stroke-width="2.5" fill="none"/>
+            <text x="12" y="112" font-family="system-ui, sans-serif" font-size="8.5" letter-spacing="2.4" fill="#fbf7f0">PALM THEORY</text>
+          </svg>
+        </li>
+        <li>
+          <svg class="scf-cover" viewBox="0 0 120 120" role="img" aria-label="Album cover: Golden Hour">
+            <defs><linearGradient id="cfg8" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4ece0"/><stop offset="1" stop-color="#ff6f59"/></linearGradient></defs>
+            <rect width="120" height="120" fill="url(#cfg8)"/>
+            <circle cx="60" cy="78" r="20" fill="#fbf7f0" opacity=".9"/>
+            <rect y="78" width="120" height="42" fill="#1c2b33"/>
+            <text x="12" y="26" font-family="system-ui, sans-serif" font-size="8.5" letter-spacing="2.4" fill="#1c2b33">GOLDEN HOUR</text>
+          </svg>
+        </li>
+        <li>
+          <svg class="scf-cover" viewBox="0 0 120 120" role="img" aria-label="Album cover: Undertow">
+            <rect width="120" height="120" fill="#2ec3c3"/>
+            <path d="M0 120 L120 0 L120 120 Z" fill="#1c2b33"/>
+            <circle cx="60" cy="60" r="22" fill="#fbf7f0" opacity=".92"/>
+            <text x="12" y="26" font-family="system-ui, sans-serif" font-size="8.5" letter-spacing="2.4" fill="#0f5c5c">UNDERTOW</text>
+          </svg>
+        </li>
+        <li>
+          <svg class="scf-cover" viewBox="0 0 120 120" role="img" aria-label="Album cover: Sea Glass">
+            <rect width="120" height="120" fill="#ece0cd"/>
+            <rect x="18" y="32" width="24" height="24" rx="7" fill="#1f8a8a" opacity=".85"/>
+            <rect x="48" y="32" width="24" height="24" rx="7" fill="#2ec3c3" opacity=".6"/>
+            <rect x="78" y="32" width="24" height="24" rx="7" fill="#0f5c5c" opacity=".75"/>
+            <rect x="18" y="62" width="24" height="24" rx="7" fill="#2ec3c3" opacity=".45"/>
+            <rect x="48" y="62" width="24" height="24" rx="7" fill="#0f5c5c" opacity=".9"/>
+            <rect x="78" y="62" width="24" height="24" rx="7" fill="#1f8a8a" opacity=".55"/>
+            <rect x="18" y="92" width="24" height="18" rx="7" fill="#0f5c5c" opacity=".5"/>
+            <rect x="48" y="92" width="24" height="18" rx="7" fill="#1f8a8a" opacity=".7"/>
+            <rect x="78" y="92" width="24" height="18" rx="7" fill="#2ec3c3" opacity=".8"/>
+            <text x="18" y="22" font-family="system-ui, sans-serif" font-size="8.5" letter-spacing="2.4" fill="#1c2b33">SEA GLASS</text>
+          </svg>
+        </li>
+        <li>
+          <svg class="scf-cover" viewBox="0 0 120 120" role="img" aria-label="Album cover: North Swell">
+            <defs><linearGradient id="cfg11" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#16242b"/><stop offset="1" stop-color="#0e171c"/></linearGradient></defs>
+            <rect width="120" height="120" fill="url(#cfg11)"/>
+            <path d="M0 84 L24 58 L44 74 L68 42 L92 66 L120 38" stroke="#2ec3c3" stroke-width="2.5" fill="none"/>
+            <path d="M0 100 L24 74 L44 90 L68 58 L92 82 L120 54" stroke="#4a5d66" stroke-width="2" fill="none" opacity=".7"/>
+            <text x="12" y="26" font-family="system-ui, sans-serif" font-size="8.5" letter-spacing="2.4" fill="#f4ece0">NORTH SWELL</text>
+          </svg>
+        </li>
+        <li>
+          <svg class="scf-cover" viewBox="0 0 120 120" role="img" aria-label="Album cover: Last Light">
+            <defs><radialGradient id="cfg12" cx=".7" cy=".3" r="1"><stop offset="0" stop-color="#1f8a8a"/><stop offset="1" stop-color="#0e171c"/></radialGradient></defs>
+            <rect width="120" height="120" fill="url(#cfg12)"/>
+            <circle cx="82" cy="38" r="14" fill="#fbf7f0"/>
+            <circle cx="30" cy="72" r="1.6" fill="#f4ece0" opacity=".9"/>
+            <circle cx="52" cy="90" r="1.2" fill="#f4ece0" opacity=".7"/>
+            <circle cx="20" cy="40" r="1.4" fill="#f4ece0" opacity=".8"/>
+            <circle cx="66" cy="70" r="1.2" fill="#f4ece0" opacity=".6"/>
+            <text x="12" y="112" font-family="system-ui, sans-serif" font-size="8.5" letter-spacing="2.4" fill="#f4ece0">LAST LIGHT</text>
+          </svg>
+        </li>
+      </ul>
+    </div>
+    <p class="caption">
+      Drag, swipe, use the arrow keys after focusing the shelf, or hold <kbd>Shift</kbd> while you scroll.
+      One cover always snaps to center and pops toward you.
+      <span class="fallback-note">Your browser shows the flat shelf: the 3D rotation needs scroll-driven animation support (Chrome or Edge 115+, Safari 26+).</span>
+    </p>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <section class="explain wrap">
+    <div class="section-head">
+      <h2>Three moves, one shelf</h2>
+      <p>The whole effect is a horizontal snap scroller plus one keyframe track per cover. The browser does everything else.</p>
+    </div>
+    <div class="cards">
+      <article class="card">
+        <span class="num">1</span>
+        <h3>view(inline) timelines</h3>
+        <p>Each cover's animation progress is its own trip across the scrollport, tracked with <code>animation-timeline: view(inline)</code>. The 50% keyframe is dead center.</p>
+      </article>
+      <article class="card">
+        <span class="num">2</span>
+        <h3>One keyframe track</h3>
+        <p>Covers enter at <code>rotateY(-45deg)</code>, straighten and pop out with <code>translateZ</code> and <code>scale(1.5)</code> at center, then mirror out the other side.</p>
+      </article>
+      <article class="card">
+        <span class="num">3</span>
+        <h3>Snap and reflect</h3>
+        <p><code>scroll-snap-type: x mandatory</code> keeps one cover featured at rest, and <code>-webkit-box-reflect</code> paints the glassy floor, all in CSS.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- THE KEY TRICK -->
+  <section class="explain wrap">
+    <div class="band">
+      <h2>The trick that makes it stable</h2>
+      <p>The transforms live on the cover art, never on the <code>&lt;li&gt;</code>. If the list items rotated, the scroller's total scroll distance would keep changing and the shelf would flicker.</p>
+      <p>The <code>&lt;li&gt;</code> boxes stay perfectly still in the scroller; only the art inside them spins. That separation, straight from the original demo, is what keeps the 3D and the scrolling from fighting each other.</p>
+    </div>
+  </section>
+
+  <footer>
+    <p><span class="mark">saltycodestudio</span> &middot; Sand &amp; Surf parts library</p>
+    <p class="credit">Recreated from the Cover Flow demo by Bramus Van Damme on scroll-driven-animations.style, Apache-2.0, adapted with credit.</p>
+  </footer>
+
+</body>
+</html>

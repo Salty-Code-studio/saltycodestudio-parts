@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Shrinking Header with Shadow, minimal usage</title>
+<link rel="stylesheet" href="styles.css" />
+<style>
+  body { margin: 0; font-family: system-ui, sans-serif; color: #1c2b33; background: #fbf7f0; line-height: 1.6; }
+  main { width: min(90vw, 1100px); margin-inline: auto; padding-block: 2rem 4rem; }
+  main p { max-width: 62ch; }
+</style>
+</head>
+<body>
+
+  <!-- 1. The header. Must be followed by a sibling element (here <main>),
+          which receives the margin compensation once the header goes fixed. -->
+  <header class="shh-header">
+    <div class="shh-inner">
+
+      <!-- Decorative wave art, fades out as the header shrinks -->
+      <div class="shh-bg" aria-hidden="true">
+        <svg viewBox="0 0 1200 160" preserveAspectRatio="none" focusable="false">
+          <path d="M0 96 C150 56 300 136 450 100 C600 64 750 128 900 96 C1000 74 1100 106 1200 84 L1200 160 L0 160 Z" fill="#2ec3c3" opacity="0.25" />
+          <path d="M0 122 C180 90 340 150 520 122 C700 94 860 150 1040 122 C1100 112 1160 118 1200 112 L1200 160 L0 160 Z" fill="#1f8a8a" opacity="0.22" />
+        </svg>
+      </div>
+
+      <!-- Identity block: avatar + name + meta -->
+      <div class="shh-info">
+        <span class="shh-avatar" aria-hidden="true">
+          <svg viewBox="0 0 100 100" focusable="false">
+            <defs>
+              <linearGradient id="shh-avatar-sky" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#2ec3c3" />
+                <stop offset="1" stop-color="#1f8a8a" />
+              </linearGradient>
+            </defs>
+            <rect width="100" height="100" fill="url(#shh-avatar-sky)" />
+            <circle cx="50" cy="42" r="16" fill="#f4ece0" />
+            <path d="M0 66 Q12.5 58 25 66 T50 66 T75 66 T100 66 V100 H0 Z" fill="#0f5c5c" opacity="0.85" />
+            <path d="M0 76 Q12.5 68 25 76 T50 76 T75 76 T100 76 V100 H0 Z" fill="#1f8a8a" opacity="0.9" />
+          </svg>
+        </span>
+        <div>
+          <h1 class="shh-name">Mara Costa</h1>
+          <ul class="shh-meta">
+            <li>Studio Lead</li>
+            <li>@maracosta</li>
+            <li>Bonaire</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Round action button, tucks down slightly on scroll -->
+      <a href="#" class="shh-action" aria-label="Edit profile">&#9998;</a>
+
+    </div>
+  </header>
+
+  <!-- 2. Content. Give the page enough height to scroll; the whole effect
+          plays out over the first 150px. -->
+  <main>
+    <h2>Scroll a little</h2>
+    <p>The header above compresses and gains a shadow over the first 150 pixels of scroll. Scroll back up and it grows again, because the animation is scrubbed by the scroll position itself.</p>
+    <p>In browsers without scroll-driven animation support, the header simply stays sticky at full size with a permanent soft shadow. Nothing breaks and nothing jumps.</p>
+    <p>Filler paragraph one. Calm seas, long lines, a slow tide working its way up the sand.</p>
+    <p>Filler paragraph two. The reef keeps its own rhythm and the light keeps changing.</p>
+    <p>Filler paragraph three. By late afternoon the water turns to hammered glass.</p>
+    <p>Filler paragraph four. Nobody hurries here, and neither does this header.</p>
+    <p>Filler paragraph five. End of the minimal example.</p>
+    <div style="height: 60vh"></div>
+  </main>
+
+</body>
+</html>

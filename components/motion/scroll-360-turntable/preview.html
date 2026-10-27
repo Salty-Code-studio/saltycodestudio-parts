@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Scroll 360 Turntable · Sand &amp; Surf demo</title>
+<style>
+  /* ---- Sand & Surf palette ---- */
+  :root {
+    --sand-1: #fbf7f0;
+    --sand-2: #f4ece0;
+    --sand-3: #ece0cd;
+    --ink: #1c2b33;
+    --ink-soft: #4a5d66;
+    --teal: #1f8a8a;
+    --teal-deep: #0f5c5c;
+    --surf: #2ec3c3;
+    --coral: #ff6f59;
+    --maxw: 1080px;
+
+    /* Turntable geometry + product colors */
+    --tt-radius: 120px;
+    --tt-height: 300px;
+    --tt-cap-radius: 44px;
+    --tt-cap-h: 58px;
+    --tt-face-w: calc(var(--tt-radius) * 0.85);
+    --tt-cap-face-w: calc(var(--tt-cap-radius) * 0.85);
+    --tt-glass-1: #35c9c4;
+    --tt-glass-2: #1f8a8a;
+    --tt-glass-3: #0c4a4e;
+    --tt-cap-1: #2a3b44;
+    --tt-cap-2: #141f26;
+    --tt-disc-1: #f4ece0;
+    --tt-disc-2: #d9c8a8;
+    --tt-disc-3: #c2ab84;
+    --tt-ink: var(--ink);
+    --tt-accent: var(--coral);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    color: var(--ink);
+    background: radial-gradient(140% 90% at 50% -10%, var(--sand-1), var(--sand-2) 55%, var(--sand-3) 100%);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: var(--maxw); margin-inline: auto; padding-inline: 1.5rem; }
+
+  /* ============================================================
+     INTRO
+     ============================================================ */
+
+  .intro {
+    min-height: 86vh;
+    display: grid;
+    place-content: center;
+    text-align: center;
+    padding: 5rem 1.5rem 3rem;
+  }
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.32em;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--teal-deep);
+    margin-bottom: 1.2rem;
+  }
+  .intro h1 {
+    font-size: clamp(2.6rem, 7vw, 5.2rem);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+  }
+  .intro h1 em { font-style: normal; color: var(--teal-deep); }
+  .intro > p {
+    max-width: 52ch;
+    margin: 1.6rem auto 0;
+    color: var(--ink-soft);
+    font-size: 1.12rem;
+  }
+  .scroll-hint {
+    margin-top: 3rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .scroll-hint span {
+    display: block;
+    margin-top: 0.6rem;
+    font-size: 1.4rem;
+    animation: nudge 1.8s ease-in-out infinite;
+  }
+  @keyframes nudge {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(6px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-hint span { animation: none; }
+  }
+  .note {
+    margin-top: 1.6rem;
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+    background: rgba(255, 255, 255, 0.55);
+    border: 1px dashed rgba(31, 138, 138, 0.4);
+    border-radius: 12px;
+    padding: 0.8rem 1rem;
+    display: inline-block;
+  }
+
+  /* ============================================================
+     TURNTABLE PART (same rules as styles.css, inlined)
+     ============================================================ */
+
+  .turntable-section {
+    position: relative;
+    height: 100vh;
+    height: 100svh;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+  }
+  .turntable-section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(44% 40% at 50% 54%, rgba(46, 195, 195, 0.16), transparent 72%);
+  }
+
+  .turntable-headline {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: grid;
+    place-content: center;
+    text-align: center;
+    pointer-events: none;
+    letter-spacing: 0.02em;
+    color: var(--tt-ink);
+  }
+  .turntable-headline h2 {
+    font-size: clamp(3rem, 13vw, 8.5rem);
+    font-weight: 800;
+    line-height: 0.95;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .turntable-kicker {
+    margin-bottom: 1rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    opacity: 0.7;
+    color: var(--teal-deep);
+  }
+  .turntable-caption {
+    position: absolute;
+    bottom: 1.6rem;
+    left: 0;
+    right: 0;
+    z-index: 3;
+    text-align: center;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.24em;
+    color: var(--tt-ink);
+    opacity: 0.55;
+  }
+
+  .turntable-scene {
+    position: relative;
+    z-index: 2;
+    width: calc(var(--tt-radius) * 2.8);
+    height: calc(var(--tt-height) + var(--tt-cap-h) * 2 + 90px);
+    perspective: 1200px;
+  }
+  .turntable-tilt {
+    position: absolute;
+    inset: 0;
+    transform-style: preserve-3d;
+    transform: rotateX(-8deg);
+  }
+  .turntable-shadow {
+    position: absolute;
+    left: 50%;
+    bottom: 5%;
+    width: 62%;
+    height: 26px;
+    transform: translateX(-50%);
+    background: radial-gradient(closest-side, rgba(28, 43, 51, 0.32), transparent 72%);
+    filter: blur(6px);
+  }
+
+  .turntable-object {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: var(--tt-face-w);
+    height: var(--tt-height);
+    margin: calc(var(--tt-height) / -2) 0 0 calc(var(--tt-face-w) / -2);
+    transform-style: preserve-3d;
+    transform: rotateY(-32deg);
+    will-change: transform;
+  }
+  .turntable-body {
+    position: absolute;
+    inset: 0;
+    transform-style: preserve-3d;
+  }
+  .turntable-face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0) 22%),
+      linear-gradient(180deg, var(--tt-glass-1), var(--tt-glass-2) 48%, var(--tt-glass-3));
+    box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.12);
+  }
+  .turntable-body > .turntable-face:nth-child(1) { transform: rotateY(0deg)   translateZ(var(--tt-radius)); filter: brightness(1.05); }
+  .turntable-body > .turntable-face:nth-child(2) { transform: rotateY(45deg)  translateZ(var(--tt-radius)); filter: brightness(0.97); }
+  .turntable-body > .turntable-face:nth-child(3) { transform: rotateY(90deg)  translateZ(var(--tt-radius)); filter: brightness(0.90); }
+  .turntable-body > .turntable-face:nth-child(4) { transform: rotateY(135deg) translateZ(var(--tt-radius)); filter: brightness(0.84); }
+  .turntable-body > .turntable-face:nth-child(5) { transform: rotateY(180deg) translateZ(var(--tt-radius)); filter: brightness(0.80); }
+  .turntable-body > .turntable-face:nth-child(6) { transform: rotateY(225deg) translateZ(var(--tt-radius)); filter: brightness(0.84); }
+  .turntable-body > .turntable-face:nth-child(7) { transform: rotateY(270deg) translateZ(var(--tt-radius)); filter: brightness(0.90); }
+  .turntable-body > .turntable-face:nth-child(8) { transform: rotateY(315deg) translateZ(var(--tt-radius)); filter: brightness(0.97); }
+
+  .turntable-face--label { display: grid; place-items: center; overflow: hidden; }
+  .turntable-label {
+    display: grid;
+    gap: 0.3rem;
+    place-items: center;
+    width: 80%;
+    padding: 0.6rem 0.35rem;
+    border-radius: 8px;
+    background: rgba(251, 247, 240, 0.94);
+    box-shadow: 0 1px 4px rgba(12, 74, 78, 0.35);
+    text-align: center;
+  }
+  .turntable-label svg { width: 24px; height: auto; color: var(--tt-glass-2); }
+  .turntable-label strong { font-size: 0.6rem; font-weight: 800; letter-spacing: 0.12em; color: var(--tt-ink); }
+  .turntable-label span { font-size: 0.5rem; font-weight: 700; letter-spacing: 0.08em; color: var(--tt-accent); }
+
+  .turntable-lid {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    backface-visibility: hidden;
+    clip-path: polygon(29.3% 0%, 70.7% 0%, 100% 29.3%, 100% 70.7%, 70.7% 100%, 29.3% 100%, 0% 70.7%, 0% 29.3%);
+  }
+  .turntable-lid--body {
+    width: calc(var(--tt-radius) * 2);
+    height: calc(var(--tt-radius) * 2);
+    transform: translate(-50%, -50%) rotateX(90deg) translateZ(calc(var(--tt-height) / 2));
+    background: radial-gradient(circle at 50% 38%, #43d0d0, #17716f 78%);
+  }
+  .turntable-lid--cap {
+    width: calc(var(--tt-cap-radius) * 2);
+    height: calc(var(--tt-cap-radius) * 2);
+    transform: translate(-50%, -50%) rotateX(90deg) translateZ(calc(var(--tt-cap-h) / 2));
+    background: radial-gradient(circle at 50% 38%, #3b515c, var(--tt-cap-2) 80%);
+  }
+
+  .turntable-cap {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: var(--tt-cap-face-w);
+    height: var(--tt-cap-h);
+    transform: translate(-50%, calc(-100% + 2px));
+    transform-style: preserve-3d;
+  }
+  .turntable-cap > .turntable-face {
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0) 30%),
+      linear-gradient(180deg, var(--tt-cap-1), var(--tt-cap-2));
+  }
+  .turntable-cap > .turntable-face:nth-child(1) { transform: rotateY(0deg)   translateZ(var(--tt-cap-radius)); filter: brightness(1.05); }
+  .turntable-cap > .turntable-face:nth-child(2) { transform: rotateY(45deg)  translateZ(var(--tt-cap-radius)); filter: brightness(0.97); }
+  .turntable-cap > .turntable-face:nth-child(3) { transform: rotateY(90deg)  translateZ(var(--tt-cap-radius)); filter: brightness(0.90); }
+  .turntable-cap > .turntable-face:nth-child(4) { transform: rotateY(135deg) translateZ(var(--tt-cap-radius)); filter: brightness(0.84); }
+  .turntable-cap > .turntable-face:nth-child(5) { transform: rotateY(180deg) translateZ(var(--tt-cap-radius)); filter: brightness(0.80); }
+  .turntable-cap > .turntable-face:nth-child(6) { transform: rotateY(225deg) translateZ(var(--tt-cap-radius)); filter: brightness(0.84); }
+  .turntable-cap > .turntable-face:nth-child(7) { transform: rotateY(270deg) translateZ(var(--tt-cap-radius)); filter: brightness(0.90); }
+  .turntable-cap > .turntable-face:nth-child(8) { transform: rotateY(315deg) translateZ(var(--tt-cap-radius)); filter: brightness(0.97); }
+
+  .turntable-disc {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: calc(var(--tt-radius) * 2.4);
+    height: calc(var(--tt-radius) * 2.4);
+    border-radius: 50%;
+    backface-visibility: hidden;
+    transform: translate(-50%, -50%) rotateX(90deg) translateZ(calc(var(--tt-height) / -2 - 8px));
+    background: radial-gradient(circle at 50% 42%, var(--tt-disc-1), var(--tt-disc-2) 66%, var(--tt-disc-3));
+    box-shadow: inset 0 0 0 2px rgba(28, 43, 51, 0.08);
+  }
+
+  @media (max-width: 640px) {
+    :root {
+      --tt-radius: 88px;
+      --tt-height: 226px;
+      --tt-cap-radius: 33px;
+      --tt-cap-h: 44px;
+    }
+  }
+
+  /* ============================================================
+     AFTER THE SPIN
+     ============================================================ */
+
+  section.features { padding-block: clamp(4rem, 11vh, 9rem); }
+  .section-head { max-width: 56ch; margin-bottom: 3rem; }
+  .section-head h2 {
+    font-size: clamp(1.9rem, 4.5vw, 3rem);
+    letter-spacing: -0.015em;
+    line-height: 1.08;
+    margin-bottom: 1rem;
+  }
+  .section-head p { color: var(--ink-soft); font-size: 1.08rem; }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 1.25rem;
+  }
+  .card {
+    background: rgba(255, 255, 255, 0.66);
+    border: 1px solid rgba(28, 43, 51, 0.08);
+    border-radius: 18px;
+    padding: 1.8rem 1.6rem;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 18px 40px -28px rgba(15, 92, 92, 0.5);
+  }
+  .card .num {
+    display: inline-grid;
+    place-content: center;
+    width: 2.6rem;
+    height: 2.6rem;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--teal), var(--surf));
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+  .card h3 { margin-bottom: 0.5rem; font-size: 1.2rem; }
+  .card p { color: var(--ink-soft); font-size: 0.96rem; }
+
+  footer {
+    text-align: center;
+    padding: 4rem 1.5rem 5rem;
+    color: var(--ink-soft);
+  }
+  footer .mark { font-weight: 700; color: var(--teal-deep); letter-spacing: -0.02em; }
+</style>
+</head>
+<body>
+
+  <!-- INTRO -->
+  <header class="intro">
+    <div>
+      <p class="eyebrow">Sand &amp; Surf · GSAP ScrollTrigger</p>
+      <h1>Scroll <em>360</em> Turntable</h1>
+      <p>A pinned hero where the product spins one full turn as you scroll,
+         while the layered headline fades and letter-spaces away.</p>
+      <p class="scroll-hint">Scroll to spin<span>&#8595;</span></p>
+      <div><span class="note">The bottle below is pure CSS 3D, no images. A frame-sequence mode handles real 360 shoots. Reduced motion gets a calm static hero.</span></div>
+    </div>
+  </header>
+
+  <!-- PINNED TURNTABLE HERO -->
+  <section class="turntable-section">
+    <div class="turntable-headline">
+      <p class="turntable-kicker">Eau de parfum · No. 01</p>
+      <h2>Saltwater</h2>
+    </div>
+
+    <div class="turntable-scene" aria-hidden="true">
+      <div class="turntable-shadow"></div>
+      <div class="turntable-tilt">
+        <div class="turntable-object">
+          <div class="turntable-body">
+            <div class="turntable-face turntable-face--label">
+              <div class="turntable-label">
+                <svg viewBox="0 0 48 20" fill="none" aria-hidden="true">
+                  <path d="M2 14 C8 4 16 4 22 12 S38 20 46 8" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+                </svg>
+                <strong>SALTWATER</strong>
+                <span>No. 01 · 50 ml</span>
+              </div>
+            </div>
+            <div class="turntable-face"></div>
+            <div class="turntable-face"></div>
+            <div class="turntable-face"></div>
+            <div class="turntable-face"></div>
+            <div class="turntable-face"></div>
+            <div class="turntable-face"></div>
+            <div class="turntable-face"></div>
+          </div>
+          <div class="turntable-lid turntable-lid--body"></div>
+          <div class="turntable-cap">
+            <div class="turntable-face"></div>
+            <div class="turntable-face"></div>
+            <div class="turntable-face"></div>
+            <div class="turntable-face"></div>
+            <div class="turntable-face"></div>
+            <div class="turntable-face"></div>
+            <div class="turntable-face"></div>
+            <div class="turntable-face"></div>
+            <div class="turntable-lid turntable-lid--cap"></div>
+          </div>
+          <div class="turntable-disc"></div>
+        </div>
+      </div>
+    </div>
+
+    <p class="turntable-caption" aria-hidden="true">Scroll · one full turn · 360&#176;</p>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features wrap">
+    <div class="section-head">
+      <h2>One scrub, three moves</h2>
+      <p>The section pins for three viewport heights while a single GSAP timeline
+         drives everything in lockstep with the scrollbar.</p>
+    </div>
+    <div class="cards">
+      <article class="card">
+        <span class="num">1</span>
+        <h3>CSS-3D spin</h3>
+        <p>The default mode rotateY-spins a faceted flacon built from sixteen
+           transformed divs, two lids, and a disc. No images anywhere.</p>
+      </article>
+      <article class="card">
+        <span class="num">2</span>
+        <h3>Frame sequence</h3>
+        <p>Pass initTurntable a frames array of a real 360 shoot and the scrub
+           swaps preloaded stills instead. Same call, same markup.</p>
+      </article>
+      <article class="card">
+        <span class="num">3</span>
+        <h3>Kind fallback</h3>
+        <p>Reduced-motion visitors get no pin and no spin, just the product at
+           a flattering resting angle with the headline fully readable.</p>
+      </article>
+    </div>
+  </section>
+
+  <footer>
+    <p><span class="mark">saltycodestudio</span> · Sand &amp; Surf parts library</p>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    function initTurntable(options) {
+      var opts = Object.assign({
+        root: document,
+        section: '.turntable-section',
+        object: '.turntable-object',
+        headline: '.turntable-headline',
+        frames: null,
+        turns: 1,
+        scrollLength: 3,
+        headlineSpacing: '0.18em',
+        headlineFade: 0.55
+      }, options || {});
+
+      var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var frames = Array.isArray(opts.frames) && opts.frames.length ? opts.frames : null;
+
+      opts.root.querySelectorAll(opts.section).forEach(function (section) {
+        var object = section.querySelector(opts.object);
+        var headline = section.querySelector(opts.headline);
+        var frameImg = null;
+        var loaded = null;
+
+        if (frames) {
+          frameImg = section.querySelector('.turntable-frame');
+          if (!frameImg) {
+            frameImg = document.createElement('img');
+            frameImg.className = 'turntable-frame';
+            frameImg.alt = '';
+            (section.querySelector('.turntable-scene') || section).appendChild(frameImg);
+          }
+          loaded = frames.map(function (src) {
+            var im = new Image();
+            im.src = src;
+            return im;
+          });
+          frameImg.src = loaded[0].src;
+          section.classList.add('turntable--frames');
+        }
+
+        if (!frames && !object) return;
+
+        if (prefersReduced) {
+          section.classList.add('turntable--static');
+          return;
+        }
+
+        var tl = gsap.timeline({
+          defaults: { ease: 'none' },
+          scrollTrigger: {
+            trigger: section,
+            start: 'top top',
+            end: function () { return '+=' + section.offsetHeight * opts.scrollLength; },
+            pin: true,
+            scrub: true,
+            anticipatePin: 1,
+            invalidateOnRefresh: true
+          }
+        });
+
+        if (frames) {
+          var count = loaded.length;
+          var state = { p: 0 };
+          var current = 0;
+          tl.to(state, {
+            p: 1,
+            duration: 1,
+            onUpdate: function () {
+              var i = Math.round(state.p * count * opts.turns) % count;
+              if (i !== current) {
+                current = i;
+                frameImg.src = loaded[i].src;
+              }
+            }
+          }, 0);
+        } else {
+          tl.fromTo(object, { rotationY: 0 }, { rotationY: 360 * opts.turns, duration: 1 }, 0);
+        }
+
+        if (headline) {
+          tl.to(headline, {
+            opacity: 0,
+            letterSpacing: opts.headlineSpacing,
+            duration: Math.max(0.1, Math.min(1, opts.headlineFade))
+          }, 0);
+        }
+      });
+    }
+
+    initTurntable();
+  </script>
+
+</body>
+</html>

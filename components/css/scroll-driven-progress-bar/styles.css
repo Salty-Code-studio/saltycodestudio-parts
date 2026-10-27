@@ -1,0 +1,73 @@
+/* ============================================================
+   Scroll-Driven Progress Bar
+   A fixed reading indicator at the top of the page that fills
+   from left to right as the document scrolls, powered entirely
+   by a native CSS Scroll Progress Timeline. Zero JavaScript.
+   Adapted from the progress-bar demo by Bramus Van Damme,
+   scroll-driven-animations.style (Apache-2.0). Full demo URL
+   and credit in this part's README.
+   ============================================================ */
+
+/* ============================================================
+   1. The bar. It spans the full viewport width and is scaled
+      on the x-axis instead of animating width, so the whole
+      effect stays composited and runs off the main thread.
+
+      Tune it per page with custom properties:
+        --sdp-height   bar thickness        (default 6px)
+        --sdp-fill     bar color / gradient (default Sand & Surf teal)
+        --sdp-z        stacking level       (default 100)
+   ============================================================ */
+.sdp-bar {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: var(--sdp-height, 6px);
+  z-index: var(--sdp-z, 100);
+  background: var(--sdp-fill, linear-gradient(90deg, #0f5c5c, #1f8a8a 55%, #2ec3c3));
+  transform-origin: 0 50%;
+  /* Fallback state: fully collapsed. Browsers without
+     scroll-driven animations simply never show the bar,
+     which beats showing one stuck at 100%. */
+  transform: scaleX(0);
+  pointer-events: none;
+}
+
+/* ============================================================
+   2. Keyframes. Progress is expressed as a horizontal scale,
+      so the bar grows out of the left edge.
+   ============================================================ */
+@keyframes sdp-grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* ============================================================
+   3. Progressive enhancement. A named Scroll Progress Timeline
+      is created on the root element, then the bar's animation
+      is attached to it. Top of the document maps to an empty
+      bar, bottom of the document maps to a full one. Only
+      browsers that support scroll-driven animations (and
+      users who have not asked for reduced motion) turn it on.
+   ============================================================ */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+
+    /* The document scroll drives the timeline. */
+    html {
+      scroll-timeline: --sdp-page-scroll block;
+    }
+
+    /* The bar plays its keyframes along that timeline. */
+    .sdp-bar {
+      animation-name: sdp-grow;
+      animation-duration: auto;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: --sdp-page-scroll;
+    }
+  }
+}

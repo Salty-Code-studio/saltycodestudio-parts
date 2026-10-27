@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CSS Scroll Shadows &middot; Sand &amp; Surf demo</title>
+<style>
+  /* ---- Sand & Surf palette ---- */
+  :root {
+    --sand-1: #fbf7f0;
+    --sand-2: #f4ece0;
+    --sand-3: #ece0cd;
+    --ink: #1c2b33;
+    --ink-soft: #4a5d66;
+    --teal: #1f8a8a;
+    --teal-deep: #0f5c5c;
+    --surf: #2ec3c3;
+    --maxw: 1080px;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    font-family: "Helvetica Neue", Arial, system-ui, sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(140% 90% at 50% -10%, var(--sand-1), var(--sand-2) 55%, var(--sand-3) 100%);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: var(--maxw); margin-inline: auto; padding-inline: 1.5rem; }
+
+  /* ============================================================
+     THE PART: CSS Scroll Shadows (scroll-driven, zero JS)
+     Adapted from the scroll-shadows demo by Bramus Van Damme,
+     https://scroll-driven-animations.style (Apache-2.0).
+     ============================================================ */
+
+  .sds-scroller {
+    --sds-shadow-rgb: 14 58 64;
+    --sds-shadow-alpha: 0.28;
+    --sds-shadow-size: 0.75rem;
+
+    position: relative;
+    overflow-y: auto;
+  }
+
+  .sds-scroller::before,
+  .sds-scroller::after {
+    content: "";
+    display: block;
+    position: sticky;
+    left: 0;
+    right: 0;
+    height: var(--sds-shadow-size);
+    flex: none;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .sds-scroller::before {
+    top: 0;
+    background: radial-gradient(
+      farthest-side at 50% 0,
+      rgb(var(--sds-shadow-rgb) / var(--sds-shadow-alpha)),
+      rgb(var(--sds-shadow-rgb) / 0)
+    );
+  }
+
+  .sds-scroller::after {
+    bottom: 0;
+    background: radial-gradient(
+      farthest-side at 50% 100%,
+      rgb(var(--sds-shadow-rgb) / var(--sds-shadow-alpha)),
+      rgb(var(--sds-shadow-rgb) / 0)
+    );
+  }
+
+  .sds-scroller > :first-child { margin-top: 0; }
+  .sds-scroller > :last-child  { margin-bottom: 0; }
+
+  @keyframes sds-reveal {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* Space toggle: the lone space after the colon IS the value. */
+  @keyframes sds-detect-scroll {
+    from, to { --sds-can-scroll: ; }
+  }
+
+  @supports (animation-timeline: scroll()) {
+    @media (prefers-reduced-motion: no-preference) {
+
+      .sds-scroller {
+        scroll-timeline: --sds-timeline y;
+        animation: sds-detect-scroll;
+        animation-timeline: --sds-timeline;
+        animation-fill-mode: none;
+      }
+
+      .sds-scroller::before,
+      .sds-scroller::after {
+        --sds-visible-if-can-scroll: var(--sds-can-scroll) visible;
+        visibility: var(--sds-visible-if-can-scroll, hidden);
+
+        animation-name: sds-reveal;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: --sds-timeline;
+      }
+
+      .sds-scroller::before {
+        animation-range: 1em 2em;
+      }
+
+      .sds-scroller::after {
+        animation-direction: reverse;
+        animation-range: calc(100% - 2em) calc(100% - 1em);
+      }
+    }
+  }
+
+  /* ============================================================
+     DEMO LAYOUT
+     ============================================================ */
+
+  /* Hero */
+  .hero {
+    min-height: 78vh;
+    display: grid;
+    place-content: center;
+    text-align: center;
+    padding: 5rem 1.5rem 3rem;
+  }
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: .32em;
+    font-size: .72rem;
+    font-weight: 700;
+    color: var(--teal-deep);
+    margin: 0 0 1.2rem;
+  }
+  .hero h1 {
+    font-size: clamp(2.6rem, 7vw, 5rem);
+    line-height: 1.02;
+    letter-spacing: -.02em;
+    margin: 0;
+    color: var(--ink);
+  }
+  .hero h1 em { font-style: normal; color: var(--teal-deep); }
+  .hero > div > p.lede {
+    max-width: 52ch;
+    margin: 1.6rem auto 0;
+    color: var(--ink-soft);
+    font-size: 1.15rem;
+  }
+  .hero .wave { margin-top: 2.2rem; color: var(--teal); }
+  .note {
+    margin-top: 1.6rem;
+    font-size: .82rem;
+    color: var(--ink-soft);
+    background: rgba(255,255,255,.55);
+    border: 1px dashed rgba(31,138,138,.4);
+    border-radius: 12px;
+    padding: .8rem 1rem;
+    display: inline-block;
+  }
+
+  section { padding-block: clamp(3.5rem, 9vh, 7rem); }
+
+  .section-head { max-width: 58ch; margin-bottom: 2.6rem; }
+  .section-head h2 {
+    font-size: clamp(1.9rem, 4.5vw, 2.8rem);
+    letter-spacing: -.015em;
+    line-height: 1.08;
+    margin: 0 0 1rem;
+  }
+  .section-head p { color: var(--ink-soft); font-size: 1.06rem; margin: 0; }
+  .section-head code,
+  .panel-note code {
+    background: rgba(31,138,138,.1);
+    border-radius: 6px;
+    padding: .1em .35em;
+    font-size: .92em;
+  }
+
+  /* Panel grid */
+  .panels {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.4rem;
+    align-items: start;
+  }
+  .panel {
+    background: rgba(255,255,255,.72);
+    border: 1px solid rgba(28,43,51,.08);
+    border-radius: 18px;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 18px 40px -28px rgba(15,92,92,.5);
+    overflow: hidden;
+  }
+  .panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .8rem;
+    padding: 1.1rem 1.25rem .9rem;
+    border-bottom: 1px solid rgba(28,43,51,.08);
+  }
+  .panel-head h3 { margin: 0; font-size: 1.05rem; letter-spacing: -.01em; }
+  .badge {
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--teal-deep);
+    background: rgba(46,195,195,.16);
+    border-radius: 999px;
+    padding: .28em .8em;
+    white-space: nowrap;
+  }
+  .badge.quiet { color: var(--ink-soft); background: rgba(28,43,51,.07); }
+
+  .panel .sds-scroller {
+    height: 300px;
+    padding: 0 1.25rem;
+  }
+  .panel .sds-scroller:focus-visible {
+    outline: 2px solid var(--teal);
+    outline-offset: -2px;
+    border-radius: 0 0 18px 18px;
+  }
+  .panel .sds-scroller.is-short { height: auto; max-height: 300px; }
+
+  .panel-note {
+    padding: .85rem 1.25rem;
+    border-top: 1px solid rgba(28,43,51,.08);
+    color: var(--ink-soft);
+    font-size: .85rem;
+  }
+
+  /* Tide log list */
+  .tide { list-style: none; margin: 0; padding: .35rem 0; display: grid; gap: .55rem; }
+  .tide li {
+    display: flex;
+    align-items: baseline;
+    gap: .8rem;
+    padding: .55rem .1rem;
+    border-bottom: 1px dashed rgba(28,43,51,.1);
+  }
+  .tide li:last-child { border-bottom: 0; }
+  .tide .dot {
+    flex: none;
+    width: .55rem; height: .55rem;
+    border-radius: 50%;
+    background: var(--teal);
+    box-shadow: 0 0 0 3px rgba(46,195,195,.18);
+    align-self: center;
+  }
+  .tide time {
+    flex: none;
+    font-size: .78rem;
+    font-weight: 700;
+    color: var(--teal-deep);
+    font-variant-numeric: tabular-nums;
+  }
+  .tide span { font-size: .92rem; color: var(--ink-soft); }
+
+  .prose p { font-size: .95rem; color: var(--ink-soft); margin: .9rem 0; }
+  .prose p strong { color: var(--ink); }
+
+  /* Dark retheme band */
+  .band {
+    border-radius: 22px;
+    overflow: hidden;
+    color: #f4ece0;
+    background:
+      linear-gradient(150deg, #16242b, #0e171c 70%),
+      radial-gradient(100% 120% at 90% -10%, rgba(46,195,195,.25), transparent 60%);
+    box-shadow: 0 30px 70px -40px rgba(14,23,28,.9);
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+  }
+  @media (max-width: 760px) { .band { grid-template-columns: 1fr; } }
+  .band-copy { padding: clamp(1.8rem, 5vw, 3.2rem); }
+  .band-copy .eyebrow { color: var(--surf); }
+  .band-copy h2 {
+    font-size: clamp(1.7rem, 4vw, 2.6rem);
+    margin: 0 0 .9rem;
+    letter-spacing: -.015em;
+    line-height: 1.1;
+  }
+  .band-copy p { margin: 0 0 .8rem; color: #9fb3ba; }
+  .band-copy code {
+    background: rgba(46,195,195,.14);
+    color: #7fe3e3;
+    border-radius: 6px;
+    padding: .1em .35em;
+    font-size: .9em;
+  }
+  .band .sds-scroller {
+    height: 340px;
+    padding: 0 1.4rem;
+    background: rgba(255,255,255,.03);
+    border-left: 1px solid rgba(127,227,227,.12);
+  }
+  @media (max-width: 760px) {
+    .band .sds-scroller { border-left: 0; border-top: 1px solid rgba(127,227,227,.12); }
+  }
+  .band .sds-scroller:focus-visible { outline: 2px solid var(--surf); outline-offset: -2px; }
+
+  .setlist { list-style: none; margin: 0; padding: .3rem 0; }
+  .setlist li {
+    display: flex;
+    align-items: center;
+    gap: .9rem;
+    padding: .7rem .2rem;
+    border-bottom: 1px solid rgba(127,227,227,.08);
+  }
+  .setlist li:last-child { border-bottom: 0; }
+  .setlist .no {
+    flex: none;
+    font-size: .74rem;
+    font-weight: 700;
+    color: var(--surf);
+    width: 1.6rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .setlist strong { display: block; font-size: .95rem; letter-spacing: -.01em; }
+  .setlist span { font-size: .8rem; color: #9fb3ba; }
+
+  /* How-it-works cards */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 1.25rem;
+  }
+  .card {
+    background: rgba(255,255,255,.66);
+    border: 1px solid rgba(28,43,51,.08);
+    border-radius: 18px;
+    padding: 1.8rem 1.6rem;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 18px 40px -28px rgba(15,92,92,.5);
+  }
+  .card .num {
+    display: inline-grid;
+    place-content: center;
+    width: 2.6rem; height: 2.6rem;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--teal), var(--surf));
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+  .card h3 { margin: 0 0 .5rem; font-size: 1.15rem; }
+  .card p  { margin: 0; color: var(--ink-soft); font-size: .95rem; }
+  .card code {
+    background: rgba(31,138,138,.1);
+    border-radius: 6px;
+    padding: .1em .3em;
+    font-size: .88em;
+  }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    padding: 4rem 1.5rem 5rem;
+    color: var(--ink-soft);
+    font-size: .95rem;
+  }
+  footer .mark { font-weight: 700; color: var(--teal-deep); letter-spacing: -.02em; }
+  footer a { color: var(--teal-deep); }
+</style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div>
+      <p class="eyebrow">Sand &amp; Surf &middot; Scroll-driven CSS</p>
+      <h1>Shadows that say<br /><em>keep scrolling</em></h1>
+      <p class="lede">Every panel on this page hints at hidden content with soft edge
+         shadows that appear only while there is somewhere left to scroll.
+         Pure CSS, zero JavaScript.</p>
+      <div class="wave" aria-hidden="true">
+        <svg width="120" height="22" viewBox="0 0 120 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M2 14 C 12 4, 22 4, 32 14 S 52 24, 62 14 S 82 4, 92 14 S 112 24, 118 16"
+                stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+        </svg>
+      </div>
+      <div><span class="note">Best in Chrome/Edge 115+ and Safari 26+. Elsewhere the panels
+        still scroll normally, just without the shadow hints.</span></div>
+    </div>
+  </header>
+
+  <!-- PANEL GRID -->
+  <section class="wrap">
+    <div class="section-head">
+      <h2>Three panels, one class</h2>
+      <p>Each scroller carries nothing but <code>.sds-scroller</code> and a height.
+         Watch the top shadow appear once content slips out of view above, and the
+         bottom one melt away when you reach the end. The short panel proves the
+         detection: no overflow, no shadows.</p>
+    </div>
+
+    <div class="panels">
+
+      <!-- Scrollable: tide log -->
+      <article class="panel">
+        <div class="panel-head">
+          <h3>Tide log &middot; Bonaire</h3>
+          <span class="badge">Scrollable</span>
+        </div>
+        <div class="sds-scroller" tabindex="0" role="region" aria-label="Tide log entries">
+          <ul class="tide">
+            <li><span class="dot"></span><time>05:40</time><span>First light, glassy water, zero wind.</span></li>
+            <li><span class="dot"></span><time>06:15</time><span>Low tide turns, reef edge showing.</span></li>
+            <li><span class="dot"></span><time>07:02</time><span>Trade winds wake up from the east.</span></li>
+            <li><span class="dot"></span><time>08:30</time><span>Small swell lines start stacking up.</span></li>
+            <li><span class="dot"></span><time>09:45</time><span>Mid tide, current picks up along the pier.</span></li>
+            <li><span class="dot"></span><time>11:20</time><span>Wind steady at 18 knots, whitecaps offshore.</span></li>
+            <li><span class="dot"></span><time>12:05</time><span>High tide, lagoon brim full and bright.</span></li>
+            <li><span class="dot"></span><time>13:40</time><span>Gusts to 24 knots, kites out at Atlantis.</span></li>
+            <li><span class="dot"></span><time>15:10</time><span>Tide easing, water clearing over the sand flats.</span></li>
+            <li><span class="dot"></span><time>16:55</time><span>Wind tapering, longboard glass returning.</span></li>
+            <li><span class="dot"></span><time>18:20</time><span>Golden hour, low tide again, reef pools warm.</span></li>
+            <li><span class="dot"></span><time>19:03</time><span>Sunset. Log closed, board rinsed, done.</span></li>
+          </ul>
+        </div>
+        <p class="panel-note">The bottom shadow fades out exactly at the last entry.</p>
+      </article>
+
+      <!-- Scrollable: prose -->
+      <article class="panel">
+        <div class="panel-head">
+          <h3>Field notes</h3>
+          <span class="badge">Scrollable</span>
+        </div>
+        <div class="sds-scroller prose" tabindex="0" role="region" aria-label="Field notes on the technique">
+          <p><strong>Scroll shadows are an old trick with a long JavaScript tail.</strong>
+             For years the recipe was a scroll listener, some math against
+             scrollHeight, and a pair of toggled classes. It worked, but it ran on
+             the main thread and broke the moment content resized.</p>
+          <p>This version deletes all of that. The container publishes a
+             <strong>scroll progress timeline</strong>, a native browser primitive
+             that maps its own scroll position onto animation progress.</p>
+          <p>Two tiny keyframe animations ride that timeline. The top shadow fades
+             in across the first bit of scrolling, so it only shows once something
+             is actually hidden above you.</p>
+          <p>The bottom shadow plays the very same fade in reverse across the last
+             stretch, so it disappears the moment there is nothing left below.</p>
+          <p>Because the browser owns the mapping, the shadows stay perfectly in
+             sync while you drag, fling, or keyboard-scroll, and they keep working
+             when content grows or shrinks.</p>
+          <p>No listeners to debounce, no observers to disconnect, nothing to keep
+             alive. The whole effect is a stylesheet.</p>
+          <p><strong>And it fails politely.</strong> Browsers without the feature
+             simply show a plain scrolling panel, which is exactly what this would
+             have been anyway.</p>
+        </div>
+        <p class="panel-note">Plain paragraphs inside, nothing special about the markup.</p>
+      </article>
+
+      <!-- Not scrollable -->
+      <article class="panel">
+        <div class="panel-head">
+          <h3>Too short to scroll</h3>
+          <span class="badge quiet">No shadows</span>
+        </div>
+        <div class="sds-scroller prose is-short">
+          <p><strong>Same class, no shadows.</strong> This panel holds less content
+             than its box, so there is no scrollable overflow.</p>
+          <p>Scroll-driven animations only activate when a container can actually
+             scroll, and this part uses that as a detector: a no-op animation flips
+             a custom property that switches the shadows on. Here it never runs,
+             so the edges stay clean.</p>
+        </div>
+        <p class="panel-note">Delete a paragraph from a scroller and its shadows retire themselves.</p>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- DARK RETHEME -->
+  <section class="wrap">
+    <div class="band">
+      <div class="band-copy">
+        <p class="eyebrow">Retheme with custom properties</p>
+        <h2>On dark panels, the shadow becomes a glow</h2>
+        <p>Every scroller reads three custom properties:
+           <code>--sds-shadow-rgb</code> for the color channels,
+           <code>--sds-shadow-alpha</code> for the strength, and
+           <code>--sds-shadow-size</code> for the strip height.</p>
+        <p>This setlist swaps the deep teal ink for bright surf channels
+           (<code>46 195 195</code>), so the edges glow instead of shade.
+           Same class, same CSS, one inline style.</p>
+      </div>
+      <div class="sds-scroller" tabindex="0" role="region" aria-label="Beach bar setlist"
+           style="--sds-shadow-rgb: 46 195 195; --sds-shadow-alpha: .4; --sds-shadow-size: 1rem">
+        <ol class="setlist">
+          <li><span class="no">01</span><div><strong>Salt on the Keys</strong><span>opener &middot; 3:42</span></div></li>
+          <li><span class="no">02</span><div><strong>Trade Wind Letters</strong><span>midtempo &middot; 4:05</span></div></li>
+          <li><span class="no">03</span><div><strong>Reef Break Radio</strong><span>upbeat &middot; 2:58</span></div></li>
+          <li><span class="no">04</span><div><strong>Driftwood Ink</strong><span>slow burn &middot; 5:11</span></div></li>
+          <li><span class="no">05</span><div><strong>Lagoon Brim Full</strong><span>groove &middot; 3:34</span></div></li>
+          <li><span class="no">06</span><div><strong>Eighteen Knots</strong><span>upbeat &middot; 3:07</span></div></li>
+          <li><span class="no">07</span><div><strong>Glass by Sunset</strong><span>ballad &middot; 4:48</span></div></li>
+          <li><span class="no">08</span><div><strong>Pier Current</strong><span>instrumental &middot; 3:20</span></div></li>
+          <li><span class="no">09</span><div><strong>Whitecaps Offshore</strong><span>closer &middot; 4:16</span></div></li>
+          <li><span class="no">10</span><div><strong>Board Rinsed, Done</strong><span>encore &middot; 2:41</span></div></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="wrap">
+    <div class="section-head">
+      <h2>How the trick works</h2>
+      <p>Three small ideas stacked together, all native CSS.</p>
+    </div>
+    <div class="cards">
+      <article class="card">
+        <span class="num">1</span>
+        <h3>Sticky gradients</h3>
+        <p>The shadows are <code>::before</code> and <code>::after</code> strips
+           pinned to the container edges with <code>position: sticky</code>, each
+           painted as a soft radial gradient.</p>
+      </article>
+      <article class="card">
+        <span class="num">2</span>
+        <h3>Scroll timeline fades</h3>
+        <p>A named <code>scroll-timeline</code> on the container drives each
+           strip's opacity, with <code>animation-range</code> pinning the fades to
+           the first and last bit of scroll.</p>
+      </article>
+      <article class="card">
+        <span class="num">3</span>
+        <h3>Can-scroll detection</h3>
+        <p>Scroll-driven animations only run when there is overflow, so a no-op
+           animation doubles as a detector and hides the shadows on panels that
+           cannot scroll.</p>
+      </article>
+    </div>
+  </section>
+
+  <footer>
+    <p><span class="mark">saltycodestudio</span> &middot; Sand &amp; Surf parts library</p>
+    <p>Adapted with credit from the Scroll Shadows demo by Bramus Van Damme,
+       <a href="https://scroll-driven-animations.style/demos/scroll-shadows/css/">scroll-driven-animations.style</a> (Apache-2.0).</p>
+  </footer>
+
+</body>
+</html>

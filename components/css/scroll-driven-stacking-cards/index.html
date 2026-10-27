@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CSS Stacking Cards, usage example</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ============================================================
+       Minimal usage example for CSS Stacking Cards.
+       One <li class="sdc-card"> per card, each wrapping a
+       .sdc-card__content. Set the --sdc-numcards knob on the
+       wrapper to match the number of cards; positions 1 to 6 are
+       indexed automatically by nth-child. The art can be any
+       image or inline SVG, it will cover the panel.
+       ============================================================ -->
+
+  <ul class="sdc-cards" style="--sdc-numcards: 4">
+
+    <li class="sdc-card">
+      <div class="sdc-card__content">
+        <div class="sdc-card__text">
+          <h2>Card one</h2>
+          <p>Pins at the top, then scales back as card two slides over it.</p>
+          <a href="#">Read more</a>
+        </div>
+        <figure class="sdc-card__art">
+          <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Teal gradient with a pale wave line">
+            <defs>
+              <linearGradient id="sdc-ex1" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#2ec3c3"/>
+                <stop offset="1" stop-color="#1f8a8a"/>
+              </linearGradient>
+            </defs>
+            <rect width="400" height="300" fill="url(#sdc-ex1)"/>
+            <path d="M0 210 Q 100 180 200 210 T 400 210" stroke="#fbf7f0" stroke-width="6" fill="none"/>
+          </svg>
+        </figure>
+      </div>
+    </li>
+
+    <li class="sdc-card">
+      <div class="sdc-card__content">
+        <div class="sdc-card__text">
+          <h2>Card two</h2>
+          <p>Each card owns one slice of the wrapper's exit-crossing range.</p>
+          <a href="#">Read more</a>
+        </div>
+        <figure class="sdc-card__art">
+          <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Sand gradient with a deep teal wave line">
+            <defs>
+              <linearGradient id="sdc-ex2" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#f4ece0"/>
+                <stop offset="1" stop-color="#ece0cd"/>
+              </linearGradient>
+            </defs>
+            <rect width="400" height="300" fill="url(#sdc-ex2)"/>
+            <path d="M0 190 Q 100 160 200 190 T 400 190" stroke="#0f5c5c" stroke-width="6" fill="none"/>
+          </svg>
+        </figure>
+      </div>
+    </li>
+
+    <li class="sdc-card">
+      <div class="sdc-card__content">
+        <div class="sdc-card__text">
+          <h2>Card three</h2>
+          <p>The inner content animates, so scroll distance never changes.</p>
+          <a href="#">Read more</a>
+        </div>
+        <figure class="sdc-card__art">
+          <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Surf gradient with a cream sun disc">
+            <defs>
+              <linearGradient id="sdc-ex3" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#7fe3e3"/>
+                <stop offset="1" stop-color="#2ec3c3"/>
+              </linearGradient>
+            </defs>
+            <rect width="400" height="300" fill="url(#sdc-ex3)"/>
+            <circle cx="200" cy="150" r="60" fill="#fbf7f0"/>
+          </svg>
+        </figure>
+      </div>
+    </li>
+
+    <li class="sdc-card">
+      <div class="sdc-card__content">
+        <div class="sdc-card__text">
+          <h2>Card four</h2>
+          <p>The last card stays at full size on top of the stack.</p>
+          <a href="#">Read more</a>
+        </div>
+        <figure class="sdc-card__art">
+          <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Deep teal gradient with a surf wave line">
+            <defs>
+              <linearGradient id="sdc-ex4" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#0f5c5c"/>
+                <stop offset="1" stop-color="#083b3b"/>
+              </linearGradient>
+            </defs>
+            <rect width="400" height="300" fill="url(#sdc-ex4)"/>
+            <path d="M0 220 Q 100 195 200 220 T 400 220" stroke="#2ec3c3" stroke-width="6" fill="none"/>
+          </svg>
+        </figure>
+      </div>
+    </li>
+
+  </ul>
+
+  <!-- More than six cards? Index the extras inline:
+       <li class="sdc-card" style="--sdc-index: 7"> ... </li> -->
+
+</body>
+</html>

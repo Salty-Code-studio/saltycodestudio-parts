@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Iridescent Foil — saltycodestudio-parts</title>
+<style>
+  :root {
+    --sand: #F2EBDD;
+    --sand-2: #EAE1CF;
+    --teal: #0E3A40;
+    --sky: #4FA8C9;
+    --coral: #FF6F59;
+    --ink: #1C2B2E;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--sand);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+
+  /* full-bleed foil canvas behind everything */
+  .stage { position: fixed; inset: 0; }
+  #foil { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+  /* readability scrim so the headline reads on bright foil */
+  .scrim {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(120% 90% at 50% 42%, rgba(28,43,46,0.04), rgba(28,43,46,0.34) 100%);
+    pointer-events: none;
+  }
+
+  .content {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 24px;
+    pointer-events: none; /* let the pointer reach the canvas for hue shift */
+  }
+  .eyebrow {
+    pointer-events: none;
+    font-size: 12px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--sand);
+    opacity: 0.92;
+    margin: 0 0 18px;
+    text-shadow: 0 1px 14px rgba(14,58,64,0.55);
+  }
+  h1 {
+    pointer-events: none;
+    margin: 0;
+    font-size: clamp(44px, 11vw, 132px);
+    line-height: 0.94;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #fff;
+    text-shadow: 0 2px 40px rgba(14,58,64,0.45), 0 1px 2px rgba(28,43,46,0.5);
+  }
+  .lead {
+    pointer-events: none;
+    margin: 22px 0 0;
+    max-width: 540px;
+    font-size: clamp(15px, 2vw, 19px);
+    line-height: 1.55;
+    color: var(--sand);
+    text-shadow: 0 1px 18px rgba(14,58,64,0.6);
+  }
+  .hint {
+    pointer-events: none;
+    margin-top: 26px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    color: #fff;
+    background: rgba(28,43,46,0.28);
+    border: 1px solid rgba(242,235,221,0.35);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    padding: 9px 16px;
+    border-radius: 999px;
+  }
+  .hint .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--coral);
+    box-shadow: 0 0 0 4px rgba(255,111,89,0.25);
+  }
+
+  /* preset toggles */
+  .presets {
+    position: fixed;
+    z-index: 3;
+    left: 50%;
+    bottom: 28px;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    pointer-events: auto;
+  }
+  .presets button {
+    font: inherit;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    color: var(--ink);
+    background: rgba(242,235,221,0.86);
+    border: 1px solid rgba(28,43,46,0.18);
+    padding: 10px 18px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+    box-shadow: 0 4px 18px rgba(14,58,64,0.18);
+  }
+  .presets button:hover { transform: translateY(-1px); }
+  .presets button[aria-pressed="true"] {
+    background: var(--teal);
+    color: var(--sand);
+    border-color: var(--teal);
+  }
+
+  .credit {
+    position: fixed;
+    z-index: 3;
+    right: 16px; bottom: 16px;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: rgba(242,235,221,0.85);
+    text-shadow: 0 1px 10px rgba(14,58,64,0.6);
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <canvas id="foil" aria-hidden="true"></canvas>
+    <div class="scrim"></div>
+  </div>
+
+  <main class="content">
+    <p class="eyebrow">Iridescent Foil</p>
+    <h1>Catch&nbsp;the&nbsp;light.</h1>
+    <p class="lead">A raw-WebGL thin-film iridescence surface: holographic foil and oil-on-water sheen, tuned to a coastal Sand &amp; Surf palette.</p>
+    <span class="hint"><span class="dot"></span> move your cursor to shift the hue</span>
+  </main>
+
+  <div class="presets" role="group" aria-label="Foil presets">
+    <button id="pearl" aria-pressed="true">Pearl</button>
+    <button id="oil" aria-pressed="false">Oil slick</button>
+  </div>
+
+  <p class="credit">saltycodestudio-parts · original · MIT</p>
+
+  <script src="./iridescent-foil.js"></script>
+  <script>
+    var canvas = document.getElementById("foil");
+
+    // Two presets: "Pearl" = subtle, premium pearlescent.
+    //              "Oil slick" = vivid, high-chroma iridescence.
+    var PRESETS = {
+      pearl: {
+        hueShift: 0.10,
+        sheen: 1.15,
+        grain: 0.85,
+        speed: 0.7,
+        mouseInfluence: 0.9,
+        colors: { sand: "#F2EBDD", teal: "#0E3A40", sky: "#4FA8C9", coral: "#FF6F59", ink: "#1C2B2E" }
+      },
+      oil: {
+        hueShift: 0.45,
+        sheen: 1.5,
+        grain: 1.25,
+        speed: 1.25,
+        mouseInfluence: 1.4,
+        colors: { sand: "#EAE1CF", teal: "#0E3A40", sky: "#4FA8C9", coral: "#FF6F59", ink: "#10242A" }
+      }
+    };
+
+    var foil = initIridescentFoil(canvas, PRESETS.pearl);
+    var current = "pearl";
+
+    var btnPearl = document.getElementById("pearl");
+    var btnOil = document.getElementById("oil");
+
+    function setPreset(name) {
+      current = name;
+      foil.update(PRESETS[name]);
+      btnPearl.setAttribute("aria-pressed", String(name === "pearl"));
+      btnOil.setAttribute("aria-pressed", String(name === "oil"));
+    }
+    btnPearl.addEventListener("click", function () { setPreset("pearl"); });
+    btnOil.addEventListener("click", function () { setPreset("oil"); });
+
+    window.addEventListener("beforeunload", function () { foil.destroy(); });
+  </script>
+</body>
+</html>

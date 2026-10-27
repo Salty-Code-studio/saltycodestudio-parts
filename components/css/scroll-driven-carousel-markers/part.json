@@ -1,0 +1,13 @@
+{
+  "name": "Scroll-Driven Carousel Markers",
+  "slug": "scroll-driven-carousel-markers",
+  "category": "css",
+  "tier": "showcase",
+  "tags": ["carousel", "markers", "dots", "scroll-timeline", "timeline-scope", "scroll-snap", "no-js", "animation-range", "progressive-enhancement"],
+  "description": "A snap-scrolling carousel whose marker dots light up in sync with the scroll position, using a named CSS scroll-timeline hoisted with timeline-scope so sibling markers can animate over their own slice of it. Zero JavaScript.",
+  "deps": [],
+  "files": ["styles.css", "index.html"],
+  "usage": "Include styles.css, then wrap an .sdcm-entries slide list and an .sdcm-markers dot list in an .sdcm-carousel with --sdcm-n set to your slide count. Give each slide an id and point each marker link at it; the dots sync to scroll automatically in supporting browsers.",
+  "source": "https://scroll-driven-animations.style/demos/carousel-with-markers/css/",
+  "license": "Apache-2.0 (demo by Bramus Van Damme, scroll-driven-animations.style), adapted with credit"
+}

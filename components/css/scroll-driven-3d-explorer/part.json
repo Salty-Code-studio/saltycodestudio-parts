@@ -1,0 +1,13 @@
+{
+  "name": "Scroll 3D Object Explorer",
+  "slug": "scroll-driven-3d-explorer",
+  "category": "css",
+  "tier": "showcase",
+  "tags": ["scroll-driven", "view-timeline", "3d", "css-3d", "scroll-snap", "product-showcase", "carousel", "no-js", "progressive-enhancement"],
+  "description": "A horizontal scroll-snap product explorer where every card carries a pure CSS 3D object (a cuboid box, a hologram cross of SVG planes, a hex tin) that spins 450 degrees as you scroll, driven entirely by named view timelines. Titles wipe in and out and captions fade up near the snap point. Zero JavaScript.",
+  "deps": [],
+  "files": ["styles.css", "index.html"],
+  "usage": "Include styles.css, then add an .s3d-explorer scroller containing one .s3d-card per product; give each card an absolutely placed h2 title, a footer caption, and an .s3d-stage holding an .s3d-object in one of the three variants from index.html (s3d-box, s3d-planes, s3d-hex). Scroll the panel sideways and each object spins on its card's own view timeline.",
+  "source": "https://scroll-driven-animations.style/demos/3d-shoe-explorer/css/",
+  "license": "Apache-2.0 (demo by Bramus Van Damme, scroll-driven-animations.style), adapted with credit"
+}

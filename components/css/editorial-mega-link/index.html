@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Editorial Mega Link · usage example</title>
+<link rel="stylesheet" href="styles.css" />
+<style>
+  /* Page scaffolding only. The part itself lives in styles.css. */
+  body { margin: 0; font-family: system-ui, sans-serif; }
+  main > section { padding: 3rem clamp(1rem, 5vw, 3rem); }
+  .dark-section { background: #0e171c; }
+</style>
+</head>
+<body>
+<main>
+
+  <!-- 1. Light version (default). One anchor holding a text span
+       and an inline SVG arrow, nothing else. -->
+  <section>
+    <a class="mega-link" href="/products">
+      <span class="mega-link__text">See all products</span>
+      <svg class="mega-link__arrow" viewBox="0 0 72 24" fill="none" aria-hidden="true" focusable="false">
+        <path d="M1.5 12h64" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+        <path d="M56 2.5 65.5 12 56 21.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </a>
+  </section>
+
+  <!-- 2. Dark variant, for dark backgrounds -->
+  <section class="dark-section">
+    <a class="mega-link mega-link--dark" href="/journal">
+      <span class="mega-link__text">Read the journal</span>
+      <svg class="mega-link__arrow" viewBox="0 0 72 24" fill="none" aria-hidden="true" focusable="false">
+        <path d="M1.5 12h64" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+        <path d="M56 2.5 65.5 12 56 21.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </a>
+  </section>
+
+  <!-- 3. Retheme or resize with inline custom properties -->
+  <section>
+    <a class="mega-link" href="/contact" style="--ml-size: clamp(1.6rem, 1rem + 3vw, 3rem); --ml-rule-hover: #FF6F59; --ml-hover: #b23c28;">
+      <span class="mega-link__text">Start a project</span>
+      <svg class="mega-link__arrow" viewBox="0 0 72 24" fill="none" aria-hidden="true" focusable="false">
+        <path d="M1.5 12h64" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+        <path d="M56 2.5 65.5 12 56 21.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </a>
+  </section>
+
+</main>
+</body>
+</html>

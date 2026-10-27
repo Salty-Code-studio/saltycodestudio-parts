@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scroll Theme Switch: minimal usage</title>
+  <!-- Sections declare their theme. script.js watches which one dominates
+       the viewport and mirrors it onto <html data-theme>, and the tokens
+       in styles.css crossfade the page (about 0.6s). Without JS the page
+       simply stays in the light theme. -->
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- Fixed header: uses the shared tokens, so it adapts on its own. -->
+  <header class="ts-header">
+    <strong>Brand</strong>
+    <nav aria-label="Main">
+      <a href="#opening">Opening</a>
+      <a href="#deep">Deep</a>
+      <a href="#closing">Closing</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Any number of sections, each voting dark or light. -->
+    <section id="opening" data-theme="light">
+      <h1>Opens in the light</h1>
+      <p>Bone-white background, ink text.</p>
+    </section>
+
+    <section id="deep" data-theme="dark">
+      <h2>Scroll in and the page goes dark</h2>
+      <p>The whole canvas crossfades, header included.</p>
+    </section>
+
+    <section id="closing" data-theme="light">
+      <h2>And back to light again</h2>
+      <p>Add as many sections as you like.</p>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

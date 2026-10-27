@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cover Card to Fixed Header, a Sand &amp; Surf demo</title>
+<style>
+  /* ---- Sand & Surf palette ---- */
+  :root {
+    --cvh-sand-1: #fbf7f0;
+    --cvh-sand-2: #f4ece0;
+    --cvh-sand-3: #ece0cd;
+    --cvh-ink: #1c2b33;
+    --cvh-ink-soft: #4a5d66;
+    --cvh-teal: #1f8a8a;
+    --cvh-teal-deep: #0f5c5c;
+    --cvh-surf: #2ec3c3;
+    --cvh-abyss: #082227;
+    --maxw: 60rem;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: "Helvetica Neue", Arial, system-ui, sans-serif;
+    color: var(--cvh-ink);
+    background:
+      radial-gradient(140% 90% at 50% -10%, var(--cvh-sand-1), var(--cvh-sand-2) 55%, var(--cvh-sand-3) 100%);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ============================================================
+     COVER CARD TO FIXED HEADER (the part itself)
+     ============================================================ */
+
+  .cvh-cover {
+    --cvh-docked: 10vh;
+
+    height: 100vh;
+    width: 100%;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    color: #fff;
+    font-size: clamp(2.2rem, 4vw + 1rem, 4.4rem);
+
+    background-color: var(--cvh-teal);
+    background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201200%202000'%3E%3Cdefs%3E%3ClinearGradient%20id='g'%20x1='0'%20y1='0'%20x2='0'%20y2='1'%3E%3Cstop%20offset='0'%20stop-color='%233ec2c2'/%3E%3Cstop%20offset='.35'%20stop-color='%231f8a8a'/%3E%3Cstop%20offset='.7'%20stop-color='%230f5c5c'/%3E%3Cstop%20offset='1'%20stop-color='%23082227'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width='1200'%20height='2000'%20fill='url(%23g)'/%3E%3Ccircle%20cx='880'%20cy='310'%20r='150'%20fill='%23ff6f59'%20opacity='.9'/%3E%3Cpath%20d='M0%20500%20C200%20460%20400%20540%20600%20500%20S1000%20460%201200%20500%20V560%20C1000%20600%20800%20520%20600%20560%20S200%20600%200%20560%20Z'%20fill='%23fbf7f0'%20opacity='.18'/%3E%3Cpath%20d='M0%20830%20C200%20790%20400%20870%20600%20830%20S1000%20790%201200%20830%20V880%20C1000%20920%20800%20840%20600%20880%20S200%20920%200%20880%20Z'%20fill='%237fe3e3'%20opacity='.22'/%3E%3Cpath%20d='M0%201160%20C200%201120%20400%201200%20600%201160%20S1000%201120%201200%201160%20V1205%20C1000%201245%20800%201165%20600%201205%20S200%201245%200%201205%20Z'%20fill='%23fbf7f0'%20opacity='.12'/%3E%3Cpath%20d='M0%201480%20C200%201440%20400%201520%20600%201480%20S1000%201440%201200%201480%20V1520%20C1000%201560%20800%201480%20600%201520%20S200%201560%200%201520%20Z'%20fill='%232ec3c3'%20opacity='.16'/%3E%3Cpath%20d='M0%201790%20C200%201750%20400%201830%20600%201790%20S1000%201750%201200%201790%20V1825%20C1000%201865%20800%201785%20600%201825%20S200%201865%200%201825%20Z'%20fill='%237fe3e3'%20opacity='.1'/%3E%3C/svg%3E");
+    background-size: cover;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    background-blend-mode: soft-light;
+  }
+
+  .cvh-cover-inner { padding-inline: 1.25rem; }
+
+  .cvh-title {
+    margin: 0;
+    font-size: 1em;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    text-shadow: 0 2px 24px rgba(8, 34, 39, 0.45);
+  }
+
+  .cvh-sub {
+    margin: 0.9em 0 0;
+    font-size: 0.35em;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    opacity: 0.92;
+    text-shadow: 0 1px 12px rgba(8, 34, 39, 0.45);
+  }
+
+  .cvh-content {
+    width: min(85vw, var(--maxw));
+    margin-inline: auto;
+    padding-block: 2rem;
+  }
+
+  @keyframes cvh-dock {
+    from {
+      background-position: 50% 0%;
+    }
+    to {
+      background-position: 50% 100%;
+      background-color: var(--cvh-abyss);
+      height: var(--cvh-docked);
+      font-size: 1.3rem;
+      box-shadow: 0 8px 24px rgba(8, 34, 39, 0.35);
+    }
+  }
+
+  @keyframes cvh-sub-fade {
+    to { opacity: 0; visibility: hidden; font-size: 0px; margin: 0; }
+  }
+
+  @supports (animation-timeline: scroll()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .cvh-cover {
+        position: fixed;
+        inset: 0 0 auto 0;
+        z-index: 200;
+        animation: cvh-dock linear forwards;
+        animation-timeline: scroll(root block);
+        animation-range: 0vh 90vh;
+      }
+      .cvh-content { padding-top: 100vh; }
+      .cvh-sub {
+        animation: cvh-sub-fade linear forwards;
+        animation-timeline: scroll(root block);
+        animation-range: 0vh 35vh;
+      }
+    }
+  }
+
+  /* ============================================================
+     DEMO PAGE STYLING
+     ============================================================ */
+
+  .eyebrow {
+    display: block;
+    margin: 0 0 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.32em;
+    font-size: clamp(0.65rem, 0.22em, 0.85rem);
+    font-weight: 700;
+    opacity: 0.85;
+  }
+
+  .scroll-hint {
+    display: inline-block;
+    margin-top: 1.5em;
+    font-size: 1em; /* rides the tagline size so it collapses with it */
+    animation: nudge 1.8s ease-in-out infinite;
+  }
+  @keyframes nudge {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(6px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-hint { animation: none; }
+  }
+
+  section { padding-block: clamp(3rem, 8vh, 6rem); }
+
+  .section-head { max-width: 56ch; margin-bottom: 2.4rem; }
+  .section-head h2 {
+    font-size: clamp(1.8rem, 4vw, 2.7rem);
+    letter-spacing: -0.015em;
+    line-height: 1.1;
+    margin: 0 0 0.9rem;
+  }
+  .section-head p { color: var(--cvh-ink-soft); font-size: 1.06rem; margin: 0; }
+
+  .note {
+    display: inline-block;
+    margin-top: 1.4rem;
+    font-size: 0.84rem;
+    color: var(--cvh-ink-soft);
+    background: rgba(255, 255, 255, 0.55);
+    border: 1px dashed rgba(31, 138, 138, 0.4);
+    border-radius: 12px;
+    padding: 0.8rem 1rem;
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 1.25rem;
+  }
+  .card {
+    background: rgba(255, 255, 255, 0.66);
+    border: 1px solid rgba(28, 43, 51, 0.08);
+    border-radius: 18px;
+    padding: 1.8rem 1.6rem;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 18px 40px -28px rgba(15, 92, 92, 0.5);
+  }
+  .card .num {
+    display: inline-grid;
+    place-content: center;
+    width: 2.6rem;
+    height: 2.6rem;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--cvh-teal), var(--cvh-surf));
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+  .card h3 { margin: 0 0 0.5rem; font-size: 1.15rem; }
+  .card p { margin: 0; color: var(--cvh-ink-soft); font-size: 0.95rem; }
+  .card code { font-size: 0.85em; }
+
+  .band {
+    border-radius: 22px;
+    color: #fff;
+    padding: clamp(2rem, 6vw, 4rem);
+    background:
+      linear-gradient(120deg, rgba(15, 92, 92, 0.94), rgba(46, 195, 195, 0.85)),
+      repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.06) 0 14px, transparent 14px 28px);
+  }
+  .band h2 { font-size: clamp(1.7rem, 4.5vw, 2.8rem); margin: 0 0 0.8rem; letter-spacing: -0.02em; }
+  .band p { margin: 0 0 0.8rem; max-width: 58ch; opacity: 0.94; font-size: 1.06rem; }
+  .band p:last-child { margin-bottom: 0; }
+
+  .prose p { color: var(--cvh-ink-soft); max-width: 62ch; }
+  .prose h2 {
+    font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+    letter-spacing: -0.015em;
+    margin: 0 0 1rem;
+    color: var(--cvh-ink);
+  }
+
+  .steps { list-style: none; padding: 0; margin: 0; display: grid; gap: 1rem; }
+  .steps li {
+    display: flex;
+    align-items: center;
+    gap: 1.1rem;
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(28, 43, 51, 0.08);
+    border-radius: 14px;
+    padding: 1.1rem 1.4rem;
+  }
+  .steps .dot {
+    flex: none;
+    width: 0.9rem;
+    height: 0.9rem;
+    border-radius: 50%;
+    background: var(--cvh-teal);
+    box-shadow: 0 0 0 4px rgba(46, 195, 195, 0.2);
+  }
+  .steps strong { display: block; }
+  .steps span { color: var(--cvh-ink-soft); font-size: 0.92rem; }
+
+  footer {
+    text-align: center;
+    padding: 4rem 1.5rem 6rem;
+    color: var(--cvh-ink-soft);
+  }
+  footer .mark { font-weight: 700; color: var(--cvh-teal-deep); letter-spacing: -0.02em; }
+  footer a { color: var(--cvh-teal-deep); }
+</style>
+</head>
+<body>
+
+  <!-- THE COVER: full-viewport hero that docks into a fixed header -->
+  <header class="cvh-cover">
+    <div class="cvh-cover-inner">
+      <span class="eyebrow">Sand &amp; Surf &middot; scroll-driven CSS</span>
+      <h1 class="cvh-title">Cover card to fixed header</h1>
+      <p class="cvh-sub">A full-screen cover that shrinks and docks into the page header as you scroll. Pure CSS, zero JavaScript.</p>
+      <p class="cvh-sub"><span class="scroll-hint">&darr;</span></p>
+    </div>
+  </header>
+
+  <!-- EVERYTHING BELOW THE COVER -->
+  <main class="cvh-content">
+
+    <section>
+      <div class="section-head">
+        <h2>One scroll timeline, zero JavaScript</h2>
+        <p>The cover above starts at a full 100vh and collapses to a slim 10vh bar over the first 90vh of scrolling. The animation is scrubbed by the scroll position itself, so easing back up replays every frame in reverse.</p>
+        <span class="note">Needs CSS scroll-driven animations: Chrome and Edge 115+, Safari 26+, Firefox behind a flag. Elsewhere the cover simply stays a static full-height hero.</span>
+      </div>
+      <div class="cards">
+        <article class="card">
+          <span class="num">1</span>
+          <h3>scroll() timeline</h3>
+          <p>The dock animation is bound to the document scroller with <code>animation-timeline: scroll()</code> and plays across a 90vh <code>animation-range</code>.</p>
+        </article>
+        <article class="card">
+          <span class="num">2</span>
+          <h3>Fixed, not sticky</h3>
+          <p>The cover is <code>position: fixed</code>, and the content wrapper is padded down by 100vh so the page never jumps when the cover leaves the flow.</p>
+        </article>
+        <article class="card">
+          <span class="num">3</span>
+          <h3>Guarded by @supports</h3>
+          <p>The pinning and the timelines only activate inside an <code>@supports</code> and reduced-motion check. Unsupported browsers get a clean static hero.</p>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <div class="band">
+        <h2>Why not position: sticky?</h2>
+        <p>Sticky seems like the obvious tool, but it fails here for a sneaky reason: the animation shrinks the cover's height, and a sticky element's height is part of the document. Shrinking it would shrink the whole page and eat the scroll distance mid-animation.</p>
+        <p>So the cover is fixed instead, taken out of the flow entirely, and the content below compensates with a 100vh top padding. That is the whole trick, borrowed straight from Bramus Van Damme's original demo.</p>
+      </div>
+    </section>
+
+    <section class="prose">
+      <h2>The parallax is just background-position</h2>
+      <p>The seascape behind the title is a single inline SVG, delivered as a data URI, that is much taller than it is wide. While the card shrinks, its <code>background-position</code> animates from the top of the artwork to the bottom, so the sun sets and the water deepens as you scroll.</p>
+      <p>At the same time the keyframes animate <code>background-color</code> toward a deep ink teal. Because the cover uses <code>background-blend-mode: soft-light</code>, that color tints the artwork progressively darker, which keeps the white title readable at every height.</p>
+      <p>The type shrinks for free: the title is sized in <code>em</code> against the cover's own <code>font-size</code>, and the keyframes animate that one property from hero scale down to header scale.</p>
+    </section>
+
+    <section class="prose">
+      <h2>Field notes from the beach office</h2>
+      <p>Keep scrolling. This section exists to give the timeline room to breathe, and to show how ordinary article content behaves under a docked header: it simply slides beneath the bar like any fixed navigation.</p>
+      <p>The docking completes at 90vh of scroll, which means everything below this point lives with the finished slim header. Scroll back toward the top at any speed and the cover grows right back to full bleed, frame by frame.</p>
+      <p>Because the animation is driven by scroll position rather than time, there is nothing to desynchronize. No listeners, no requestAnimationFrame, no jank from work on the main thread. The browser owns the whole effect.</p>
+      <p>The tagline in the cover fades out over the first 35vh using a second animation on the same scroll timeline. That keeps the docked bar clean: title only, no clutter.</p>
+      <p>One honest caveat: the keyframes animate <code>height</code> and <code>font-size</code>, which trigger layout. For a single header element that is perfectly fine in practice, but keep heavy content out of the cover itself.</p>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <h2>Wire it up in four moves</h2>
+        <p>The part is two classes and a wrapper. Everything else is taste.</p>
+      </div>
+      <ul class="steps">
+        <li>
+          <span class="dot"></span>
+          <div><strong>Copy styles.css</strong><span>Or paste its contents into a style block.</span></div>
+        </li>
+        <li>
+          <span class="dot"></span>
+          <div><strong>Make your hero the cover</strong><span>header.cvh-cover with a .cvh-cover-inner holding the title.</span></div>
+        </li>
+        <li>
+          <span class="dot"></span>
+          <div><strong>Wrap the rest</strong><span>All following content goes inside main.cvh-content.</span></div>
+        </li>
+        <li>
+          <span class="dot"></span>
+          <div><strong>Tune the dock</strong><span>Adjust the docked height with the custom property on the cover.</span></div>
+        </li>
+      </ul>
+    </section>
+
+    <footer>
+      <p><span class="mark">saltycodestudio</span> &middot; Sand &amp; Surf parts library</p>
+      <p>Technique adapted with credit from the Apache-2.0 demo by Bramus Van Damme at scroll-driven-animations.style (the full demo link lives in the README).</p>
+    </footer>
+
+  </main>
+
+</body>
+</html>

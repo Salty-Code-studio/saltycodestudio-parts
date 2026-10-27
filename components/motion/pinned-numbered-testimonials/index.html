@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pinned Numbered Testimonials, minimal usage</title>
+  <link rel="stylesheet" href="./styles.css" />
+  <style>
+    body { margin: 0; font-family: system-ui, sans-serif; }
+    header, footer { min-height: 70vh; display: grid; place-items: center; text-align: center; padding: 2rem; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <p>Scroll down. The section below pins while numerals and quotes take turns.</p>
+  </header>
+
+  <section class="pnt-section" aria-label="What clients say">
+    <div class="pnt-inner">
+      <div class="pnt-rail" aria-hidden="true"><span class="pnt-rail-fill"></span></div>
+      <div class="pnt-stage">
+
+        <figure class="pnt-item">
+          <span class="pnt-num" aria-hidden="true">01</span>
+          <blockquote class="pnt-quote">The first quote goes here, big and confident.</blockquote>
+          <figcaption class="pnt-author"><strong>First Person</strong><span>Role, Company One</span></figcaption>
+        </figure>
+
+        <figure class="pnt-item">
+          <span class="pnt-num" aria-hidden="true">02</span>
+          <blockquote class="pnt-quote">The second quote slides in as the numeral crossfades.</blockquote>
+          <figcaption class="pnt-author"><strong>Second Person</strong><span>Role, Company Two</span></figcaption>
+        </figure>
+
+        <figure class="pnt-item">
+          <span class="pnt-num" aria-hidden="true">03</span>
+          <blockquote class="pnt-quote">The third quote closes the sequence and releases the pin.</blockquote>
+          <figcaption class="pnt-author"><strong>Third Person</strong><span>Role, Company Three</span></figcaption>
+        </figure>
+
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>Pin released. Content flows on.</p>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <!-- Module imports do not run from file://, serve this folder locally first
+       (for example: npx serve). preview.html works straight from disk. -->
+  <script type="module">
+    import { initNumberedTestimonials } from './animation.js';
+    initNumberedTestimonials();
+  </script>
+
+</body>
+</html>
